@@ -15,5 +15,19 @@ module Teppan
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
+    config.generators do |generator|
+      generator.orm :active_record, primary_key_type: :integer
+      generator.test_framework :rspec,
+      # fixtures: false,
+      view_specs: false,
+      helper_specs: false,
+      routing_specs: false
+    end
+    
+    # 日本語化
+    config.i18n.default_locale = :ja
+    
+    # 日本時間
+    config.time_zone = 'Tokyo'
   end
 end
