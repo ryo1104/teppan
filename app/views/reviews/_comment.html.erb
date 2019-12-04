@@ -1,0 +1,27 @@
+<li class="collection-item avatar custom" >
+  <%= link_to user_path(comment.user.id) do %>
+    <%= image_tag comment.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+  <% end %>
+  <p class="comment-text"><%= comment.text %></p>
+  <div class="collection-item-footer">
+    <p class="topic-footer-text">
+      <%= atname(comment.user.nickname) %>&nbsp;&nbsp;
+      <%= comment.updated_at.to_s(:human) %>&nbsp;&nbsp;&nbsp;
+    </p>
+    <% if user_signed_in? && comment.user_id == current_user.id %>
+      <span class="topic-footer-deletelink">
+        <%= link_to '削除', comment_path(comment.id), {:method => :delete, :data => {:confirm => "本当に削除しますか？"}} %>
+      </span>
+    <% end %>
+    <p class="topic-footer-icons">
+      <% if user_signed_in? %>
+        <span id="likes_buttons_<%= comment.class.name.downcase %>_<%= comment.id %>">
+          <%= render partial: 'likes/like', locals: { likeable: comment } %>
+        </span>
+      <% else %>
+        <i class="material-icons like custom">favorite_border</i>
+        <span class="icon-side-count"><%= comment.likes_count %></span>&nbsp;&nbsp;
+      <% end %>
+    </p>
+  </div>
+</li>

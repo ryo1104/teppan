@@ -1,0 +1,9 @@
+<tbody>
+  <tr>
+    <td class="left-align"><%= link_to inprogress_request.title, request_path(inprogress_request.id) %></td>
+    <td class="center-align"><%= inprogress_request.finaldate.strftime('%Y/%m/%d') %></td>
+    <td class="center-align"><%= inprogress_request.price %></td>
+    <td class="center-align"><%= link_to atname(inprogress_request.assignee.nickname), user_path(inprogress_request.assignee_id) %></td>
+    <td class="center-align"><%= inprogress_request.get_status_string %></td>
+  </tr>
+</tbody>

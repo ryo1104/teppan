@@ -1,0 +1,52 @@
+<div class="row">
+  <div class="col s12 m12">
+    <%= link_to new_copycheck_path, {:class => 'btn btn-primary withripple custom'} do %>
+      <span>コピーチェック</span>
+    <% end %>
+    <table class="highlight">
+      <thead class="table_header">
+        <tr>
+          <th class="center-align">QueueID</th>
+          <th class="center-align">NetaID</th>
+          <th class="center-align">類似度判定</th>
+          <th class="center-align">類似度割合</th>
+          <th class="center-align">一致率判定</th>
+          <th class="center-align">一致率割合</th>
+          <th class="center-align">テキスト間判定</th>
+          <th class="center-align">テキスト間割合</th>
+          <th class="center-align"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @check_objs.each do |check_obj| %>
+          <tr>
+            <td class="copycheck-data center-align"><%= check_obj.queue_id %></td>
+            <td class="copycheck-data center-align">
+              <% if check_obj.neta_id.present? %>
+              <%= check_obj.neta_id %></td>
+              <% end %>
+            <td class="copycheck-data center-align">
+              <% if check_obj.web_like_status.present? %>
+              <%= @check_status.find(check_obj.web_like_status).text %>
+              <% end %>
+            </td>
+            <td class="copycheck-data center-align"><%= check_obj.web_like_percent %>％</td>
+            <td class="copycheck-data center-align">
+              <% if check_obj.web_match_status.present? %>
+              <%= @check_status.find(check_obj.web_match_status).text %>
+              <% end %>
+            </td>
+            <td class="copycheck-data center-align"><%= check_obj.web_match_percent %>％</td>
+            <td class="copycheck-data center-align">
+              <% if check_obj.text_match_status.present? %> 
+              <%= @check_status.find(check_obj.text_match_status).text %>
+              <% end %>
+            </td>
+            <td class="copycheck-data center-align"><%= check_obj.text_match_percent %>％</td>
+            <td class="copycheck-data center-align"><%= link_to '詳細', copycheck_path(check_obj.id) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,86 @@
+<script type="text/javascript" src="//jpostal-1006.appspot.com/jquery.jpostal.js"></script>
+<div class="page-body-container">
+  <div class="row">
+    <div class="col s12 m9 user-page">
+      <h1 class="h1_class">ご連絡先</h1>
+      <ul class="collection z-depth-1 user-page">
+        <%= form_with url: account_path, local: true, method: :patch do |f| %>
+          <%= label_tag '姓（漢字）' %>
+          <%= f.text_field :last_name_kanji, :value => @account_info["personal_info"]["last_name_kanji"]  %>
+          <%= label_tag '姓（カナ）' %>
+          <%= f.text_field :last_name_kana, :value => @account_info["personal_info"]["last_name_kana"] %>
+          <%= label_tag '名（漢字）' %>
+          <%= f.text_field :first_name_kanji, :value => @account_info["personal_info"]["first_name_kanji"]%>
+          <%= label_tag '名（カナ）' %>
+          <%= f.text_field :first_name_kana, :value => @account_info["personal_info"]["first_name_kana"] %>
+          <%= label_tag '性別' %>
+          <%= select_tag :gender, options_for_select([["男性","male"], ["女性","female"]],:selected => @account_info["personal_info"]["gender"]), {:class => "browser-default"} %>
+          <%= label_tag 'メールアドレス' %>
+          <%= f.text_field :email, :value => @account_info["personal_info"]["email"] %>
+          <%= label_tag '生年月日' %>
+          <% if @account_info["personal_info"]["dob"]["year"] == nil || @account_info["personal_info"]["dob"]["month"] == nil || @account_info["personal_info"]["dob"]["day"] == nil %>
+            <%= f.date_select :birthdate,
+                      {:start_year => 1930, 
+                       :end_year => (Time.zone.now.year - 18),
+                       :include_blank => true,
+                      }, 
+                      {:class => 'form-control date-select'} 
+            %>
+          <% else %>
+            <%= f.date_select :birthdate,
+                                {:start_year => 1930, 
+                                 :end_year => (Time.zone.now.year - 18),
+                                 :default => Date.new(
+                                    @account_info["personal_info"]["dob"]["year"],
+                                    @account_info["personal_info"]["dob"]["month"],
+                                    @account_info["personal_info"]["dob"]["day"]
+                                    )
+                                }, 
+                                {:class => 'form-control date-select'} 
+            %>
+          <% end %>
+          <%= label_tag '郵便番号' %><br>
+          <%= f.text_field :postal_code, :id => "zip", :value => @account_info["personal_info"]["postal_code"] %><br>
+          <%= label_tag '住所' %><br>
+          <%= f.text_field :state, :id => "prefecture_code", :value => @account_info["personal_info"]["kanji_state"] %><br>
+          <%= f.text_field :city,  :id => "address_city", :value => @account_info["personal_info"]["kanji_city"] %><br>
+          <%= f.text_field :town,  :id => "address_town", :value => @account_info["personal_info"]["kanji_town"]  %><br>
+          <%= label_tag '番地・号（漢字）' %>
+          <%= f.text_field :kanji_line1, :value => @account_info["personal_info"]["kanji_line1"] %>
+          <%= f.text_field :kanji_line2, :value => @account_info["personal_info"]["kanji_line2"] %>
+          <%= label_tag '番地・号（かな）' %>
+          <%= f.text_field :kana_line1, :value => @account_info["personal_info"]["kana_line1"] %>
+          <%= f.text_field :kana_line2, :value => @account_info["personal_info"]["kana_line2"] %>
+          <br>
+          <%= label_tag '電話番号' %>
+          <%= f.text_field :phone, :value => @account_info["personal_info"]["phone"] %>
+          <br>
+          <% unless @account_info["tos_acceptance"]["date"].present? && @account_info["tos_acceptance"]["ip"].present? %>
+            <label class="custom">
+              <%= check_box_tag :user_agreement, true, false, {:class => 'reset-checkbox'} %>
+              <span>利用規約に同意</span>
+            </label>
+            <br>
+          <% end %>
+          <br>
+          <%= f.submit %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+$(function () {
+	$('#zip').jpostal({
+		postcode : [
+			'#zip'
+		],
+		address : {
+      "#prefecture_code" : "%3",
+      "#address_city"    : "%4",
+      "#address_town"  : "%5%6%7"
+		}
+	});
+});
+</script>

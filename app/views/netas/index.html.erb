@@ -1,0 +1,77 @@
+<%= javascript_pack_tag 'raty' %>
+<%= javascript_pack_tag 'custom' %>
+<% @page_title = "小ネタ一覧" %>
+<% breadcrumb :netas %>
+<div class="page-body-container">
+  <p><%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %></p>
+  <div class="row topic-index">
+    <div class="col s12 m9 topics-list">
+      <ul class="collection z-depth-1">
+        <%= render partial: "netas/neta", collection: @netas %>
+        <li><%= paginate(@netas) %></li>
+      </ul>
+    </div>
+    <div class="col s12 m3 topics-ranking z-depth-1">
+      <div class="ranking-data">
+        <b>トレンド</b><br>
+        <% @hashtag_ranking.each do |key, value| %>
+          <%= link_to "#"+value[1], "/neta/hashtag/#{value[1]}" %><br>
+          <p class="hashtrendlist-footer-text">
+            <%= value[2] %>&nbsp;views&nbsp;&nbsp;
+            <i class="material-icons post custom">create</i>
+            <span class="icon-side-count"><%= value[3] %></span><br>
+          </p>
+        <% end %>
+      </div>
+      <br>
+      <div class="ranking-data">
+        <b>人気ネタ</b><br>
+        <% @neta_ranking.each do |item| %>
+          <%= link_to neta_path(item.rankable_id) do %>
+            <p class="collection-item-text truncate">
+              <%= item.rank %>.&nbsp;&nbsp;<%= remove_hashtags(item.rankable.text) %>
+            </p>
+          <% end %>
+        <% end %>
+        <br>
+      </div>
+      <% if user_signed_in? && @view_history %>
+        <div class="ranking-data">
+          <b>閲覧履歴</b><br>
+          <% @view_history.each do |pageview| %>
+            <%= link_to neta_path(pageview.pageviewable_id) do %>
+              <p class="collection-item-text truncate">
+                <%= pageview.pageviewable.text %>
+              </p>
+            <% end %>
+          <% end %>
+          <br>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="fixed-action-btn horizontal">
+  <!-- Modal Trigger -->
+    <a class="btn-floating modal-trigger light-green accent-4" data-target="search-modal">
+      <i class="material-icons">search</i>
+    </a>
+  </div>
+  <!-- Modal Structure -->
+  <div id="search-modal" class="modal">
+    <div class="modal-content">
+      <h2 class="h2_class">絞り込み検索</h2>
+      <%= search_form_for(@search, url: netas_path, html: {method: :get, :class => 'browser-default', role: 'form'}) do |f| %>
+        <%= f.label :neta, 'キーワード' %><br>
+        <%= f.text_field :text_cont, class: "browser-default" %><br>
+        <%= f.label :user, '投稿者' %><br>
+        <%= f.text_field :user_nickname_cont, class: "browser-default" %><br>
+        <%= f.label :price, '価格' %><br>
+        <%= f.number_field :price_gteq, min: 0, step: 10, class: "browser-default" %>〜
+        <%= f.number_field :price_lteq, min: 0, step: 10, class: "browser-default" %><br>
+        <%= f.label :rate, '評価（以上）' %><br>
+        <%= f.number_field :average_rate_gteq, min: 1, max: 5, step: 1, class: "browser-default" %><br><br>
+        <%= button_tag '検索', :type => "submit", class: "btn btn-primary withripple custom" %>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,63 @@
+<div class="page-body-container">
+  <div class="row">
+    <div class="col s12 m8 neta-new">
+      <h1 class="h1_class">ネタを購入</h1>
+      <ul class="collection z-depth-1">
+        <li class="collection-item">
+          価格　：<%= @price %>円<br>
+          消費税：<%= @ctax %>円<br>
+          <b>合計　：<%= @charge_amount %>円</b><br><br>
+          <% if @buyer.account %>
+            利用可能ポイント：<b><%= @balance %></b><br>
+            <% if @balance >= @charge_amount %>
+              <%= form_with url: neta_trades_path(@tradeable.id), local: true, method: :post do |f| %>
+                <%= f.hidden_field :price, :value => @price %>
+                <%= f.hidden_field :user_points, :value => @balance %>
+                <%= f.hidden_field :timestamp, :value => @stale_form_check_timestamp %>
+                <%= button_tag :type => "submit", class: "btn btn-primary withripple custom" do %>
+                  <i class="material-icons"></i>ポイントで支払う
+                <% end %>
+              <% end %>
+            <% else %>
+              <div class="btn btn-primary withripple custom inactive">ポイントで支払う</div>
+            <% end %>
+            <br><br>
+          <% end %>
+          <% if @cards[0] %>
+            <% @cards[1]["data"].each do |card| %>
+              <%= card["brand"] %>&nbsp;&nbsp;
+              <%= card["exp_month"] %>/<%= card["exp_year"] %>&nbsp;&nbsp;
+              <%= "******"+card["last4"] %>&nbsp;
+              <%= form_with url: neta_trades_path(@tradeable.id), local: true, method: :post do |f| %>
+                <%= f.hidden_field :price, :value => @price %>
+                <%= f.hidden_field :card_id, :value => card["id"] %>
+                <%= f.hidden_field :timestamp, :value => @stale_form_check_timestamp %>
+                <%= button_tag :type => "submit", class: "btn btn-primary withripple custom" do %>
+                  <i class="material-icons"></i>このカードで支払う
+                <% end %><br><br>
+              <% end %>&nbsp;&nbsp;
+            <% end %>
+          <% end %>
+          <%= form_with url: neta_trades_path(@tradeable.id), local: true, method: :post do |f| %>
+            <%= f.hidden_field :price, :value => @price %>
+            <%= f.hidden_field :timestamp, :value => @stale_form_check_timestamp %>
+            <script
+              src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+              data-key="pk_test_p2Y9RrxY6Gjj2Bi43zhElMTp00hQwI9bNL"
+              data-locale="ja"
+              data-label=
+              <% if @cards[0] %>
+                "別のカードで支払う"
+              <% else %>
+                "カードで支払う"
+              <% end %>
+              data-panel-label="支払う"
+              data-email="<%= @buyer.email %>">
+            </script>
+          <% end %>
+          <br><br>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

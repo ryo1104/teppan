@@ -1,0 +1,93 @@
+<% breadcrumb :show_account, @account %>
+<div class="page-body-container">
+  <p><%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %></p>
+  <div class="row">
+    <div class="col s12 m9 user-page">
+      <h1 class="h1_class">出金用 銀行口座</h1>
+      <ul class="collection z-depth-1 user-page">
+        <% case @account_info["personal_info"]["verification"]["status"] %>
+        <% when "verified" then %>
+          <b>残高</b><br>
+          <% if @account_info["payouts_enabled"] == true %>
+            出金：可能<br>
+            出金可能額：<b><%= @balance_info["available"][0]["amount"] %>&nbsp;円</b><br>
+            まもなく出金可能：<%= @balance_info["pending"][0]["amount"] %>&nbsp;円<br>
+            <%= link_to '出金', new_account_payout_path(@account.id), :class => "button-points" %>
+          <% end %>
+          <br><br>
+          <b>振込先口座</b><br>
+          <% if @account_info["bank_info"]["account_number"].present? %>
+            金融機関名：<%= @account_info["bank_info"]["bank_name"] %><br>
+            支店名　　：<%= @account_info["bank_info"]["branch_name"] %><br>
+            口座番号　：<%= @account_info["bank_info"]["account_number"] %><br>
+            口座名義　：<%= @account_info["bank_info"]["account_holder_name"] %><br>
+            <%= link_to '口座変更', edit_externalaccount_path(@account.externalaccount.id), :class => "button-points" %><br>
+          <% else %>
+            <%= link_to '登録', new_account_externalaccount_path(@account.id), :class => "button-points" %><br>
+          <% end %>
+          <br>
+
+        <% when "unverified" || "pending" then %>
+          <b>振込先口座</b><br>
+          <% if @account_info["bank_info"]["bank_name"].present? %>
+            金融機関名：<%= @account_info["bank_info"]["bank_name"] %><br>
+            支店名　　：<%= @account_info["bank_info"]["branch_name"] %><br>
+            口座番号　：<%= @account_info["bank_info"]["account_number"] %><br>
+            口座名義　：<%= @account_info["bank_info"]["account_holder_name"] %><br>
+            <%= link_to '口座変更', edit_externalaccount_path(@account.externalaccount.id), :class => "button-points" %><br>
+          <% else %>
+            金融機関名：<br>
+            支店名　　：<br>
+            口座番号　：<br>
+            口座名義　：<br>
+            <%= link_to '登録', new_account_externalaccount_path(@account.id), :class => "button-points" %><br>
+          <% end %><br>
+        
+          <b>ご連絡先</b><br>
+          名前（漢字）：<%= @account_info["personal_info"]["last_name_kanji"] %>&nbsp;<%= @account_info["personal_info"]["first_name_kanji"] %><br>
+          名前（カナ）：<%= @account_info["personal_info"]["last_name_kana"] %>&nbsp;<%= @account_info["personal_info"]["first_name_kana"] %><br>
+          性別：<%= @account_info["personal_info"]["gender"] %><br>
+          生年月日：
+            <%= @account_info["personal_info"]["dob"]["year"] %>年
+            <%= @account_info["personal_info"]["dob"]["month"] %>月
+            <%= @account_info["personal_info"]["dob"]["day"] %>日
+          <br>
+          住所：<br>
+          <%= @account_info["personal_info"]["postal_code"] %><br>
+          <%= @account_info["personal_info"]["kanji_state"] %>
+          <%= @account_info["personal_info"]["kanji_city"] %>
+          <%= @account_info["personal_info"]["kanji_town"] %>
+          <%= @account_info["personal_info"]["kanji_line1"] %>
+          <%= @account_info["personal_info"]["kanji_line2"] %><br>
+          <%= @account_info["personal_info"]["kana_state"] %>
+          <%= @account_info["personal_info"]["kana_city"] %>
+          <%= @account_info["personal_info"]["kana_town"] %>
+          <%= @account_info["personal_info"]["kana_line1"] %>
+          <%= @account_info["personal_info"]["kana_line2"] %><br>
+          電話番号：
+          <%= @account_info["personal_info"]["phone"] %><br>
+          メールアドレス：<%= @account_info["personal_info"]["email"] %><br>
+          <%= link_to '編集', edit_account_path(@account.id), :class => "button-points" %>&nbsp;&nbsp;
+          <br><br>
+          <b>身分証明書コピー</b><br>
+          <%= link_to '登録', new_account_idcard_path(@account.id), :class => "button-points" %>&nbsp;&nbsp;
+          <% if @account.idcards.present? %>
+            <%= link_to '表示', account_idcards_path(@account.id), :class => "button-points" %>
+          <% end %><br>
+          
+          <br>
+          <b>不足情報</b><br>
+          <% @account_info["requirements"]["currently_due"].map do |a| %>
+            <%= a %><br>
+          <% end %>
+          <br>
+          <%= link_to 'アカウント削除', account_path(@account.id), {:method => :delete, :class => "button-points", data: { confirm: "本当に削除しますか？" }} %><br>
+        <% end %>
+        <% if false %>
+          <%= @account_info %><br><br>
+          <%= @balance_info %><br>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>

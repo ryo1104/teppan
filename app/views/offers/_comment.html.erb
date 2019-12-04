@@ -1,0 +1,5 @@
+<li class="collection-item avatar" >
+  <%= image_tag comment.user.avatar, {:class => "circle"} %>
+  <%= link_to atname(comment.user.nickname), user_path(comment.user_id) %><br>
+  <%= comment.text %><br><br>
+</li>

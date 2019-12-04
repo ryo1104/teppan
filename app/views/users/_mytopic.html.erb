@@ -1,0 +1,27 @@
+<li class="collection-item custom">
+  <%= link_to topic_path(mytopic.id) do %>
+    <p class="collection-item-title truncate"><%= mytopic.title %></p>
+    <p class="collection-item-text truncate"><%= mytopic.text %></p>
+    <div class="collection-item-postdata">
+      <% if mytopic.max_rate == 0 %>
+        <span class="star_rating" rating-data="0"></span>
+      <% else %>
+        <span class="star_rating" rating-data="<%= mytopic.max_rate %>"></span>
+        <span class="star-rating-text">&nbsp;&nbsp;<%= mytopic.max_rate %></span>
+      <% end %>
+    </div>
+    <div class="collection-item-footer">
+      <p class="indexitem-footer-text">
+        <%= mytopic.created_at.to_s(:human) %>&nbsp;&nbsp;
+        <%= mytopic.pageviews_count %>&nbsp;views
+      </p>
+      <p class="indexitem-footer-icons">
+        <i class="material-icons post custom">create</i>
+        <span class="icon-side-count"><%= mytopic.netas_count %></span>&nbsp;&nbsp;
+        <i class="material-icons like custom">favorite_border</i>
+        <span class="icon-side-count"><%= mytopic.likes_count %></span>
+        <br>
+      </p>
+    </div>
+  <% end %>
+</li>

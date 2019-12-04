@@ -1,0 +1,38 @@
+<% if likeable.class.name == "Topic" %>
+  <% if likeable.likes.find_by(user: current_user) %>
+    <%= link_to topic_like_path(likeable.id, likeable.likes.find_by(user: current_user).id), method: :delete, remote: true do %>
+      <i class="material-icons like custom">favorite</i>
+    <% end %>
+  <% else %>
+    <%= link_to topic_likes_path(likeable.id), method: :post, remote: true do %>
+      <i class="material-icons like custom">favorite_border</i>
+    <% end %>
+  <% end %>
+  <span class="icon-side-count"><%= likeable.likes_count %></span>&nbsp;&nbsp;
+<% else %>
+  <% if likeable.class.name == "Comment" %>
+    <% if likeable.likes.find_by(user_id: current_user.id) %>
+      <%= link_to comment_like_path(likeable.id, likeable.likes.find_by(user_id: current_user.id).id), :method => :delete, remote: true do %>
+        <i class="material-icons like custom">favorite</i>
+      <% end %>
+    <% else %>
+      <%= link_to comment_likes_path(likeable.id), :method => :post, remote: true do %>
+        <i class="material-icons like custom">favorite_border</i>
+      <% end %>
+    <% end %>
+    <span class="icon-side-count"><%= likeable.likes_count %></span>&nbsp;&nbsp;
+  <% else %>
+    <% if likeable.class.name == "Review" %>
+      <% if likeable.likes.find_by(user_id: current_user.id) %>
+        <%= link_to review_like_path(likeable.id, likeable.likes.find_by(user_id: current_user.id).id), :method => :delete, remote: true do %>
+          <i class="material-icons like custom">favorite</i>
+        <% end %>
+      <% else %>
+        <%= link_to review_likes_path(likeable.id), :method => :post, remote: true do %>
+          <i class="material-icons like custom">favorite_border</i>
+        <% end %>
+      <% end %>
+      <span class="icon-side-count"><%= likeable.likes_count %></span>&nbsp;&nbsp;
+    <% end %>
+  <% end %>
+<% end %>

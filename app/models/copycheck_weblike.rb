@@ -1,0 +1,2 @@
+class CopycheckWeblike < ApplicationRecord
+end

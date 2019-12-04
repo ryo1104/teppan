@@ -1,0 +1,59 @@
+<%= javascript_pack_tag 'raty' %>
+<%= javascript_pack_tag 'custom' %>
+<% @page_title = "レビュー" %>
+<% breadcrumb :show_review, @review %>
+<div class="page-body-container">
+  <p><%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %></p>
+  <div class="row">
+    <div class="col s12 m8 topic-show">
+      <div class="indent-wrapper">
+        <h1 class="h1_class">レビュー</h1>
+      </div>
+      <ul class="collection z-depth-1">
+        <li class="collection-item avatar custom">
+          <%= link_to user_path(@review.user.id) do %>
+            <%= image_tag @review.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+          <% end %>
+          <span class="star_rating" rating-data="<%= @review.rate %>"></span>
+          <span class="star-rating-text">&nbsp;&nbsp;<%= @review.rate %></span>
+          <p class="review-text"><%= @review.text %></p>
+          <div class="collection-item-footer">
+            <span class="review-footer-text">
+              <%= atname(@review.user.nickname) %>&nbsp;&nbsp;
+              <%= @review.updated_at.to_s(:human) %>&nbsp;&nbsp;&nbsp;
+            </span>
+            <div class="review-footer-icons">
+              <span id="likes_buttons_<%= @review.class.name.downcase %>_<%= @review.id %>">
+                <%= render partial: 'likes/like', locals: { likeable: @review } %>
+              </span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12 m8 neta-show">
+      <div class="indent-wrapper">
+        <h1 class="h1_class">コメント(<%= @comments.count %>)</h1>
+      </div>
+      <% unless @comments %>
+        <div class="indent-wrapper">
+          <p> (投稿はまだありません) </p>
+        </div>
+        <% if user_signed_in? %>
+          <ul class="collection z-depth-1">
+            <%= render partial: "reviews/newcomment" %>
+          </ul>
+        <% end %>
+      <% else %>
+        <ul class="collection z-depth-1">
+          <%= render partial: "reviews/comment", :collection => @comments %>
+          <% if user_signed_in? %>
+            <%= render partial: "reviews/newcomment" %>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+</div>

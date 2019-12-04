@@ -1,0 +1,27 @@
+<div class="page-body-container">
+  <div class="row">
+    <div class="col s12 m9 user-page">
+      <h1 class="h1_class">銀行口座変更</h1>
+      <ul class="collection z-depth-1 user-page">
+        <%= form_with url: externalaccount_path, local: true, method: :patch do |f| %>
+          
+          <%= label_tag '銀行名' %>
+          <%= f.text_field :bank_name, :value => @bank_info["bank_name"] %>
+          <br>
+          <%= label_tag '支店名' %>
+          <%= f.text_field :branch_name, :value => @bank_info["branch_name"] %>
+          <br>
+          <%= label_tag '口座番号' %>
+          <%= f.text_field :account_number, :value => @bank_info["account_number"]  %>
+          <br>
+          <%= label_tag '口座名義人' %>
+          <%= f.text_field :account_holder_name, :value => @bank_info["account_holder_name"] %>
+          <br>
+          
+          <br>
+          <%= f.submit %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>

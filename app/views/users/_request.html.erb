@@ -1,0 +1,8 @@
+<tbody>
+  <tr>
+    <td><%= link_to request.title, request_path(request.id) %></td>
+    <td><%= request.finaldate.strftime('%Y/%m/%d') %></td>
+    <td><%= request.price %></td>
+    <td><%= request.get_status_string %></td>
+  </tr>
+</tbody>

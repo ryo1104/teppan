@@ -1,0 +1,57 @@
+<div class="row">
+  <div class="col s12 m12">
+    <h1 class="h1_class">コピーチェック</h1>
+    <ul class="collection z-depth-1">
+      <li class="collection-item">
+        <p>QueueID:<%= @check_obj.queue_id %></p>
+        <% if @check_obj.neta_id.present? %>
+        <p>NetaID:<%= link_to "#{@check_obj.neta_id}", neta_path(@check_obj.neta_id) %></p>
+        <% end %>
+        <p><b>本文：</b></p>
+        <%= @check_obj.text %>
+      </li>
+      <% if @check_obj.web_like_status.present? %>
+        <li class="collection-item">
+          <p><b>結果サマリー</b></p>
+          <p>類似サイトチェック:<%= @check_status.find(@check_obj.web_like_status).text %> &nbsp;&nbsp;
+             類似度:<%= @check_obj.web_like_percent %>％
+          </p>
+          <p>一致文字列チェック:<%= @check_status.find(@check_obj.web_match_status).text %>&nbsp;&nbsp;
+             類似度:<%= @check_obj.web_match_percent %>％
+          </p>
+          <p>CCD登録済記事とのチェック:<%= @check_status.find(@check_obj.text_match_status).text %>&nbsp;&nbsp;
+             類似度:<%= @check_obj.text_match_percent %>％
+          </p>
+        </li>
+        <li class="collection-item">
+          <p><b>類似サイト</b></p>
+          <% @web_like_list.each_with_index do |web_like, i| %>
+            <%= link_to "#{web_like.url}", web_like.url %><br>
+            類似度：<%= 100 - web_like.distance %>%&nbsp;&nbsp;
+            <%= web_like.text %><br>
+          <% end %>
+        <li class="collection-item">
+          <p><b>CCD登録済記事との類似度</b></p>
+          <% @text_like_list.each do |text_like| %>
+            類似 QueueID：<%= text_like.like_queue_id %>&nbsp;&nbsp;
+            類似度：<%= text_like.percent %><br>
+          <% end %>
+        </li>
+    </ul>
+      <% else %>
+    </ul>
+        <% if @check_obj.queue_id.present? %>
+          <%= link_to copycheck_path(@check_obj.id), {:method => :put, :class => 'btn btn-primary withripple custom'} do %>
+            <span>CCD結果取得</span>
+          <% end %>
+        <% else %>
+          <%= link_to copycheck_path(@check_obj.id), {:method => :put, :class => 'btn btn-primary withripple custom'} do %>
+            <span>CCDへ登録</span>
+          <% end %>
+        <% end %>
+      <% end %>
+    <%= link_to copychecks_path, {:class => 'btn btn-primary withripple custom'} do %>
+      <span>一覧へ戻る</span>
+    <% end %>
+  </div>
+</div>

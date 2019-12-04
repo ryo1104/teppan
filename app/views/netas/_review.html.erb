@@ -1,0 +1,22 @@
+<li class="collection-item avatar custom">
+  <%= link_to user_path(review.user.id) do %>
+    <%= image_tag review.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+  <% end %>
+  <%= link_to review_path(review.id), method: :get do %>
+    <span class="star_rating" rating-data="<%= review.rate %>"></span>
+    <span class="star-rating-text">&nbsp;&nbsp;<%= review.rate %></span>
+    <p class="review-text"><%= review.text %></p>
+    <div class="collection-item-footer">
+      <span class="review-footer-text">
+        <%= atname(review.user.nickname) %>&nbsp;&nbsp;
+        <%= review.updated_at.to_s(:human) %>&nbsp;&nbsp;&nbsp;
+      </span>
+      <div class="review-footer-icons">
+        <i class="material-icons comment custom">chat_bubble_outline</i>
+        <span class="icon-side-count"><%= review.comments_count %></span>&nbsp;&nbsp;
+        <i class="material-icons like custom">favorite_border</i>
+        <span class="icon-side-count"><%= review.likes_count %></span>
+      </div>
+    </div>
+  <% end %>
+</li>

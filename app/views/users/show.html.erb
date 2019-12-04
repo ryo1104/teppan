@@ -1,0 +1,206 @@
+<%= javascript_pack_tag 'raty' %>
+<%= javascript_pack_tag 'custom' %>
+<% @page_title = "プロフィール" %>
+<% breadcrumb :show_user, @user %>
+<div class="page-body-container">
+  <p><%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %></p>
+  <div class="row">
+    <div class="col s12 m9 user-page">
+      <% if @my_page %>
+        <div class="indent-wrapper">
+          <h1 class="h1_class">マイページ</h1>
+        </div>
+      <% end %>
+      <ul class="collection z-depth-1 user-page">
+      <div class="user-page-body-upper">
+        <div class="col s3 m3 user-page-left">
+          <div class="user-page-avatar-container">
+            <%= image_tag @user.avatar, {:class => "circle", :id => "user-page-image"} %>
+          </div>
+        </div>
+        <div class="col s9 m9 user-page-info">
+          <h1 class="h1_class"><%= @user.nickname %></h1>
+          <div class="user-page-basic">
+            <%= @user.age %>歳&nbsp;&nbsp;
+            <%= @user.gender_str %>&nbsp;&nbsp;
+            <%= @user.prefecture_name %>&nbsp;&nbsp;
+            <% if @premium_user[0] %>
+              <span class="user-page-prouser">認定User&nbsp;
+                <i class="material-icons check">check</i>
+              </span>
+            <% end %>
+          </div>
+          <div class="user-page-sns">
+            <span class="user-page-follows">
+              <% if @my_page %>
+                <%= link_to "/users/#{@user.id}/follows/following" do %>
+                  <b>123<%= @following_users_count %></b>&nbsp;フォロー&nbsp;&nbsp;
+                <% end %>
+              <% end %>
+              <%= link_to "/users/#{@user.id}/follows/followed" do %>
+                <b>123<%= @followed_users_count %></b>&nbsp;フォロワー&nbsp;&nbsp;
+              <% end %>
+            </span>
+            <% unless @my_page %>
+              <% unless @user.is_blocked_by(current_user.id) %>
+                <span id="follows_buttons_<%= @user.id %>">
+                  <%= render partial: 'follows/follow', locals: { user: @user, followed_users_count: @followed_users_count } %>
+                </span>&nbsp;&nbsp;&nbsp;
+                <%= link_to new_user_violation_path(@user.id) do %>
+                  <i class="material-icons user-more">more_horiz</i>
+                <% end %>
+              <% else %>
+                &nbsp;&nbsp;
+                <span class="user-violation-reported"><違反報告済></span>
+              <% end %>
+            <% else %>
+  
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="user-page-introduction"><%= text_extract_links(simple_format(h(@user.introduction))).html_safe %></div>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12 m9 user-page">
+      <div class="user-tab-menu">
+        <ul>
+          <li class="ChangeElem_Tab">投稿</li>
+          <% if @my_page %>
+          <li class="ChangeElem_Tab">購読</li>
+          <li class="ChangeElem_Tab">販売</li>
+          <li class="ChangeElem_Tab">アカウント</li>
+          <% end %>
+        </ul>
+      </div>
+      <div class="user-tab-contents z-depth-1">
+        <div class="ChangeElem_Panel">
+          <h1 class="h1_class">投稿したネタ(<%= @postednetas.count %>)</h1>
+          <% if @userrate == "-" %>
+            <b>平均評価：</b><span class="star_rating" rating-data="0"></span>&nbsp;
+          <% else %>
+            <b>平均評価：</b><span class="star_rating" rating-data="<%= @userrate %>"></span>&nbsp;
+            <span class="star-rating-text-user-page"><%= @userrate %></span>
+          <% end %><br>
+          <% if @postednetas %>
+            <ul class="collection">
+              <%= render partial: "users/myneta", collection: @postednetas %>
+            </ul>
+          <% else %>
+            <p>（投稿はありません）</p>
+          <% end %>
+          <h1 class="h1_class">リクエストしたトピック(<%= @requested_topics.count %>)</h1>
+          <% if @requested_topics %>
+          <ul class="collection">
+            <%= render partial: "users/mytopic", collection: @requested_topics %>
+          </ul>
+          <% else %>
+            <p>（投稿はありません）</p><br>
+          <% end %>
+        </div>
+        
+        <% if @my_page %>
+          <div class="ChangeElem_Panel">
+            <h1 class="h1_class">購入したネタ(<%= @bought_netas.count %>)</h1>
+            <% if @bought_netas %>
+            <ul class="collection">
+              <%= render partial: "users/bought_neta", collection: @bought_netas %>
+            </ul>
+            <% else %>
+              <p>（トピックはありません）</p>
+            <% end %>
+            <h1 class="h1_class">ブックマークしたネタ(<%= @interested_netas.count %>)</h1>
+            <% if @interested_netas %>
+            <ul class="collection">
+              <%= render partial: "netas/neta", collection: @interested_netas %>
+            </ul>
+            <% else %>
+              <p>（トピックはありません）</p>
+            <% end %>
+            <h1 class="h1_class">ブックマークしたトピック(<%= @interested_topics.count %>)</h1>
+            <% if @interested_topics %>
+            <ul class="collection">
+              <%= render partial: "topics/topic", collection: @interested_topics %>
+            </ul>
+            <% else %>
+              <p>（トピックはありません）</p>
+            <% end %>
+          </div> 
+        <% end %>
+
+        <% if @my_page %>
+          <div class="ChangeElem_Panel">
+            <% if @premium_user[0] %>
+              <h1 class="h1_class">販売実績</h1>
+              <% if @account_exists && @sold_netas_info[0] %>
+                <table>
+                  <thead>
+                    <tr>
+                      <th class="table_header_item">日時</th>
+                      <th class="table_header_item">ネタ</th>
+                      <th class="table_header_item">価格</th>
+                      <th class="table_header_item">購入者</th>
+                      <th class="table_header_item">評価</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <%= render partial: "users/sold_trade", collection: @sold_netas_info[1] %>
+                  </tbody>
+                </table>
+              <% else %>
+                (販売履歴はありません)<br>
+              <% end %>
+            <% else %>
+              有料ネタの販売を開始するためには、下記の条件を両方満たす必要があります。<br>
+              ・無料ネタ&nbsp;３つ以上投稿<br>
+              ・レビュー平均&nbsp;3.0以上<br>
+              <br>
+              <b>無料ネタ実績</b><br>
+              ネタ数　：<%= @premium_user[2].count %><br>
+              評価平均
+              <% if @premium_user[1] == "-" %>
+                <span class="star_rating" rating-data="0"></span>
+              <% else %>
+                <span class="star_rating" rating-data="<%=@premium_user[1] %>"></span>
+                <span class="star-rating-text">&nbsp;&nbsp;<%= @premium_user[1] %></span>
+              <% end %>
+              <br>
+            <% end %><br>
+            <br>
+          </div>
+        <% end %>
+        
+        <% if @my_page %>
+          <div class="ChangeElem_Panel">
+            <h1 class="h1_class">アカウント</h1>
+            <div class="user-page-links">
+              <%= link_to 'プロフィール編集', edit_user_path(current_user.id), :class => "button-points" %>&nbsp;&nbsp;
+              <% unless @user.authorization %>
+                <%= link_to 'パスワード変更', edit_user_registration_path(current_user), :class => "button-points" %><br>
+              <% end %>
+            </div>
+            <h1 class="h1_class">プラン</h1>
+            <% if @premium_user[0] %>
+              <% unless @user.subscription %>
+                <%= link_to '有料プラン申込', new_user_subscription_path(@user.id), :class => "button-points" %><br>
+              <% else %>
+                <%= link_to '詳細', user_subscription_path(@user.id, @user.subscription.id), :class => "button-points" %><br>
+                <h1 class="h1_class">出金用 銀行口座</h1>
+                <% unless @user.account %>
+                  <%= link_to '登録', new_user_account_path(@user.id), :method => :get, :class => "button-points" %>
+                <% else %>
+                  <%= link_to '詳細', account_path(@user.account.id), :class => "button-points" %><br><br>
+                <% end %>
+              <% end %>
+            <% else %>
+              <div class="btn btn-primary withripple custom inactive">有料プラン申込</div>
+            <% end %>
+          </div>
+        <% end %>
+        
+      </div>
+    </div>
+  </div>
+</div>

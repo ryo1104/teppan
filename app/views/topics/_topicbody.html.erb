@@ -1,0 +1,43 @@
+<ul class="collection z-depth-1">
+  <li class="collection-item avatar custom">
+    <p>
+      <%= link_to user_path(@topic.user_id) do %>
+        <%= image_tag @topic.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+      <% end %>
+    </p>
+    <p class="topic-body-title"><%= @topic.title %></p>
+    <p class="topic-body-text">
+      <%= text_extract_links(simple_format(h(@topic.text))).html_safe %>
+      <% if user_signed_in? %> 
+        <% if @topic.editable(current_user) %>
+          <%= link_to '編集', edit_topic_path(@topic.id) %>
+        <% end %>
+      <% end %>
+    </p>
+    <div class="collection-item-footer">
+      <p class="topic-footer-text">
+        <%= atname(@topic.user.nickname) %>&nbsp;&nbsp;
+        <%= @topic.created_at.to_s(:human) %>&nbsp;&nbsp;
+        <%= @topic.pageviews_count %>&nbsp;views
+      </p>
+      <p class="topic-footer-icons">
+        <% if user_signed_in? %>
+          <% unless @topic.owner(current_user) %>
+            <span id="likes_buttons_<%= @topic.class.name.downcase %>_<%= @topic.id %>">
+              <%= render partial: 'likes/like', locals: { likeable: @topic } %>
+            </span>
+            <span id="bookmark_buttons_<%= @topic.class.name.downcase %>_<%= @topic.id %>">
+              <%= render partial: 'interests/interest', locals: { interestable: @topic } %>
+            </span>
+          <% else %>
+            <i class="material-icons bookmark custom non-active">bookmark_border</i>&nbsp;&nbsp;
+          <% end %>
+        <% else %>
+          <i class="material-icons like custom">favorite_border</i>
+          <span class="icon-side-count"><%= @topic.likes_count %></span>&nbsp;&nbsp;
+          <i class="material-icons bookmark custom">bookmark_border</i>
+        <% end %>
+      </p>
+    </div>
+  </li>
+</ul>

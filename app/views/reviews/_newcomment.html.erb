@@ -1,0 +1,9 @@
+<li class="collection-item avatar custom" >
+  <%= link_to user_path(current_user.id) do %>
+    <%= image_tag current_user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+  <% end %>  
+  <%= form_for [@review, @newcomment] do |f| %>
+    <%= f.text_area :text, placeholder: 'コメントを書いて下さい', style: 'width: 100%; height: 70px;' %>
+    <%= f.submit "コメント", class: "btn btn-primary withripple custom" %>
+  <% end %>
+</li>

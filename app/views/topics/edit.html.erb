@@ -1,0 +1,28 @@
+<%= javascript_pack_tag 'custom' %>
+<% breadcrumb :edit_topic, @topic %>
+<div class="page-body-container">
+  <p><%= breadcrumbs separator: "  &rsaquo;  "%></p>
+  <div class="row">
+    <div class="col s12 m6">
+      <div class="card white">
+        <div class="card-content black-text">
+          <%= form_for @topic do |f| %>
+            <% if @topic.errors.any? %>
+              <%= render :partial => "errorform" %>
+            <% end %>
+            <p>トピック名</p><%= f.text_field :title, maxlength: 30 %>
+            <p>説明</p><%= f.text_area :text, style: 'width: 100%; height: 200px;', maxlength: 200 %>
+            <br>
+            <%= button_tag :type => "submit", class: "btn btn-primary withripple custom" do %>
+              <i class="material-icons left">refresh</i>更新
+            <% end %>
+            <%= link_to topic_path(@topic.id), {:method => :delete, :class => 'btn btn-primary withripple custom', data: { confirm: "本当にトピックを削除しますか？" }} do %>
+              <i class="material-icons left">delete</i>
+              <span>削除</span><br>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

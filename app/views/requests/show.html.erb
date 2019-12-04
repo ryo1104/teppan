@@ -1,0 +1,16 @@
+<%= javascript_pack_tag 'custom' %>
+<div class="page-body-container">
+  <% if @request.status == "OPEN" %>
+    <%= render :partial => "open" %>
+  <% else %>
+    <% if @request.status == "ASSIGNED" %>
+        <%= render :partial => "assigned" %>
+    <% end %>
+    <% if @request.status == "IN_PROGRESS" %>
+      <%= render :partial => "inprogress" %>
+    <% end %>
+    <% if @request.status == "FINAL" %>
+      <%= render :partial => "final" %>
+    <% end %>
+  <% end %>
+</div>

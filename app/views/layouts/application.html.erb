@@ -14,7 +14,15 @@
       <div class="nav-wrapper">
         <a href="<%= root_path %>" class="brand-logo left">teppan</a>
         <ul class="nav-contents right hide-on-med-and-down">
-          <li class="hide-on-med-and-down">ネタ</li>
+          <li class="hide-on-med-and-down"><%= link_to "ネタ", netas_path, method: :get %></li>
+          <li class="hide-on-med-and-down"><%= link_to "トピック", topics_path, method: :get %></li>
+          <% if user_signed_in? %>
+            <li class="hide-on-med-and-down"><%= link_to "マイページ", user_path(current_user) %></li>
+            <li class="hide-on-med-and-down"><%= link_to "ログアウト", destroy_user_session_path, method: :delete %></li>
+          <% else %>
+            <li class="hide-on-med-and-down"><%= link_to "ログイン", new_user_session_path, class: 'post' %></li>
+            <li class="hide-on-med-and-down"><%= link_to "ユーザー登録", new_user_registration_path, class: 'post' %></li>
+          <% end %>
         </ul>
       </div>
     </nav>

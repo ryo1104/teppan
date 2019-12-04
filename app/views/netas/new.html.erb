@@ -1,0 +1,42 @@
+<%= javascript_pack_tag 'custom' %>
+<% @page_title = "新規ネタ" %>
+<% breadcrumb :new_koneta, @topic %>
+<div class="page-body-container">
+  <p><%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %></p>
+  <div class="row">
+    <div class="col s12 m8 topic-show">
+      <h1 class="h1_class">トピック</h1>
+      <%= render partial: "topics/topicbody", :locals => { topic: @topic }%>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12 m8 neta-entry">
+      <h1 class="h1_class">投稿ネタ</h1>
+      <ul class="collection z-depth-1">
+        <li class="collection-item">
+          <%= form_with url: topic_netas_path(@topic.id), local: true, method: :post do |f| %>
+            <% if @neta.errors.any? %>
+              <%= render :partial => "errorform" %>
+            <% end %>
+            <%= f.text_area :text, placeholder: "８００字以内", :class => "neta-form-text", :minlength => '20', :maxlength => '800' %>
+            <%= f.hidden_field :timestamp, :value => @stale_form_check_timestamp %>
+            <% if @qualified %>
+              <%= f.text_area :valuetext, placeholder: "有料部分（８００字以内）", :class => "neta-form-text", :minlength => '20', :maxlength => '800' %>
+            <% end %>
+            <span>価格</span>
+            <% if @qualified %>
+              <%= f.number_field :price, min: 0, step: 10, :value => 0 %>
+            <% else %>
+              <%= f.number_field :price, :readonly => true, :value => 0 %>
+            <% end %>
+            <%= f.select :private_flag, [['公開', false], ['非公開', true]], { include_blank: false, selected: @neta.private_flag }, { class: "browser-default" } %>
+            <br>
+            <%= button_tag :type => "submit", data: {disable_with: '保存中...'}, class: "btn btn-primary withripple custom" do %>
+              <i class="material-icons left">create</i>投稿
+            <% end %>
+          <% end %>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

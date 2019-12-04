@@ -1,0 +1,121 @@
+<%= javascript_pack_tag 'raty' %>
+<%= javascript_pack_tag 'custom' %>
+<% @page_title = "小ネタ" %>
+<% breadcrumb :show_koneta, @neta %>
+<div class="page-body-container">
+  <p><%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %></p>
+  <div class="row">
+    <div class="col s12 m8 neta-show">
+      <div class="indent-wrapper">
+        <h1 class="h1_class">投稿ネタ</h1>
+      </div>
+      <ul class="collection z-depth-1">
+        <li class="collection-item avatar custom">
+          <%= link_to user_path(@neta.user_id) do %>
+            <%= image_tag @neta.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+          <% end %>
+          <% if @owner || @neta.private_flag == false %>
+            <div class="neta-text"><%= text_extract_links(simple_format(h(remove_hashtags(@neta.text)))).html_safe %></div>
+            <div class="neta-purchase">
+              <% if @neta.price != 0 %>
+                <% unless (@purchased || @owner) %>
+                  <% if @for_sale %>
+                    <p class="neta-text-divider">--------  これより先は有料コンテンツです（<%= @neta.valuetext.length %>文字）--------</p>
+                    <span class="neta-price"><%= @neta.price %>&nbsp;円&nbsp;&nbsp;</span>
+                    <%= link_to new_neta_trade_path(@neta.id), {:class => 'btn btn-primary withripple custom' } do %>
+                      <i class="material-icons left">get_app&nbsp;</i>購入
+                    <% end %>
+                  <% else %>
+                    <p class="neta-text-divider">--------  現在は販売されておりません --------</p>
+                    <span class="neta-price-inactive"><%= @neta.price %>&nbsp;円&nbsp;&nbsp;</span>
+                    <div class="btn btn-primary withripple custom inactive">購入</div>
+                  <% end %>
+                <% else %>
+                  <% if @neta.valuetext.present? %>
+                    <p class="neta-text-divider">---------  ここから有料部分   ---------</p>
+                    <div class="neta-text"><%= text_extract_links(simple_format(h(remove_hashtags(@neta.valuetext)))).html_safe %></div>
+                  <% end %>
+                  <% unless @owner %>
+                    <span class="neta-price-inactive"><%= @purchased.price %>&nbsp;円&nbsp;で購入済み</span>
+                  <% else %>
+                    <span class="neta-price"><%= @neta.price %>&nbsp;円&nbsp;&nbsp;</span>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </div>
+            <% @neta.hashtags.each do |tag| %>
+              <div class="chip custom"><%= link_to "#"+tag.hashname, "/neta/hashtag/#{tag.hashname}" %></div>
+            <% end %>
+            <% if @owner %>
+              <p><%= link_to "編集", edit_neta_path(@neta.id) %></p>
+            <% end %>
+            <div class="collection-item-footer">
+              <p class="neta-footer-text">
+                <%= atname(@neta.user.nickname) %>&nbsp;&nbsp;
+                <%= @neta.created_at.to_s(:human) %>&nbsp;&nbsp;
+                <%= @neta.pageviews_count %>&nbsp;views&nbsp;&nbsp;
+                <%= @neta.public_str if @owner %>
+              </p>
+              <p class="neta-footer-icons">
+                <% if user_signed_in? %>
+                  <% unless @owner %>
+                    <span id="bookmark_buttons_<%= @neta.class.name.downcase %>_<%= @neta.id %>">
+                      <%= render partial: 'interests/interest', locals: { interestable: @neta } %>
+                    </span>
+                  <% else %>
+                    <i class="material-icons bookmark custom non-active">bookmark_border</i>&nbsp;&nbsp;
+                  <% end %>
+                <% else %>
+                  <i class="material-icons bookmark custom">bookmark_border</i>
+                <% end %>
+              </p>
+            </div>
+          <% else %>
+            <%= @message %>
+          <% end %>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <% if @owner || @neta.private_flag == false %>
+  <div class="row">
+    <div class="col s12 m8 neta-show">
+      <div class="indent-wrapper">
+        <h1 class="h1_class">レビュー(<%= @reviews.count %>)</h1>
+      </div>
+      <% if @reviews %>
+        <ul class="collection z-depth-1">
+        <%= render partial: "netas/review", collection: @reviews %>
+        </ul>
+      <% else %>
+        <div class="indent-wrapper">
+          <p> (レビューはありません) </p>
+        </div>
+      <% end %>
+      <% unless @owner %>
+        <% if @neta.price == 0 || @purchased %>
+          <% unless @myreview.present? %>
+            <ul class="collection z-depth-1">
+              <li class="collection-item avatar custom">
+                <%= link_to user_path(current_user.id) do %>
+                  <%= image_tag current_user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+                <% end %>  
+                <%= form_for [@neta, @newreview] do |f| %>
+                  評価して下さい（1〜5点）
+                  <%= f.hidden_field :rate, id: :review_rate %>
+                  <div class='new_star_rating'></div>
+                  <p id="hint1" style="height: 1.5em; width: 8em;"></p>
+                  <%= f.text_area :text, placeholder: 'コメントを書いてください', style: 'width: 100%; height: 80px;', :maxlength => '200' %>
+                  <%= button_tag :type => "submit", class: "btn btn-primary withripple custom" do %>
+                    <i class="material-icons left">create</i>レビューを投稿
+                  <% end %>
+                <% end %>
+              </li>
+            </ul>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+  <% end %>
+</div>
