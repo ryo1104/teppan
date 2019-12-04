@@ -40,4 +40,3 @@ $('.button-collapse').sideNav({
   menuWidth: 160,
   edge: 'right', // Choose the horizontal origin
 });
-
