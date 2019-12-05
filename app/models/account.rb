@@ -4,7 +4,7 @@ class Account < ApplicationRecord
   has_many    :idcards, dependent: :destroy
   has_many    :payouts, dependent: :destroy
   validates   :user_id, presence: true, uniqueness: true
-  validates   :stripe_acct_id, uniqueness: true, allow_nil: true
+  validates   :stripe_acct_id, uniqueness: { case_sensitive: true }, allow_nil: true
   validate    :stripe_acct_id_check
   include StripeUtils
 
@@ -12,7 +12,7 @@ class Account < ApplicationRecord
   def stripe_acct_id_check
     if self.stripe_acct_id.present?
       unless self.stripe_acct_id.starts_with? 'acct_'
-        errors.add(:stripe_acct_id, "invalid stripe_acct_id")
+        errors.add(:stripe_acct_id, "stripe_acct_id does not start with acct_")
       end
     end
   end

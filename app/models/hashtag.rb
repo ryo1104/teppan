@@ -2,7 +2,7 @@ class Hashtag < ApplicationRecord
   has_many  :hashtag_netas
   has_many  :netas, through: :hashtag_netas
   has_many  :hashtag_hits, dependent: :delete_all
-  validates :hashname, presence: true, uniqueness: true, length: { maximum: 30 }
+  validates :hashname, presence: true, uniqueness: { case_sensitive: true }, length: { maximum: 30 }
   validates :hit_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :neta_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   

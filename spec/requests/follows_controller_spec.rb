@@ -88,9 +88,9 @@ RSpec.describe FollowsController, type: :request do
           delete user_follow_path(@target_user.id, @follower.id), xhr: true
           expect(response).to redirect_to user_path(@target_user.id)
         end
-        it "returns a 302 status code" do
+        it "returns a 200 status code" do
           delete user_follow_path(@target_user.id, @follower.id), xhr: true
-          expect(response).to have_http_status("302")
+          expect(response).to have_http_status("200")
         end
       end
     end

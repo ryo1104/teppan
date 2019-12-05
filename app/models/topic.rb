@@ -5,7 +5,7 @@ class Topic < ApplicationRecord
   has_many    :interests, as: :interestable
   has_many    :comments,  as: :commentable, dependent: :destroy
   has_many    :likes,     as: :likeable, dependent: :destroy
-  validates   :title,     presence: true, uniqueness: true, length: { maximum: 30 }
+  validates   :title,     presence: true, uniqueness: { case_sensitive: true }, length: { maximum: 30 }
   validates   :text,      presence: true, length: { maximum: 200 }
   
   def max_rate

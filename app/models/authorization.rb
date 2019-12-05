@@ -1,7 +1,7 @@
 class Authorization < ApplicationRecord
   belongs_to :user
   validates_presence_of :user_id, :uid, :provider
-  validates             :uid, uniqueness: {:scope => :provider, message: "すでにこのユーザーは登録されています。"}
+  validates             :uid, uniqueness: {:scope => :provider, case_sensitive: true, message: "すでにこのユーザーは登録されています。"}
 
   def self.find_from_auth(auth)
     find_by_provider_and_uid(auth['provider'], auth['uid'])

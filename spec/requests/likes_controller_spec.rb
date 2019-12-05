@@ -184,9 +184,9 @@ RSpec.describe LikesController, type: :request do
             delete topic_like_path(@topic.id, @like.id), xhr: true
             expect(response).to redirect_to "/topics/#{@topic.id}"
           end
-          it "returns a 302 status code" do
+          it "returns a 200 status code" do
             delete topic_like_path(@topic.id, @like.id), xhr: true
-            expect(response).to have_http_status("302")
+            expect(response).to have_http_status("200")
           end
         end
       end
@@ -219,9 +219,9 @@ RSpec.describe LikesController, type: :request do
             delete comment_like_path(@comment.id, @like.id), xhr: true
             expect(response).to redirect_to "/comments/#{@comment.id}"
           end
-          it "returns a 302 status code" do
+          it "returns a 200 status code" do
             delete comment_like_path(@comment.id, @like.id), xhr: true
-            expect(response).to have_http_status("302")
+            expect(response).to have_http_status("200")
           end
         end
       end
@@ -254,9 +254,9 @@ RSpec.describe LikesController, type: :request do
             delete review_like_path(@review.id, @like.id), xhr: true
             expect(response).to redirect_to "/reviews/#{@review.id}"
           end
-          it "returns a 302 status code" do
+          it "returns a 200 status code" do
             delete review_like_path(@review.id, @like.id), xhr: true
-            expect(response).to have_http_status("302")
+            expect(response).to have_http_status("200")
           end
         end
       end

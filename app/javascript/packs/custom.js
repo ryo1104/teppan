@@ -1,4 +1,4 @@
-$(function(){
+jQuery(function(){
   $('.star_rating').raty({
     score: function() {
     return $(this).attr('rating-data');
@@ -13,8 +13,8 @@ $(function(){
   });
 });
 
-$(function(){
-  $('.new_star_rating').raty({
+jQuery(function(){
+  jQuery('.new_star_rating').raty({
     number   : 5,  
     half     : false,
     precision:   false,
@@ -26,14 +26,17 @@ $(function(){
     targetType: 'number',
     round:  { down: .25, full: .6, up: .76 },
     click: function(score, evt) {
-      $("#review_rate").val(score);
+      jQuery("#review_rate").val(score);
     }
   });
 });
 
+jQuery(document).ready(function(){
+  // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+  jQuery('.modal').modal();
+});
 
-
-$('.button-collapse').sideNav({
+jQuery('.button-collapse').sideNav({
   menuWidth: 160,
   edge: 'right', // Choose the horizontal origin
 });

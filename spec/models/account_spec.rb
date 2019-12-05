@@ -358,7 +358,7 @@ RSpec.describe Account, type: :model do
     it "is invalid if stripe_acct_id does not start with acct_" do
       account = build(:account, user: user_create, stripe_acct_id: "aaaa_"+Faker::Lorem.characters(number: 16))
       account.valid?
-      expect(account.errors[:stripe_acct_id]).to include("invalid stripe_acct_id")
+      expect(account.errors[:stripe_acct_id]).to include("stripe_acct_id does not start with acct_")
     end
 
     it "is invalid with a duplicate stripe_acct_id" do
