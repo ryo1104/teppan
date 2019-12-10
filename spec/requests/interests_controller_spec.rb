@@ -135,9 +135,9 @@ RSpec.describe InterestsController, type: :request do
             delete topic_interest_path(@topic.id, @interest.id), xhr: true
             expect(response).to redirect_to "/topics/#{@topic.id}"
           end
-          it "returns a 200 status code" do
+          it "returns a 302 status code" do
             delete topic_interest_path(@topic.id, @interest.id), xhr: true
-            expect(response).to have_http_status("200")
+            expect(response).to have_http_status("302")
           end
         end
       end
@@ -169,9 +169,9 @@ RSpec.describe InterestsController, type: :request do
             delete neta_interest_path(@neta.id, @interest.id), xhr: true
             expect(response).to redirect_to "/netas/#{@neta.id}"
           end
-          it "returns a 200 status code" do
+          it "returns a 302 status code" do
             delete neta_interest_path(@neta.id, @interest.id), xhr: true
-            expect(response).to have_http_status("200")
+            expect(response).to have_http_status("302")
           end
         end
       end

@@ -1,6 +1,10 @@
 <li class="collection-item avatar custom" >
   <%= link_to user_path(comment.user.id) do %>
-    <%= image_tag comment.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+    <% if comment.user.avatar.present? %>
+      <%= image_pack_tag comment.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+    <% else %>
+      <%= image_pack_tag "no_user_image.png", {:class => "circle custom", :id => "mycircle"} %>
+    <% end %>
   <% end %>
   <p class="comment-text"><%= comment.text %></p>
   <div class="collection-item-footer">

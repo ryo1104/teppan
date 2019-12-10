@@ -1,7 +1,7 @@
 <li class="collection-item avatar custom">
   <p>
     <%= link_to user_path(bought_neta.user_id) do %>
-    <%= image_tag bought_neta.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+    <%= image_pack_tag bought_neta.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
     <% end %>
   </p>
   <%= link_to neta_path(bought_neta.id) do %>

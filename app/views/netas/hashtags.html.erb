@@ -1,5 +1,5 @@
 <%= javascript_pack_tag 'raty' %>
-<%= javascript_pack_tag 'custom' %>
+
 <% @page_title = "#"+@tag.hashname %>
 <% breadcrumb :hashtag, @tag %>
 <div class="page-body-container">
@@ -15,7 +15,7 @@
             <li class="collection-item avatar custom">
               <p>
               <%= link_to user_path(neta.user_id) do %>
-              <%= image_tag neta.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+              <%= image_pack_tag neta.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
               <% end %>
               </p>
               <%= link_to neta_path(neta.id) do %>

@@ -1,5 +1,5 @@
 <%= javascript_pack_tag 'raty' %>
-<%= javascript_pack_tag 'custom' %>
+
 <% @page_title = "レビュー" %>
 <% breadcrumb :show_review, @review %>
 <div class="page-body-container">
@@ -12,7 +12,11 @@
       <ul class="collection z-depth-1">
         <li class="collection-item avatar custom">
           <%= link_to user_path(@review.user.id) do %>
-            <%= image_tag @review.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+            <% if @review.user.avatar.present? %>
+              <%= image_tag @review.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+            <% else %>
+              <%= image_pack_tag "no_user_image.png", {:class => "circle custom", :id => "mycircle"} %>
+            <% end %>
           <% end %>
           <span class="star_rating" rating-data="<%= @review.rate %>"></span>
           <span class="star-rating-text">&nbsp;&nbsp;<%= @review.rate %></span>

@@ -69,7 +69,7 @@ class User < ApplicationRecord
     if self.image.attached?
       return self.image
     else
-      return "no_user_image.png"
+      return nil
     end
   end
   

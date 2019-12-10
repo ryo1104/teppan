@@ -1,7 +1,11 @@
 <li class="collection-item avatar custom">
   <p>
     <%= link_to user_path(topic.user_id) do %>
-    <%= image_tag topic.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+      <% if topic.user.avatar.present? %>
+        <%= image_tag topic.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+      <% else %>
+        <%= image_pack_tag "no_user_image.png", {:class => "circle custom", :id => "mycircle"} %>
+      <% end %>
     <% end %>
   </p>
   <%= link_to topic_path(topic.id) do %>

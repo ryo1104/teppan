@@ -1,6 +1,10 @@
 <li class="collection-item avatar custom">
   <%= link_to user_path(review.user.id) do %>
-    <%= image_tag review.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+    <% if review.user.avatar.present? %>
+      <%= image_tag review.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+    <% else %>
+      <%= image_pack_tag "no_user_image.png", {:class => "circle custom", :id => "mycircle"} %>
+    <% end %>
   <% end %>
   <%= link_to review_path(review.id), method: :get do %>
     <span class="star_rating" rating-data="<%= review.rate %>"></span>

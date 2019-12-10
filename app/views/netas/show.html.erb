@@ -1,5 +1,4 @@
 <%= javascript_pack_tag 'raty' %>
-<%= javascript_pack_tag 'custom' %>
 <%= javascript_pack_tag 'materialize' %>
 <% @page_title = "小ネタ" %>
 <% breadcrumb :show_koneta, @neta %>
@@ -13,7 +12,11 @@
       <ul class="collection z-depth-1">
         <li class="collection-item avatar custom">
           <%= link_to user_path(@neta.user_id) do %>
-            <%= image_tag @neta.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+            <% if @neta.user.avatar.present? %>
+              <%= image_tag @neta.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+            <% else %>
+              <%= image_pack_tag "no_user_image.png", {:class => "circle custom", :id => "mycircle"} %>
+            <% end %>
           <% end %>
           <% if @owner || @neta.private_flag == false %>
             <div class="neta-text"><%= text_extract_links(simple_format(h(remove_hashtags(@neta.text)))).html_safe %></div>
@@ -99,7 +102,11 @@
             <ul class="collection z-depth-1">
               <li class="collection-item avatar custom">
                 <%= link_to user_path(current_user.id) do %>
-                  <%= image_tag current_user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+                  <% if current_user.avatar.present? %>
+                    <%= image_tag current_user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+                  <% else %>
+                    <%= image_pack_tag "no_user_image.png", {:class => "circle custom", :id => "mycircle"} %>
+                  <% end %>
                 <% end %>  
                 <%= form_for [@neta, @newreview] do |f| %>
                   評価して下さい（1〜5点）
@@ -120,3 +127,38 @@
   </div>
   <% end %>
 </div>
+<script>
+window.onload = function(){
+  $('.star_rating').raty({
+    score: function() {
+    return $(this).attr('rating-data');
+    },
+    readOnly : true,
+    number   : 5,  
+    half     : true,
+    size     : 24,
+    starHalf : '/assets/star-half.png',
+    starOff  : '/assets/star-off.png',
+    starOn   : '/assets/star-on.png',
+  });
+};
+</script>
+<script>
+window.onload = function(){
+  $('.new_star_rating').raty({
+    number   : 5,  
+    half     : false,
+    precision:   false,
+    size     : 24,
+    starHalf : '/assets/star-half.png',
+    starOff  : '/assets/star-off.png',
+    starOn   : '/assets/star-on.png',
+    target: '#hint1',
+    targetType: 'number',
+    round:  { down: .25, full: .6, up: .76 },
+    click: function(score, evt) {
+      $("#review_rate").val(score);
+    }
+  });
+};
+</script>

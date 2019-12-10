@@ -1,5 +1,4 @@
 <%= javascript_pack_tag 'raty' %>
-<%= javascript_pack_tag 'custom' %>
 <%= javascript_pack_tag 'materialize' %>
 <% @page_title = "小ネタ一覧" %>
 <% breadcrumb :netas %>
@@ -75,24 +74,26 @@
       <% end %>
     </div>
   </div>
-  
-  <!-- Modal Trigger -->
-  <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
-
-  <!-- Modal Structure -->
-  <div id="modal1" class="modal">
-    <div class="modal-content">
-      <h4>Modal Header</h4>
-      <p>A bunch of text</p>
-    </div>
-    <div class="modal-footer">
-      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-    </div>
-  </div>
-  <script>
-    $(document).ready(function(){
-    // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
-      $('.modal').modal();
-    });
-  </script>
 </div>
+<script>
+  $(document).ready(function(){
+  // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+    $('.modal').modal();
+  });
+</script>
+<script>
+$(document).ready(function(){
+  $('.star_rating').raty({
+    score: function() {
+    return $(this).attr('rating-data');
+    },
+    readOnly : true,
+    number   : 5,  
+    half     : true,
+    size     : 24,
+    starHalf : 'public/packs/media/images/star-half.png',
+    starOff  : 'public/packs/media/images/star-off.png',
+    starOn   : 'public/packs/media/images/star-on.png',
+  });
+});
+</script>

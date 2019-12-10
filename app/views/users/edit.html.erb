@@ -1,4 +1,4 @@
-<%= javascript_pack_tag 'custom' %>
+
 <% @page_title = "プロフィール編集" %>
 <% breadcrumb :edit_user, current_user %>
 <div class="page-body-container">
@@ -20,7 +20,7 @@
             <div class="user-profile-edit-tophalf">
               <div class="col s3 m3 user-page-left">
                 <div class="user-page-avatar-container">
-                  <%= image_tag @user.avatar, {:class => "circle", :id => "user-page-image"} %>
+                  <%= image_pack_tag @user.avatar, {:class => "circle", :id => "user-page-image"} %>
                 </div>
                 <label>
                   <div class="filelabel" title="ファイルを選択">

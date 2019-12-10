@@ -5,9 +5,7 @@
     <title>Teppan</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <%= javascript_pack_tag 'application' %>
   </head>
 
   <body>
@@ -27,11 +25,14 @@
         </ul>
       </div>
     </nav>
+      
     <% flash.each do |key, value| %>
       <%= content_tag(:div, value, class: "#{key}") %>
     <% end %>
+    
     <%= yield %>
   </body>
+  
   <footer class="page-footer orange accent-4">
     <div class="row footer-contents">
       <div class="col s6 m6 footer-column1">footer column 1</div>
@@ -45,4 +46,5 @@
     </div>
     <div class="footer-copyright orange accent-4">© 2020 Teppan</div>
   </footer>
+
 </html>
