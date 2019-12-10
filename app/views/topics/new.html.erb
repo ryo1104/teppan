@@ -12,7 +12,7 @@
               <%= render :partial => "errorform" %>
             <% end %>
             <p>タイトル</p><%= f.text_field :title, placeholder: "３０字以内", maxlength: 30 %>
-            <p>内容</p><%= f.text_area :text, style: 'width: 100%; height: 200px;', placeholder: "２００字以内", maxlength: 200 %>
+            <p>内容</p><%= f.rich_text_area :text, style: 'width: 100%; height: 200px;', maxlength: 200 %>
             <br>
             <%= button_tag :type => "submit", class: "btn btn-primary withripple custom" do %>
               <i class="material-icons left">create</i>投稿

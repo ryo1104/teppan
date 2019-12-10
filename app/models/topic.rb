@@ -1,13 +1,13 @@
 class Topic < ApplicationRecord
-  belongs_to  :user
-  has_many    :netas
-  has_many    :pageviews, as: :pageviewable
-  has_many    :interests, as: :interestable
-  has_many    :comments,  as: :commentable, dependent: :destroy
-  has_many    :likes,     as: :likeable, dependent: :destroy
-  validates   :title,     presence: true, uniqueness: { case_sensitive: true }, length: { maximum: 30 }
-  validates   :text,      presence: true, length: { maximum: 200 }
-  
+  belongs_to    :user
+  has_rich_text :text
+  has_many      :netas
+  has_many      :pageviews, as: :pageviewable
+  has_many      :interests, as: :interestable
+  has_many      :comments,  as: :commentable, dependent: :destroy
+  has_many      :likes,     as: :likeable, dependent: :destroy
+  validates     :title,     presence: true, uniqueness: { case_sensitive: true }, length: { maximum: 30 }
+
   def max_rate
     maxrate = 0
     self.netas.each do |neta|

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_04_094925) do
+ActiveRecord::Schema.define(version: 2019_12_10_133251) do
 
   create_table "accounts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "user_id"
@@ -18,6 +18,16 @@ ActiveRecord::Schema.define(version: 2019_12_04_094925) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "stripe_status"
+  end
+
+  create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "body", size: :long
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
   end
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
@@ -239,7 +249,6 @@ ActiveRecord::Schema.define(version: 2019_12_04_094925) do
 
   create_table "topics", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "title"
-    t.text "text", size: :medium
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
