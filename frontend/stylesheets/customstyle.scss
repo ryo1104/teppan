@@ -252,8 +252,9 @@ label.custom{
 }
 
 .topic-body-title{
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   font-weight: bold;
+  padding: 1rem 0 1rem 0;
 }
 .topic-footer-text{
   float: left;
@@ -358,11 +359,11 @@ label.custom{
 
 @media screen and (max-width:480px) {
   body{
-    font-size:  13px;
+    font-size:  1rem;
   }
 
   a{
-    font-size:  13px;
+    font-size:  1rem;
   }
   
   .page-body-container{
@@ -387,14 +388,14 @@ label.custom{
   }
   
   .h1_class{
-    font-size:  13px;
+    font-size:  1rem;
     font-weight: bold;
     margin: .5rem 0;
     // padding: 0 0.5rem;
   }
   
   .h2_class{
-    font-size:  13px;
+    font-size:  1rem;
     font-weight: bold;
     margin-top: .5rem;
     margin-bottom: .5rem;
@@ -542,7 +543,7 @@ label.custom{
   //   }
   // }
   
-  .col.s12.m8.topic-show{
+  .col.s12.m10.topic-show{
     margin: 0;
     padding: 0;
   }
@@ -838,7 +839,7 @@ label.custom{
 @media screen and (min-width:769px) {
 
   body{
-    font-size:  13px;
+    font-size:  1rem;
   }
 
   .page-body-container{
@@ -860,14 +861,14 @@ label.custom{
   }
   
   .h1_class{
-    font-size:  14px;
+    font-size:  1rem;
     font-weight: bold;
     margin: .5rem 0;
     // padding: 0 0.5rem;
   }
   
   .h2_class{
-    font-size:  14px;
+    font-size:  1rem;
     font-weight: bold;
     margin-top: .5rem;
     margin-bottom: .5rem;
@@ -1052,12 +1053,13 @@ label.custom{
   // }
   
   a{
-    font-size:  13px;
+    font-size:  1rem;
   }
   
   p{
-    font-size:  13px;
+    font-size:  1rem;
   }
+  
   td{
     font-size:  13px;
     padding: 5px 5px;

@@ -1,8 +1,0 @@
-<tbody>
-  <tr>
-    <td class="left-align"><%= link_to completed_request.title, request_path(completed_request.id) %></td>
-    <td class="center-align"><%= completed_request.price %></td>
-    <td class="center-align"><%= link_to atname(completed_request.assignee.nickname), user_path(completed_request.assignee_id) %></td>
-    <td class="center-align"><%= completed_request.average_rate %></td>
-  </tr>
-</tbody>

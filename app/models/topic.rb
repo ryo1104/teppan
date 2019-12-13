@@ -1,12 +1,13 @@
 class Topic < ApplicationRecord
   belongs_to    :user
-  has_rich_text :text
+  has_rich_text :content
   has_many      :netas
   has_many      :pageviews, as: :pageviewable
   has_many      :interests, as: :interestable
   has_many      :comments,  as: :commentable, dependent: :destroy
   has_many      :likes,     as: :likeable, dependent: :destroy
   validates     :title,     presence: true, uniqueness: { case_sensitive: true }, length: { maximum: 30 }
+  validate      :content_check
 
   def max_rate
     maxrate = 0
@@ -64,4 +65,17 @@ class Topic < ApplicationRecord
     end
   end
   
+  private
+  
+  def content_check
+    unless self.content.body.present?
+      errors.add(:content, " cannot be blank")
+    end
+    # Need attachment checks. Below does not work because at this point blob is not attached..
+    # self.content.embeds.blobs.each do |blob|
+    #   if blob.byte_size.to_i > 10.megabytes
+    #     errors.add(:content, " size must be smaller than 10MB")
+    #   end
+    # end
+  end
 end

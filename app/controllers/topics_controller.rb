@@ -40,6 +40,10 @@ class TopicsController < ApplicationController
         @newcomment = Comment.new
         @topic.add_pageview(current_user)
       end
+      # @topic.content.embeds.blobs.each do |blob|
+      #   puts "blob size : "
+      #   puts blob.byte_size
+      # end
     rescue => e
       ErrorUtility.log_and_notify e
       redirect_to topics_path, alert: "エラーが発生しました。" and return
@@ -100,7 +104,7 @@ class TopicsController < ApplicationController
   
   private
   def create_params
-    params.require(:topic).permit(:title, :text).merge(user_id: current_user.id)
+    params.require(:topic).permit(:title, :content).merge(user_id: current_user.id)
   end
   
 end

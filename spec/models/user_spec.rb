@@ -314,6 +314,13 @@ RSpec.describe User, type: :model do
       user.valid?
       expect(user.errors[:follows_count]).to include("は0以上の値にしてください。")
     end
+    
+    it "is invalid if unsupported file type for image was attached" do
+      user = FactoryBot.create(:user, nickname: nil, gender: nil, prefecture_code: nil, birthdate: nil, introduction: nil)
+      file = fixture_file_upload('/files/トラ.gif', 'image/gif')
+      user.image.attach(file)
+      expect(user.errors[:image]).to include("の拡張子が間違っています")
+    end
   end
 
   describe "method::create_from_auth!(auth)" do

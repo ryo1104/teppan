@@ -11,7 +11,7 @@
     </p>
     <p class="topic-body-title"><%= @topic.title %></p>
     <p class="topic-body-text">
-      <%= text_extract_links(simple_format(h(@topic.text))).html_safe %>
+      <%= @topic.content %>
       <% if user_signed_in? %> 
         <% if @topic.editable(current_user) %>
           <%= link_to '編集', edit_topic_path(@topic.id) %>

@@ -1,9 +1,0 @@
-<tbody>
-  <tr>
-    <td class="left-align"><%= link_to open_request.title, request_path(open_request.id) %></td>
-    <td class="center-align"><%= open_request.nextdate.strftime('%Y/%m/%d') %></td>
-    <td class="center-align"><%= open_request.finaldate.strftime('%Y/%m/%d') %></td>
-    <td class="center-align"><%= open_request.price %></td>
-    <td class="center-align"><%= open_request.offers.count %></td>
-  </tr>
-</tbody>

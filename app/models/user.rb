@@ -6,13 +6,6 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-  validates :email, presence: true, uniqueness: { case_sensitive: false }
-  validate  :gender_code_check
-  validate  :prefecture_code_check
-  validate  :age_check
-  validates :introduction, length: { maximum: 800 }
-  validate  :stripe_cus_id_check
-  validates :follows_count, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   has_many  :topics, ->{ order("created_at DESC") }
   has_many  :requests, ->{ order("created_at DESC") }
   has_many  :netas, ->{ order("created_at DESC") }
@@ -30,41 +23,17 @@ class User < ApplicationRecord
   has_one   :externalaccount, :through => :account
   has_one   :idcard, :through => :account
   has_one_attached :image
+  validates :email, presence: true, uniqueness: { case_sensitive: false }
+  validate  :image_content_type, if: :was_attached?
+  validate  :gender_code_check
+  validate  :prefecture_code_check
+  validate  :age_check
+  validates :introduction, length: { maximum: 800 }
+  validate  :stripe_cus_id_check
+  validates :follows_count, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   
   jp_prefecture :prefecture_code
   
-  def gender_code_check
-    if self.gender.present?
-      if self.gender < 1 || self.gender > 2
-        errors.add(:gender, "Invalid gender code")
-      end
-    end
-  end
-  
-  def prefecture_code_check
-    if self.prefecture_code.present?
-      if self.prefecture_code < 1 || self.prefecture_code > 47
-        errors.add(:prefecture_code, "Invalid prefecture code")
-      end
-    end
-  end
-
-  def age_check
-    if self.birthdate.present? 
-      if self.birthdate > Time.zone.today.prev_year(13)
-        errors.add(:birthdate, "１３歳未満は登録できません。")
-      end
-    end
-  end
-  
-  def stripe_cus_id_check
-    if self.stripe_cus_id.present?
-      unless self.stripe_cus_id.starts_with? 'cus_'
-        errors.add(:stripe_cus_id, "invalid stripe_cus_id")
-      end
-    end
-  end
-
   def avatar
     if self.image.attached?
       return self.image
@@ -582,4 +551,50 @@ class User < ApplicationRecord
       return [false, "No sold netas found for user_id #{self.id}"]
     end
   end
+  
+  private
+  
+  # Custom Validations
+  
+  def image_content_type
+    extension = ['image/png', 'image/jpg', 'image/jpeg']
+    errors.add(:image, "の拡張子が間違っています") unless image.content_type.in?(extension)
+  end
+
+  def was_attached?
+    self.image.attached?
+  end
+  
+  def gender_code_check
+    if self.gender.present?
+      if self.gender < 1 || self.gender > 2
+        errors.add(:gender, "Invalid gender code")
+      end
+    end
+  end
+  
+  def prefecture_code_check
+    if self.prefecture_code.present?
+      if self.prefecture_code < 1 || self.prefecture_code > 47
+        errors.add(:prefecture_code, "Invalid prefecture code")
+      end
+    end
+  end
+
+  def age_check
+    if self.birthdate.present? 
+      if self.birthdate > Time.zone.today.prev_year(13)
+        errors.add(:birthdate, "１３歳未満は登録できません。")
+      end
+    end
+  end
+  
+  def stripe_cus_id_check
+    if self.stripe_cus_id.present?
+      unless self.stripe_cus_id.starts_with? 'cus_'
+        errors.add(:stripe_cus_id, "invalid stripe_cus_id")
+      end
+    end
+  end
+
 end

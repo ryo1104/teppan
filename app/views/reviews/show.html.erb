@@ -1,5 +1,4 @@
 <%= javascript_pack_tag 'raty' %>
-
 <% @page_title = "レビュー" %>
 <% breadcrumb :show_review, @review %>
 <div class="page-body-container">
@@ -47,14 +46,14 @@
         </div>
         <% if user_signed_in? %>
           <ul class="collection z-depth-1">
-            <%= render partial: "reviews/newcomment" %>
+            <%= render partial: "comments/newcomment", locals: { commentable: @review, newcomment: @newcomment } %>
           </ul>
         <% end %>
       <% else %>
         <ul class="collection z-depth-1">
-          <%= render partial: "reviews/comment", :collection => @comments %>
+          <%= render partial: "comments/comment", :collection => @comments %>
           <% if user_signed_in? %>
-            <%= render partial: "reviews/newcomment" %>
+            <%= render partial: "comments/newcomment", locals: { commentable: @review, newcomment: @newcomment } %>
           <% end %>
         </ul>
       <% end %>

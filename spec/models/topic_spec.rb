@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Topic, type: :model do
   let(:user_create)   { FactoryBot.create(:user) }
   
-  describe "Validations" do
+  describe "Validations", type: :doing do
   
     it "is valid with a user_id, title and text" do
       topic = build(:topic, :with_user)
@@ -29,23 +29,23 @@ RSpec.describe Topic, type: :model do
       expect(another_topic.errors[:title]).to include("はすでに存在します。")
     end
     
-    it "is invalid without a text" do
-      topic = build(:topic, :with_user, text: nil)
-      topic.valid?
-      expect(topic.errors[:text]).to include("を入力してください。")
-    end
-    
     it "is invalid if title is longer than 30 characters" do
       topic = build(:topic, :with_user, title: Faker::Lorem.characters(number: 31) )
       topic.valid?
       expect(topic.errors[:title]).to include("は30文字以内で入力してください。")
     end
     
-    it "is invalid if text is longer than 200 characters" do
-      topic = build(:topic, :with_user, text: Faker::Lorem.characters(number: 201) )
+    it "is invalid without a content" do
+      topic = build(:topic, :with_user, content: nil)
       topic.valid?
-      expect(topic.errors[:text]).to include("は200文字以内で入力してください。")
+      expect(topic.errors[:content]).to include(" cannot be blank")
     end
+    
+    it "is invalid if content text is longer than 200 characters"
+    it "is valid with attachment image"
+    it "is invalid if attachment is not image file"
+    it "is invalid if any single attachment is larger than 5MB"
+    it "is invalid if total attachment size is larger than 20MB"
   end
   
   describe "method::max_rate" do
