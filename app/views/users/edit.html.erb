@@ -20,7 +20,11 @@
             <div class="user-profile-edit-tophalf">
               <div class="col s3 m3 user-page-left">
                 <div class="user-page-avatar-container">
-                  <%= image_pack_tag @user.avatar, {:class => "circle", :id => "user-page-image"} %>
+                  <% if @user.avatar.present? %>
+                    <%= image_tag @user.avatar, {:class => "circle", :id => "user-page-image"} %>
+                  <% else %>
+                    <%= image_pack_tag "no_user_image.png", {:class => "circle", :id => "user-page-image"} %>
+                  <% end %>
                 </div>
                 <label>
                   <div class="filelabel" title="ファイルを選択">

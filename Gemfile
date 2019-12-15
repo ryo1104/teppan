@@ -90,3 +90,6 @@ gem 'counter_culture', '~> 1.0'
 
 #ERD
 # gem 'rails-erd'
+
+#Amazon S3
+gem 'aws-sdk-s3'
