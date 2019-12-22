@@ -9,7 +9,7 @@
       <ul class="collection z-depth-1 user-page">
         <% if @no_nickname %>
           <%= form_for @user do |f| %>
-            ユーザー名を登録しましょう！
+            ユーザー名を登録して下さい。
             <div class="user-form-nickname">ユーザー名
               <%= f.text_field :nickname, placeholder: @temp_nickname, :class => "browser-default" %>
             </div>

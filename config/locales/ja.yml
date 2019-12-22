@@ -5,7 +5,7 @@ ja:
     password_confirmation: パスワード（確認）
     current_password: 現在のパスワード
     new_password: 新しいパスワード
-    remember_me: ログインしたままにする
+    remember_me: ログイン状態を保持する
     group_id: グループ名
     user: ユーザー
     title: タイトル

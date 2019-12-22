@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "管理人 <info@example.com>"
+  default from: "Teppan"
   layout 'mailer'
 end

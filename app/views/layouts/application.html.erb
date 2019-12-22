@@ -7,12 +7,13 @@
     <%= csp_meta_tag %>
     <%= javascript_pack_tag 'application' %>
     <%= stylesheet_pack_tag 'application' %>
+    <%= favicon_pack_tag 'favicon.ico' %>
   </head>
 
   <body>
     <nav class="orange accent-4">
       <div class="nav-wrapper">
-        <a href="<%= root_path %>" class="brand-logo left">teppan</a>
+        <a href="<%= root_path %>" class="brand-logo left">Teppan</a>
         <ul class="nav-contents right hide-on-med-and-down">
           <li class="hide-on-med-and-down"><%= link_to "ネタ", netas_path, method: :get %></li>
           <li class="hide-on-med-and-down"><%= link_to "トピック", topics_path, method: :get %></li>

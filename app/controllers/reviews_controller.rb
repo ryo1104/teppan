@@ -38,7 +38,6 @@ class ReviewsController < ApplicationController
   private
   def filter_create_params
     ret_params = params.require(:review).permit(:text, :rate).merge(user_id: current_user.id)
-    puts ret_params
     if ret_params[:rate].blank?
       return false
     else

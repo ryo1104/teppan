@@ -1,14 +1,18 @@
 <div class="page-body-container">
   <div class="row top-page-text">
     <div class="center-align">
-      <div class="top-page-logo">TEPPAN（ロゴ）</div>
-      <div class="top-page-subtitle">・あなたのその鉄板ネタ、売れるかも？</div>
-      <div class="top-page-subtitle">・ここぞという時の鉄板ネタ、買えるかも？</div>
+      <div class="row">
+        <div class="col s12 m12 top-page-logo-container">
+          <%= image_pack_tag "logo-color-1.png", {class: "top-page-logo", alt: "Teppan"} %>
+        </div>
+      </div>
+      <div class="top-page-subtitle">あなたのその鉄板ネタ、売れるかも？</div>
+      <div class="top-page-subtitle">ここぞという時の鉄板ネタ、買えるかも？</div>
     </div>
   </div>
 </div>
 <script>
 $(function() {
-  $(".top-page-subtitle").css("color","orange");
+  $(".top-page-subtitle").css("color","#fb8c00");
 });
 </script>
