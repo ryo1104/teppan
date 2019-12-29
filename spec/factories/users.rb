@@ -4,6 +4,7 @@ FactoryBot.define do
     sequence(:nickname) { |n| "ryohei#{n}" }
     password { "00000000" }
     password_confirmation { "00000000" }
+    confirmed_at { Time.zone.yesterday }
     gender { "1" }
     prefecture_code { "1" }
     birthdate { Time.zone.today.prev_year(19) }

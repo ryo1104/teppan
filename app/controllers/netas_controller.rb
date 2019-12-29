@@ -1,5 +1,5 @@
 class NetasController < ApplicationController
-  before_action :authenticate_user!, except: %i[index hashtags]
+  before_action :authenticate_user!#, except: %i[index hashtags]
 
   def index
     begin

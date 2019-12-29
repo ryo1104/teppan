@@ -10,7 +10,8 @@ RSpec.describe NetasController, type: :controller do
   let(:neta_list_create)    { FactoryBot.create_list(:neta, 5, user: user_create, topic: topic_create) }
   let(:hashtag_list_create) { FactoryBot.create_list(:hashtag, 15, :with_random_hit_count, :with_random_neta_count) }
   let(:pageview_list_create){ FactoryBot.create_list(:pageview, 3, pageviewable: neta_create, user: user_create) }
-  render_views
+  # login_user
+  # render_views
   
   describe "GET #index" do
     context "as a guest" do
@@ -43,10 +44,11 @@ RSpec.describe NetasController, type: :controller do
     end
     
     context "as an authenticated user" do
-      before do
-        @user = user_create
-        sign_in @user
-      end
+      # before do
+      #   @user = user_create
+        # @user.confirm
+        # sign_in @user
+      # end
       it "populates @view_history" do
         pageview_list_create
         get :index
@@ -112,14 +114,16 @@ RSpec.describe NetasController, type: :controller do
   end
 
   describe "GET #new" do
+
     context "as an authenticated user" do
+      
+      login_user
+
       before do
-        @user = user_create
-        sign_in @user
         @topic = topic_create
       end
       
-      it "populates @topic" do
+      it "populates @topic", type: :doing do
         get :new, params: { topic_id: @topic.id }
         expect(assigns(:topic)).to eq @topic
       end

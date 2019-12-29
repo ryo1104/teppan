@@ -1,5 +1,3 @@
-<%= javascript_pack_tag 'raty' %>
-<%= javascript_pack_tag 'materialize' %>
 <% @page_title = "小ネタ" %>
 <% breadcrumb :show_koneta, @neta %>
 <div class="page-body-container">
@@ -109,7 +107,7 @@
                   <% end %>
                 <% end %>  
                 <%= form_for [@neta, @newreview] do |f| %>
-                  評価して下さい（1〜5点）
+                  評価して下さい
                   <%= f.hidden_field :rate, id: :review_rate %>
                   <div class='new_star_rating'></div>
                   <p id="hint1" style="height: 1.5em; width: 8em;"></p>
@@ -127,38 +125,3 @@
   </div>
   <% end %>
 </div>
-<script>
-window.onload = function(){
-  $('.star_rating').raty({
-    score: function() {
-    return $(this).attr('rating-data');
-    },
-    readOnly : true,
-    number   : 5,  
-    half     : true,
-    size     : 24,
-    starHalf : '/assets/star-half.png',
-    starOff  : '/assets/star-off.png',
-    starOn   : '/assets/star-on.png',
-  });
-};
-</script>
-<script>
-window.onload = function(){
-  $('.new_star_rating').raty({
-    number   : 5,  
-    half     : false,
-    precision:   false,
-    size     : 24,
-    starHalf : '/assets/star-half.png',
-    starOff  : '/assets/star-off.png',
-    starOn   : '/assets/star-on.png',
-    target: '#hint1',
-    targetType: 'number',
-    round:  { down: .25, full: .6, up: .76 },
-    click: function(score, evt) {
-      $("#review_rate").val(score);
-    }
-  });
-};
-</script>

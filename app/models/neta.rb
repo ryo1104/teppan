@@ -23,10 +23,10 @@ class Neta < ApplicationRecord
         gross_count += neta.reviews_count
       end
     end
-    if count != 0
+    if gross_count != 0
       return (gross_rate/gross_count.to_f).round(2)
     else
-      return "-"
+      return 0
     end
   end
 

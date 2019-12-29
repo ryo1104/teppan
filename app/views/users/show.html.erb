@@ -80,7 +80,7 @@
       <div class="user-tab-contents z-depth-1">
         <div class="ChangeElem_Panel">
           <h1 class="h1_class">投稿したネタ(<%= @postednetas.count %>)</h1>
-          <% if @userrate == "-" %>
+          <% if @userrate == 0 %>
             <b>平均評価：</b><span class="star_rating" rating-data="0"></span>&nbsp;
           <% else %>
             <b>平均評価：</b><span class="star_rating" rating-data="<%= @userrate %>"></span>&nbsp;

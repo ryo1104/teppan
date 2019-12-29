@@ -8,4 +8,9 @@ environment.plugins.prepend('Provide',
     })
 )
 
+// resolve-url-loader must be used before sass-loader
+environment.loaders.get('sass').use.splice(-1, 0, {
+  loader: 'resolve-url-loader', options: { removeCR: true }
+});
+
 module.exports = environment
