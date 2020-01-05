@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
   default from: "Teppan"
-  layout 'mailer'
+  # layout 'mailer'
 end

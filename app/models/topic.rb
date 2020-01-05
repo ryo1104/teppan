@@ -1,5 +1,6 @@
 class Topic < ApplicationRecord
   belongs_to    :user
+  has_one_attached :header_image
   has_rich_text :content
   has_many      :netas
   has_many      :pageviews, as: :pageviewable
@@ -8,6 +9,16 @@ class Topic < ApplicationRecord
   has_many      :likes,     as: :likeable, dependent: :destroy
   validates     :title,     presence: true, uniqueness: { case_sensitive: true }, length: { maximum: 30 }
   validate      :content_check
+  validate      :header_image_type, if: :was_attached?
+
+  def header_image_type
+    extension = ['image/png', 'image/jpg', 'image/jpeg']
+    errors.add(:header_image, "の拡張子はサポートされていません。") unless header_image.content_type.in?(extension)
+  end
+
+  def was_attached?
+    self.header_image.attached?
+  end
 
   def max_rate
     maxrate = 0

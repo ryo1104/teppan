@@ -558,7 +558,7 @@ class User < ApplicationRecord
   
   def image_content_type
     extension = ['image/png', 'image/jpg', 'image/jpeg']
-    errors.add(:image, "の拡張子が間違っています") unless image.content_type.in?(extension)
+    errors.add(:image, "の拡張子はサポートされていません。") unless image.content_type.in?(extension)
   end
 
   def was_attached?

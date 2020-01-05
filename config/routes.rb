@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'contacts/new'
+  get 'contacts/create'
   root 'top#index'
   resources :netas, only: [:index]
   resources :topics do
@@ -11,7 +13,7 @@ Rails.application.routes.draw do
     resources :netadrafts, only: [:create, :show, :edit, :update, :destroy]
     resources :comments, only: [:create, :destroy]
   end
-  
+  delete  'topics/:topic_id/delete_header_image', to: 'topics#delete_header_image', as: 'topic_header_image'
   post    'topics/:id/likes', to: 'likes#create', as: 'topic_likes'
   delete  'topics/:topic_id/likes/:id', to: 'likes#destroy', as: 'topic_like'
   post    'comments/:id/likes', to: 'likes#create', as: 'comment_likes'
@@ -27,12 +29,16 @@ Rails.application.routes.draw do
   get     '/neta/hashtag/:hashname', to: "netas#hashtags"
   post    '/neta/draft', to: "netas#draft"
 
+  
+  
   resources :copychecks, only: [:new, :create, :show, :update, :index]
+  resources :inquiries, only: [:new, :create]
 
   devise_for :users, :controllers => {
     :sessions      => "users/sessions",
     :registrations => "users/registrations",
-    :passwords     => "users/passwords"
+    :passwords     => "users/passwords",
+    :confirmations => "users/confirmations"
   }
   match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   

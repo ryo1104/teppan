@@ -13,7 +13,7 @@
   <body>
     <nav class="orange accent-4">
       <div class="nav-wrapper">
-        <a href="<%= root_path %>" class="brand-logo left">Teppan</a>
+        <a href="<%= root_path %>" class="nav-brand-logo left">Teppan</a>
         <ul class="nav-contents right hide-on-med-and-down">
           <li class="hide-on-med-and-down"><%= link_to "ネタ", netas_path, method: :get %></li>
           <li class="hide-on-med-and-down"><%= link_to "トピック", topics_path, method: :get %></li>
@@ -50,13 +50,20 @@
   
   <footer class="page-footer orange accent-4">
     <div class="row footer-contents">
-      <div class="col s6 m6 footer-column1">footer column 1</div>
-      <div class="col s6 m6 footer-column2">footer column 2<br>
-        <div class="line-it-button" data-lang="ja" data-type="share-b" data-url="#{<%= root_path %>}" style="display: none;"></div>
-        <script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
-        &nbsp;&nbsp;
-        <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-hashtags="teppan" data-show-count="false"></a>
-        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      <div class="col s12 m12 footer-column1">
+        <ul>
+          <li>ご利用ガイド</li>
+          <li>利用規約</li>
+          <li>プライバシーポリシー</li>
+          <li><a href="<%= new_inquiry_path %>" class="page-footer-text">お問合わせ</a></li>
+        </ul>
+        <div class="hide-on-med-and-down">
+          <div class="line-it-button" data-lang="ja" data-type="share-b" data-url="#{<%= root_path %>}" style="display: none;"></div>
+          <script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+          &nbsp;&nbsp;
+          <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-hashtags="teppan" data-show-count="false"></a>
+          <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
       </div>
     </div>
     <div class="footer-copyright orange accent-4">© 2020 Teppan</div>

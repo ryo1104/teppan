@@ -1,0 +1,39 @@
+<li class="collection-item avatar custom">
+  <p>
+    <%= link_to user_path(topic.user_id) do %>
+      <% if topic.user.avatar.present? %>
+        <%= image_tag topic.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+      <% else %>
+        <%= image_pack_tag "no_user_image.png", {:class => "circle custom", :id => "mycircle"} %>
+      <% end %>
+    <% end %>
+  </p>
+  <%= link_to topic_path(topic.id) do %>
+    <p class="collection-item-title truncate"><%= topic.title %></p>
+    <div class="collection-item-postdata">
+      <% if topic.max_rate == 0 %>
+        <span class="star_rating" rating-data="0"></span>
+      <% else %>
+        最高評価
+        <span class="star_rating" rating-data="<%= topic.max_rate %>"></span>
+        <span class="star-rating-text">&nbsp;&nbsp;<%= topic.max_rate %></span>
+      <% end %>
+        &nbsp;&nbsp;
+        投稿数
+        <i class="material-icons post custom">create</i>
+        <span class="icon-side-count"><%= topic.netas_count %></span>
+    </div>
+    <div class="collection-item-footer">
+      <p class="indexitem-footer-text">
+        <%= atname(topic.user.nickname) %>&nbsp;&nbsp;
+        <%= topic.created_at.to_s(:human) %>&nbsp;&nbsp;
+        <%= topic.pageviews_count %>&nbsp;views
+      </p>
+      <p class="indexitem-footer-icons">
+        <i class="material-icons like custom">favorite_border</i>
+        <span class="icon-side-count"><%= topic.likes_count %></span>
+        <br>
+      </p>
+    </div>
+  <% end %>
+</li>

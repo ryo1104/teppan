@@ -14,6 +14,8 @@
             <p>タイトル</p><%= f.text_field :title, placeholder: "３０字以内", maxlength: 30 %>
             <%= f.rich_text_area :content %>
             <br>
+            <%= f.file_field :header_image %>
+            <br>
             <%= button_tag :type => "submit", class: "btn btn-primary withripple custom" do %>
               <i class="material-icons left">create</i>投稿
             <% end %>

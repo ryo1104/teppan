@@ -4,17 +4,13 @@
   <p><%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %></p>
   <div class="row">
     <div class="col s12 m10 topic-show">
-      <div class="indent-wrapper">
-        <h1 class="h1_class">トピック</h1>
-      </div>
+      <h1 class="h1-topic"><%= @topic.title %></h1>
       <%= render partial: "topics/topicbody" %>
     </div>
   </div>
   <div class="row">
     <div class="col s12 m10 topic-show">
-      <div class="indent-wrapper">
-        <h1 class="h1_class">投稿ネタ(<%= @netas.count %>)</h1>
-      </div>
+      <h2 class="h2-topic">投稿ネタ(<%= @netas.count %>)</h2>
       <% if @netas %>
         <ul class="collection z-depth-1">
         <%= render partial: "netas/neta", :collection => @netas %>
@@ -35,9 +31,7 @@
   </div>
   <div class="row">
     <div class="col s12 m10 topic-show">
-      <div class="indent-wrapper">
-        <h1 class="h1_class">トピックへのコメント(<%= @comments.count %>)</h1>
-      </div>
+      <h2 class="h2-topic">トピックへのコメント(<%= @comments.count %>)</h2>
       <% unless @comments %>
         <div class="indent-wrapper">
           <p> (投稿はまだありません) </p>

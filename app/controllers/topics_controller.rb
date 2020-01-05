@@ -40,10 +40,6 @@ class TopicsController < ApplicationController
         @newcomment = Comment.new
         @topic.add_pageview(current_user)
       end
-      # @topic.content.embeds.blobs.each do |blob|
-      #   puts "blob size : "
-      #   puts blob.byte_size
-      # end
     rescue => e
       ErrorUtility.log_and_notify e
       redirect_to topics_path, alert: "エラーが発生しました。" and return
@@ -102,9 +98,17 @@ class TopicsController < ApplicationController
     end
   end
   
+  def delete_header_image
+    @topic = Topic.find(params[:topic_id])
+    if @topic.header_image.attached?
+      @topic.header_image.purge
+    end
+    redirect_to edit_topic_path(@topic.id) and return
+  end
+  
   private
   def create_params
-    params.require(:topic).permit(:title, :content).merge(user_id: current_user.id)
+    params.require(:topic).permit(:title, :content, :header_image).merge(user_id: current_user.id)
   end
   
 end
