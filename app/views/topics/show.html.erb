@@ -3,22 +3,23 @@
 <div class="page-body-container">
   <p><%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %></p>
   <div class="row">
-    <div class="col s12 m10 topic-show">
-      <h1 class="h1-topic"><%= @topic.title %></h1>
+    <div class="col s12 m10 show">
+    <% if @topic.header_image.attached? %>
+      <%= image_tag @topic.header_image, :class => 'topic-header-image' %>
+    <% end %>
+    
       <%= render partial: "topics/topicbody" %>
     </div>
   </div>
   <div class="row">
     <div class="col s12 m10 topic-show">
       <h2 class="h2-topic">投稿ネタ(<%= @netas.count %>)</h2>
-      <% if @netas %>
+      <% if @netas.present? %>
         <ul class="collection z-depth-1">
         <%= render partial: "netas/neta", :collection => @netas %>
         </ul>
       <% else %>
-        <div class="indent-wrapper">
-          <p> (投稿はまだありません) </p>
-        </div>
+        <p> (投稿はまだありません) </p>
       <% end %>
       <% if user_signed_in? %>
         <div class="fixed-action-btn horizontal">
@@ -31,18 +32,18 @@
   </div>
   <div class="row">
     <div class="col s12 m10 topic-show">
-      <h2 class="h2-topic">トピックへのコメント(<%= @comments.count %>)</h2>
+      <h2 class="h2-topic">トピックへコメント(<%= @comments.count %>)</h2>
       <% unless @comments %>
         <div class="indent-wrapper">
           <p> (投稿はまだありません) </p>
         </div>
         <% if user_signed_in? %>
-          <ul class="collection z-depth-1">
+          <ul class="collection">
             <%= render partial: "comments/newcomment", locals: { commentable: @topic, newcomment: @newcomment } %>
           </ul>
         <% end %>
       <% else %>
-        <ul class="collection z-depth-1">
+        <ul class="collection">
           <%= render partial: "comments/comment", :collection => @comments %>
           <% if user_signed_in? %>
             <%= render partial: "comments/newcomment", locals: { commentable: @topic, newcomment: @newcomment } %>

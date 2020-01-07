@@ -62,7 +62,7 @@ trix-toolbar .trix-button {
       padding: 0 0.3em; } }
 trix-toolbar .trix-button--icon {
   font-size: inherit;
-  width: 2.6em;
+  width: 1.5rem;
   height: 1.6em;
   max-width: calc(0.8em + 4vw);
   text-indent: -9999px; }

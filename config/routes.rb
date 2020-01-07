@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  get 'contacts/new'
-  get 'contacts/create'
   root 'top#index'
   resources :netas, only: [:index]
   resources :topics do
@@ -10,7 +8,6 @@ Rails.application.routes.draw do
         resources :comments, only: [:create, :destroy]
       end
     end
-    resources :netadrafts, only: [:create, :show, :edit, :update, :destroy]
     resources :comments, only: [:create, :destroy]
   end
   delete  'topics/:topic_id/delete_header_image', to: 'topics#delete_header_image', as: 'topic_header_image'
@@ -28,9 +25,7 @@ Rails.application.routes.draw do
   
   get     '/neta/hashtag/:hashname', to: "netas#hashtags"
   post    '/neta/draft', to: "netas#draft"
-
-  
-  
+ 
   resources :copychecks, only: [:new, :create, :show, :update, :index]
   resources :inquiries, only: [:new, :create]
 

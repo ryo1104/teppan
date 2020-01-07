@@ -1,18 +1,14 @@
-<div class="card z-depth-0">
-  <div class="card-image">
-    <% if @topic.header_image.attached? %>
-      <%= image_tag @topic.header_image %>
-    <% end %>
-  </div>
-  <p class="topic-body-text">
-    <%= @topic.content %>
-    <% if user_signed_in? %> 
-      <% if @topic.editable(current_user) %>
-        <%= link_to '編集', edit_topic_path(@topic.id) %>
+<div class="card show z-depth-0">
+  <div class="card-content show">
+    <h1 class="h1-card"><%= @topic.title %></h1>
+    <p class="topic-body-text">
+      <%= @topic.content %>
+      <% if user_signed_in? %> 
+        <% if @topic.editable(current_user) %>
+          <%= link_to '編集', edit_topic_path(@topic.id) %>
+        <% end %>
       <% end %>
-    <% end %>
-  </p>
-  <div class="collection-item-footer">
+    </p>
     <p class="topic-footer-text">
       <%= link_to user_path(@topic.user_id) do %>
         <span class="avatar-card">
@@ -46,5 +42,4 @@
       <% end %>
     </p>
   </div>
-  
 </div>

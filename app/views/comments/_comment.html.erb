@@ -1,22 +1,24 @@
-<li class="collection-item avatar custom" >
-  <%= link_to user_path(comment.user.id) do %>
-    <% if comment.user.avatar.present? %>
-      <%= image_tag comment.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
-    <% else %>
-      <%= image_pack_tag "no_user_image.png", {:class => "circle custom", :id => "mycircle"} %>
-    <% end %>
-  <% end %>
+<li class="collection-item custom" >
   <p class="comment-text"><%= comment.text %></p>
+  <% if user_signed_in? && comment.user_id == current_user.id %>
+    <span class="topic-footer-deletelink">
+      <%= link_to '削除', comment_path(comment.id), {:method => :delete, :data => {:confirm => "本当に削除しますか？"}} %>
+    </span>
+  <% end %>
   <div class="collection-item-footer">
     <p class="topic-footer-text">
+      <span class="avatar-collection">
+        <%= link_to user_path(comment.user.id) do %>
+          <% if comment.user.avatar.present? %>
+            <%= image_tag comment.user.avatar, {:class => "circle"} %>
+          <% else %>
+            <%= image_pack_tag "no_user_image.png", {:class => "circle"} %>
+          <% end %>
+        <% end %>
+      </span>
       <%= atname(comment.user.nickname) %>&nbsp;&nbsp;
       <%= comment.updated_at.to_s(:human) %>&nbsp;&nbsp;&nbsp;
     </p>
-    <% if user_signed_in? && comment.user_id == current_user.id %>
-      <span class="topic-footer-deletelink">
-        <%= link_to '削除', comment_path(comment.id), {:method => :delete, :data => {:confirm => "本当に削除しますか？"}} %>
-      </span>
-    <% end %>
     <p class="topic-footer-icons">
       <% if user_signed_in? %>
         <span id="likes_buttons_<%= comment.class.name.downcase %>_<%= comment.id %>">

@@ -1,13 +1,13 @@
 <%= link_to topic_path(topic.id) do %>
-  <div class="card custom">
-    <div class="card-image custom">
+  <div class="card index">
+    <div class="card-image index">
       <% if topic.header_image.attached? %>
         <%= image_tag topic.header_image %>
       <% else %>
         <%= image_pack_tag "teppan_gray.jpeg" %>
       <% end %>
     </div>
-    <div class="card-content custom">
+    <div class="card-content index">
       <p class="collection-item-title truncate"><%= topic.title %></p>
       <div class="collection-item-postdata">
         <% if topic.max_rate == 0 %>

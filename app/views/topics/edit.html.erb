@@ -1,37 +1,24 @@
+<% @page_title = @topic.title + " - 編集中" %>
 <% breadcrumb :edit_topic, @topic %>
 <div class="page-body-container">
   <p><%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %></p>
-  <div class="row topic-form">
-    <div class="col s12 m10 topic-show">
-      <ul class="collection z-depth-1">
-        <li class="collection-item">
-          <%= form_for @topic do |form| %>
-            <% if @topic.errors.any? %>
-              <%= render :partial => "errorform" %>
-            <% end %>
-            <p>タイトル</p><%= form.text_field :title, maxlength: 30 %>
-            <%= form.rich_text_area :content %>
-            <p>
-            ヘッダー画像：
-              <% if @topic.header_image.attached? %>
-                <%= @topic.header_image.filename %>&nbsp;&nbsp;
-                <%= link_to "削除", topic_header_image_path(@topic.id), :method => :delete %>
-              <% else %>
-                <br>
-                <%= form.file_field :header_image %>
-              <% end %>
-            </p>
-            
-            <%= button_tag :type => "submit", class: "btn btn-primary withripple custom" do %>
-              <i class="material-icons left">refresh</i>更新
-            <% end %>
-            <%= link_to topic_path(@topic.id), {:method => :delete, :class => 'btn btn-primary withripple custom', data: { confirm: "本当にトピックを削除しますか？" }} do %>
-              <i class="material-icons left">delete</i>
-              <span>トピックを削除</span><br>
-            <% end %>
+  <div class="row">
+    <div class="col s12 m12 show">
+      <div class="card z-depth-0">
+        <%= form_for @topic do |form| %>
+          <% if @topic.errors.any? %>
+            <%= render :partial => "errorform" %>
           <% end %>
-        </li>
-      </ul>
+          <%= render :partial => "topicform", locals: { form: form } %>
+          <%= button_tag :type => "submit", class: "btn btn-primary withripple custom" do %>
+            <i class="material-icons left">refresh</i>更新
+          <% end %>
+          <%= link_to topic_path(@topic.id), {:method => :delete, :class => 'btn btn-primary withripple custom', data: { confirm: "本当にトピックを削除しますか？" }} do %>
+            <i class="material-icons left">delete</i>
+            <span>トピックを削除</span><br>
+          <% end %>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
