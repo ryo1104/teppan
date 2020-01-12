@@ -3,16 +3,15 @@
 <div class="page-body-container">
   <p><%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %></p>
   <div class="row">
-    <div class="col s12 m10 show">
+    <div class="col s12 m9 show">
     <% if @topic.header_image.attached? %>
       <%= image_tag @topic.header_image, :class => 'topic-header-image' %>
     <% end %>
-    
-      <%= render partial: "topics/topicbody" %>
+    <%= render partial: "topics/topicbody" %>
     </div>
   </div>
   <div class="row">
-    <div class="col s12 m10 topic-show">
+    <div class="col s12 m9 show">
       <h2 class="h2-topic">投稿ネタ(<%= @netas.count %>)</h2>
       <% if @netas.present? %>
         <ul class="collection z-depth-1">
@@ -31,7 +30,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col s12 m10 topic-show">
+    <div class="col s12 m9 topic-show">
       <h2 class="h2-topic">トピックへコメント(<%= @comments.count %>)</h2>
       <% unless @comments %>
         <div class="indent-wrapper">

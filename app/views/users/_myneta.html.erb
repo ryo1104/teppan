@@ -1,6 +1,6 @@
 <li class="collection-item custom">
   <%= link_to neta_path(myneta.id) do %>
-    <p class="collection-item-title truncate"><%= remove_hashtags(myneta.text) %></p>
+    <p class="collection-item-title truncate"><%= myneta.content %></p>
     <p class="collection-item-text">
       <% if myneta.price != 0 %>
         <span class="neta-price"><%= myneta.price %>&nbsp;円&nbsp;&nbsp;</span>

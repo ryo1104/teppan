@@ -25,10 +25,11 @@
             <li class="hide-on-med-and-down"><%= link_to "ユーザー登録", new_user_registration_path, class: 'post' %></li>
           <% end %>
         </ul>
+        <a href="#" data-target="slide-out" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
       </div>
     </nav>
     
-    <ul id="slide-out" class="sidenav">
+    <ul id="slide-out" class="sidenav custom">
       <li><%= link_to "ネタ", netas_path, method: :get %></li>
       <li><%= link_to "トピック", topics_path, method: :get %></li>
       <% if user_signed_in? %>
@@ -39,7 +40,7 @@
         <li><%= link_to "ユーザー登録", new_user_registration_path, class: 'post' %></li>
       <% end %>
     </ul>
-    <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    
       
     <% flash.each do |key, value| %>
       <%= content_tag(:div, value, class: "#{key}") %>

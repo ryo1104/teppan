@@ -2,6 +2,7 @@ class Neta < ApplicationRecord
   belongs_to  :user
   belongs_to  :topic
   counter_culture :topic
+  has_rich_text :content
   has_many    :reviews
   has_many    :trades, as: :tradeable
   has_many    :pageviews, as: :pageviewable
@@ -9,7 +10,8 @@ class Neta < ApplicationRecord
   has_many    :rankings, as: :rankable
   has_many    :hashtag_netas
   has_many    :hashtags, through: :hashtag_netas
-  validates   :text,      presence: true, length: { in: 20..800 }
+  validate    :content_check
+  # validates   :text,      presence: true, length: { in: 20..800 }
   validates   :valuetext, length: { maximum: 800 }
   validates   :price,     presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 10000 }
   validates   :private_flag, inclusion: { in: [true, false] }
@@ -109,24 +111,39 @@ class Neta < ApplicationRecord
     end
   end
 
-  after_create do
-    neta = Neta.find_by(id: self.id)
-    hashtags  = self.text.scan(/[#＃][\w\p{Han}ぁ-ヶｦ-ﾟー]+/)
-    hashtags.uniq.map do |hashtag|
-      tag = Hashtag.find_or_create_by(hashname: hashtag.downcase.delete('#'))
-      tag.add_netacount
-      tag.add_hit(neta.user)
-      neta.hashtags << tag
+  # after_create do
+  #   neta = Neta.find_by(id: self.id)
+  #   hashtags  = self.text.scan(/[#＃][\w\p{Han}ぁ-ヶｦ-ﾟー]+/)
+  #   hashtags.uniq.map do |hashtag|
+  #     tag = Hashtag.find_or_create_by(hashname: hashtag.downcase.delete('#'))
+  #     tag.add_netacount
+  #     tag.add_hit(neta.user)
+  #     neta.hashtags << tag
+  #   end
+  # end
+  
+  # before_update do
+  #   neta = Neta.find_by(id: self.id)
+  #   neta.hashtags.clear
+  #   hashtags  = self.text.scan(/[#＃][\w\p{Han}ぁ-ヶｦ-ﾟー]+/)
+  #   hashtags.uniq.map do |hashtag|
+  #     tag = Hashtag.find_or_create_by(hashname: hashtag.downcase.delete('#'))
+  #     neta.hashtags << tag
+  #   end
+  # end
+  
+  private
+  
+  def content_check
+    unless self.content.body.present?
+      errors.add(:content, " cannot be blank")
     end
+    # Need attachment checks. Below does not work because at this point blob is not attached..
+    # self.content.embeds.blobs.each do |blob|
+    #   if blob.byte_size.to_i > 10.megabytes
+    #     errors.add(:content, " size must be smaller than 10MB")
+    #   end
+    # end
   end
   
-  before_update do
-    neta = Neta.find_by(id: self.id)
-    neta.hashtags.clear
-    hashtags  = self.text.scan(/[#＃][\w\p{Han}ぁ-ヶｦ-ﾟー]+/)
-    hashtags.uniq.map do |hashtag|
-      tag = Hashtag.find_or_create_by(hashname: hashtag.downcase.delete('#'))
-      neta.hashtags << tag
-    end
-  end
 end

@@ -3,7 +3,7 @@
 <div class="page-body-container">
   <p><%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %></p>
   <div class="row">
-    <div class="col s12 m8 neta-show">
+    <div class="col s12 m9 neta-show">
       <div class="indent-wrapper">
         <h1 class="h1_class">投稿ネタ</h1>
       </div>
@@ -17,7 +17,7 @@
             <% end %>
           <% end %>
           <% if @owner || @neta.private_flag == false %>
-            <div class="neta-text"><%= text_extract_links(simple_format(h(remove_hashtags(@neta.text)))).html_safe %></div>
+            <div class="neta-text"><%= @neta.content %></div>
             <div class="neta-purchase">
               <% if @neta.price != 0 %>
                 <% unless (@purchased || @owner) %>
@@ -81,7 +81,7 @@
   </div>
   <% if @owner || @neta.private_flag == false %>
   <div class="row">
-    <div class="col s12 m8 neta-show">
+    <div class="col s12 m9 neta-show">
       <div class="indent-wrapper">
         <h1 class="h1_class">レビュー(<%= @reviews.count %>)</h1>
       </div>

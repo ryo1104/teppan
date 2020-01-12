@@ -1,0 +1,17 @@
+<%= form.label :content, "ネタ" %>
+<%= form.rich_text_area :content, placeholder: "８００字以内", :minlength => '20', :maxlength => '800' %>
+<%= form.hidden_field :timestamp, :value => @stale_form_check_timestamp %>
+<% if @qualified %>
+  <%= form.label :title, "有料部分" %>
+  <%= form.text_area :valuetext, placeholder: "有料部分（８００字以内）", :class => "neta-form-text", :minlength => '20', :maxlength => '800' %>
+<% end %>
+<%= form.label :price, "価格" %><br>
+<% if @qualified %>
+  <%= form.number_field :price, min: 0, step: 10, :value => 0 %>&nbsp;&nbsp;円
+<% else %>
+  <%= form.number_field :price, :readonly => true, :value => 0, :id => "price_neta_form" %>&nbsp;&nbsp;円
+<% end %>
+<br>
+<%= form.label :private_flag, "公開／非公開" %>
+<%= form.select :private_flag, [['公開', false], ['非公開', true]], { include_blank: false, selected: @neta.private_flag }, { class: "browser-default" } %>
+<br>

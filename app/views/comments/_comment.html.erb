@@ -7,7 +7,7 @@
   <% end %>
   <div class="collection-item-footer">
     <p class="topic-footer-text">
-      <span class="avatar-collection">
+      <span class="collection-avatar">
         <%= link_to user_path(comment.user.id) do %>
           <% if comment.user.avatar.present? %>
             <%= image_tag comment.user.avatar, {:class => "circle"} %>

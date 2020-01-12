@@ -25,6 +25,9 @@ class TopicsController < ApplicationController
     begin
       @topic = Topic.create!(create_params)
       redirect_to topics_path, notice: "トピックを作成しました。" and return
+    rescue ActiveRecord::RecordInvalid => e
+      ErrorUtility.log_and_notify e
+      redirect_to topics_path, alert: "入力された内容に不備があり保存できませんでした。" and return
     rescue => e
       ErrorUtility.log_and_notify e
       redirect_to topics_path, alert: "エラーが発生しました。" and return

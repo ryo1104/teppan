@@ -1,16 +1,7 @@
 <% if neta.private_flag == false %>
-  <li class="collection-item avatar custom">
-    <p>
-      <%= link_to user_path(neta.user_id) do %>
-        <% if neta.user.avatar.present? %>
-          <%= image_tag neta.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
-        <% else %>
-          <%= image_pack_tag "no_user_image.png", {:class => "circle custom", :id => "mycircle"} %>
-        <% end %>
-      <% end %>
-    </p>
+  <li class="collection-item custom">
     <%= link_to neta_path(neta.id) do %>
-      <p class="collection-item-title truncate"><%= remove_hashtags(neta.text) %></p>
+      <%= neta.content %>
       <p class="collection-item-text">
         <% if neta.price != 0 %>
           <span class="neta-price"><%= neta.price %>&nbsp;円&nbsp;&nbsp;</span>
@@ -31,15 +22,21 @@
         <% end %>
       </p>
       <div class="collection-item-footer">
-        <p class="neta-footer-text">
+        <span class="collection-avatar">
+          <%= link_to user_path(neta.user_id) do %>
+            <% if neta.user.avatar.present? %>
+              <%= image_tag neta.user.avatar, {:class => "circle"} %>
+            <% else %>
+              <%= image_pack_tag "no_user_image.png", {:class => "circle"} %>
+            <% end %>
+          <% end %>
+        </span>
+        <span class="neta-footer-text">
           <%= atname(neta.user.nickname) %>&nbsp;&nbsp;
           <%= neta.created_at.to_s(:human) %>&nbsp;&nbsp;
           <%= neta.pageviews_count %>&nbsp;views&nbsp;&nbsp;
           <%= neta.public_str %>
-        </p>
-        <p class="neta-footer-icons">
-  
-        </p>
+        </span>
       </div>
     <% end %>
   </li>

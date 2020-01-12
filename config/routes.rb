@@ -49,4 +49,5 @@ Rails.application.routes.draw do
       resources :idcards, only: [:new, :create, :edit, :update, :destroy, :index]
     end
   end
+  
 end
