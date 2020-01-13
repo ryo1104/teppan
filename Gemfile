@@ -93,3 +93,6 @@ gem 'counter_culture', '~> 1.0'
 
 #Amazon S3
 gem 'aws-sdk-s3'
+
+#Error pages
+gem 'rambulance'
