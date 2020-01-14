@@ -6,16 +6,14 @@
     </span>
   <% end %>
   <div class="collection-item-footer">
-    <p class="topic-footer-text">
-      <span class="collection-avatar">
-        <%= link_to user_path(comment.user.id) do %>
-          <% if comment.user.avatar.present? %>
-            <%= image_tag comment.user.avatar, {:class => "circle"} %>
-          <% else %>
-            <%= image_pack_tag "no_user_image.png", {:class => "circle"} %>
-          <% end %>
+    <p class="indexitem-footer-text">
+      <%= link_to user_path(comment.user.id) do %>
+        <% if comment.user.avatar.present? %>
+          <%= image_tag comment.user.avatar, {:class => "circle", :id => "index-author-image"} %>
+        <% else %>
+          <%= image_pack_tag "no_user_image.png", {:class => "circle", :id => "index-author-image"} %>
         <% end %>
-      </span>
+      <% end %>
       <%= atname(comment.user.nickname) %>&nbsp;&nbsp;
       <%= comment.updated_at.to_s(:human) %>&nbsp;&nbsp;&nbsp;
     </p>

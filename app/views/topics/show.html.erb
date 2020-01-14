@@ -14,7 +14,7 @@
     <div class="col s12 m9 show">
       <h2 class="h2-topic">投稿ネタ(<%= @netas.count %>)</h2>
       <% if @netas.present? %>
-        <ul class="collection z-depth-1">
+        <ul class="collection">
         <%= render partial: "netas/neta", :collection => @netas %>
         </ul>
       <% else %>

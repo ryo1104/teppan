@@ -1,20 +1,20 @@
 class Neta < ApplicationRecord
-  belongs_to  :user
-  belongs_to  :topic
+  belongs_to      :user
+  belongs_to      :topic
   counter_culture :topic
-  has_rich_text :content
-  has_many    :reviews
-  has_many    :trades, as: :tradeable
-  has_many    :pageviews, as: :pageviewable
-  has_many    :interests, as: :interestable
-  has_many    :rankings, as: :rankable
-  has_many    :hashtag_netas
-  has_many    :hashtags, through: :hashtag_netas
-  validate    :content_check
-  # validates   :text,      presence: true, length: { in: 20..800 }
-  validates   :valuetext, length: { maximum: 800 }
-  validates   :price,     presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 10000 }
-  validates   :private_flag, inclusion: { in: [true, false] }
+  has_rich_text   :content
+  has_many        :reviews
+  has_many        :trades, as: :tradeable
+  has_many        :pageviews, as: :pageviewable
+  has_many        :interests, as: :interestable
+  has_many        :rankings, as: :rankable
+  has_many        :hashtag_netas
+  has_many        :hashtags, through: :hashtag_netas
+  validate        :content_check
+  validates       :title,     presence: true, length: { in: 5..50 }
+  validates       :valuetext, length: { maximum: 800 }
+  validates       :price,     presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 10000 }
+  validates       :private_flag, inclusion: { in: [true, false] }
   
   def self.average_rate(netas)
     gross_count = 0

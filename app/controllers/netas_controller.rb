@@ -130,11 +130,11 @@ class NetasController < ApplicationController
   private
 
   def create_params
-    params.permit(:content, :valuetext, :price, :private_flag).merge(user_id: current_user.id)
+    params.permit(:title, :content, :valuetext, :price, :private_flag).merge(user_id: current_user.id)
   end
   
   def update_params
-    params.permit(:content, :valuetext, :price, :private_flag)
+    params.permit(:title, :content, :valuetext, :price, :private_flag)
   end
   
   def session_params

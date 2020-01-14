@@ -3,36 +3,25 @@
 <div class="page-body-container">
   <p><%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %></p>
   <div class="row">
-    <div class="col s12 m9 neta-entry">
+    <div class="col s12 m9 show">
       <h1 class="h1_class">投稿ネタ（編集）</h1>
-      <ul class="collection z-depth-1">
-        <li class="collection-item">
-          <%= form_with url: neta_path(@neta.id), local: true, html: {method: :patch, :class => 'browser-default', role: 'form'} do |f| %>
-            <%= f.text_area :text, :value => @neta.text, :class => "neta-form-text", :minlength => '20', :maxlength => '800' %>
-            <% if @qualified %>
-              <%= f.text_area :valuetext, placeholder: "有料部分（８００字以内）", :class => "neta-form-text", :minlength => '20', :maxlength => '800' %>
-              <span>価格</span>
-              <%= f.number_field :price, min: 0, step: 10, :value => 0, :class => "neta-form-price" %>
-            <% else %>
-              <span>価格</span>
-              <%= f.number_field :price, :readonly => true, :value => 0, :class => "neta-form-price" %>
-            <% end %>
-            <br>
-            <% if @editable %>
-              <%= f.select :private_flag, [['公開', false], ['非公開', true]], { include_blank: false, selected: @neta.private_flag }, { class: "browser-default" } %>
-            <% end %>
-            <%= button_tag :type => "submit", data: {disable_with: '保存中...'}, class: "btn btn-primary withripple custom" do %>
-              <i class="material-icons left">refresh</i>更新
-            <% end %>
-            <% if @editable %>
-              <%= link_to neta_path(@neta.id), {:method => :delete, :class => 'btn btn-primary withripple custom', data: { confirm: "本当に削除しますか？" }} do %>
-                <i class="material-icons left">delete</i>
-                <span>削除</span><br>
-              <% end %>
+      <div class="card z-depth-0">
+        <%= form_with model: @neta, local: true, html: {method: :patch, :class => 'browser-default', role: 'form'} do |form| %>
+          <% if @neta.errors.any? %>
+            <%= render :partial => "errorform" %>
+          <% end %>
+          <%= render :partial => "netaform", locals: { form: form } %>
+          <%= button_tag :type => "submit", data: {disable_with: '保存中...'}, class: "btn btn-primary withripple custom" do %>
+            <i class="material-icons left">refresh</i>更新
+          <% end %>
+          <% if @editable %>
+            <%= link_to neta_path(@neta.id), {:method => :delete, :class => 'btn btn-primary withripple custom', data: { confirm: "本当に削除しますか？" }} do %>
+              <i class="material-icons left">delete</i>
+              <span>削除</span><br>
             <% end %>
           <% end %>
-        </li>
-      </ul>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>

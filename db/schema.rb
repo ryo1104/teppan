@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_31_071144) do
+ActiveRecord::Schema.define(version: 2020_01_13_091423) do
 
   create_table "accounts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "user_id"
@@ -196,7 +196,7 @@ ActiveRecord::Schema.define(version: 2019_12_31_071144) do
 
   create_table "netas", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "user_id"
-    t.text "text", size: :medium
+    t.text "title", size: :medium
     t.integer "price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

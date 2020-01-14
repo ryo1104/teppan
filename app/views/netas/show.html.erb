@@ -1,22 +1,13 @@
-<% @page_title = "小ネタ" %>
+<% @page_title = @neta.title %>
 <% breadcrumb :show_koneta, @neta %>
 <div class="page-body-container">
   <p><%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %></p>
   <div class="row">
-    <div class="col s12 m9 neta-show">
-      <div class="indent-wrapper">
-        <h1 class="h1_class">投稿ネタ</h1>
-      </div>
-      <ul class="collection z-depth-1">
-        <li class="collection-item avatar custom">
-          <%= link_to user_path(@neta.user_id) do %>
-            <% if @neta.user.avatar.present? %>
-              <%= image_tag @neta.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
-            <% else %>
-              <%= image_pack_tag "no_user_image.png", {:class => "circle custom", :id => "mycircle"} %>
-            <% end %>
-          <% end %>
+    <div class="col s12 m9 show">
+      <div class="card show z-depth-0">
+        <div class="card-content show">
           <% if @owner || @neta.private_flag == false %>
+            <h1 class="h1-card"><%= @neta.title %></h1>
             <div class="neta-text"><%= @neta.content %></div>
             <div class="neta-purchase">
               <% if @neta.price != 0 %>
@@ -53,6 +44,15 @@
             <% end %>
             <div class="collection-item-footer">
               <p class="neta-footer-text">
+                <%= link_to user_path(@neta.user_id) do %>
+                  <span class="avatar-card">
+                    <% if @neta.user.avatar.present? %>
+                      <%= image_tag @neta.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+                    <% else %>
+                      <%= image_pack_tag "no_user_image.png", {:class => "circle custom", :id => "mycircle"} %>
+                    <% end %>
+                  </span>
+                <% end %>
                 <%= atname(@neta.user.nickname) %>&nbsp;&nbsp;
                 <%= @neta.created_at.to_s(:human) %>&nbsp;&nbsp;
                 <%= @neta.pageviews_count %>&nbsp;views&nbsp;&nbsp;
@@ -75,8 +75,8 @@
           <% else %>
             <%= @message %>
           <% end %>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
   </div>
   <% if @owner || @neta.private_flag == false %>

@@ -5,7 +5,7 @@
   <div class="row">
     <div class="col s12 m9 show">
       <div class="card z-depth-0">
-        <%= form_for @topic do |form| %>
+        <%= form_with model: @topic, local: true, html: {method: :patch, :class => 'browser-default', role: 'form'} do |form| %>
           <% if @topic.errors.any? %>
             <%= render :partial => "errorform" %>
           <% end %>

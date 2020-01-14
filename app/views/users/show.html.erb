@@ -88,7 +88,7 @@
           <% end %><br>
           <% if @postednetas %>
             <ul class="collection">
-              <%= render partial: "users/myneta", collection: @postednetas %>
+              <%= render partial: "netas/neta", collection: @postednetas %>
             </ul>
           <% else %>
             <p>（投稿はありません）</p>
@@ -96,7 +96,7 @@
           <h1 class="h1_class">リクエストしたトピック(<%= @requested_topics.count %>)</h1>
           <% if @requested_topics %>
           <ul class="collection">
-            <%= render partial: "users/mytopic", collection: @requested_topics %>
+            <%= render partial: "topics/topic", collection: @requested_topics %>
           </ul>
           <% else %>
             <p>（投稿はありません）</p><br>
