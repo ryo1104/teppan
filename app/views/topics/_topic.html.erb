@@ -8,7 +8,7 @@
       <% end %>
     </div>
     <div class="card-content index">
-      <p class="collection-item-title truncate"><%= topic.title %></p>
+      <div class="collection-item-title truncate"><%= topic.title %></div>
       <div class="collection-item-postdata">
         <% if topic.max_rate == 0 %>
           <span class="star_rating" rating-data="0"></span>
@@ -21,24 +21,21 @@
           <span class="icon-side-count"><%= topic.netas_count %></span>
       </div>
       <div class="collection-item-footer">
-        <p class="indexitem-footer-text">
-          <span>
-            <%= link_to user_path(topic.user_id) do %>
-              <% if topic.user.avatar.present? %>
-                <%= image_tag topic.user.avatar, {:class => "circle custom", :id => "index-author-image"} %>
-              <% else %>
-                <%= image_pack_tag "no_user_image.png", {:class => "circle custom", :id => "index-author-image"} %>
-              <% end %>
+        <span class="indexitem-footer-text">
+          <%= link_to user_path(topic.user_id) do %>
+            <% if topic.user.avatar.present? %>
+              <%= image_tag topic.user.avatar, {:class => "circle custom", :id => "index-author-image"} %>
+            <% else %>
+              <%= image_pack_tag "no_user_image.png", {:class => "circle custom", :id => "index-author-image"} %>
             <% end %>
-          </span>
+          <% end %>
           <%= atname(topic.user.nickname) %>&nbsp;&nbsp;
-        </p>
-        <p class="indexitem-footer-icons">
+        </span>
+        <span class="indexitem-footer-icons">
           <i class="material-icons like custom">favorite_border</i>
           <span class="icon-side-count"><%= topic.likes_count %></span>
-          <br>
-        </p>
+        </span>
+      </div>
     </div>
-  </div>
   </div>
 <% end %>

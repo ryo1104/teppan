@@ -4,22 +4,18 @@
       <h1 class="h1_class">お問合わせフォーム</h1>
       <ul class="collection z-depth-1">
         <li class="collection-item">
-          <%= form_with url: inquiries_path, local: true, method: :post do |f| %>
-          
+          <%= form_with model: @inquiry, local: true, method: :post do |f| %>
             <div class="form-group">
               <%= f.label :email, '返信先メールアドレス' %>
               <%= f.email_field :email, class: 'form-control' %>
             </div>
-          
             <div class="form-group">
              <%= f.label :message, 'お問い合わせ内容' %>
-             <%= f.text_area :message, style: 'width: 100%; height: 200px;', maxlength: 400, class: 'form-control' %>
+             <%= f.text_area :message, maxlength: 400, class: 'inquiry-form-textarea' %>
             </div>
-          
             <%= button_tag :type => "submit", data: {disable_with: '送信中...'}, class: "btn btn-primary withripple custom" do %>
               <i class="material-icons left">send</i>送信
             <% end %>
-          
           <% end %>
         </li>
       </ul>

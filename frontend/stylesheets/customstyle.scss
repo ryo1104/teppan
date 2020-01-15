@@ -577,6 +577,10 @@ textarea{
     width: 5rem;
   }
 
+  .inquiry-form-textarea{
+    width: 100%; 
+    height: 200px;
+  }
   .col.s12.m3.topics-ranking{
     margin: 0;
     padding: 0;
@@ -964,6 +968,21 @@ textarea{
     background-color: #fff;
   }
   
+  .card.index{
+    width: 24%;
+    float: left;
+    margin: 0 3px 10px 3px;
+  }
+  
+  .card-content.index{
+    padding: 5px;
+    height:  100px;
+  }
+  
+  .collection-item-title.truncate{
+    margin: 0 0 25px 0;
+  }
+  
   #q_title_or_text_or_netas_text_cont{
     font-size:  13px;
     width: 30%;
@@ -1019,9 +1038,9 @@ textarea{
     margin: 0 10px 10px 0;
   }
   
-  .card-image.custom{
+  .card-image.index{
     img{
-      max-height: 175px;
+      height: 120px;
     }
   }
   
@@ -1030,8 +1049,13 @@ textarea{
   }
   
   .fixed-action-btn{
-    right: 18rem;
+    right: 7rem;
     bottom: 2rem;
+  }
+  
+  .inquiry-form-textarea{
+    width: 100%; 
+    height: 300px;
   }
   
   #index-author-image{

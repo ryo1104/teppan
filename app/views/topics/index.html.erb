@@ -3,14 +3,13 @@
 <div class="page-body-container">
   <p><%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %></p>
   <div class="row topic-index">
-    <div class="col s12 m9 topics-list">
+    <div class="col s12 m12 topics-list">
       <%= render partial: "topics/topic", collection: @topics %>
       <div><%= paginate(@topics) %></div>
     </div>
-    
   </div>
   <div class="row topic-index">
-    <div class="col s12 m9 topics-ranking z-depth-1">
+    <div class="col s12 m12 topics-ranking z-depth-1">
       <div class="ranking-data">
         <b>トレンド</b><br><br>
         <% @hashtag_ranking.each do |key, value| %>
