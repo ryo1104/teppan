@@ -1,5 +1,8 @@
 <div class="card show z-depth-0">
   <div class="card-content show">
+    <% if @topic.header_image.attached? %>
+      <%= image_tag @topic.header_image, :class => 'topic-header-image' %>
+    <% end %>
     <h1 class="h1-card"><%= @topic.title %></h1>
     <p class="topic-body-text">
       <%= @topic.content %>
@@ -9,7 +12,7 @@
         <% end %>
       <% end %>
     </p>
-    <p class="topic-footer-text">
+    <div class="topic-footer">
       <%= link_to user_path(@topic.user_id) do %>
         <span class="avatar-card">
           <% if @topic.user.avatar.present? %>
@@ -22,24 +25,24 @@
       <%= atname(@topic.user.nickname) %>&nbsp;&nbsp;
       <%= @topic.created_at.to_s(:human) %>&nbsp;&nbsp;
       <%= @topic.pageviews_count %>&nbsp;views
-    </p>
-    <p class="topic-footer-icons">
-      <% if user_signed_in? %>
-        <% unless @topic.owner(current_user) %>
-          <span id="likes_buttons_<%= @topic.class.name.downcase %>_<%= @topic.id %>">
-            <%= render partial: 'likes/like', locals: { likeable: @topic } %>
-          </span>
-          <span id="bookmark_buttons_<%= @topic.class.name.downcase %>_<%= @topic.id %>">
-            <%= render partial: 'interests/interest', locals: { interestable: @topic } %>
-          </span>
+      <span class="topic-footer-icons">
+        <% if user_signed_in? %>
+          <% unless @topic.owner(current_user) %>
+            <span id="likes_buttons_<%= @topic.class.name.downcase %>_<%= @topic.id %>">
+              <%= render partial: 'likes/like', locals: { likeable: @topic } %>
+            </span>
+            <span id="bookmark_buttons_<%= @topic.class.name.downcase %>_<%= @topic.id %>">
+              <%= render partial: 'interests/interest', locals: { interestable: @topic } %>
+            </span>
+          <% else %>
+            <i class="material-icons bookmark custom non-active">bookmark_border</i>&nbsp;&nbsp;
+          <% end %>
         <% else %>
-          <i class="material-icons bookmark custom non-active">bookmark_border</i>&nbsp;&nbsp;
+          <i class="material-icons like custom">favorite_border</i>
+          <span class="icon-side-count"><%= @topic.likes_count %></span>&nbsp;&nbsp;
+          <i class="material-icons bookmark custom">bookmark_border</i>
         <% end %>
-      <% else %>
-        <i class="material-icons like custom">favorite_border</i>
-        <span class="icon-side-count"><%= @topic.likes_count %></span>&nbsp;&nbsp;
-        <i class="material-icons bookmark custom">bookmark_border</i>
-      <% end %>
-    </p>
+      </span>
+    </div>
   </div>
 </div>

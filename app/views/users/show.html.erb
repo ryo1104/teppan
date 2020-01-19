@@ -77,7 +77,7 @@
           <% end %>
         </ul>
       </div>
-      <div class="user-tab-contents z-depth-1">
+      <div class="user-tab-contents">
         <div class="ChangeElem_Panel">
           <h1 class="h1_class">投稿したネタ(<%= @postednetas.count %>)</h1>
           <% if @userrate == 0 %>
@@ -95,9 +95,9 @@
           <% end %>
           <h1 class="h1_class">リクエストしたトピック(<%= @requested_topics.count %>)</h1>
           <% if @requested_topics %>
-          <ul class="collection">
+          <div>
             <%= render partial: "topics/topic", collection: @requested_topics %>
-          </ul>
+          </div>
           <% else %>
             <p>（投稿はありません）</p><br>
           <% end %>

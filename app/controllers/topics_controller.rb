@@ -111,7 +111,7 @@ class TopicsController < ApplicationController
   
   private
   def create_params
-    params.permit(:title, :content, :header_image).merge(user_id: current_user.id)
+    params.require(:topic).permit(:title, :content, :header_image).merge(user_id: current_user.id)
   end
   
 end
