@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_13_091423) do
+ActiveRecord::Schema.define(version: 2020_01_19_044950) do
 
   create_table "accounts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "user_id"
@@ -264,6 +264,7 @@ ActiveRecord::Schema.define(version: 2020_01_13_091423) do
     t.integer "interests_count", default: 0, null: false
     t.integer "netas_count", default: 0, null: false
     t.integer "comments_count", default: 0, null: false
+    t.boolean "private_flag", default: false, null: false
   end
 
   create_table "trades", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|

@@ -3,7 +3,7 @@ class TopicsController < ApplicationController
   
   def index
     begin
-      @search = Topic.includes({user: [image_attachment: :blob]}, :netas).ransack(params[:q])
+      @search = Topic.includes({user: [image_attachment: :blob]}, :netas).where(private_flag: false).ransack(params[:q])
       @topics = @search.result(distinct: true).order("created_at DESC").page(params[:page]).per(20)
       @hashtag_ranking = Hashtag.get_ranking(10)
     rescue => e
@@ -37,11 +37,15 @@ class TopicsController < ApplicationController
   def show
     begin
       @topic = Topic.includes({user: [image_attachment: :blob]}).find(params[:id])
-      @netas = @topic.netas.includes({user: [image_attachment: :blob]}, :hashtags).order("created_at DESC")
-      @comments = @topic.comments.includes({user: [image_attachment: :blob]}, :likes)
-      if user_signed_in?
-        @newcomment = Comment.new
-        @topic.add_pageview(current_user)
+      if @topic.private_flag == false || (user_signed_in? && @topic.owner(current_user))
+        @netas = @topic.netas.includes({user: [image_attachment: :blob]}, :hashtags).order("created_at DESC")
+        @comments = @topic.comments.includes({user: [image_attachment: :blob]}, :likes)
+        if user_signed_in?
+          @newcomment = Comment.new
+          @topic.add_pageview(current_user)
+        end
+      else
+        @message = "この投稿は投稿者が非公開に設定しています。"
       end
     rescue => e
       ErrorUtility.log_and_notify e
@@ -111,7 +115,7 @@ class TopicsController < ApplicationController
   
   private
   def create_params
-    params.require(:topic).permit(:title, :content, :header_image).merge(user_id: current_user.id)
+    params.require(:topic).permit(:title, :content, :header_image, :private_flag).merge(user_id: current_user.id)
   end
   
 end

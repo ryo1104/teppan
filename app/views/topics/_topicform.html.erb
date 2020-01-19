@@ -11,4 +11,7 @@
 <%= form.label :title, "タイトル" %>
 <%= form.text_field :title, :maxlength => '30' %>
 <%= form.label :content, "本文" %>
-<%= form.rich_text_area :content %><br>
+<%= form.rich_text_area :content %>
+<%= form.label :private_flag, "公開／非公開" %>
+<%= form.select :private_flag, [['公開', false], ['非公開', true]], { include_blank: false, selected: @topic.private_flag }, { class: "browser-default", :id => "private_flag" } %>
+<br>

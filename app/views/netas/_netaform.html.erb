@@ -15,5 +15,5 @@
 <% end %>
 <br>
 <%= form.label :private_flag, "公開／非公開" %>
-<%= form.select :private_flag, [['公開', false], ['非公開', true]], { include_blank: false, selected: @neta.private_flag }, { class: "browser-default" } %>
+<%= form.select :private_flag, [['公開', false], ['非公開', true]], { include_blank: false, selected: @neta.private_flag }, { class: "browser-default", :id => "private_flag" } %>
 <br>

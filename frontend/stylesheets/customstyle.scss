@@ -467,12 +467,13 @@ textarea{
     display: inline-block;
     font-size: 12px;
     height: 22px;
+    min-width: 6rem;
     line-height: 24px;
     padding: 0 0.7rem;
 
     i{
       font-size:  13px;
-      margin: 0 5px 0 0;
+      margin: 0;
     }
     .material-icons{
       font-size:  13px;
@@ -489,12 +490,13 @@ textarea{
     display: inline-block;
     font-size: 12px;
     height: 22px;
+    min-width: 6rem;
     line-height: 24px;
     padding: 0 0.7rem;
 
     i{
       font-size:  13px;
-      margin: 0 5px 0 0;
+      margin: 0;
     }
     .material-icons{
       font-size:  13px;
@@ -516,7 +518,7 @@ textarea{
 
     i{
       font-size:  13px;
-      margin: 0 5px 0 0;
+      margin: 0;
     }
     .material-icons{
       font-size:  13px;
@@ -559,7 +561,7 @@ textarea{
   
   .card-content.index{
     padding: 4px;
-    height:  80px;
+    height:  95px;
   }
   
   #index-author-image{
@@ -577,9 +579,12 @@ textarea{
   
   #price_form{
     width: 5rem;
+    height: 2rem;
   }
+  
   #private_flag{
     width: 5rem;
+    height: 2.5rem;
   }
 
   .inquiry-form-textarea{
@@ -1070,6 +1075,12 @@ textarea{
   
   #price_form{
     width: 7rem;
+    height: 2rem;
+  }
+  
+  #private_flag{
+    width: 7rem;
+    height: 2.5rem;
   }
   
   .btn.btn-primary.withripple.custom{
@@ -1079,6 +1090,7 @@ textarea{
     display: inline-block;
     font-size: 13px;
     height: 25px;
+    min-width: 7rem;
     line-height: 25px;
     padding: 0 1.8rem 0 1.3rem;
     
@@ -1101,6 +1113,7 @@ textarea{
     display: inline-block;
     font-size: 13px;
     height: 25px;
+    min-width: 7rem;
     line-height: 25px;
     padding: 0 1.8rem 0 1.3rem;
     

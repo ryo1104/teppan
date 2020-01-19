@@ -1,51 +1,55 @@
 <% @page_title = @topic.title %>
 <% breadcrumb :show_topic, @topic %>
 <div class="page-body-container">
-  <p><%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %></p>
-  <div class="row">
-    <div class="col s12 m9 show">
-      <%= render partial: "topics/topicbody" %>
+  <% if @topic.private_flag == false || (user_signed_in? && @topic.owner(current_user)) %>
+    <p><%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %></p>
+    <div class="row">
+      <div class="col s12 m9 show">
+        <%= render partial: "topics/topicbody" %>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col s12 m9 show">
-      <h2 class="h2-topic">投稿ネタ(<%= @netas.count %>)</h2>
-      <% if @netas.present? %>
-        <ul class="collection">
-        <%= render partial: "netas/neta", :collection => @netas %>
-        </ul>
-      <% else %>
-        <p> (投稿はまだありません) </p>
-      <% end %>
-      <% if user_signed_in? %>
-        <div class="fixed-action-btn horizontal">
-          <%= link_to new_topic_neta_path(@topic.id), {:class => 'btn-floating light-green accent-4'} do %>
-            <i class="material-icons">create</i>
-          <% end %>
-        </div>
-      <% end %>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col s12 m9 topic-show">
-      <h2 class="h2-topic">トピックへコメント(<%= @comments.count %>)</h2>
-      <% unless @comments %>
-        <div class="indent-wrapper">
-          <p> (投稿はまだありません) </p>
-        </div>
-        <% if user_signed_in? %>
+    <div class="row">
+      <div class="col s12 m9 show">
+        <h2 class="h2-topic">投稿ネタ(<%= @netas.count %>)</h2>
+        <% if @netas.present? %>
           <ul class="collection">
-            <%= render partial: "comments/newcomment", locals: { commentable: @topic, newcomment: @newcomment } %>
+          <%= render partial: "netas/neta", :collection => @netas %>
+          </ul>
+        <% else %>
+          <p> (投稿はまだありません) </p>
+        <% end %>
+        <% if user_signed_in? %>
+          <div class="fixed-action-btn horizontal">
+            <%= link_to new_topic_neta_path(@topic.id), {:class => 'btn-floating light-green accent-4'} do %>
+              <i class="material-icons">create</i>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12 m9 topic-show">
+        <h2 class="h2-topic">トピックへコメント(<%= @comments.count %>)</h2>
+        <% unless @comments %>
+          <div class="indent-wrapper">
+            <p> (投稿はまだありません) </p>
+          </div>
+          <% if user_signed_in? %>
+            <ul class="collection">
+              <%= render partial: "comments/newcomment", locals: { commentable: @topic, newcomment: @newcomment } %>
+            </ul>
+          <% end %>
+        <% else %>
+          <ul class="collection">
+            <%= render partial: "comments/comment", :collection => @comments %>
+            <% if user_signed_in? %>
+              <%= render partial: "comments/newcomment", locals: { commentable: @topic, newcomment: @newcomment } %>
+            <% end %>
           </ul>
         <% end %>
-      <% else %>
-        <ul class="collection">
-          <%= render partial: "comments/comment", :collection => @comments %>
-          <% if user_signed_in? %>
-            <%= render partial: "comments/newcomment", locals: { commentable: @topic, newcomment: @newcomment } %>
-          <% end %>
-        </ul>
-      <% end %>
+      </div>
     </div>
-  </div>
+  <% else %>
+    <%= @message %>
+  <% end %>
 </div>

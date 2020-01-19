@@ -79,24 +79,24 @@
       </div>
       <div class="user-tab-contents">
         <div class="ChangeElem_Panel">
-          <h1 class="h1_class">投稿したネタ(<%= @postednetas.count %>)</h1>
+          <h1 class="h1_class">投稿したネタ(<%= @posted_netas.count %>)</h1>
           <% if @userrate == 0 %>
             <b>平均評価：</b><span class="star_rating" rating-data="0"></span>&nbsp;
           <% else %>
             <b>平均評価：</b><span class="star_rating" rating-data="<%= @userrate %>"></span>&nbsp;
             <span class="star-rating-text-user-page"><%= @userrate %></span>
           <% end %><br>
-          <% if @postednetas %>
+          <% if @posted_netas %>
             <ul class="collection">
-              <%= render partial: "netas/neta", collection: @postednetas %>
+              <%= render partial: "netas/neta", collection: @posted_netas %>
             </ul>
           <% else %>
             <p>（投稿はありません）</p>
           <% end %>
-          <h1 class="h1_class">リクエストしたトピック(<%= @requested_topics.count %>)</h1>
-          <% if @requested_topics %>
+          <h1 class="h1_class">投稿したトピック(<%= @posted_topics.count %>)</h1>
+          <% if @posted_topics %>
           <div>
-            <%= render partial: "topics/topic", collection: @requested_topics %>
+            <%= render partial: "topics/topic", collection: @posted_topics %>
           </div>
           <% else %>
             <p>（投稿はありません）</p><br>
