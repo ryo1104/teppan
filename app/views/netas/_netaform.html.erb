@@ -1,12 +1,22 @@
 <%= form.label :title, "タイトル／キャッチフレーズ" %>
 <%= form.text_field :title, :value => @neta.title, :minlength => '5', :maxlength => '30' %>
 <%= form.label :content, "ネタ" %>
-<%= form.rich_text_area :content %>
+<%= form.rich_text_area :content, :value => @neta.content %>
 <%= form.hidden_field :timestamp, :value => @stale_form_check_timestamp %>
 <% if @qualified %>
   <%= form.label :title, "有料部分" %>
   <%= form.text_area :valuetext, placeholder: "有料部分（８００字以内）", :class => "neta-form-text", :minlength => '20', :maxlength => '800' %>
 <% end %>
+<div id="all-tags" data-alltags="<%= @alltags_for_chips.to_json %>"></div>
+
+<div id="my-tags" data-mytags="<%= @mytags_for_chips.to_json %>"></div>
+<% if @mytags_for_chips.present? %>
+  <% @mytags_for_chips.each do |item| %>
+    <input type="hidden" name="tag_list[]" id="tag-<%= item["tag"] %>" value="<%= item["tag"] %>" >
+  <% end %>
+<% end %>
+<div class="chips chips-custom">
+</div>
 <%= form.label :price, "価格" %><br>
 <% if @qualified %>
   <%= form.number_field :price, :id => "price_form", min: 0, step: 10, :value => 0 %>&nbsp;&nbsp;円
@@ -17,3 +27,42 @@
 <%= form.label :private_flag, "公開／非公開" %>
 <%= form.select :private_flag, [['公開', false], ['非公開', true]], { include_blank: false, selected: @neta.private_flag }, { class: "browser-default", :id => "private_flag" } %>
 <br>
+
+<script>
+var tags =[];
+var alldata = $('#all-tags').data('alltags');
+var mydata = $('#my-tags').data('mytags')
+console.log(alldata);
+
+$('.chips-custom').chips({
+  data: mydata,
+  autocompleteOptions: {
+    data: alldata,
+    limit: Infinity,
+    minLength: 1,
+  },
+  placeholder: 'ハッシュタグ ',
+  secondaryPlaceholder: '+タグ追加',
+  onChipAdd: function(e, chip){
+    var item = chip.childNodes[0].textContent;
+    tags.push(item);
+    $('<input>').attr({
+      type: 'hidden',
+      name: 'tag_list[]',
+      id:   'tag-'+item,
+      value: item
+    }).appendTo('.chips-custom');
+    console.log("added");
+    console.log(tags);
+  },
+  onChipDelete: function(e, chip){
+    var item = chip.childNodes[0].textContent;
+    $('#' + 'tag-' + item).remove();
+    tags = $.grep(tags, function(value) {
+      return value != item;
+    });
+    $('#tags').val(tags);
+    console.log("deleted "+item);
+  }
+});
+</script>

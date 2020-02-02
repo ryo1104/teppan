@@ -101,12 +101,14 @@
       number   : 5,  
       half     : false,
       precision:   false,
-      size     : 24,
+      // size     : 32,
+      hints: ['1 : どゆこと？', '2 : つまらん', '3 : 面白い', '4 : ワロタ！', '5 : 殿堂入り！'],
       starHalf : "<%= asset_pack_url('media/images/star-half.png') %>",
       starOff  : "<%= asset_pack_url('media/images/star-off.png') %>",
       starOn   : "<%= asset_pack_url('media/images/star-on.png') %>",
       target: '#hint1',
-      targetType: 'number',
+      targetType: 'hint',
+      targetKeep:  true,
       round:  { down: .25, full: .6, up: .76 },
       click: function(score, evt) {
         $("#review_rate").val(score);

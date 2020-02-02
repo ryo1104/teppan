@@ -187,7 +187,9 @@ textarea{
 }
 
 .star_rating{
-  img{ width: 12px; }
+  img{ 
+    width: 1rem;
+  }
 }
 
 .star-rating-text{
@@ -529,8 +531,8 @@ textarea{
   }
   
   .fixed-action-btn{
-    right: 24rem;
-    bottom: 2rem;
+    right: 28rem;
+    bottom: 27rem;
   }
 
   .modal.open{
@@ -979,7 +981,7 @@ textarea{
   }
   
   .card.index{
-    width: 24%;
+    width: 190px;
     float: left;
     margin: 0 3px 10px 3px;
   }
@@ -1151,6 +1153,13 @@ textarea{
     }
     span{
       font-size:  13px;
+    }
+  }
+  
+  .new_star_rating{
+    img{
+      width: 1.2rem;
+      height: 1.2rem;
     }
   }
   

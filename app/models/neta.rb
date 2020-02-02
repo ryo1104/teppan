@@ -111,26 +111,16 @@ class Neta < ApplicationRecord
     end
   end
 
-  # after_create do
-  #   neta = Neta.find_by(id: self.id)
-  #   hashtags  = self.text.scan(/[#＃][\w\p{Han}ぁ-ヶｦ-ﾟー]+/)
-  #   hashtags.uniq.map do |hashtag|
-  #     tag = Hashtag.find_or_create_by(hashname: hashtag.downcase.delete('#'))
-  #     tag.add_netacount
-  #     tag.add_hit(neta.user)
-  #     neta.hashtags << tag
-  #   end
-  # end
-  
-  # before_update do
-  #   neta = Neta.find_by(id: self.id)
-  #   neta.hashtags.clear
-  #   hashtags  = self.text.scan(/[#＃][\w\p{Han}ぁ-ヶｦ-ﾟー]+/)
-  #   hashtags.uniq.map do |hashtag|
-  #     tag = Hashtag.find_or_create_by(hashname: hashtag.downcase.delete('#'))
-  #     neta.hashtags << tag
-  #   end
-  # end
+  def add_hashtags(tag_array)
+    if tag_array.present?
+      self.hashtags.clear if self.hashtags.present?
+      tag_array.uniq.map do |tag_name|
+        hashtag = Hashtag.find_or_create_by(hashname: tag_name)
+        self.hashtags << hashtag
+        hashtag.add_netacount
+      end
+    end
+  end
   
   private
   

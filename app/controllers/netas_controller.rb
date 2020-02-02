@@ -18,6 +18,8 @@ class NetasController < ApplicationController
     begin
       @topic = Topic.find(params[:topic_id])
       @neta = @topic.netas.new
+      @alltags_for_chips = Hashtag.for_chips_autocomplete(Hashtag.all)
+      @mytags_for_chips = Hashtag.for_chips_initial(nil)
       @qualified = current_user.premium_qualified
       @stale_form_check_timestamp = Time.zone.now.to_i
     rescue => e
@@ -32,8 +34,9 @@ class NetasController < ApplicationController
         redirect_to topic_path(params[:topic_id]), alert: "入力内容はすでに保存されています。" and return
       else
         @topic = Topic.find(params[:topic_id])
-        @topic.netas.create!(create_params)
+        @neta = @topic.netas.create!(create_params)
         #@copy_check_obj = Copycheck.create(neta_id: @neta.id, text: @neta.text+" "+@neta.valuetext)
+        @neta.add_hashtags(tag_params)
         @stale_form_check_timestamp = Time.zone.now.to_i
         session[:last_created_at] = @stale_form_check_timestamp
         redirect_to topic_path(params[:topic_id]), notice: "ネタを投稿しました。"
@@ -74,6 +77,8 @@ class NetasController < ApplicationController
       end
       @editable = @neta.editable
       @qualified = current_user.premium_qualified
+      @alltags_for_chips = Hashtag.for_chips_autocomplete(Hashtag.all)
+      @mytags_for_chips = Hashtag.for_chips_initial(@neta.hashtags)
     rescue => e
       ErrorUtility.log_and_notify e
       redirect_to neta_path(params[:id]), alert: "エラーが発生しました。" and return
@@ -84,6 +89,7 @@ class NetasController < ApplicationController
     begin
       @neta = Neta.find(params[:id])
       @neta.update!(update_params)
+      @neta.add_hashtags(tag_params)
       # copy_check_obj = Copycheck.create(neta_id: neta.id, text: neta.text)
       # ccd_post_result = copy_check_obj.post_ccd_check(neta.text)
       # copy_check_obj.update(queue_id: ccd_post_result["queue_id"]) 
@@ -117,9 +123,7 @@ class NetasController < ApplicationController
   def hashtags
     begin
       @tag = Hashtag.find_by(hashname: params[:hashname])
-      if user_signed_in?
-        @tag.add_hit(current_user)
-      end
+      @tag.add_hit(current_user) if user_signed_in?
       @netas = @tag.netas.includes({user: [image_attachment: :blob]})
     rescue => e
       ErrorUtility.log_and_notify e
@@ -130,15 +134,20 @@ class NetasController < ApplicationController
   private
 
   def create_params
-    params.permit(:title, :content, :valuetext, :price, :private_flag).merge(user_id: current_user.id)
+    params.require(:neta).permit(:title, :content, :valuetext, :price, :private_flag).merge(user_id: current_user.id)
   end
   
   def update_params
-    params.permit(:title, :content, :valuetext, :price, :private_flag)
+    params.require(:neta).permit(:title, :content, :valuetext, :price, :private_flag)
+  end
+  
+  def tag_params
+    tag_p = params.permit(tag_list: [])
+    tag_list = tag_p[:tag_list]
   end
   
   def session_params
-    params.permit(:timestamp)
+    params.require(:neta).permit(:timestamp)
   end
   
   def check_login
