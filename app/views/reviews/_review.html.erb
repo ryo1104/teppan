@@ -1,20 +1,20 @@
-<li class="collection-item avatar custom">
-  <%= link_to user_path(review.user.id) do %>
-    <% if review.user.avatar.present? %>
-      <%= image_tag review.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
-    <% else %>
-      <%= image_pack_tag "no_user_image.png", {:class => "circle custom", :id => "mycircle"} %>
-    <% end %>
-  <% end %>
+<li class="collection-item custom">
   <%= link_to review_path(review.id), method: :get do %>
     <span class="star_rating" rating-data="<%= review.rate %>"></span>
     <span class="star-rating-text">&nbsp;&nbsp;<%= review.rate %></span>
     <p class="review-text"><%= review.text %></p>
     <div class="collection-item-footer">
-      <span class="review-footer-text">
+      <div class="indexitem-footer-text">
+        <%= link_to user_path(review.user.id) do %>
+          <% if review.user.avatar.present? %>
+            <%= image_tag review.user.avatar, {:class => "circle", :id => "index-author-image"} %>
+          <% else %>
+            <%= image_pack_tag "no_user_image.png", {:class => "circle", :id => "index-author-image"} %>
+          <% end %>
+        <% end %>
         <%= atname(review.user.nickname) %>&nbsp;&nbsp;
         <%= review.updated_at.to_s(:human) %>&nbsp;&nbsp;&nbsp;
-      </span>
+      </div>
       <div class="review-footer-icons">
         <i class="material-icons comment custom">chat_bubble_outline</i>
         <span class="icon-side-count"><%= review.comments_count %></span>&nbsp;&nbsp;

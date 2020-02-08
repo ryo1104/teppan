@@ -42,7 +42,7 @@
         <%= f.label :topic, 'キーワード' %><br>
         <%= f.text_field :title_or_netas_title_or_user_nickname_cont, class: "browser-default" %><br>
         <%= f.label :neta_count, '投稿数' %><br>
-        <%= f.number_field :netas_count_gteq, min: 0, step: 1, class: "browser-default" %><br>
+        <%= f.number_field :netas_count_gteq, min: 0, step: 1, class: "browser-default" %><br><br>
         <%= button_tag '検索', :type => "submit", class: "btn btn-primary withripple custom" %>
       <% end %>
     </div>
