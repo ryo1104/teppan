@@ -3,7 +3,7 @@ class TopicsController < ApplicationController
   
   def index
     begin
-      @search = Topic.includes({user: [image_attachment: :blob]}, :netas).where(private_flag: false).ransack(params[:q])
+      @search = Topic.includes([header_image_attachment: :blob], {user: [image_attachment: :blob]}, :netas).where(private_flag: false).ransack(params[:q])
       @topics = @search.result(distinct: true).order("created_at DESC").page(params[:page]).per(20)
       @hashtag_ranking = Hashtag.get_ranking(10)
     rescue => e
@@ -39,7 +39,7 @@ class TopicsController < ApplicationController
       @topic = Topic.includes({user: [image_attachment: :blob]}).find(params[:id])
       if @topic.private_flag == false || (user_signed_in? && @topic.owner(current_user))
         @netas = @topic.netas.includes({user: [image_attachment: :blob]}, :hashtags).order("created_at DESC")
-        @comments = @topic.comments.includes({user: [image_attachment: :blob]}, :likes)
+        @comments = @topic.comments.includes({user: [image_attachment: :blob]})
         if user_signed_in?
           @newcomment = Comment.new
           @topic.add_pageview(current_user)

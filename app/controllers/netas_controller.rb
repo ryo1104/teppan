@@ -1,5 +1,5 @@
 class NetasController < ApplicationController
-  before_action :authenticate_user!#, except: %i[index hashtags]
+  before_action :authenticate_user!, except: %i[index hashtags]
 
   def index
     begin
@@ -124,7 +124,7 @@ class NetasController < ApplicationController
     begin
       @tag = Hashtag.find_by(hashname: params[:hashname])
       @tag.add_hit(current_user) if user_signed_in?
-      @netas = @tag.netas.includes({user: [image_attachment: :blob]})
+      @netas = @tag.netas.includes(:hashtag_netas, :hashtags, {user: [image_attachment: :blob]})
     rescue => e
       ErrorUtility.log_and_notify e
       redirect_to topics_path, alert: "エラーが発生しました。" and return

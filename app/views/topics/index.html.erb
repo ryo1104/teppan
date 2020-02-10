@@ -7,20 +7,12 @@
       <%= render partial: "topics/topic", collection: @topics %>
       <div><%= paginate(@topics) %></div>
     </div>
-  </div>
-  <div class="row topic-index">
-    <div class="col s12 m12 topics-ranking z-depth-1">
-      <div class="ranking-data">
-        <b>トレンド</b><br><br>
+    <div class="col s11 m11 topics-ranking z-depth-1">
+        <b>トレンド</b><br>
         <% @hashtag_ranking.each do |key, value| %>
-          <%= link_to "#"+value[1], "/neta/hashtag/#{value[1]}" %><br>
-          <p class="hashtrendlist-footer-text">
-            <%= value[2] %>&nbsp;views&nbsp;&nbsp;
-            <i class="material-icons post custom">create</i>
-            <span class="icon-side-count"><%= value[3] %></span><br>
-          </p>
+          <div class="chip custom"><%= link_to "#"+value[1], "/neta/hashtag/#{value[1]}" %></div>
         <% end %>
-      </div>
+        <br>
     </div>
   </div>
   <div class="fixed-action-btn horizontal">

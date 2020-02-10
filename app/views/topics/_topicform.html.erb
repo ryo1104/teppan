@@ -2,7 +2,7 @@
 <%= form.label :header_image, "ヘッダー画像 : " %><br>
   <% if @topic.header_image.attached? %>
     <%= @topic.header_image.filename %>&nbsp;&nbsp;
-    <%= link_to "画像を削除", topic_header_image_path(@topic.id), :method => :delete %>
+    <%= link_to "画像を削除", topic_header_image_path(@topic.id), :method => :delete %><br>
     <%= image_tag @topic.header_image, :class => 'topic-header-image', :id => 'header-image' %>
   <% else %>
     <%= image_pack_tag "teppan_gray.jpeg", :class => 'topic-header-image', :id => 'header-image' %><br>

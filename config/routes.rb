@@ -49,5 +49,6 @@ Rails.application.routes.draw do
       resources :idcards, only: [:new, :create, :edit, :update, :destroy, :index]
     end
   end
+  delete  'users/:id/delete_avatar', to: 'users#delete_avatar', as: 'delete_avatar'
   
 end

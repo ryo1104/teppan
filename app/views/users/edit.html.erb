@@ -8,7 +8,7 @@
       <h1 class="h1_class">プロフィール編集</h1>
       <ul class="collection z-depth-1 user-page">
         <% if @no_nickname %>
-          <%= form_for @user do |f| %>
+          <%= form_with model: @user, local: true, method: :patch do |f| %>
             ユーザー名を登録して下さい。
             <div class="user-form-nickname">ユーザー名
               <%= f.text_field :nickname, placeholder: @temp_nickname, :class => "browser-default" %>
@@ -16,12 +16,13 @@
             <%= f.submit "保存", class: "btn btn-primary withripple custom" %>
           <% end %>
         <% else %>
-          <%= form_for @user do |f| %>
+          <%= form_with model: @user, local: true, method: :patch do |f| %>
             <div class="user-profile-edit-tophalf">
               <div class="col s3 m3 user-page-left">
                 <div class="user-page-avatar-container">
                   <% if @user.avatar.present? %>
                     <%= image_tag @user.avatar, {:class => "circle", :id => "user-page-image"} %>
+                    <%= link_to "削除", delete_avatar_path(@user.id), :method => :delete %>
                   <% else %>
                     <%= image_pack_tag "no_user_image.png", {:class => "circle", :id => "user-page-image"} %>
                   <% end %>
@@ -40,30 +41,37 @@
                 </div>
               </div>
               <div class="col s9 m9 user-page-info">
-                <div class="user-form-nickname">ユーザー名
-                  <%= f.text_field :nickname, placeholder: "ユーザー名", :class => "browser-default" %>
+                <div class="user-form-nickname">
+                  <%= f.label :nickname, "ユーザー名" %>
+                  <%= f.text_field :nickname, placeholder: "ユーザー名" %>
                 </div>
-                <div class="birth_date_fields">生年月日<br>
+                <div class="birth_date_fields">
+                  <%= f.label :birthdate, "生年月日" %><br>
                   <%= f.date_select :birthdate, 
                         { :start_year => 1930, 
                           :end_year => (Time.zone.now.year - 18),
                           :include_blank => true },
                         { :class => 'form-control date-select' } %>
                 </div>
-                
-                <div class="prefecture_form">エリア
+                <div class="prefecture_form">
+                  <%= f.label :prefecture_code, "エリア" %><br>
                   <%= f.collection_select :prefecture_code, JpPrefecture::Prefecture.all, :code, :name, {:include_blank => '都道府県'}, {class: 'form-control prefecture'} %>
                 </div>
-      
                 <div class="gender_form">
-                  <%= f.radio_button :gender, 1, {:class => 'with-gap'} %><label for="user_gender_1">男性</label>
-                  <%= f.radio_button :gender, 2, {:class => 'with-gap'} %><label for="user_gender_2">女性</label>
+                  <label for="user_gender_1">
+                    <%= f.radio_button :gender, 1, :class => "with-gap" %>
+                    <span>男性</span>
+                  </label>
+                  <label for="user_gender_2">
+                    <%= f.radio_button :gender, 2, :class => "with-gap" %>
+                    <span>女性</span>
+                  </label>
                 </div>
               </div>
             </div>
             <div class="user-profile-edit-bottomhalf">
               <div class="user-introduction">
-                <p>自己紹介文</p>
+                <%= f.label :introduction, "プロフィール文" %>
                 <%= f.text_area :introduction, style: 'width: 100%; height: 200px;', maxlength: 800, placeholder: "（８００字以内）" %>
               </div>
               <%= f.submit "更新", class: "btn btn-primary withripple custom" %>
