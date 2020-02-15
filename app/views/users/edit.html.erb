@@ -46,12 +46,8 @@
                   <%= f.text_field :nickname, placeholder: "ユーザー名" %>
                 </div>
                 <div class="birth_date_fields">
-                  <%= f.label :birthdate, "生年月日" %><br>
-                  <%= f.date_select :birthdate, 
-                        { :start_year => 1930, 
-                          :end_year => (Time.zone.now.year - 18),
-                          :include_blank => true },
-                        { :class => 'form-control date-select' } %>
+                  <label for="user_birthdate">生年月日</label><br>
+                  <input id="user_birthdate" name="user[birthdate]" type="date" value="<%= @user.birthdate %>"/>
                 </div>
                 <div class="prefecture_form">
                   <%= f.label :prefecture_code, "エリア" %><br>

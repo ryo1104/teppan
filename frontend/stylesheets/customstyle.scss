@@ -2,18 +2,6 @@ body{
   background-color: #ffffff;
 }
 
-h1{
-  font-size: 1.3rem;
-  font-weight: bold;
-  margin: 5px 0;
-}
-
-h2{
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin: 5px 0;
-}
-
 a{
   color: #66cc00;
 }
@@ -225,6 +213,7 @@ textarea{
 
 .user-profile-completion{
   padding: 0 1rem 0 0;
+  font-size: 0.8rem;
 }
 .progress.custom{
   width: 100%;
@@ -392,6 +381,18 @@ textarea{
 {
   body{
     font-size:  1rem;
+  }
+  
+  h1{
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 5px 0;
+  }
+  
+  h2{
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 5px 0;
   }
 
   a{
@@ -701,7 +702,7 @@ textarea{
       cursor: pointer;
       background-color: #66cc00;
       border-top-right-radius: 10px;
-      font-size: 13px;
+      font-size: 12px;
       color: #fff;
       text-align: center;
   
@@ -796,6 +797,7 @@ textarea{
   
   #user_nickname{
     height: 2rem;
+    font-size: 1rem;
   }
   
   .birth_date_fields{
@@ -806,23 +808,30 @@ textarea{
     display: inline-block;
   }
   
-  #user_birthdate_1i{
-    width: 4.5rem;
-    height: 2.2rem;
-  }
-  #user_birthdate_2i{
-    width: 4.5rem;
-    height: 2.2rem;
-  }
-  #user_birthdate_3i{
-    width: 4.5rem;
-    height: 2.2rem;
-  }
+  // #user_birthdate_1i{
+  //   width: 4.5rem;
+  //   height: 2.2rem;
+  // }
+  // #user_birthdate_2i{
+  //   width: 4.5rem;
+  //   height: 2.2rem;
+  // }
+  // #user_birthdate_3i{
+  //   width: 4.5rem;
+  //   height: 2.2rem;
+  // }
 
+  #user_birthdate{
+    width: 8rem;
+    font-size: 1rem;
+    height: 2.5rem;
+  }
+  
   #user_prefecture_code{
     display: inline-block;
-    width: 6rem;
+    width: 7rem;
     height: 2.2rem;
+    font-size: 1rem;
   }
   
   .gender_form{
@@ -920,6 +929,18 @@ textarea{
   
   body{
     font-size:  1rem;
+  }
+  
+  h1{
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin: 5px 0;
+  }
+  
+  h2{
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 5px 0;
   }
 
   .nav-brand-logo{
@@ -1405,8 +1426,13 @@ textarea{
     margin: 1rem 0;
     #user_nickname{
       font-size: 14px;
-      
+      height: 2.5rem;
     }
+  }
+  
+  #user_birthdate{
+    width: 10rem;
+    font-size: 1rem;
   }
   
   .form-control.file{

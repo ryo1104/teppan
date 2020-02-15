@@ -32,7 +32,7 @@
 var tags =[];
 var alldata = $('#all-tags').data('alltags');
 var mydata = $('#my-tags').data('mytags')
-console.log(alldata);
+// console.log(alldata);
 
 $('.chips-custom').chips({
   data: mydata,
@@ -52,8 +52,8 @@ $('.chips-custom').chips({
       id:   'tag-'+item,
       value: item
     }).appendTo('.chips-custom');
-    console.log("added");
-    console.log(tags);
+    // console.log("added");
+    // console.log(tags);
   },
   onChipDelete: function(e, chip){
     var item = chip.childNodes[0].textContent;
@@ -62,7 +62,7 @@ $('.chips-custom').chips({
       return value != item;
     });
     $('#tags').val(tags);
-    console.log("deleted "+item);
+    // console.log("deleted "+item);
   }
 });
 </script>

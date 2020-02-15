@@ -10,9 +10,9 @@ require('jquery')
 require('trix')
 require('@rails/actiontext')
 require('raty-js')
+import 'materialize-css/dist/js/materialize'
 
 // CSS
-import 'materialize-css/dist/js/materialize'
 import '../stylesheets/style.scss'
 
 // Uncomment to copy all static images under ../images to the output folder and reference
@@ -21,4 +21,4 @@ import '../stylesheets/style.scss'
 const images = require.context('../images', true)
 const imagePath = (name) => images(name, true)
 import './favicons'
-import './customscripts'
+// import './customscripts'
