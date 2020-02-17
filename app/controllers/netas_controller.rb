@@ -122,7 +122,12 @@ class NetasController < ApplicationController
 
   def hashtags
     begin
-      @tag = Hashtag.find_by(hashname: params[:hashname])
+      if params[:hashname] == "search" && params[:search_form] == "true"
+        hashname = params[:searchname]
+      else
+        hashname = params[:hashname]
+      end
+      @tag = Hashtag.find_by(hashname: hashname)
       @tag.add_hit(current_user) if user_signed_in?
       @netas = @tag.netas.includes(:hashtag_netas, :hashtags, {user: [image_attachment: :blob]})
     rescue => e

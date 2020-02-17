@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   post    'topics/:id/interests', to: 'interests#create', as: 'topic_interests'
   delete  'topics/:topic_id/interests/:id', to: 'interests#destroy', as: 'topic_interest'
   
-  get     '/neta/hashtag/:hashname', to: "netas#hashtags"
+  get     '/neta/hashtag/:hashname', to: "netas#hashtags", as: 'netas_hashtags'
   post    '/neta/draft', to: "netas#draft"
  
   resources :copychecks, only: [:new, :create, :show, :update, :index]
