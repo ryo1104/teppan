@@ -60,4 +60,9 @@ class Hashtag < ApplicationRecord
     return hashtag_ranking
   end
   
+  def update_hiragana(force: false)
+    rubyfuri = Rubyfuri::Client.new(ENV['YAHOOJP_KEY'])
+    self.update(hiragana: rubyfuri.furu(self.hashname))
+  end
+  
 end

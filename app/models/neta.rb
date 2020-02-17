@@ -116,6 +116,7 @@ class Neta < ApplicationRecord
       self.hashtags.clear if self.hashtags.present?
       tag_array.uniq.map do |tag_name|
         hashtag = Hashtag.find_or_create_by(hashname: tag_name)
+        hashtag.update_hiragana
         self.hashtags << hashtag
         hashtag.add_netacount
       end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_19_044950) do
+ActiveRecord::Schema.define(version: 2020_02_17_061622) do
 
   create_table "accounts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "user_id"
@@ -160,6 +160,7 @@ ActiveRecord::Schema.define(version: 2020_01_19_044950) do
     t.datetime "updated_at", null: false
     t.integer "hit_count", default: 0, null: false
     t.integer "neta_count", default: 0, null: false
+    t.string "hiragana"
     t.index ["hashname"], name: "index_hashtags_on_hashname", unique: true
   end
 

@@ -96,3 +96,6 @@ gem 'aws-sdk-s3'
 
 #Error pages
 gem 'rambulance'
+
+#Hiragana
+gem 'rubyfuri'
