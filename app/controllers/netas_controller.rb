@@ -127,16 +127,21 @@ class NetasController < ApplicationController
       else
         hashname = params[:hashname]
       end
-      @tag = Hashtag.find_by(hashname: hashname)
-      @tag.add_hit(current_user) if user_signed_in?
-      @netas = @tag.netas.includes(:hashtag_netas, :hashtags, {user: [image_attachment: :blob]})
+      
+      if @tag = Hashtag.find_by(hashname: hashname)
+        @tag.add_hit(current_user) if user_signed_in?
+        @netas = @tag.netas.includes(:hashtag_netas, :hashtags, {user: [image_attachment: :blob]})
+      else
+        @tag = Hashtag.new(hashname: hashname)
+        @netas = nil
+      end
     rescue => e
       ErrorUtility.log_and_notify e
       redirect_to topics_path, alert: "エラーが発生しました。" and return
     end
   end
   
-  def tag_autocomplete
+  def tag_search_autocomplete
     items = Hashtag.ransack(hashname_or_hiragana_cont: params[:keyword]).result.order("neta_count DESC").limit(10)
     render json: HashtagSerializer.new(items)
   end
@@ -153,7 +158,7 @@ class NetasController < ApplicationController
   
   def tag_params
     tag_p = params.permit(tag_list: [])
-    tag_list = tag_p[:tag_list]
+    return tag_p[:tag_list]
   end
   
   def session_params

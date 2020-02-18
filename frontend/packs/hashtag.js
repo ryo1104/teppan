@@ -2,7 +2,7 @@ import $ from 'jquery';
 require('selectize');
 
 const url = (query) => {
-  return `/neta/tag_autocomplete?keyword=${encodeURIComponent(query)}`
+  return `/neta/tag_search_autocomplete?keyword=${encodeURIComponent(query)}`
 };
 
 const items = (data) => {

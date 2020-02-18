@@ -9,7 +9,7 @@
   <% end %>
   <div class="row">
     <div class="col s12 m9 show">
-      <% unless @netas.exists? %>
+      <% unless @netas %>
         <p> (ネタの投稿はまだありません) </p><br>
       <% else %>
         <h1>#<%= @tag.hashname %></h1>

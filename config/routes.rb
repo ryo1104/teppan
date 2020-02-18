@@ -24,7 +24,7 @@ Rails.application.routes.draw do
   delete  'topics/:topic_id/interests/:id', to: 'interests#destroy', as: 'topic_interest'
   
   get     '/neta/hashtag/:hashname', to: "netas#hashtags", as: 'netas_hashtags'
-  get     '/neta/tag_autocomplete', to: "netas#tag_autocomplete"
+  get     '/neta/tag_search_autocomplete', to: "netas#tag_search_autocomplete"
   post    '/neta/draft', to: "netas#draft"
  
   resources :copychecks, only: [:new, :create, :show, :update, :index]
