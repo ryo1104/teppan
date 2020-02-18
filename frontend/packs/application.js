@@ -11,6 +11,7 @@ require('trix')
 require('@rails/actiontext')
 require('raty-js')
 import 'materialize-css/dist/js/materialize'
+import './hashtag_autocomplete'
 
 // CSS
 import '../stylesheets/style.scss'

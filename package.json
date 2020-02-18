@@ -12,6 +12,7 @@
     "materialize-css": "^1.0.0",
     "raty-js": "^2.9.0",
     "resolve-url-loader": "^3.1.1",
+    "selectize": "^0.12.6",
     "trix": "^1.0.0",
     "turbolinks": "^5.2.0"
   },

@@ -903,10 +903,51 @@ textarea{
     font-size: 14px;
   }
   
+  #hashtag_search_form{
+    height: 2.2rem;
+    margin: 1rem 0.75rem;
+  }
+  
   #tag_search_field{
-    width: 11rem;
+    display: none;
+  }
+  
+  #tag_search_field-selectized{
+    height: 0.8rem;
+  }
+  
+  .selectize-control.single{
+    display: inline-flex;
+  }
+  
+  .selectize-control.single.selectize-input.input-active{
     height: 2rem;
-    margin: 0 0 1rem 1rem;
+    line-height: 1rem;
+  }
+  
+  .selectize-input.items.not-full{
+    width: 15rem;
+    height: 2.2rem;
+  }
+  
+  .selectize-input.items.not-full.focus.input-active{
+    height: 2.2rem;
+    line-height: 1rem;
+  }
+  
+  .selectize-input.items.full.has-items.has-options{
+    width: 15rem;
+    height: 2.2rem;
+    line-height: 1rem;
+  }
+  
+  .selectize-input.items.full.has-options.has-items{
+    width: 15rem;
+    height: 2.2rem;
+    line-height: 1rem;
+    input{
+      height: 1rem;
+    }
   }
   
   .col.s12.m12.footer-column1 {

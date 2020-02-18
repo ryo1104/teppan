@@ -2,8 +2,8 @@
 <% breadcrumb :hashtag, @tag %>
 <div class="page-body-container">
   <p><%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %></p>
-  <%= form_with url: netas_hashtags_path("search"), local: true, method: :get, :class => 'browser-default' do |f| %>
-    <%= f.text_field :searchname, :id => "tag_search_field" %>
+  <%= form_with url: netas_hashtags_path("search"), local: true, method: :get, :id => 'hashtag_search_form' do |f| %>
+    <%= f.text_field :keyword, :value => params[:keyword], :autocomplete => 'off', :id => "tag_search_field" %>
     <%= f.hidden_field :search_form, :value => "true" %>
     <%= f.submit '検索', class: "btn btn-primary withripple custom", :name => nil %>
   <% end %>

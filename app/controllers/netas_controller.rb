@@ -123,7 +123,7 @@ class NetasController < ApplicationController
   def hashtags
     begin
       if params[:hashname] == "search" && params[:search_form] == "true"
-        hashname = params[:searchname]
+        hashname = params[:keyword]
       else
         hashname = params[:hashname]
       end
@@ -134,6 +134,11 @@ class NetasController < ApplicationController
       ErrorUtility.log_and_notify e
       redirect_to topics_path, alert: "エラーが発生しました。" and return
     end
+  end
+  
+  def tag_autocomplete
+    items = Hashtag.ransack(hashname_or_hiragana_cont: params[:keyword]).result.order("neta_count DESC").limit(10)
+    render json: HashtagSerializer.new(items)
   end
 
   private

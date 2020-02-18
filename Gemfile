@@ -99,3 +99,6 @@ gem 'rambulance'
 
 #Hiragana
 gem 'rubyfuri'
+
+#Serializer
+gem 'fast_jsonapi'
