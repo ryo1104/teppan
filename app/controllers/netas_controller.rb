@@ -18,8 +18,6 @@ class NetasController < ApplicationController
     begin
       @topic = Topic.find(params[:topic_id])
       @neta = @topic.netas.new
-      # @alltags_for_chips = Hashtag.for_chips_autocomplete(Hashtag.all)
-      # @mytags_for_chips = Hashtag.for_chips_initial(nil)
       @qualified = current_user.premium_qualified
       @stale_form_check_timestamp = Time.zone.now.to_i
     rescue => e
@@ -36,8 +34,6 @@ class NetasController < ApplicationController
         @topic = Topic.find(params[:topic_id])
         @neta = @topic.netas.create!(create_params)
         #@copy_check_obj = Copycheck.create(neta_id: @neta.id, text: @neta.text+" "+@neta.valuetext)
-        puts "tags : "
-        puts tag_array
         @neta.add_hashtags(tag_array)
         @stale_form_check_timestamp = Time.zone.now.to_i
         session[:last_created_at] = @stale_form_check_timestamp
@@ -90,8 +86,6 @@ class NetasController < ApplicationController
     begin
       @neta = Neta.find(params[:id])
       @neta.update!(update_params)
-      puts "tags : "
-      puts tag_array
       @neta.add_hashtags(tag_array)
       # copy_check_obj = Copycheck.create(neta_id: neta.id, text: neta.text)
       # ccd_post_result = copy_check_obj.post_ccd_check(neta.text)
