@@ -6,26 +6,6 @@ class Hashtag < ApplicationRecord
   validates :hit_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :neta_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   
-  def self.for_chips_autocomplete(tags)
-    tags_for_chips = {}
-    if tags.present?
-      tags.each do |tag|
-        tags_for_chips.merge!( { tag.hashname => nil } )
-      end
-    end
-    return tags_for_chips
-  end
-  
-  def self.for_chips_initial(tags)
-    tags_for_chips = []
-    if tags.present?
-      tags.each do |tag|
-        tags_for_chips.push( { "tag" => tag.hashname } )
-      end
-    end
-    return tags_for_chips
-  end
-  
   def add_hit(user)
     from = Time.zone.now - 1.day
     to = Time.zone.now

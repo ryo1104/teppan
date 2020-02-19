@@ -123,6 +123,19 @@ class Neta < ApplicationRecord
     end
   end
   
+  def get_hashtags_str
+    if self.hashtags.present?
+      tags = self.hashtags
+      tag_array = []
+      tags.each do |tag|
+        tag_array.push(tag.hashname)        
+      end
+      return tag_array.join(',')
+    else
+      return ""
+    end
+  end
+  
   private
   
   def content_check
