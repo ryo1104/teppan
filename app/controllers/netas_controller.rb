@@ -29,15 +29,20 @@ class NetasController < ApplicationController
   def create
     begin
       if session[:last_created_at].to_i > session_params[:timestamp].to_i
-        redirect_to topic_path(params[:topic_id]), alert: "入力内容はすでに保存されています。" and return
+        redirect_to topic_path(params[:topic_id]), alert: "すでに投稿済です。" and return
       else
         @topic = Topic.find(params[:topic_id])
-        @neta = @topic.netas.create!(create_params)
+        @neta = @topic.netas.new(create_params)
+        @tags = tag_array
+        if @tags.size > 5
+          @neta.errors.add(:hashtags, "は5個までです。")
+          render :new and return
+        end
+        @neta.save!
+        @neta.add_hashtags(@tags)
         #@copy_check_obj = Copycheck.create(neta_id: @neta.id, text: @neta.text+" "+@neta.valuetext)
-        @neta.add_hashtags(tag_array)
-        @stale_form_check_timestamp = Time.zone.now.to_i
-        session[:last_created_at] = @stale_form_check_timestamp
-        redirect_to topic_path(params[:topic_id]), notice: "ネタを投稿しました。"
+        session[:last_created_at] = Time.zone.now.to_i
+        redirect_to neta_path(@neta.id), notice: "ネタを投稿しました。"
       end
     rescue => e
       ErrorUtility.log_and_notify e
@@ -76,6 +81,7 @@ class NetasController < ApplicationController
       @editable = @neta.editable
       @qualified = current_user.premium_qualified
       @current_tags = @neta.get_hashtags_str
+      @stale_form_check_timestamp = Time.zone.now.to_i
     rescue => e
       ErrorUtility.log_and_notify e
       redirect_to neta_path(params[:id]), alert: "エラーが発生しました。" and return
@@ -84,13 +90,18 @@ class NetasController < ApplicationController
   
   def update
     begin
-      @neta = Neta.find(params[:id])
-      @neta.update!(update_params)
-      @neta.add_hashtags(tag_array)
-      # copy_check_obj = Copycheck.create(neta_id: neta.id, text: neta.text)
-      # ccd_post_result = copy_check_obj.post_ccd_check(neta.text)
-      # copy_check_obj.update(queue_id: ccd_post_result["queue_id"]) 
-      redirect_to neta_path(params[:id]), notice: "ネタを更新しました。" and return
+      if session[:last_created_at].to_i > session_params[:timestamp].to_i
+        redirect_to neta_path(params[:id]), alert: "投稿はすでに更新されています。" and return
+      else
+        @neta = Neta.find(params[:id])
+        @neta.update!(update_params)
+        @neta.add_hashtags(tag_array)
+        # copy_check_obj = Copycheck.create(neta_id: neta.id, text: neta.text)
+        # ccd_post_result = copy_check_obj.post_ccd_check(neta.text)
+        # copy_check_obj.update(queue_id: ccd_post_result["queue_id"]) 
+        session[:last_created_at] = Time.zone.now.to_i
+        redirect_to neta_path(params[:id]), notice: "ネタを更新しました。" and return
+      end
     rescue => e
       ErrorUtility.log_and_notify e
       redirect_to neta_path(params[:id]), alert: "エラーが発生しました。" and return
@@ -99,12 +110,13 @@ class NetasController < ApplicationController
   
   def destroy
     begin
-      @neta = Neta.includes(:trades, :interests, :reviews, :pageviews, :rankings).find(params[:id])
+      @neta = Neta.includes(:trades, :interests, :reviews, :pageviews, :rankings, :hashtag_netas).find(params[:id])
       if @neta.owner(current_user)
         if @neta.has_dependents
           redirect_to neta_path(params[:id]), alert: "このネタに属する取引等があるため、削除できません。" and return
         else
           topic_id = @neta.topic_id
+          @neta.delete_hashtags
           @neta.destroy!
           redirect_to topic_path(topic_id), notice: "ネタを削除しました。" and return
         end
@@ -153,10 +165,17 @@ class NetasController < ApplicationController
     params.require(:neta).permit(:title, :content, :valuetext, :price, :private_flag)
   end
   
+  def tag_params
+    params.require(:neta).permit(:tags)
+  end
+  
   def tag_array
-    tag_param = params.require(:neta).permit(:tags)
-    tag_str = tag_param["tags"]
-    return tag_str.split(/,/)
+    if tag_params["tags"].present?
+      tag_str = tag_params["tags"]
+      return tag_str.split(/,/)
+    else
+      return []
+    end
   end
   
   def session_params

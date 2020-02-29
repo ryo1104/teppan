@@ -19,14 +19,18 @@ class Neta < ApplicationRecord
   def self.average_rate(netas)
     gross_count = 0
     gross_rate = 0
-    netas.each do |neta|
-      if neta.reviews_count != 0
-        gross_rate += neta.average_rate * neta.reviews_count
-        gross_count += neta.reviews_count
+    if netas.present?
+      netas.each do |neta|
+        if neta.reviews_count != 0
+          gross_rate += neta.average_rate * neta.reviews_count
+          gross_count += neta.reviews_count
+        end
       end
-    end
-    if gross_count != 0
-      return (gross_rate/gross_count.to_f).round(2)
+      if gross_count != 0
+        return (gross_rate/gross_count.to_f).round(2)
+      else
+        return 0
+      end
     else
       return 0
     end
@@ -123,6 +127,15 @@ class Neta < ApplicationRecord
     end
   end
   
+  def delete_hashtags
+    if self.hashtags.present?
+      self.hashtags.each do |tag|
+        tag.reduce_netacount
+      end
+      self.hashtags.clear
+    end
+  end
+  
   def get_hashtags_str
     if self.hashtags.present?
       tags = self.hashtags
@@ -140,7 +153,7 @@ class Neta < ApplicationRecord
   
   def content_check
     unless self.content.body.present?
-      errors.add(:content, " cannot be blank")
+      errors.add(:content, "を入力してください。")
     end
     # Need attachment checks. Below does not work because at this point blob is not attached..
     # self.content.embeds.blobs.each do |blob|

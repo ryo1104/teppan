@@ -7,15 +7,19 @@
           <% @follow_list.each do |following_user| %>
             <li class="collection-item avatar custom">
               <%= link_to user_path(following_user.id) do %>
-                <%= image_pack_tag following_user.avatar, {:class => "circle"} %>
+                <% if following_user.avatar.present? %>
+                  <%= image_tag following_user.avatar, {:class => "circle", :id => "follow-list-image"} %>
+                <% else %>
+                  <%= image_pack_tag "no_user_image.png", {:class => "circle", :id => "follow-list-image"} %>
+                <% end %>
                 <div class="collection-item-text">
                   <%= atname(following_user.nickname) %><br>
                   <p>フォロワー&nbsp;&nbsp;<b><%= following_user.follows.count %></b></p>
-                  <% if following_user.average_rate == "-" %>
-                    ネタ平均評価&nbsp;<span class="star_rating" rating-data="0"></span>&nbsp;
+                  <% if following_user.average_rate == 0 %>
+                    平均評価&nbsp;<span class="star_rating" rating-data="0"></span>&nbsp;
                     <span class="star-rating-text-user-page"><%= following_user.average_rate %></span>
                   <% else %>
-                    ネタ平均評価&nbsp;<span class="star_rating" rating-data="<%= following_user.average_rate %>"></span>&nbsp;
+                    平均評価&nbsp;<span class="star_rating" rating-data="<%= following_user.average_rate %>"></span>&nbsp;
                     <span class="star-rating-text-user-page"><%= following_user.average_rate %></span>
                   <% end %>
                 </div>

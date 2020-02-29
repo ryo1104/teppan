@@ -22,6 +22,11 @@ class Hashtag < ApplicationRecord
     self.update!(neta_count: neta_count+1)
   end
   
+  def reduce_netacount
+    neta_count = self.neta_count
+    self.update!(neta_count: neta_count-1) unless neta_count == 0
+  end
+  
   def self.fix_netacount
     hashtags = Hashtag.all
     hashtags.each do |hashtag|

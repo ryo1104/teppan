@@ -235,15 +235,12 @@ class User < ApplicationRecord
   
   def premium_user
     netas = self.free_netas
-    if netas.count >= 3
-      avg = Neta.average_rate(netas)
-      if avg >= 3
-        return [true, avg, netas]
-      else
-        return [false, avg, netas]
-      end
+    free_neta_count = netas.count
+    avg = Neta.average_rate(netas)
+    if free_neta_count >= 3 && avg >= 3
+      return [true, avg, free_neta_count]
     else
-      return [false, nil, netas]
+      return [false, avg, free_neta_count]
     end
   end
   
@@ -286,7 +283,7 @@ class User < ApplicationRecord
         i_topicids << interest.interestable_id
       end
     end
-    return Topic.includes({user: [image_attachment: :blob]}, :netas).where(id: i_topicids).order("created_at DESC")
+    return Topic.includes([header_image_attachment: :blob], {user: [image_attachment: :blob]}, :netas).where(id: i_topicids).order("created_at DESC")
   end
   
   def get_customer

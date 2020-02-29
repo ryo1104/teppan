@@ -22,30 +22,30 @@ RSpec.describe Neta, type: :model do
       neta.valid?
       expect(neta.errors[:topic]).to include("を入力してください")
     end
-  
-    it "is invalid without a text" do
-      neta = build(:neta, user: user_create, topic: topic_create, text: nil)
+    it "is invalid without a title"
+    it "is invalid without a content" do
+      neta = build(:neta, user: user_create, topic: topic_create, content: nil)
       neta.valid?
-      expect(neta.errors[:text]).to include("を入力してください。")
+      expect(neta.errors[:content]).to include("を入力してください。")
     end
   
-    it "is invalid if text is longer than 800 characters" do
-      neta = build(:neta, text: Faker::Lorem.characters(number: 801), user: user_create, topic: topic_create)
-      neta.valid?
-      expect(neta.errors[:text]).to include("は800文字以内で入力してください。")
-    end
+    it "is invalid if content is longer than 800 characters" #do
+    #   neta = build(:neta, content: Faker::Lorem.characters(number: 801), user: user_create, topic: topic_create)
+    #   neta.valid?
+    #   expect(neta.errors[:text]).to include("は800文字以内で入力してください。")
+    # end
   
-    it "is invalid if text is shorter than 20 characters" do
-      neta = build(:neta, text: Faker::Lorem.characters(number: 19), user: user_create, topic: topic_create)
-      neta.valid?
-      expect(neta.errors[:text]).to include("は20文字以上で入力してください。")
-    end
+    it "is invalid if content is shorter than 20 characters" #do
+    #   neta = build(:neta, text: Faker::Lorem.characters(number: 19), user: user_create, topic: topic_create)
+    #   neta.valid?
+    #   expect(neta.errors[:text]).to include("は20文字以上で入力してください。")
+    # end
     
-    it "is invalid if valuetext is longer than 800 characters" do
-      neta = build(:neta, valuetext: Faker::Lorem.characters(number: 801), user: user_create, topic: topic_create)
-      neta.valid?
-      expect(neta.errors[:valuetext]).to include("は800文字以内で入力してください。")
-    end
+    it "is invalid if introduction is longer than 200 characters" #do
+    #   neta = build(:neta, valuetext: Faker::Lorem.characters(number: 801), user: user_create, topic: topic_create)
+    #   neta.valid?
+    #   expect(neta.errors[:valuetext]).to include("は800文字以内で入力してください。")
+    # end
   
     it "is invalid without a price" do
       neta = build(:neta, user: user_create, topic: topic_create, price: nil)
@@ -81,6 +81,13 @@ RSpec.describe Neta, type: :model do
       neta = build(:neta, user: user_create, topic: topic_create, private_flag: false)
       expect(neta).to be_valid
     end
+    
+    it "is invalid if hashtag count is more than 20"
+  end
+  
+  describe "counter_culture" do
+    it "increments review count column when child review is created"
+    it "decrements review count column when child review is deleted"
   end
   
   describe "method::average_rate(netas)" do
@@ -94,10 +101,11 @@ RSpec.describe Neta, type: :model do
       create(:neta, user: user, topic: topic3, reviews_count: 1, average_rate: 0)
       expect(Neta.average_rate(user.netas)).to eq ((3.11*4+3.72*3+0*1)/(4+3+1)).round(2)
     end
-    it "returns hyphen when no netas by user" do
+    it "returns 0 when no netas by user" do
       user = user_create
-      expect(Neta.average_rate(user.netas)).to eq "-"
+      expect(Neta.average_rate(user.netas)).to eq 0
     end
+    it "returns 0 when netas exist but with no reviews"
   end
   
   describe "method::update_average_rate" do

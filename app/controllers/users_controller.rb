@@ -7,7 +7,7 @@ class UsersController < ApplicationController
       @premium_user = @user.premium_user
       @userrate = @user.average_rate
       # @lastlogin = @user.current_sign_in_at
-      @posted_netas = @user.netas.includes(:reviews, :hashtags).where(private_flag: false)
+      @posted_netas = @user.netas.includes(:reviews, :hashtags, :user).where(private_flag: false)
       @posted_topics = @user.topics.includes([header_image_attachment: :blob], :netas, :user).where(private_flag: false)
       @followed_users_count = @user.follows_count
       

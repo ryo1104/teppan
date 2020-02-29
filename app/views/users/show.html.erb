@@ -156,18 +156,14 @@
               <% end %>
             <% else %>
               有料ネタの販売を開始するためには、下記の条件を両方満たす必要があります。<br>
-              ・無料ネタ&nbsp;３つ以上投稿<br>
-              ・レビュー平均&nbsp;3.0以上<br>
+              ・無料ネタ&nbsp;<b>3つ以上</b>投稿<br>
+              ・レビュー平均&nbsp;<b>3.0以上</b><br>
               <br>
               <b>無料ネタ実績</b><br>
-              ネタ数　：<%= @premium_user[2].count %><br>
+              ネタ数　：<%= @premium_user[2] %><br>
               評価平均
-              <% if @premium_user[1] == "-" %>
-                <span class="star_rating" rating-data="0"></span>
-              <% else %>
-                <span class="star_rating" rating-data="<%=@premium_user[1] %>"></span>
-                <span class="star-rating-text">&nbsp;&nbsp;<%= @premium_user[1] %></span>
-              <% end %>
+              <span class="star_rating" rating-data="<%=@premium_user[1] %>"></span>
+              <span class="star-rating-text">&nbsp;&nbsp;<%= @premium_user[1] %></span>
               <br>
             <% end %><br>
             <br>
@@ -197,7 +193,7 @@
                 <% end %>
               <% end %>
             <% else %>
-              <div class="btn btn-primary withripple custom inactive">有料プラン申込</div>
+              <div class="btn btn-primary custom inactive">有料プラン申込</div>
             <% end %>
           </div>
         <% end %>
