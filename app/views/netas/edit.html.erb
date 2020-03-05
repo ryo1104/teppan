@@ -13,7 +13,7 @@
           <%= render :partial => "netaform", locals: { form: form } %>
           <%= button_tag :type => "submit", data: {disable_with: '保存中...'}, class: "btn btn-primary withripple custom" do %>
             <i class="material-icons left">refresh</i>更新
-          <% end %>
+          <% end %>&nbsp;&nbsp;
           <% if @editable %>
             <%= link_to neta_path(@neta.id), {:method => :delete, :class => 'btn btn-primary withripple custom', data: { confirm: "本当に削除しますか？" }} do %>
               <i class="material-icons left">delete</i>

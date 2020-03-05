@@ -5,14 +5,18 @@
   <div class="row topic-index">
     <div class="col s12 m12 topics-list">
       <%= render partial: "topics/topic", collection: @topics %>
-      <div><%= paginate(@topics) %></div>
     </div>
-    <div class="col s11 m11 topics-ranking z-depth-1">
-        <b>トレンド</b><br>
-        <% @hashtag_ranking.each do |key, value| %>
-          <div class="chip custom"><%= link_to "#"+value[1], "/neta/hashtag/#{value[1]}" %></div>
-        <% end %>
-        <br>
+  </div>
+  <div class="row topic-index">
+    <div><%= paginate(@topics) %></div>
+  </div>
+  <div class="row topic-index">
+    <div class="col s12 m12 topics-ranking z-depth-0">
+      <b>トレンド</b><br>
+      <% @hashtag_ranking.each do |key, value| %>
+        <div class="chip custom"><%= link_to "#"+value[1], "/neta/hashtag/#{value[1]}" %></div>
+      <% end %>
+      <br>
     </div>
   </div>
   <div class="fixed-action-btn horizontal">

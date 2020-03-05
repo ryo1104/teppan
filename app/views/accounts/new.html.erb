@@ -2,61 +2,119 @@
 <div class="page-body-container">
   <div class="row">
     <div class="col s12 m9 user-page">
-      <h1 class="h1_class">ご本人様情報</h1>
-      <ul class="collection z-depth-1 user-page">
-        <%= form_with url: user_accounts_path(@user.id), local: true, method: :post do |f| %>
-          <%= label_tag '姓（漢字）' %>
-          <%= f.text_field :last_name_kanji %>
-          <%= label_tag '姓（カナ）' %>
-          <%= f.text_field :last_name_kana %>
-          <%= label_tag '名（漢字）' %>
-          <%= f.text_field :first_name_kanji %>
-          <%= label_tag '名（カナ）' %>
-          <%= f.text_field :first_name_kana %>
-          <%= label_tag '性別' %>
-          <%= select_tag :gender, options_for_select([["男性","male"], ["女性","female"]]), {:class => "browser-default"} %>
-          <%= label_tag 'メールアドレス' %>
-          <%= f.text_field :email, :value => @user.email %>
-
-          <%= label_tag '生年月日' %>
-          <%= f.date_select :birthdate,
-                    {:start_year => 1930, 
-                     :end_year => (Time.zone.now.year - 18),
-                     :include_blank => true,
-                    }, 
-                    {:class => 'form-control date-select'} 
-          %>
-
-          <%= label_tag '郵便番号' %><br>
-          <%= f.text_field :postal_code, :id => "zip" %><br>
-          
-          <%= label_tag '住所' %><br>
-          <%= f.text_field :state, :id => "prefecture_code" %><br>
-          <%= f.text_field :city,  :id => "address_city" %><br>
-          <%= f.text_field :town,  :id => "address_town" %><br>
-          <%= label_tag '番地・号（漢字）' %>
-          <%= f.text_field :kanji_line1 %>
-          <%= f.text_field :kanji_line2 %>
-          <%= label_tag '番地・号（かな）' %>
-          <%= f.text_field :kana_line1 %>
-          <%= f.text_field :kana_line2 %>
-          <br>
-          
-          <%= label_tag '電話番号' %>
-          <%= f.text_field :phone %>
-          <br>
-
-          <label class="custom">
-            <%= check_box_tag :user_agreement, true, false, {:class => 'reset-checkbox'} %>
-            <span>利用規約に同意</span>
-          </label>
-          <br>
-          
-          <br>
-          <%= f.submit %>
+      <h1>お客様情報の入力</h1>
+      <div class="collection z-depth-0 account-form">
+        <%= form_with url: accounts_confirm_path(@user.id), local: true, method: :post do |f| %>
+          <div class="col s12 m12" id="account-form-field-row">
+            <div class="col s5 m4 account_form_name">
+              <%= label_tag '姓（漢字）' %><br>
+              <%= f.text_field :last_name_kanji, :id => "form_account_name", :required => true %><br>
+              <%= label_tag '姓（カナ）' %><br>
+              <%= f.text_field :last_name_kana, :id => "form_account_name", :required => true %>
+            </div>
+            <div class="col s5 m4 account_form_name">
+              <%= label_tag '名（漢字）' %><br>
+              <%= f.text_field :first_name_kanji, :id => "form_account_name", :required => true %><br>
+              <%= label_tag '名（カナ）' %><br>
+              <%= f.text_field :first_name_kana, :id => "form_account_name", :required => true %>
+            </div>
+          </div>
+          <div class="col s12 m12" id="account-form-field-row">
+            <div class="col s4 m4">
+              <%= label_tag '性別' %>
+              <%= select_tag :gender, options_for_select([["男性","male"], ["女性","female"]]), {:class => "browser-default"} %>
+            </div>
+          </div>
+          <div class="col s12 m12" id="account-form-field-row">
+            <div class="col s12 m8">
+              <%= label_tag 'メールアドレス' %>
+              <%= f.text_field :email, :value => @user.email, :required => true %>
+            </div>
+          </div>
+          <div class="col s12 m12" id="account-form-field-row">
+            <div class="col s6 m4">
+              <%= label_tag '生年月日' %>
+              <input id="account_form_birthdate" name="birthdate" type="date" value="<%= @user.birthdate %>" required="required" />
+            </div>
+          </div>
+          <div class="col s12 m12" id="account-form-field-row">
+            <div class="col s4 m4">
+              <%= label_tag '郵便番号' %>
+              <%= f.text_field :postal_code, :id => "zip", :placeholder => "例) 100-8111", :required => true %>
+            </div>
+          </div>
+          <div class="col s12 m12" id="account-form-field-row">
+            <div class="col s6 m6">
+              <%= label_tag '都道府県・市区郡' %>
+            </div>
+          </div>
+          <div class="col s12 m12" id="account-form-field-row">
+            <div class="col s4 m4">
+              <%= f.text_field :state, :id => "prefecture", :placeholder => "例) 東京都", :required => true %>
+            </div>
+            <div class="col s8 m8">
+              <%= f.text_field :city,  :id => "address_city", :placeholder => "例) 千代田区", :required => true %>
+            </div>
+          </div>
+          <div class="col s12 m12" id="account-form-field-row">
+            <div class="col s12 m12 account-form">
+              <%= f.text_field :town,  :id => "address_town", :placeholder => "例) 千代田", :required => true %>
+            </div>
+          </div>
+          <div class="col s12 m12" id="account-form-field-row">
+            <div class="col s12 m12 account-form">
+              <%= label_tag '番地・号（漢字）' %>
+              <%= f.text_field :kanji_line1, :placeholder => "例) 1-1-1", :required => true %>
+              <%= f.text_field :kanji_line2, :placeholder => "マンション・建物名" %>
+            </div>
+          </div>
+          <div class="col s12 m12" id="account-form-field-row">
+            <div class="col s6 m6">
+              <%= label_tag '都道府県・市区郡（カナ）' %>
+            </div>
+          </div>
+          <div class="col s12 m12" id="account-form-field-row">
+            <div class="col s4 m4">
+              <%= f.text_field :state, :id => "prefecture_kana", :placeholder => "例) ﾄｳｷｮｳﾄ", :required => true %>
+            </div>
+            <div class="col s8 m8">
+              <%= f.text_field :city,  :id => "address_city_kana", :placeholder => "例) ｾﾀｶﾞﾔｸ", :required => true %>
+            </div>
+          </div>
+          <div class="col s12 m12" id="account-form-field-row">
+            <div class="col s12 m12 account-form">
+              <%= f.text_field :town,  :id => "address_town_kana", :placeholder => "例) ﾀﾏｶﾞﾜ", :required => true %>
+            </div>
+          </div>
+          <div class="col s12 m12" id="account-form-field-row">
+            <div class="col s12 m12 account-form">
+              <%= label_tag '番地・号（カナ）' %>
+              <%= f.text_field :kana_line1, :placeholder => "例) 1-1-1", :required => true %>
+              <%= f.text_field :kana_line2, :placeholder => "マンション・建物名（半角カナ）" %>
+            </div>
+          </div>
+          <div class="col s12 m12" id="account-form-field-row">
+            <div class="col s12 m12 account-form">
+              <%= label_tag '電話番号' %>
+              <%= f.telephone_field :phone, size:15, maxlength:14, :required => true, :placeholder => "例) 090-1234-5678" %>
+            </div>
+          </div>
+          <div class="col s12 m12" id="account-form-field-row">
+            <div class="col s12 m12 account-form">
+              <label class="custom">
+                <%= check_box_tag :user_agreement, true, false, {:class => 'reset-checkbox', :required => true } %>
+                <span id="account-form-policies">利用規約に同意</span>
+              </label>
+            </div>
+          </div>
+          <div class="col s12 m12" id="account-form-field-row">
+            <div class="col s12 m12 account-form">
+              <%= f.submit "確認画面へ", data: {disable_with: '送信中...'}, class: "btn btn-primary withripple custom" %>
+            </div>
+          </div>
         <% end %>
 
-      </ul>
+      </div>
     </div>
   </div>
 </div>
@@ -68,9 +126,12 @@ $(function () {
 			'#zip'
 		],
 		address : {
-      "#prefecture_code" : "%3",
-      "#address_city"    : "%4",
-      "#address_town"  : "%5%6%7"
+      "#prefecture"         : "%3",
+      "#address_city"       : "%4",
+      "#address_town"       : "%5",
+      "#prefecture_kana"    : "%8",
+      "#address_city_kana"  : "%9",
+      "#address_town_kana"  : "%10"
 		}
 	});
 });

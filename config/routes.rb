@@ -50,6 +50,7 @@ Rails.application.routes.draw do
       resources :idcards, only: [:new, :create, :edit, :update, :destroy, :index]
     end
   end
+  post    '/users/:user_id/accounts/confirm', to: "accounts#confirm", as: 'accounts_confirm'
   delete  'users/:id/delete_avatar', to: 'users#delete_avatar', as: 'delete_avatar'
   
 end

@@ -4,7 +4,7 @@ class TopicsController < ApplicationController
   def index
     begin
       @search = Topic.includes([header_image_attachment: :blob], {user: [image_attachment: :blob]}, :netas).where(private_flag: false).ransack(params[:q])
-      @topics = @search.result(distinct: true).order("created_at DESC").page(params[:page]).per(20)
+      @topics = @search.result(distinct: true).order("created_at DESC").page(params[:page]).per(5)
       @hashtag_ranking = Hashtag.get_ranking(10)
     rescue => e
       ErrorUtility.log_and_notify e

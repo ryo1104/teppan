@@ -18,21 +18,39 @@ class AccountsController < ApplicationController
     end
   end
   
+  def confirm
+    begin
+      if qualified
+        @user = User.find(params[:user_id])
+        @account = new_account_params
+      else
+        redirect_to user_path(current_user.id), alert: "アカウントを作成する条件を満たしていません。" and return
+      end
+    rescue => e
+      ErrorUtility.log_and_notify e
+      redirect_to user_path(params[:user_id]), alert: "エラーが発生しました。" and return
+    end
+  end
+  
   def create
     begin
       if qualified
         user = User.find(params[:user_id])
-        stripe_result = Account.create_stripe_account(new_account_params)
-        if stripe_result[0]
-          account = Account.create!(user_id: user.id, stripe_acct_id: stripe_result[1]["id"], stripe_status: stripe_result[1]["personal_info"]["verification"]["status"] )
-          redirect_to account_path(account.id), notice: "出金用アカウントが作成されました。" and return
+        if params[:back]
+          
         else
-          Rails.logger.error "create_stripe_account returned false : #{stripe_result[1]}"
-          redirect_to user_path(user.id), notice: "出金用アカウントが作成できませんでした。" and return
+          stripe_result = Account.create_stripe_account(new_account_params)
+          if stripe_result[0]
+            account = Account.create!(user_id: user.id, stripe_acct_id: stripe_result[1]["id"], stripe_status: stripe_result[1]["personal_info"]["verification"]["status"] )
+            redirect_to account_path(account.id), notice: "出金用アカウントが作成されました。" and return
+          else
+            Rails.logger.error "create_stripe_account returned false : #{stripe_result[1]}"
+            redirect_to user_path(user.id), alert: "出金用アカウントが作成できませんでした。" and return
+          end
         end
       else
         Rails.logger.info "User ID #{current_user.id} is not qualified to create a sellers account."
-        redirect_to user_path(current_user.id), alert: "アカウントを作成する条件を満たしていません。" and return
+        redirect_to user_path(current_user.id), alert: "アカウントを作成するユーザー条件を満たしていません。" and return
       end
     rescue Stripe::PermissionError => e
       ErrorUtility.log_and_notify e
@@ -157,12 +175,12 @@ class AccountsController < ApplicationController
 
   def qualified
     if current_user.id == params[:user_id].to_i && current_user.premium_user[0]
-      true
+      return true
     else
-      false
+      return false
     end
   end
-
+  
   def new_account_params
     ac_params = account_params
     ac_params.merge!(:type => "custom")
