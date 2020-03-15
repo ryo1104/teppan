@@ -330,6 +330,7 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     stripe (5.11.0)
+    telephone_number (1.4.6)
     terrapin (0.6.0)
       climate_control (>= 0.0.3, < 1.0)
     thor (1.0.1)
@@ -408,6 +409,7 @@ DEPENDENCIES
   spring-commands-rspec
   spring-watcher-listen (~> 2.0.0)
   stripe
+  telephone_number
   trix
   tzinfo-data
   web-console (>= 3.3.0)

@@ -12,7 +12,7 @@ class Topic < ApplicationRecord
   validate      :header_image_type, if: :was_attached?
 
   def header_image_type
-    extension = ['image/png', 'image/jpg', 'image/jpeg']
+    extension = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif']
     errors.add(:header_image, "の拡張子はサポートされていません。") unless header_image.content_type.in?(extension)
   end
 

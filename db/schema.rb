@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_17_061622) do
+ActiveRecord::Schema.define(version: 2020_03_06_143900) do
 
   create_table "accounts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "user_id"
@@ -18,6 +18,23 @@ ActiveRecord::Schema.define(version: 2020_02_17_061622) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "stripe_status"
+    t.string "last_name_kanji", null: false
+    t.string "last_name_kana", null: false
+    t.string "first_name_kanji", null: false
+    t.string "first_name_kana", null: false
+    t.string "gender", null: false
+    t.string "email", null: false
+    t.date "birthdate", null: false
+    t.string "postal_code", null: false
+    t.string "state", null: false
+    t.string "city", null: false
+    t.string "town", null: false
+    t.string "kanji_line1", null: false
+    t.string "kanji_line2", null: false
+    t.string "kana_line1", null: false
+    t.string "kana_line2", null: false
+    t.string "phone", null: false
+    t.boolean "user_agreement", default: false, null: false
   end
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC", force: :cascade do |t|

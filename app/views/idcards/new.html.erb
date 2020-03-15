@@ -1,18 +1,23 @@
+<% breadcrumb :new_idcard, @account %>
 <div class="page-body-container">
+  <p><%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %></p>
   <div class="row">
     <div class="col s12 m9 user-page">
-      <h1 class="h1_class">身分証明書（コピー）登録</h1>
-      <ul class="collection z-depth-1 user-page">
-        <%= form_with model: [@account, @idcard], local: true do |f| %>
-          <%= label_tag 'ファイル（JPGまたはPNG）' %><br>
-          <%= f.file_field :image %>
+      <h1>ご本人様確認</h1>
+      <div class="collection z-depth-0 user-page">
+        <%= form_with model: [@account, @idcard], local: true, class: "idcard-form" do |f| %>
+          <% if @idcard.errors.any? %>
+            <%= render :partial => "errorform" %>
+          <% end %>
+          <%= label_tag '身分証明証の画像（JPG又はPNG形式）' %><br>
+          <%= f.file_field :image, :class => 'file-field custom' %>
           <br><br>
           <%= label_tag '表面／裏面' %><br>
           <%= f.select :frontback, [["表面","front"], ["裏面","back"]], {}, {:class => "browser-default"} %>
           <br>
-          <%= f.submit %>
+          <%= f.submit "保存", data: {disable_with: '送信中...'}, class: "btn btn-primary withripple custom" %>
         <% end %>
-      </ul>
+      </div>
     </div>
   </div>
 </div>

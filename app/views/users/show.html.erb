@@ -129,13 +129,12 @@
         <% if @my_page %>
           <div class="ChangeElem_Panel">
             <% if @premium_user[0] %>
-              <h2>出金用 銀行口座</h2>
+              <h2>ビジネスアカウント</h2>
                 <% unless @user.account %>
                   <%= link_to '登録', new_user_account_path(@user.id), :method => :get, :class => "btn btn-primary withripple custom" %>
                 <% else %>
                   <%= link_to '詳細', account_path(@user.account.id), :class => "btn btn-primary withripple custom" %><br><br>
                 <% end %>
-                <br><br>
               <h2>販売実績</h2>
               <% if @account_exists && @sold_netas_info[0] %>
                 <table>

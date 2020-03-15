@@ -3,19 +3,61 @@
     <div class="col s12 m9 user-page">
       <h1>お客様情報の確認</h1>
       <div class="collection z-depth-0 account-form">
-        <%= form_with url: user_accounts_path(@user.id), local: true, method: :post do |f| %>
-          <%= @account %>
+      <%= render :partial => "confirmform" %><br><br>
+      <% if @mode == "new" %>
+        <%= form_with model: [@user, @account], local: true, method: :post do |f| %>
+          <%= f.hidden_field :last_name_kanji, :value => @account.last_name_kanji %>
+          <%= f.hidden_field :last_name_kana, :value => @account.last_name_kana %>
+          <%= f.hidden_field :first_name_kanji, :value => @account.first_name_kanji %>
+          <%= f.hidden_field :first_name_kana, :value => @account.first_name_kana %>
+          <%= f.hidden_field :gender, :value => @account.gender %>
+          <%= f.hidden_field :email, :value => @account.email %>
+          <%= f.hidden_field :birthdate, :value => @account.birthdate %>
+          <%= f.hidden_field :postal_code, :value => @account.postal_code %>
+          <%= f.hidden_field :state, :value => @account.state %>
+          <%= f.hidden_field :city, :value => @account.city %>
+          <%= f.hidden_field :town, :value => @account.town %>
+          <%= f.hidden_field :kanji_line1, :value => @account.kanji_line1 %>
+          <%= f.hidden_field :kanji_line2, :value => @account.kanji_line2 %>
+          <%= f.hidden_field :kana_line1, :value => @account.kana_line1 %>
+          <%= f.hidden_field :kana_line2, :value => @account.kana_line2 %>
+          <%= f.hidden_field :phone, :value => @account.phone %>
+          <%= f.hidden_field :user_agreement, :value => @account.user_agreement %>
           <div class="col s12 m12" id="account-form-field-row">
             <div class="col s12 m12 account-form">
-              <%= f.submit '入力画面に戻る', name: 'back', class: "btn btn-primary withripple custom" %>
-            </div>
-          </div>
-          <div class="col s12 m12" id="account-form-field-row">
-            <div class="col s12 m12 account-form">
+              <%= f.submit '入力画面に戻る', name: 'back', class: "btn btn-primary withripple custom" %>&nbsp;&nbsp;
               <%= f.submit '保存する', data: {disable_with: '保存中...'}, class: "btn btn-primary withripple custom" %>
             </div>
           </div>
         <% end %>
+      <% end %>
+      <% if @mode == "edit" %>
+        <%= form_with model: @account, local: true, method: :patch do |f| %>
+          <%= f.hidden_field :last_name_kanji, :value => @account.last_name_kanji %>
+          <%= f.hidden_field :last_name_kana, :value => @account.last_name_kana %>
+          <%= f.hidden_field :first_name_kanji, :value => @account.first_name_kanji %>
+          <%= f.hidden_field :first_name_kana, :value => @account.first_name_kana %>
+          <%= f.hidden_field :gender, :value => @account.gender %>
+          <%= f.hidden_field :email, :value => @account.email %>
+          <%= f.hidden_field :birthdate, :value => @account.birthdate %>
+          <%= f.hidden_field :postal_code, :value => @account.postal_code %>
+          <%= f.hidden_field :state, :value => @account.state %>
+          <%= f.hidden_field :city, :value => @account.city %>
+          <%= f.hidden_field :town, :value => @account.town %>
+          <%= f.hidden_field :kanji_line1, :value => @account.kanji_line1 %>
+          <%= f.hidden_field :kanji_line2, :value => @account.kanji_line2 %>
+          <%= f.hidden_field :kana_line1, :value => @account.kana_line1 %>
+          <%= f.hidden_field :kana_line2, :value => @account.kana_line2 %>
+          <%= f.hidden_field :phone, :value => @account.phone %>
+          <%= f.hidden_field :user_agreement, :value => @account.user_agreement %>
+          <div class="col s12 m12" id="account-form-field-row">
+            <div class="col s12 m12 account-form">
+              <%= f.submit '入力画面に戻る', name: 'back', class: "btn btn-primary withripple custom" %>&nbsp;&nbsp;
+              <%= f.submit '保存する', data: {disable_with: '保存中...'}, class: "btn btn-primary withripple custom" %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
       </div>
     </div>
   </div>

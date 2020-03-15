@@ -3,6 +3,15 @@ class ExternalaccountsController < ApplicationController
   def new
     begin
       @account = Account.find(params[:account_id])
+      if @account.present?
+        if qualified(@account.user)
+          @ext_acct = Externalaccount.new
+        else
+          redirect_to user_path(current_user.id), alert: "アカウントを作成するユーザー条件を満たしていません。" and return
+        end
+      else
+        redirect_to user_path(current_user.id), alert: "ご本人様情報を先に登録して下さい。" and return
+      end
     rescue => e
       ErrorUtility.log_and_notify e
       redirect_to account_path(params[:account_id]), alert: "エラーが発生しました。" and return
@@ -14,7 +23,7 @@ class ExternalaccountsController < ApplicationController
       @account = Account.find(params[:account_id])
       @stripe_bank_inputs = create_stripe_bank_inputs
       if @stripe_bank_inputs[0]
-        @ext_acct = @account.externalaccount.new
+        @ext_acct = Externalaccount.new(account_id: @account.id)
         @new_stripe_ba_hash = @ext_acct.create_stripe_ext_account(@stripe_bank_inputs[1])
         if @new_stripe_ba_hash[0]
           @ext_acct.save!(stripe_bank_id: @new_stripe_ba_hash[1]["id"])
@@ -25,11 +34,11 @@ class ExternalaccountsController < ApplicationController
         end
       else
         Rails.logger.error "create_stripe_bank_inputs returned false : #{@stripe_bank_inputs[1]}"
-        redirect_to user_path(@account.user_id), alert: "銀行口座の登録に失敗しました。#{@stripe_bank_inputs[1]}" and return
+        redirect_to account_path(@account.id), alert: "入力情報に誤りがあります。#{@stripe_bank_inputs[1]}" and return
       end
     rescue => e
       ErrorUtility.log_and_notify e
-      redirect_to account_path(params[:account_id]), alert: "銀行口座の登録に失敗しました。" and return
+      redirect_to account_path(params[:account_id]), alert: "システムエラーが発生しました。" and return
     end
   end
   
@@ -75,7 +84,7 @@ class ExternalaccountsController < ApplicationController
 
   private
   def create_params
-    params.permit(:bank_name, :branch_name, :account_number, :account_holder_name)
+    params.require(:externalaccount).permit(:bank_name, :branch_name, :account_number, :account_holder_name)
   end
   
   def create_stripe_bank_inputs
@@ -105,6 +114,14 @@ class ExternalaccountsController < ApplicationController
       end
     else
       return [false, "口座情報が不足しています。"]
+    end
+  end
+  
+  def qualified(user)
+    if current_user.id == user.id && current_user.premium_user[0]
+      return true
+    else
+      return false
     end
   end
 end

@@ -32,19 +32,19 @@ crumb :edit_topic do |topic|
   parent :show_topic, topic
 end
 
-# 小ネタshow
+# ネタshow
 crumb :show_koneta do |neta|
   link "#{neta.user.nickname}さんの小ネタ", neta_path(neta.id)
   parent :show_topic, neta.topic
 end
 
-# 小ネタnew
+# ネタnew
 crumb :new_koneta do |topic|
   link "新規ネタ", new_topic_neta_path
   parent :show_topic, topic
 end
 
-# 小ネタedit
+# ネタedit
 crumb :edit_koneta do |neta|
   link "編集", edit_neta_path(neta.id)
   parent :show_koneta, neta
@@ -94,6 +94,30 @@ end
 
 # account#show
 crumb :show_account do |account|
-  link "出金用 銀行口座", account_path(account.id)
+  link "ビジネスアカウント", account_path(account.id)
   parent :show_user, account.user
+end
+
+# account#show
+crumb :edit_account do |account|
+  link "お客様情報", edit_account_path(account.id)
+  parent :show_account, account
+end
+
+# idcard#new
+crumb :new_idcard do |account|
+  link "ご本人様確認", new_account_idcard_path(account.id)
+  parent :show_account, account
+end
+
+# externalaccount#new
+crumb :new_externalaccount do |account|
+  link "銀行口座", new_account_externalaccount_path(account.id)
+  parent :show_account, account
+end
+
+# externalaccount#edit
+crumb :edit_externalaccount do |ext_account|
+  link "銀行口座", edit_externalaccount_path(ext_account.id)
+  parent :show_account, ext_account.account
 end

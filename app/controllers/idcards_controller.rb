@@ -1,5 +1,6 @@
 class IdcardsController < ApplicationController
   before_action :authenticate_user!
+  include StripeUtils
   
   def new
     begin
@@ -14,32 +15,36 @@ class IdcardsController < ApplicationController
   def create
     begin
       @account = Account.find(params[:account_id])
-      file = file_to_upload
-      name = file.original_filename
-      
-      if !['.jpg', '.png'].include?(File.extname(name).downcase)
-        redirect_to account_path(@account.id), alert: "JPG, PNGファイルのみアップロードできます。" and return
-      elsif file.size > 5.megabyte
-        redirect_to account_path(@account.id), alert: "5MBまでアップロードできます。" and return
+      @idcard = @account.idcards.new(save_params)
+      unless @idcard.valid?
+        render :new
       else
-        File.open("tmp/#{name}", "wb") {|f|f.write(file.read)}
-        file_upload = Stripe::FileUpload.create(
-                                            {purpose: 'identity_document',
-                                             file: File.open("tmp/#{name}", "r"),},
-                                            {stripe_account: @account.stripe_acct_id})
-        @file_upload_hash = JSON.parse(file_upload.to_s)
-        if @file_upload_hash["id"].present?
-          @idcard = @account.idcards.create!(save_params.merge(stripe_file_id: @file_upload_hash["id"]))
-          Stripe::Account.update(@account.stripe_acct_id, verification_docs(@idcard.stripe_file_id, @idcard.frontback))
-          File.delete("tmp/#{name}")
-          @msg = "ファイルをアップロードしました。"
+        @file = params[:idcard][:image]
+        @name = @file.original_filename
+        # @file_upload = Stripe::FileUpload.create( { purpose: 'identity_document', file: File.open("tmp/#{@name}", "r"),}, { stripe_account: @account.stripe_acct_id } )
+        @idcard.transaction do
+          File.open("tmp/#{@name}", "wb") {|f|f.write(@file.read)}
+          @file_upload = Stripe::File.create( { purpose: 'identity_document', file: File.open("tmp/#{@name}", "r"),} )
+          @file_upload_hash = JSON.parse(@file_upload.to_s)
+          File.delete("tmp/#{@name}")
+          if @file_upload_hash["id"].present?
+            @idcard.save!
+            @idcard.update!(stripe_file_id: @file_upload_hash["id"])
+          else
+            redirect_to account_path(@account.id), alert: "ご本人様確認書類の保存に失敗しました。" and return
+          end
+        end
+        @stripe_acct = Stripe::Account.update(@account.stripe_acct_id, @idcard.verification_docs)
+        @stripe_acct_hash = JSON.parse(@stripe_acct.to_s)
+        if @stripe_acct_hash["id"].present?
+          redirect_to account_path(@account.id), notice: "ご本人様確認書類を受領しました。" and return
         else
-          redirect_to account_path(@account.id), alert: "ファイルのアップロードに失敗しました。" and return
+          redirect_to account_path(@account.id), alert: "ご本人様確認書類の登録に失敗しました。" and return
         end
       end
     rescue => e
       ErrorUtility.log_and_notify e
-      redirect_to account_path(params[:account_id]), alert: e.message and return
+      redirect_to account_path(params[:account_id]), alert: "エラーが発生しました。" and return
     end
   end
   
@@ -66,23 +71,7 @@ class IdcardsController < ApplicationController
     end
   end
   
-  def verification_docs(fileid, frontback)
-    return {
-              individual:{
-                verification:{
-                  document:{
-                    "#{frontback}":"#{fileid}"
-                  },
-                },
-              },
-            }
-  end
-  
   private
-
-  def set_stripe_key
-    Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
-  end
   
   def save_params
     params.require(:idcard).permit(:frontback, :image)

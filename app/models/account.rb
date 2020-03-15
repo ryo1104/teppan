@@ -6,6 +6,23 @@ class Account < ApplicationRecord
   validates   :user_id, presence: true, uniqueness: true
   validates   :stripe_acct_id, uniqueness: { case_sensitive: true }, allow_nil: true
   validate    :stripe_acct_id_check
+  validates   :last_name_kanji, presence: true
+  validates   :last_name_kana, presence: true
+  validates   :first_name_kanji, presence: true
+  validates   :first_name_kana, presence: true
+  validates   :gender, presence: true
+  validates   :email, presence: true
+  validates   :birthdate, presence: true
+  validates   :postal_code, presence: true
+  validates   :state, presence: true
+  validates   :city, presence: true
+  validates   :town, presence: true
+  validates   :kanji_line1, presence: true
+  validates   :kanji_line2, presence: true
+  validates   :kana_line1, presence: true
+  validates   :kana_line2, presence: true
+  validates   :phone, telephone_number: {country: :jp, types: [:fixed_line, :mobile]} #uses gem 'telephone_number'
+  validates   :user_agreement, presence: true
   include StripeUtils
 
   # custom validation
@@ -36,11 +53,12 @@ class Account < ApplicationRecord
     end
   end
 
-  def self.create_stripe_account(account_params)
-    inputs_check = Account.check_stripe_inputs(account_params, "create")
+  def create_stripe_account(remote_ip)
+    stripe_inputs = self.stripe_inputs_create(remote_ip)
+    inputs_check = check_stripe_inputs(stripe_inputs, "create")
     if inputs_check[0]
       begin
-        stripe_account_obj = JSON.parse(Stripe::Account.create(account_params).to_s)
+        stripe_account_obj = JSON.parse(Stripe::Account.create(stripe_inputs).to_s)
       rescue => e
         ErrorUtility.log_and_notify e
         return [false, "Stripe error - #{e.message}"]
@@ -56,12 +74,15 @@ class Account < ApplicationRecord
     end
   end
   
-  def update_stripe_account(account_params)
+  def update_stripe_account(remote_ip)
     if self.stripe_acct_id
-      inputs_check = Account.check_stripe_inputs(account_params, "update")
+      stripe_inputs = self.stripe_inputs_update(remote_ip)
+      puts "stripe_inputs = "
+      puts stripe_inputs
+      inputs_check = check_stripe_inputs(stripe_inputs, "update")
       if inputs_check[0]
         begin
-          stripe_account_obj = JSON.parse(Stripe::Account.update(self.stripe_acct_id, account_params).to_s)
+          stripe_account_obj = JSON.parse(Stripe::Account.update(self.stripe_acct_id, stripe_inputs).to_s)
         rescue => e
           ErrorUtility.log_and_notify e
           return [false, "Stripe error - #{e.message}"]
@@ -148,12 +169,118 @@ class Account < ApplicationRecord
       return false
     end
   end
-
+  
+  def stripe_inputs_create(remote_ip)
+    ac_params = {
+      business_type: "individual",
+      type: "custom",
+      country: "JP",
+      individual: stripe_inputs_individual,
+    }
+    if self.user_agreement
+      ac_params.merge!(
+        tos_acceptance: {
+          date: Time.parse(Time.zone.now.to_s).to_i,
+          ip: remote_ip.to_s
+        })
+    end
+    return ac_params
+  end
+  
+  def stripe_inputs_update(remote_ip)
+    ac_params = {
+      business_type: "individual",
+      individual: stripe_inputs_individual,
+    }
+    if self.user_agreement
+      ac_params.merge!(
+        tos_acceptance: {
+          date: Time.parse(Time.zone.now.to_s).to_i,
+          ip: remote_ip.to_s
+        })
+    end
+    return ac_params
+  end
+  
+  def stripe_inputs_individual
+    indiv = {
+        last_name:        self.last_name_kanji.present? ? self.last_name_kanji : nil,
+        last_name_kanji:  self.last_name_kanji.present? ? self.last_name_kanji : nil,
+        last_name_kana:   self.last_name_kana.present? ? self.last_name_kana : nil,
+        first_name:       self.first_name_kanji.present? ? self.first_name_kanji : nil,
+        first_name_kanji: self.first_name_kanji.present? ? self.first_name_kanji : nil,
+        first_name_kana:  self.first_name_kana.present? ? self.first_name_kana : nil,
+        gender:           self.gender.present? ? self.gender : nil,
+        dob:              self.birthdate.present? ? {year: self.birthdate.year.to_s, month: self.birthdate.month.to_s, day: self.birthdate.day.to_s,} : nil,
+        address_kanji:{
+          postal_code:    self.postal_code.present? ? self.postal_code : nil,
+          state:          (self.state.present? && self.postal_code.present?) ? self.state : nil,
+          city:           (self.city.present? && self.postal_code.present?) ? self.city : nil,
+          town:           (self.town.present? && self.postal_code.present?) ? self.town : nil,
+          line1:          (self.kanji_line1.present? && self.postal_code.present?) ? self.kanji_line1 : nil,
+          line2:          (self.kanji_line2.present? && self.postal_code.present?) ? self.kanji_line2 : nil,
+        },
+        address_kana:{
+          line1:          (self.kana_line1.present? && self.postal_code.present?) ? hankaku(self.kana_line1) : nil,
+          line2:          (self.kana_line2.present? && self.postal_code.present?) ? hankaku(self.kana_line2) : nil,
+        },
+        phone:            self.phone.present? ? self.international_phone_number : nil,
+        email:            self.email.present? ? self.email : nil,
+      }
+    return indiv
+  end
+  
+  def international_phone_number
+    phone_object = TelephoneNumber.parse(self.phone, :jp)
+    phone_object.e164_number
+  end
+  
+  def national_phone_number
+    phone_object = TelephoneNumber.parse(self.phone, :jp)
+    phone_object.national_number
+  end
+  
+  def check_stripe_inputs(account_params, action)
+    if action == "update" || action == "create"
+      if account_params.key?(:business_type) == false
+        return [false, "params for :business_type does not exist"]
+      elsif account_params[:business_type] != "individual"
+        return [false, "invalid business type : #{account_params[:business_type]}"]
+      elsif account_params.key?(:individual) == false
+        return [false, "params for :individual does not exist"]
+      end
+      if action == "create"
+        if account_params.key?(:type) == false
+          return [false, "params for :type does not exist"]
+        elsif account_params[:type] != "custom"
+          return [false, "invalid connected account type : #{account_params[:type]}"]
+        elsif account_params.key?(:country) == false
+          return [false, "params for :country does not exist"]
+        elsif account_params[:country] != "JP"
+          return [false, "invalid country : #{account_params[:country]}"]
+        elsif account_params[:individual].key?(:email) == false
+          return [false, "params for :email does not exist"]
+        elsif account_params[:individual][:email] == nil
+          return [false, "params for :email is blank"]
+        end
+      end
+    else
+      return [false, "invalid action : #{action}"]
+    end
+    return [true, nil]
+  end
+  
+  def hankaku(str)
+    if str == nil
+      return nil
+    else
+      return NKF.nkf('-w -Z4', str)
+    end
+  end
   
   private
   
   def self.parse_account_info(stripe_account_obj)
-    
     check_results = Account.check_stripe_results(stripe_account_obj)
     if check_results[0] == false
       return [false, check_results[1]]
@@ -198,11 +325,9 @@ class Account < ApplicationRecord
     }
 
     return [true, account_info]
-    
   end
 
   def self.parse_personal_info(individual)
-    
     if individual.key?("last_name_kanji")
       last_name_kanji = individual["last_name_kanji"]
     else
@@ -290,49 +415,20 @@ class Account < ApplicationRecord
       personal_info.merge!({"kana_town" => individual["address_kana"]["town"]})
       personal_info.merge!({"kana_line1" => Account.hankaku(individual["address_kana"]["line1"])})
       personal_info.merge!({"kana_line2" => Account.hankaku(individual["address_kana"]["line2"])})
-      # puts "HANKAKU test = "
-      # puts personal_info["kana_line2"]
     end
     if individual.key?("phone")
-      personal_info.merge!({"phone" => individual["phone"]})
+      if individual["phone"].present?
+        phone_object = TelephoneNumber.parse(individual["phone"])
+        if phone_object.valid?
+          personal_info.merge!({"phone" => phone_object.national_number})
+        end
+      end
     end
     if individual.key?("verification")
       personal_info.merge!({"verification" => individual["verification"]})
     end
 
     return [true, personal_info]
-  end
-  
-  def self.check_stripe_inputs(account_params, action)
-
-    if action == "update" || action == "create"
-      if account_params.key?(:business_type) == false
-        return [false, "params for :business_type does not exist"]
-      elsif account_params[:business_type] != "individual"
-        return [false, "invalid business type : #{account_params[:business_type]}"]
-      elsif account_params.key?(:individual) == false
-        return [false, "params for :individual does not exist"]
-      end
-      if action == "create"
-        if account_params.key?(:type) == false
-          return [false, "params for :type does not exist"]
-        elsif account_params[:type] != "custom"
-          return [false, "invalid connected account type : #{account_params[:type]}"]
-        elsif account_params.key?(:country) == false
-          return [false, "params for :country does not exist"]
-        elsif account_params[:country] != "JP"
-          return [false, "invalid country : #{account_params[:country]}"]
-        elsif account_params[:individual].key?(:email) == false
-          return [false, "params for :email does not exist"]
-        elsif account_params[:individual][:email] == nil
-          return [false, "params for :email is blank"]
-        end
-      end
-    else
-      return [false, "invalid input : action is #{action}"]
-    end
-    
-    return [true, nil]
   end
   
   def self.check_stripe_results(stripe_obj)
@@ -363,14 +459,6 @@ class Account < ApplicationRecord
         return [true, nil]
       else
         return [false, "unknown stripe object type"]
-    end
-  end
-
-  def self.hankaku(str)
-    if str == nil
-      return nil
-    else
-      return NKF.nkf('-w -Z4', str)
     end
   end
 end

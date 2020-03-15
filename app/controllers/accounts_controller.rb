@@ -4,13 +4,15 @@ class AccountsController < ApplicationController
   
   def new
     begin
-      if qualified
-        @user = User.find(params[:user_id])
+      @user = User.find(params[:user_id])
+      if qualified(@user)
         if @user.account.present?
           redirect_to edit_account_path(@user.account.id), alert: "すでに出金用アカウントが存在します。" and return
+        else
+          @account = Account.new
         end
       else
-        redirect_to user_path(current_user.id), alert: "アカウントを作成する条件を満たしていません。" and return
+        redirect_to user_path(current_user.id), alert: "アカウントを作成するユーザー条件を満たしていません。" and return
       end
     rescue => e
       ErrorUtility.log_and_notify e
@@ -20,11 +22,14 @@ class AccountsController < ApplicationController
   
   def confirm
     begin
-      if qualified
+      @mode = params[:mode]
+      if @mode == "new"
         @user = User.find(params[:user_id])
-        @account = new_account_params
-      else
-        redirect_to user_path(current_user.id), alert: "アカウントを作成する条件を満たしていません。" and return
+        @account = Account.new(create_params)
+      elsif @mode == "edit"
+        @account = Account.find(params[:id])
+        @account.assign_attributes(update_params)
+        @user = @account.user
       end
     rescue => e
       ErrorUtility.log_and_notify e
@@ -34,18 +39,22 @@ class AccountsController < ApplicationController
   
   def create
     begin
-      if qualified
-        user = User.find(params[:user_id])
+      @user = User.find(params[:user_id])
+      if qualified(@user)
+        @account = Account.new(create_params)
         if params[:back]
-          
+          render :new and return
         else
-          stripe_result = Account.create_stripe_account(new_account_params)
-          if stripe_result[0]
-            account = Account.create!(user_id: user.id, stripe_acct_id: stripe_result[1]["id"], stripe_status: stripe_result[1]["personal_info"]["verification"]["status"] )
-            redirect_to account_path(account.id), notice: "出金用アカウントが作成されました。" and return
+          @account.transaction do
+            @account.save!
+            @stripe_result = @account.create_stripe_account(request.remote_ip)
+          end
+          if @stripe_result[0]
+            @account.update!(user_id: @user.id, stripe_acct_id: @stripe_result[1]["id"], stripe_status: @stripe_result[1]["personal_info"]["verification"]["status"] )
+            redirect_to account_path(@account.id), notice: "出金用アカウントが作成されました。" and return
           else
-            Rails.logger.error "create_stripe_account returned false : #{stripe_result[1]}"
-            redirect_to user_path(user.id), alert: "出金用アカウントが作成できませんでした。" and return
+            Rails.logger.error "create_stripe_account returned false : #{@stripe_result[1]}"
+            redirect_to user_path(@user.id), alert: "出金用アカウントが作成できませんでした。" and return
           end
         end
       else
@@ -57,15 +66,72 @@ class AccountsController < ApplicationController
       redirect_to user_path(current_user.id), alert: "アカウント情報の取得に失敗しました。" and return
     rescue => e
       ErrorUtility.log_and_notify e
-      redirect_to new_user_account_path(params[:user_id]), alert: "システムエラーにより出金用アカウントが作成できませんでした。しばらく時間をおいて再度お試しください。" and return
+      redirect_to new_user_account_path(params[:user_id]), alert: "システムエラーが発生しました。" and return
     end
   end
   
+  def edit
+    begin
+      @account = Account.find(params[:id])
+      if @account.user_id == current_user.id
+        # @stripe_account = account.get_stripe_account
+        # @account_info = Account.extract_account_info(@stripe_account)
+        # stripe_result_acct = @account.get_stripe_account
+        # if stripe_result_acct[0]
+        #   @account_info = stripe_result_acct[1]
+        # else
+        #   Rails.logger.error "get_stripe_account returned false : #{stripe_result_acct[1]}"
+        #   redirect_to user_path(current_user.id), alert: "アカウント情報を取得できませんでした。" and return
+        # end
+      else
+        redirect_to user_path(current_user.id), alert: "アクセス権限がありません。" and return
+      end
+    rescue Stripe::PermissionError => e
+      ErrorUtility.log_and_notify e
+      redirect_to user_path(current_user.id), alert: "口座情報にアクセス権限がありません。" and return
+    rescue => e
+      ErrorUtility.log_and_notify e
+      redirect_to user_path(current_user.id), alert: "エラーが発生しました。" and return
+    end    
+  end
+  
+  def update
+    begin
+      @account = Account.find(params[:id])
+      redirect_to user_path(current_user.id), alert: "アクセス権限がありません。" and return unless @account.user_id == current_user.id
+      if params[:back]
+        @account.assign_attributes(update_params)
+        render :edit and return
+      else
+        @account.transaction do
+          @account.update!(update_params)
+          puts "REMOTE IP : "
+          puts request.remote_ip
+          @stripe_result_acct = @account.update_stripe_account(request.remote_ip)
+        end
+        if @stripe_result_acct[0]
+          @account_info = @stripe_result_acct[1]
+          @account.update!(stripe_status: @account_info["personal_info"]["verification"]["status"])
+          redirect_to account_path(@account.id), notice: "アカウント情報が更新されました。" and return
+        else
+          Rails.logger.error "update_stripe_account returned false : #{@stripe_result_acct[1]}"
+          redirect_to edit_account_path(@account.id), alert: "アカウント情報を更新できませんでした。" and return
+        end
+      end
+    rescue Stripe::PermissionError => e
+      ErrorUtility.log_and_notify e
+      redirect_to user_path(current_user.id), alert: "口座情報にアクセス権限がありません。" and return
+    rescue => e
+      ErrorUtility.log_and_notify e
+      redirect_to edit_account_path(params[:id]), alert: "エラーが発生しました。" and return
+    end
+  end
+
   def show
     begin
       @account = Account.includes(:externalaccount).find(params[:id])
       redirect_to user_path(current_user.id), alert: "アクセス権限がありません。" and return unless @account.user_id == current_user.id
-      
+
       stripe_result_acct = @account.get_stripe_account
       if stripe_result_acct[0]
         @account_info = stripe_result_acct[1]
@@ -73,7 +139,7 @@ class AccountsController < ApplicationController
         Rails.logger.error "get_stripe_account returned false : #{stripe_result_acct[1]}"
         redirect_to user_path(current_user.id), alert: "アカウント情報を取得できませんでした。" and return
       end
-      
+
       if @account_info["personal_info"]["verification"]["status"].present?
         latest_stripe_status = @account_info["personal_info"]["verification"]["status"]
         if latest_stripe_status != @account.stripe_status
@@ -96,52 +162,7 @@ class AccountsController < ApplicationController
       redirect_to user_path(current_user.id), alert: "アカウント情報の取得に失敗しました。" and return
     rescue => e
       ErrorUtility.log_and_notify e
-      redirect_to user_path(current_user.id), alert: "システムエラーにより出金用アカウントが作成できませんでした。しばらく時間をおいて再度お試しください。" and return
-    end
-  end
-  
-  def edit
-    begin
-      @account = Account.find(params[:id])
-      redirect_to user_path(current_user.id), alert: "アクセス権限がありません。" and return unless @account.user_id == current_user.id
-      # @stripe_account = account.get_stripe_account
-      # @account_info = Account.extract_account_info(@stripe_account)
-      stripe_result_acct = @account.get_stripe_account
-      if stripe_result_acct[0]
-        @account_info = stripe_result_acct[1]
-      else
-        Rails.logger.error "get_stripe_account returned false : #{stripe_result_acct[1]}"
-        redirect_to user_path(current_user.id), alert: "アカウント情報を取得できませんでした。" and return
-      end
-    rescue Stripe::PermissionError => e
-      ErrorUtility.log_and_notify e
-      redirect_to user_path(current_user.id), alert: "口座情報にアクセス権限がありません。" and return
-    rescue => e
-      ErrorUtility.log_and_notify e
-      redirect_to user_path(current_user.id), alert: "エラーが発生しました。" and return
-    end    
-  end
-  
-  def update
-    begin
-      @account = Account.find(params[:id])
-      redirect_to user_path(current_user.id), alert: "アクセス権限がありません。" and return unless @account.user_id == current_user.id
-
-      stripe_result_acct = @account.update_stripe_account(account_params)
-      if stripe_result_acct[0]
-        @account_info = stripe_result_acct[1]
-        @account.update!(stripe_status: @account_info["personal_info"]["verification"]["status"])
-        redirect_to account_path(@account.id), notice: "アカウント情報が更新されました。" and return
-      else
-        Rails.logger.error "update_stripe_account returned false : #{stripe_result_acct[1]}"
-        redirect_to edit_account_path(@account.id), alert: "アカウント情報を更新できませんでした。" and return
-      end
-    rescue Stripe::PermissionError => e
-      ErrorUtility.log_and_notify e
-      redirect_to user_path(current_user.id), alert: "口座情報にアクセス権限がありません。" and return
-    rescue => e
-      ErrorUtility.log_and_notify e
-      redirect_to edit_account_path(params[:id]), alert: "エラーが発生しました。" and return
+      redirect_to user_path(current_user.id), alert: "システムエラーが発生しました。しばらく時間をおいて再度お試しください。" and return
     end
   end
   
@@ -173,62 +194,24 @@ class AccountsController < ApplicationController
 
   private
 
-  def qualified
-    if current_user.id == params[:user_id].to_i && current_user.premium_user[0]
+  def qualified(user)
+    if current_user.id == user.id && current_user.premium_user[0]
       return true
     else
       return false
     end
   end
   
-  def new_account_params
-    ac_params = account_params
-    ac_params.merge!(:type => "custom")
-    ac_params.merge!(:country => "JP")
-    return ac_params
+  def create_params
+    params.require(:account).permit(:last_name_kanji, :last_name_kana, :first_name_kanji, :first_name_kana, 
+                            :postal_code, :state, :city, :town, :kanji_line1, :kanji_line2, :kana_line1, :kana_line2, 
+                            :gender, :birthdate, :phone, :email, :user_agreement).merge(user_id: current_user.id)
   end
   
-  def account_params
-    filtered_params = params.permit(:user_id, :last_name_kanji, :last_name_kana, :first_name_kanji, :first_name_kana, 
-                                    :postal_code, :state, :city, :town, :kanji_line1, :kanji_line2, :kana_line1, :kana_line2, 
-                                    :gender, :birthdate, :phone, :email, :user_agreement)
-    ac_params = {
-      business_type: "individual",
-      individual:{
-        last_name:        filtered_params[:last_name_kanji].present? ? filtered_params[:last_name_kanji] : nil,
-        last_name_kanji:  filtered_params[:last_name_kanji].present? ? filtered_params[:last_name_kanji] : nil,
-        last_name_kana:   filtered_params[:last_name_kana].present? ? filtered_params[:last_name_kana] : nil,
-        first_name:       filtered_params[:first_name_kanji].present? ? filtered_params[:first_name_kanji] : nil,
-        first_name_kanji: filtered_params[:first_name_kanji].present? ? filtered_params[:first_name_kanji] : nil,
-        first_name_kana:  filtered_params[:first_name_kana].present? ? filtered_params[:first_name_kana] : nil,
-        gender:           filtered_params[:gender].present? ? filtered_params[:gender] : nil,
-        dob:              (filtered_params["birthdate(1i)"].present? && filtered_params["birthdate(2i)"].present? && filtered_params["birthdate(3i)"].present?) ? {year: filtered_params["birthdate(1i)"], month: filtered_params["birthdate(2i)"], day: filtered_params["birthdate(3i)"],} : nil,
-        address_kanji:{
-          postal_code:    filtered_params[:postal_code].present? ? filtered_params[:postal_code] : nil,
-          state:          (filtered_params[:state].present? && filtered_params[:postal_code].present?) ? filtered_params[:state] : nil,
-          city:           (filtered_params[:city].present? && filtered_params[:postal_code].present?) ? filtered_params[:city] : nil,
-          town:           (filtered_params[:town].present? && filtered_params[:postal_code].present?) ? filtered_params[:town] : nil,
-          line1:          (filtered_params[:kanji_line1].present? && filtered_params[:postal_code].present?) ? filtered_params[:kanji_line1] : nil,
-          line2:          (filtered_params[:kanji_line2].present? && filtered_params[:postal_code].present?) ? filtered_params[:kanji_line2] : nil,
-        },
-        address_kana:{
-          line1:          (filtered_params[:kana_line1].present? && filtered_params[:postal_code].present?) ? hankaku(filtered_params[:kana_line1]) : nil,
-          line2:          (filtered_params[:kana_line2].present? && filtered_params[:postal_code].present?) ? hankaku(filtered_params[:kana_line2]) : nil,
-        },
-        phone:            filtered_params[:phone].present? ? filtered_params[:phone] : nil,
-        email:            filtered_params[:email].present? ? filtered_params[:email] : nil,
-      },
-    }
-    if filtered_params[:user_agreement] == "true"
-      user_agree_date = Time.parse(Time.zone.now.to_s).to_i
-      user_ip = request.remote_ip
-      ac_params.merge!(
-        tos_acceptance: {
-          date: user_agree_date,
-          ip: user_ip   
-        })
-    end
-    return ac_params
+  def update_params
+    params.require(:account).permit(:last_name_kanji, :last_name_kana, :first_name_kanji, :first_name_kana, 
+                            :postal_code, :state, :city, :town, :kanji_line1, :kanji_line2, :kana_line1, :kana_line2, 
+                            :gender, :birthdate, :phone, :email, :user_agreement)
   end
   
   def hankaku(str)
