@@ -27,10 +27,14 @@ class Externalaccount < ApplicationRecord
       stripe_acct_id = self.account.stripe_acct_id
       if stripe_acct_id
         begin
-          new_bank_account_obj = JSON.parse(Stripe::Account.create_external_account(stripe_acct_id, stripe_bank_inputs).to_s)
-          return [true, new_bank_account_obj]
+          res = JSON.parse(Stripe::Account.create_external_account(stripe_acct_id, stripe_bank_inputs).to_s)
+          if res.key?("id")
+            return [true, res]
+          else
+            return [false, "Failed to create external account"]
+          end
         rescue => e
-          return [false, "Stripe error - #{e.message}"]
+          return [false, "Stripe create_external_account error - #{e.message}"]
         end
       else
         return [false, "stripe_acct_id is blank"]
@@ -45,8 +49,12 @@ class Externalaccount < ApplicationRecord
       stripe_acct_id = self.account.stripe_acct_id
       if stripe_acct_id
         begin
-          deleted_bank_account_obj = JSON.parse(Stripe::Account.delete_external_account(stripe_acct_id, stripe_bank_id).to_s)
-          return [true, deleted_bank_account_obj]
+          res = JSON.parse(Stripe::Account.delete_external_account(stripe_acct_id, stripe_bank_id).to_s)
+          if res.key?("deleted") && res["deleted"] == true
+            return [true, res]
+          else
+            return [false, "Failed to delete external account"]
+          end
         rescue => e
           return [false, "Stripe error - #{e.message}"]
         end

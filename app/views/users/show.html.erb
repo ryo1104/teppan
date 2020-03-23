@@ -1,4 +1,4 @@
-<% @page_title = "プロフィール" %>
+<% @page_title = "ユーザーページ" %>
 <% breadcrumb :show_user, @user %>
 <div class="page-body-container">
   <p><%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %></p>
@@ -174,7 +174,7 @@
           <div class="ChangeElem_Panel">
             <h2>アカウント</h2>
             <div class="user-page-links">
-              <%= link_to 'プロフィール編集', edit_user_path(current_user.id), :class => "btn btn-primary withripple custom" %>&nbsp;&nbsp;
+              <%= link_to 'プロフィール変更', edit_user_path(current_user.id), :class => "btn btn-primary withripple custom" %>&nbsp;&nbsp;
               <% unless @user.authorization %>
                 <%= link_to 'パスワード変更', edit_user_registration_path(current_user), :class => "btn btn-primary withripple custom" %><br>
               <% end %>

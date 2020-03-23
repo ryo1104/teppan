@@ -74,10 +74,28 @@ nav.pagination {
   a{
     color: #66cc00;
   }
-  img{
-    max-width: 50%;
+  .attachment--preview {
+    text-align: left;
+    img{
+      max-width: 50%;
+    }
+    .attachment__caption{
+      text-align: left;
+      color: #757575;
+      font-size: 0.8rem;
+    }
   }
 }
+
+// figcaption{
+//   .attachment__caption{
+//     .attachment__caption--edited{
+//       display: none;
+//     }
+//   }
+// }
+      
+
 
 .collection-avatar{
   width: 1.8rem;
@@ -597,6 +615,7 @@ textarea{
   #neta-form-price{
     width: 5rem;
     height: 2rem;
+    text-align: right;
   }
   
   #private_flag{
@@ -683,6 +702,19 @@ textarea{
     margin: 0;
   }
 
+  #neta_form_content{
+    min-height: 15rem;
+  }
+
+  #neta_form_value_content{
+    min-height: 15rem;
+  }
+  
+  #neta_form_no_price_message{
+    font-size: 0.8rem;
+    color: #9e9e9e;
+  }
+  
   .user-page-body-upper{
     min-height: 70px;  
   }
@@ -861,6 +893,10 @@ textarea{
   
   .collection.z-depth-0.account-form{
     padding: 1rem 0;
+  }
+  
+  .collection.z-depth-0.account-show{
+    padding: 0.5rem 0.5rem 0 0.5rem;
   }
   
   .form-control.date-select{
@@ -1221,6 +1257,7 @@ textarea{
   #neta-form-price{
     width: 7rem;
     height: 2rem;
+    text-align: right;
   }
   
   #private_flag{

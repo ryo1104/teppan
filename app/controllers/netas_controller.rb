@@ -33,16 +33,18 @@ class NetasController < ApplicationController
       else
         @topic = Topic.find(params[:topic_id])
         @neta = @topic.netas.new(create_params)
-        @tags = tag_array
-        if @tags.size > 5
-          @neta.errors.add(:hashtags, "は5個までです。")
+        if @neta.valid? && @neta.check_hashtags(tag_array)
+          Neta.transaction do
+            @neta.save!
+            @neta.add_hashtags(tag_array)
+          end
+          #@copy_check_obj = Copycheck.create(neta_id: @neta.id, text: @neta.text+" "+@neta.valuetext)
+          session[:last_created_at] = Time.zone.now.to_i
+          redirect_to neta_path(@neta.id), notice: "ネタを投稿しました。"
+        else
+          @stale_form_check_timestamp = Time.zone.now.to_i
           render :new and return
         end
-        @neta.save!
-        @neta.add_hashtags(@tags)
-        #@copy_check_obj = Copycheck.create(neta_id: @neta.id, text: @neta.text+" "+@neta.valuetext)
-        session[:last_created_at] = Time.zone.now.to_i
-        redirect_to neta_path(@neta.id), notice: "ネタを投稿しました。"
       end
     rescue => e
       ErrorUtility.log_and_notify e
@@ -58,9 +60,11 @@ class NetasController < ApplicationController
         @reviews = @neta.reviews.includes({user: [image_attachment: :blob]})
         @myreview = @reviews.where(user_id: current_user.id)
         @newreview = Review.new unless @myreview.present?
-        @for_sale = @neta.for_sale if @neta.price != 0
+        # @for_sale = @neta.for_sale if @neta.price != 0
+        @for_sale = true
         unless @owner
-          @purchased = @neta.trades.find_by(buyer_id: current_user.id)
+          # @purchased = @neta.trades.find_by(buyer_id: current_user.id)
+          @purchased = Trade.new
           @neta.add_pageview(current_user)
         end
       else
@@ -94,13 +98,22 @@ class NetasController < ApplicationController
         redirect_to neta_path(params[:id]), alert: "投稿はすでに更新されています。" and return
       else
         @neta = Neta.find(params[:id])
-        @neta.update!(update_params)
-        @neta.add_hashtags(tag_array)
-        # copy_check_obj = Copycheck.create(neta_id: neta.id, text: neta.text)
-        # ccd_post_result = copy_check_obj.post_ccd_check(neta.text)
-        # copy_check_obj.update(queue_id: ccd_post_result["queue_id"]) 
-        session[:last_created_at] = Time.zone.now.to_i
-        redirect_to neta_path(params[:id]), notice: "ネタを更新しました。" and return
+        @neta.assign_attributes(update_params)
+        if @neta.valid? && @neta.check_hashtags(tag_array)
+          Neta.transaction do
+            @neta.save!
+            @neta.add_hashtags(tag_array)
+          end
+          # copy_check_obj = Copycheck.create(neta_id: neta.id, text: neta.text)
+          # ccd_post_result = copy_check_obj.post_ccd_check(neta.text)
+          # copy_check_obj.update(queue_id: ccd_post_result["queue_id"]) 
+          session[:last_created_at] = Time.zone.now.to_i
+          redirect_to neta_path(params[:id]), notice: "ネタを更新しました。" and return
+        else
+          @stale_form_check_timestamp = Time.zone.now.to_i
+          @current_tags = @neta.get_hashtags_str
+          render :edit and return
+        end
       end
     rescue => e
       ErrorUtility.log_and_notify e
@@ -158,11 +171,11 @@ class NetasController < ApplicationController
   private
 
   def create_params
-    params.require(:neta).permit(:title, :content, :valuetext, :price, :private_flag).merge(user_id: current_user.id)
+    params.require(:neta).permit(:title, :content, :valuecontent, :price, :private_flag).merge(user_id: current_user.id)
   end
   
   def update_params
-    params.require(:neta).permit(:title, :content, :valuetext, :price, :private_flag)
+    params.require(:neta).permit(:title, :content, :valuecontent, :price, :private_flag)
   end
   
   def tag_params

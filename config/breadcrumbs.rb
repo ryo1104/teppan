@@ -33,27 +33,27 @@ crumb :edit_topic do |topic|
 end
 
 # ネタshow
-crumb :show_koneta do |neta|
-  link "#{neta.user.nickname}さんの小ネタ", neta_path(neta.id)
+crumb :show_neta do |neta|
+  link neta.title, neta_path(neta.id)
   parent :show_topic, neta.topic
 end
 
 # ネタnew
-crumb :new_koneta do |topic|
+crumb :new_neta do |topic|
   link "新規ネタ", new_topic_neta_path
   parent :show_topic, topic
 end
 
 # ネタedit
-crumb :edit_koneta do |neta|
+crumb :edit_neta do |neta|
   link "編集", edit_neta_path(neta.id)
-  parent :show_koneta, neta
+  parent :show_neta, neta
 end
 
 # user#show
 crumb :show_review do |review|
   link "レビュー", review_path(review.id)
-  parent :show_koneta, review.neta
+  parent :show_neta, review.neta
 end
 
 # レビュー#show
@@ -64,13 +64,13 @@ end
 
 # user#edit
 crumb :edit_user do |user|
-  link "プロフィール編集", edit_user_path(user.id)
+  link "プロフィール変更", edit_user_path(user.id)
   parent :show_user, user
 end
 
 # user#edit_registration
 crumb :edit_user_registration do |user|
-  link "アカウント編集", edit_user_registration_path(user.id)
+  link "パスワード変更", edit_user_registration_path(user.id)
   parent :show_user, user
 end
 

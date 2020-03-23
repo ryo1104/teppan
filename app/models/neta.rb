@@ -3,6 +3,7 @@ class Neta < ApplicationRecord
   belongs_to      :topic
   counter_culture :topic
   has_rich_text   :content
+  has_rich_text   :valuecontent
   has_many        :reviews
   has_many        :trades, as: :tradeable
   has_many        :pageviews, as: :pageviewable
@@ -11,6 +12,7 @@ class Neta < ApplicationRecord
   has_many        :hashtag_netas
   has_many        :hashtags, through: :hashtag_netas
   validate        :content_check
+  validate        :valuecontent_check
   validates       :title,     presence: true, length: { in: 5..50 }
   validates       :valuetext, length: { maximum: 800 }
   validates       :price,     presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 10000 }
@@ -114,7 +116,20 @@ class Neta < ApplicationRecord
       return false
     end
   end
-
+  
+  def check_hashtags(tag_array)
+    if tag_array.present?
+      if tag_array.size > 3
+        self.errors.add(:hashtags, "は3個までです。")
+        return false
+      else
+        return true
+      end
+    else
+      return true
+    end
+  end
+  
   def add_hashtags(tag_array)
     if tag_array.present?
       self.hashtags.clear if self.hashtags.present?
@@ -161,6 +176,14 @@ class Neta < ApplicationRecord
     #     errors.add(:content, " size must be smaller than 10MB")
     #   end
     # end
+  end
+  
+  def valuecontent_check
+    if self.valuecontent.body.present?
+      unless self.valuecontent.body.length in: 5..800
+        errors.add(:valuecontent, "は５文字以上、８００字以内で入力してください。")
+      end
+    end
   end
   
 end

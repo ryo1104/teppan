@@ -46,9 +46,9 @@ const searchSelectize = () => {
     closeAfterSelect: true,
     create: true, // 新規単語を追加を許可
     createOnBlur: true, // 画面外をタッチすると新規単語を追加
-    maxItems: 1,
+    maxItems: 1,//検索フォームのCSSがSelectize.Singleでなくてはならないので１で固定
     loadThrottle: 500,
-    placeholder: 'キーワードを入力',
+    placeholder: 'ハッシュタグを検索',
     load: (query, callback) => {
       if (!query.length) return callback();
       getAutocomplete(query, callback)
@@ -74,7 +74,7 @@ const addSelectize = () => {
     create: true, // 新規単語を追加を許可
     createOnBlur: true, // 画面外をタッチすると新規単語を追加
     delimiter: ',',
-    maxItems: 20,
+    maxItems: 10,
     loadThrottle: 500,
     placeholder: 'ハッシュタグ',
     load: (query, callback) => {

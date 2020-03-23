@@ -105,8 +105,6 @@ class AccountsController < ApplicationController
       else
         @account.transaction do
           @account.update!(update_params)
-          puts "REMOTE IP : "
-          puts request.remote_ip
           @stripe_result_acct = @account.update_stripe_account(request.remote_ip)
         end
         if @stripe_result_acct[0]
@@ -174,8 +172,13 @@ class AccountsController < ApplicationController
         stripe_result_acct = @account.delete_stripe_account
         if stripe_result_acct[0]
           @delete_result = stripe_result_acct[1]
-          @account.destroy!
-          @message = "出金用アカウントを削除しました。"
+          if @account.destroy!
+            Rails.logger.error "account.destroy succeeded. Account id : #{@account.id}, @delete_result = #{@delete_result}"
+            redirect_to user_path(current_user.id), alert: "出金用アカウントを削除しました。" and return
+          else
+            Rails.logger.error "account.destroy failed. Account id : #{@account.id}"
+            redirect_to account_path(@account.id), alert: "出金用アカウントを削除できませんでした。" and return
+          end
         else
           Rails.logger.error "delete_stripe_account returned false : #{stripe_result_acct[1]}"
           redirect_to account_path(@account.id), alert: "出金用アカウントを削除できませんでした。" and return

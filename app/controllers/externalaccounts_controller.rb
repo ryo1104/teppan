@@ -63,13 +63,16 @@ class ExternalaccountsController < ApplicationController
         @new_stripe_ba_hash = @ext_acct.create_stripe_ext_account(@stripe_bank_inputs[1])
         if @new_stripe_ba_hash[0]
           @ext_acct.update!(stripe_bank_id: @new_stripe_ba_hash[1]["id"])
-        end
-        # 古い口座情報をStripeから削除
-        @old_stripe_ba_hash = @ext_acct.delete_stripe_ext_account(@old_stripe_bank_id)
-        if @old_stripe_ba_hash[0]
-          redirect_to account_path(@ext_acct.account.id), notice: "銀行口座情報を更新しました。" and return
+          # 古い口座情報をStripeから削除。注意：上のように先に新しいdefault accountを追加しておかないとエラーで弾かれる
+          @old_stripe_ba_hash = @ext_acct.delete_stripe_ext_account(@old_stripe_bank_id)
+          if @old_stripe_ba_hash[0]
+            redirect_to account_path(@ext_acct.account.id), notice: "銀行口座情報を更新しました。" and return
+          else
+            Rails.logger.error "delete_stripe_ext_account returned false : #{@old_stripe_ba_hash[1]}"
+            redirect_to edit_externalaccount_path(params[:id]), alert: "銀行口座の更新に失敗しました。" and return
+          end
         else
-          Rails.logger.error "delete_stripe_ext_account returned false : #{@old_stripe_ba_hash[1]}"
+          Rails.logger.error "create_stripe_ext_account returned false : #{@new_stripe_ba_hash[1]}"
           redirect_to edit_externalaccount_path(params[:id]), alert: "銀行口座の更新に失敗しました。" and return
         end
       else

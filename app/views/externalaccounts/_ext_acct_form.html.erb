@@ -1,12 +1,24 @@
-<%= label_tag '銀行名' %>
-<%= f.text_field :bank_name %>
-<br>
-<%= label_tag '支店名' %>
-<%= f.text_field :branch_name %>
-<br>
-<%= label_tag '口座番号' %>
-<%= f.text_field :account_number %>
-<br>
-<%= label_tag '口座名義人' %>
-<%= f.text_field :account_holder_name %>
-<br>
+<div class="col s12 m12 push-m1" id="account-form-field-row">
+  <div class="col s12 m10 account-form">
+    <%= label_tag '銀行名' %>
+    <%= f.text_field :bank_name, :value => @bank_info[1]["bank_name"] %>
+  </div>
+</div>
+<div class="col s12 m12 push-m1" id="account-form-field-row">
+  <div class="col s12 m10 account-form">
+    <%= label_tag '支店名' %>
+    <%= f.text_field :branch_name, :value => @bank_info[1]["branch_name"] %>
+  </div>
+</div>
+<div class="col s12 m12 push-m1" id="account-form-field-row">
+  <div class="col s12 m10 account-form">
+    <%= label_tag '口座番号' %>
+    <%= f.text_field :account_number, :value => @bank_info[1]["account_number"] %>
+  </div>
+</div>
+<div class="col s12 m12 push-m1" id="account-form-field-row">
+  <div class="col s12 m10 account-form">
+    <%= label_tag '口座名義人' %>
+    <%= f.text_field :account_holder_name, :value => @bank_info[1]["account_holder_name"] %>
+  </div>
+</div>
