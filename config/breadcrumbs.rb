@@ -121,3 +121,9 @@ crumb :edit_externalaccount do |ext_account|
   link "銀行口座", edit_externalaccount_path(ext_account.id)
   parent :show_account, ext_account.account
 end
+
+# trade#new
+crumb :new_trade do |neta|
+  link "購入", new_neta_trade_path(neta.id)
+  parent :show_neta, neta
+end

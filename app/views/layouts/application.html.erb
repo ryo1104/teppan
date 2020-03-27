@@ -15,8 +15,7 @@
       <div class="nav-wrapper">
         <a href="<%= root_path %>" class="nav-brand-logo left">Teppan</a>
         <ul class="nav-contents right hide-on-med-and-down">
-          <li class="hide-on-med-and-down"><%= link_to "ネタ", netas_path, method: :get %></li>
-          <li class="hide-on-med-and-down"><%= link_to "トピック", topics_path, method: :get %></li>
+          <li class="hide-on-med-and-down"><%= link_to "１分ネタ", topics_path, method: :get %></li>
           <% if user_signed_in? %>
             <li class="hide-on-med-and-down"><%= link_to "マイページ", user_path(current_user) %></li>
             <li class="hide-on-med-and-down"><%= link_to "ログアウト", destroy_user_session_path, method: :delete %></li>
@@ -30,8 +29,7 @@
     </nav>
     
     <ul id="slide-out" class="sidenav custom">
-      <li><%= link_to "ネタ", netas_path, method: :get %></li>
-      <li><%= link_to "トピック", topics_path, method: :get %></li>
+      <li><%= link_to "１分ネタ", topics_path, method: :get %></li>
       <% if user_signed_in? %>
         <li><%= link_to "マイページ", user_path(current_user) %></li>
         <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete %></li>

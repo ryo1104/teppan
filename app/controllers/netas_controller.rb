@@ -60,11 +60,11 @@ class NetasController < ApplicationController
         @reviews = @neta.reviews.includes({user: [image_attachment: :blob]})
         @myreview = @reviews.where(user_id: current_user.id)
         @newreview = Review.new unless @myreview.present?
-        # @for_sale = @neta.for_sale if @neta.price != 0
-        @for_sale = true
+        @for_sale = @neta.for_sale if @neta.price != 0
+        # @for_sale = true
         unless @owner
-          # @purchased = @neta.trades.find_by(buyer_id: current_user.id)
-          @purchased = Trade.new
+          @purchased = @neta.trades.find_by(buyer_id: current_user.id)
+          # @purchased = Trade.new
           @neta.add_pageview(current_user)
         end
       else

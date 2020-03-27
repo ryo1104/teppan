@@ -29,6 +29,31 @@ class Trade < ApplicationRecord
     end
   end
 
+  def self.get_stripe_session(tradeable, destination, success_path, cancel_path)
+    result = Stripe::Checkout::Session.create({
+        success_url: success_path,
+        cancel_url: cancel_path,
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            name: tradeable.title,
+            description: 'Comfortable cotton t-shirt',
+            amount: tradeable.price,
+            currency: 'jpy',
+            quantity: 1,
+          },
+        ],
+        payment_intent_data: {
+          application_fee_amount: 200,
+          transfer_data: {
+            destination: destination,
+          },
+        },
+      })
+    stripe_session = JSON.parse(result.to_s)
+    return stripe_session
+  end
+
   def self.charge(source, buyer, seller, tradeable, charge_amount, seller_revenue)
     ret_hash = {}
     if source["object"] == "customer" || source["object"] == "card" #顧客に紐付いているカードで支払い

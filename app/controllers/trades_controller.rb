@@ -16,6 +16,10 @@ class TradesController < ApplicationController
       @ctax = Trade.get_ctax(@price)
       @charge_amount = @price + @ctax
       @stale_form_check_timestamp = Time.zone.now.to_i
+      @destination = @tradeable.user.account.stripe_acct_id
+      @success_url = neta_trades_url(@tradeable.id)
+      @cancel_url = request.url
+      @stripe_session = Trade.get_stripe_session(@tradeable, @destination, @success_url, @cancel_url )
     rescue => e
       ErrorUtility.log_and_notify e
       redirect_to "/#{@resource}/#{@id}", alert: e.message and return

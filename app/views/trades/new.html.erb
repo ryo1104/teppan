@@ -1,63 +1,97 @@
+<% @page_title = "購入" %>
+<% breadcrumb :new_trade, @tradeable %>
 <div class="page-body-container">
+  <p><%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %></p>
   <div class="row">
     <div class="col s12 m9 neta-new">
-      <h1 class="h1_class">ネタを購入</h1>
-      <ul class="collection z-depth-1">
-        <li class="collection-item">
-          価格　：<%= @price %>円<br>
-          消費税：<%= @ctax %>円<br>
-          <b>合計　：<%= @charge_amount %>円</b><br><br>
-          <% if @buyer.account %>
-            利用可能ポイント：<b><%= @balance %></b><br>
-            <% if @balance >= @charge_amount %>
-              <%= form_with url: neta_trades_path(@tradeable.id), local: true, method: :post do |f| %>
-                <%= f.hidden_field :price, :value => @price %>
-                <%= f.hidden_field :user_points, :value => @balance %>
-                <%= f.hidden_field :timestamp, :value => @stale_form_check_timestamp %>
-                <%= button_tag :type => "submit", class: "btn btn-primary withripple custom" do %>
-                  <i class="material-icons"></i>ポイントで支払う
-                <% end %>
+      <h1>ネタを購入</h1>
+      <div class="collection z-depth-0 account-show">
+        <table>
+          <thead>
+            <tr>
+                <th>タイトル</th>
+                <th>税込価格</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><%= @tradeable.title %></td>
+              <td><%= number_to_currency(@charge_amount, locale: 'ja') %></td>
+            </tr>
+          </tbody>
+        </table><br>
+        <% if @buyer.account %>
+          利用可能ポイント：<b><%= @balance %></b><br>
+          <% if @balance >= @charge_amount %>
+            <%= form_with url: neta_trades_path(@tradeable.id), local: true, method: :post do |f| %>
+              <%= f.hidden_field :price, :value => @price %>
+              <%= f.hidden_field :user_points, :value => @balance %>
+              <%= f.hidden_field :timestamp, :value => @stale_form_check_timestamp %>
+              <%= button_tag :type => "submit", class: "btn btn-primary withripple custom" do %>
+                <i class="material-icons"></i>ポイントで支払う
               <% end %>
-            <% else %>
-              <div class="btn btn-primary withripple custom inactive">ポイントで支払う</div>
             <% end %>
-            <br><br>
-          <% end %>
-          <% if @cards[0] %>
-            <% @cards[1]["data"].each do |card| %>
-              <%= card["brand"] %>&nbsp;&nbsp;
-              <%= card["exp_month"] %>/<%= card["exp_year"] %>&nbsp;&nbsp;
-              <%= "******"+card["last4"] %>&nbsp;
-              <%= form_with url: neta_trades_path(@tradeable.id), local: true, method: :post do |f| %>
-                <%= f.hidden_field :price, :value => @price %>
-                <%= f.hidden_field :card_id, :value => card["id"] %>
-                <%= f.hidden_field :timestamp, :value => @stale_form_check_timestamp %>
-                <%= button_tag :type => "submit", class: "btn btn-primary withripple custom" do %>
-                  <i class="material-icons"></i>このカードで支払う
-                <% end %><br><br>
-              <% end %>&nbsp;&nbsp;
-            <% end %>
-          <% end %>
-          <%= form_with url: neta_trades_path(@tradeable.id), local: true, method: :post do |f| %>
-            <%= f.hidden_field :price, :value => @price %>
-            <%= f.hidden_field :timestamp, :value => @stale_form_check_timestamp %>
-            <script
-              src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-              data-key="pk_test_p2Y9RrxY6Gjj2Bi43zhElMTp00hQwI9bNL"
-              data-locale="ja"
-              data-label=
-              <% if @cards[0] %>
-                "別のカードで支払う"
-              <% else %>
-                "カードで支払う"
-              <% end %>
-              data-panel-label="支払う"
-              data-email="<%= @buyer.email %>">
-            </script>
+          <% else %>
+            <div class="btn btn-primary withripple custom inactive">ポイントで支払う</div>
           <% end %>
           <br><br>
-        </li>
-      </ul>
+        <% end %>
+        <% if @cards[0] %>
+          <% @cards[1]["data"].each do |card| %>
+            <%= card["brand"] %>&nbsp;&nbsp;
+            <%= card["exp_month"] %>/<%= card["exp_year"] %>&nbsp;&nbsp;
+            <%= "******"+card["last4"] %>&nbsp;
+            <%= form_with url: neta_trades_path(@tradeable.id), local: true, method: :post do |f| %>
+              <%= f.hidden_field :price, :value => @price %>
+              <%= f.hidden_field :card_id, :value => card["id"] %>
+              <%= f.hidden_field :timestamp, :value => @stale_form_check_timestamp %>
+              <%= button_tag :type => "submit", class: "btn btn-primary withripple custom" do %>
+                <i class="material-icons"></i>このカードで支払う
+              <% end %><br><br>
+            <% end %>&nbsp;&nbsp;
+          <% end %>
+        <% end %>
+        
+        <%= form_with url: neta_trades_path(@tradeable.id), local: true, method: :post do |f| %>
+          <%= f.hidden_field :price, :value => @price %>
+          <%= f.hidden_field :timestamp, :value => @stale_form_check_timestamp %>
+          <script
+            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+            data-key="pk_test_p2Y9RrxY6Gjj2Bi43zhElMTp00hQwI9bNL"
+            data-locale="ja"
+            data-label=
+            <% if @cards[0] %>
+              "別のカードで支払う"
+            <% else %>
+              "カードで支払う"
+            <% end %>
+            data-panel-label="支払う"
+            data-email="<%= @buyer.email %>">
+          </script>
+        <% end %>
+        <br><br>
+        <button class="btn_buy" id="<%= @stripe_session.id %>" role="link">BUY</button>
+        <script src="https://js.stripe.com/v3">
+          $(function(){
+            $(document).on('click', '.btn_buy', function (){
+              var stripe = Stripe('pk_test_p2Y9RrxY6Gjj2Bi43zhElMTp00hQwI9bNL');
+              var sId = $(this).attr("id");
+              stripe.redirectToCheckout({
+                // Make the id field from the Checkout Session creation API response
+                // available to this file, so you can provide it as parameter here
+                // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
+                sessionId: sId
+              }).then(function (result) {
+                // If `redirectToCheckout` fails due to a browser or network
+                // error, display the localized error message to your customer
+                // using `result.error.message`.
+              });
+            });
+          });
+        </script>
+        
+        
+      </div>
     </div>
   </div>
 </div>

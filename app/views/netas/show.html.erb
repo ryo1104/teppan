@@ -14,10 +14,8 @@
                 <% unless (@purchased || @owner) %>
                   <% if @for_sale %>
                     <p class="neta-text-divider">--------  これより先は有料コンテンツです  --------</p>
-                    <span class="neta-price"><%= number_to_currency(@neta.price, locale: 'ja') %></span>
-                    <%= link_to new_neta_trade_path(@neta.id), {:class => 'btn btn-primary withripple custom' } do %>
-                      <i class="material-icons left">get_app&nbsp;</i>購入
-                    <% end %>
+                    <span class="neta-price">価格：<%= number_to_currency(@neta.price, locale: 'ja') %></span>&nbsp;&nbsp;
+                    <%= link_to "購入", new_neta_trade_path(@neta.id), {:class => 'btn btn-primary withripple custom' } %>
                   <% else %>
                     <p class="neta-text-divider">--------  現在は販売されておりません  --------</p>
                     <span class="neta-price-inactive"><%= number_to_currency(@neta.price, locale: 'ja') %></span>
