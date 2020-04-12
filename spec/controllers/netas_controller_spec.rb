@@ -119,7 +119,7 @@ RSpec.describe NetasController, type: :controller do
       
       login_user
 
-      before do
+      before(:each) do
         @topic = topic_create
       end
       
@@ -150,16 +150,18 @@ RSpec.describe NetasController, type: :controller do
     end
     
     context "as a guest" do
-      before do
-        @topic = topic_create
-      end
+      # before(:each) do
+      #   @topic = topic_create
+      # end
 
       it "returns a 302 status code" do
+        @topic = topic_create
         get :new, params: { topic_id: @topic.id }
         expect(response).to have_http_status("302")
       end
       
       it "redirects to the sign-in page" do
+        @topic = topic_create
         get :new, params: { topic_id: @topic.id }
         expect(response).to redirect_to "/users/sign_in"
       end

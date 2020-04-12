@@ -1,7 +1,7 @@
 <div class="col s12 m12 push-m1" id="account-form-field-row">
   <div class="col s12 m10 account-form">
     <%= label_tag '銀行名' %>
-    <%= f.text_field :bank_name, :value => @bank_info[1]["bank_name"] %>
+    <%= f.text_field :bank_name, :value => @bank_info[1]["bank_name"], :id => 'bank_post_field' %>
   </div>
 </div>
 <div class="col s12 m12 push-m1" id="account-form-field-row">
@@ -22,3 +22,97 @@
     <%= f.text_field :account_holder_name, :value => @bank_info[1]["account_holder_name"] %>
   </div>
 </div>
+
+<div class="col s4 center search input-field">
+  <input type="text" id="test_bank_input" class="autocomplete">
+</div>
+
+<div class="col s4 center search input-field">
+  <span id="output"></span>
+</div>
+<div class="col s4 center search input-field">
+  <span id="output2"></span>
+</div>
+
+<script>
+// $('#bank_post_field2').on('input', function(event){
+//   var $input = $('#bank_post_field2');
+//   var query = $input.val();
+  
+//   const items = (data) => {
+//     return data.map((item) => {
+//       return {
+//         name: item['attributes']['name'],
+//         namehira: item['attributes']['namehira'] // ひらがなでも検索結果を絞り込めるようにする
+//       }
+//     })
+//   };
+    // const url = (query) => {
+    //   return `/externalaccounts/bank_search_autocomplete?keyword=${encodeURIComponent(query)}`
+    // };  
+//   $.ajax({
+//             url: url(query),
+//             type: 'GET',
+//             timeout: 10000
+//             // error: () => {
+//             //   console.log("ERROR.")
+//             //   return {}
+//             // },
+//             // success: (res) => {
+//             //   console.log(items(res.data))
+//             //   $("#output").append(res.data);
+//             // }
+//             // success: (res) => {
+//             //   // console.log("SUCCESS.")
+//             //   // console.log(res)
+//             //   console.log("SUCCESS. From Items")
+//             //   console.log(items(res.data))
+//             //   var resdata = items(res.data)
+//             //   // var resdata = eval('(' + res.responseText + ')');
+//             //   console.log("resdata : ")
+//             //   console.log(resdata)
+//             //   return(resdata)
+//             // }
+//         })
+  
+//         .done(function(response) { 
+//           //通信成功時の処理
+//           //成功したとき実行したいスクリプトを記載
+//           console.log(items(response.data)[0])
+//           $("#output").append("あ" + items(response.data)[0]);
+//         });
+        
+//         // .fail(function() {
+//         //   // 通信失敗時の処理を記述
+//         // })
+//     // })；
+  
+//   // console.log("This can be returned to HTML")
+//   // console.log(resdata)
+  
+//   // var $output = $('#output');
+//   // $output.text(value);
+  
+// });
+
+// $('#bank_post_field2').on('input', function(event) {
+//   console.log("entry autocomplete2....")
+//   $('#bank_post_field2').autocomplete({
+//       source: function( req, res ) {
+//         console.log(req)
+//           $.ajax({
+//               url: `/externalaccounts/bank_search_autocomplete?keyword=${encodeURIComponent(req.term)}`,
+//               dataType: "json",
+//               success: function( data ) {
+//                   console.log("result :" + res(data))
+//                   res(data);
+//               }
+//           });
+//       },
+//       autoFocus: true,
+//       delay: 500,
+//       minLength: 2
+//   });
+// });
+
+</script>

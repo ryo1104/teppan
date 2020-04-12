@@ -1,9 +1,11 @@
 FactoryBot.define do
   factory :user do
-    sequence(:email) { |n| "tester#{n}@example.com" }
+    # password = Faker::Internet.password(min_length: 8)
+    # sequence(:email) { |n| "tester#{n}@example.com" }
+    email { Faker::Internet.email }
     sequence(:nickname) { |n| "ryohei#{n}" }
-    password { "00000000" }
-    password_confirmation { "00000000" }
+    password { "aaoinawei897d" }
+    password_confirmation { "aaoinawei897d" }
     confirmed_at { Time.zone.yesterday }
     gender { "1" }
     prefecture_code { "1" }

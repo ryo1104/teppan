@@ -53,5 +53,5 @@ Rails.application.routes.draw do
   post    '/users/:user_id/accounts/confirm', to: "accounts#confirm", as: 'accounts_new_confirm'
   patch   '/accounts/:id/confirm', to: "accounts#confirm", as: 'accounts_edit_confirm'
   delete  'users/:id/delete_avatar', to: 'users#delete_avatar', as: 'delete_avatar'
-  
+  get     '/externalaccounts/bank_search_autocomplete', to: "externalaccounts#bank_search_autocomplete"
 end

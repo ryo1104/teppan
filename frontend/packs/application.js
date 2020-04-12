@@ -7,11 +7,13 @@ require("@rails/ujs").start()
 require("@rails/activestorage").start()
 require("channels")
 require('jquery')
+require("jquery-ui-dist/jquery-ui")
 require('trix')
 require('@rails/actiontext')
 require('raty-js')
 import 'materialize-css/dist/js/materialize'
 import './hashtag'
+import './externalaccount'
 
 // CSS
 import '../stylesheets/style.scss'

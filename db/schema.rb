@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_22_122907) do
+ActiveRecord::Schema.define(version: 2020_03_28_171948) do
 
   create_table "accounts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "user_id"
@@ -80,9 +80,9 @@ ActiveRecord::Schema.define(version: 2020_03_22_122907) do
   create_table "banks", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "code", default: "", null: false
     t.string "name", default: "", null: false
-    t.string "name_kana", default: "", null: false
-    t.string "name_hira", default: "", null: false
-    t.string "name_en", default: "", null: false
+    t.string "namekana", default: "", null: false
+    t.string "namehira", default: "", null: false
+    t.string "roma", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["code"], name: "index_banks_on_code", unique: true
@@ -91,9 +91,9 @@ ActiveRecord::Schema.define(version: 2020_03_22_122907) do
   create_table "branches", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "code", default: "", null: false
     t.string "name", default: "", null: false
-    t.string "name_kana", default: "", null: false
-    t.string "name_hira", default: "", null: false
-    t.string "name_en", default: "", null: false
+    t.string "namekana", default: "", null: false
+    t.string "namehira", default: "", null: false
+    t.string "roma", default: "", null: false
     t.integer "bank_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
