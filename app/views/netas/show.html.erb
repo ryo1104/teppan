@@ -45,7 +45,7 @@
                     <% if @neta.user.avatar.present? %>
                       <%= image_tag @neta.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
                     <% else %>
-                      <%= image_pack_tag "no_user_image.png", {:class => "circle custom", :id => "mycircle"} %>
+                      <%= image_bundle_tag "no_user_image.png", {:class => "circle custom", :id => "mycircle"} %>
                     <% end %>
                   </span>
                 <% end %>

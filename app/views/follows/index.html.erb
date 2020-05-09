@@ -10,7 +10,7 @@
                 <% if following_user.avatar.present? %>
                   <%= image_tag following_user.avatar, {:class => "circle", :id => "follow-list-image"} %>
                 <% else %>
-                  <%= image_pack_tag "no_user_image.png", {:class => "circle", :id => "follow-list-image"} %>
+                  <%= image_bundle_tag "no_user_image.png", {:class => "circle", :id => "follow-list-image"} %>
                 <% end %>
                 <div class="collection-item-text">
                   <%= atname(following_user.nickname) %><br>

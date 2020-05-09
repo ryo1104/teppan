@@ -1,0 +1,77 @@
+import $ from 'jquery';
+require("jquery-ui")
+
+$(function () {
+    $("#bank_name_input").autocomplete({
+        source: ( req, res ) => {
+            $.ajax({
+              url: bank_search_url( req.term ),
+              type: 'GET',
+              dataType: "json",
+              success: ( data ) => {
+                  res( items( data ) )
+              },
+              error: () => {
+                  res();
+              }
+            });
+        },
+        select: function(event, ui) {
+            $('#bank_name_input').val(ui.item.value);
+        },
+        autoFocus: false,
+        delay: 500,
+        minLength: 2
+    });
+});
+
+$(function () {
+    if ( $("#bank_name_input").val() != null ) {
+        $("#branch_name_input").autocomplete({
+            source: ( req, res ) => {
+                $.ajax({
+                    url: branch_search_url( $("#bank_name_input").val(), req.term ),
+                    type: 'GET',
+                    dataType: "json",
+                    success: ( data ) => {
+                        res( items( data ) );
+                    },
+                    error: () => {
+                        res( null );
+                    }
+                });
+            },
+            select: function(event, ui) {
+                $('#branch_name_input').val(ui.item.value);
+            },
+            autoFocus: false,
+            delay: 500,
+            minLength: 1
+        });
+    }
+});
+
+const bank_search_url = ( bankName ) => {
+   return `/externalaccounts/bank_search_autocomplete?keyword=${encodeURIComponent(bankName)}`
+};
+
+const branch_search_url = ( bankName, branchName ) => {
+    if ( bankName != null ) {
+        return `/externalaccounts/branch_search_autocomplete?bankname=${encodeURIComponent(bankName)}&branchname=${encodeURIComponent(branchName)}`
+    }
+    else{
+        return null
+    }
+}
+
+const items = ( data ) => {
+    let dataArray = Object.values(data)
+    let newArray = new Array(dataArray[0].length);
+    let i = 0;
+    dataArray[0].forEach( (target) => {
+        let newObject = target.attributes.name;
+        newArray[i] = newObject;
+        i++;
+    });
+    return newArray;
+};

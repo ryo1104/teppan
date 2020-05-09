@@ -18,7 +18,7 @@
           <% if @topic.user.avatar.present? %>
             <%= image_tag @topic.user.avatar, {:class => "circle"} %>
           <% else %>
-            <%= image_pack_tag "no_user_image.png", {:class => "circle"} %>
+            <%= image_bundle_tag "no_user_image.png", {:class => "circle"} %>
           <% end %>
         </span>
       <% end %>

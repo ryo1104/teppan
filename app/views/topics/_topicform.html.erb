@@ -5,7 +5,7 @@
     <%= link_to "画像を削除", topic_header_image_path(@topic.id), :method => :delete %><br>
     <%= image_tag @topic.header_image, :class => 'topic-header-image', :id => 'header-image' %>
   <% else %>
-    <%= image_pack_tag "teppan_gray.jpeg", :class => 'topic-header-image', :id => 'header-image' %><br>
+    <%= image_bundle_tag "teppan_gray.jpeg", :class => 'topic-header-image', :id => 'header-image' %><br>
     <%= form.file_field :header_image, :class => 'file-field custom', :id => 'header-image-upload' %>
   <% end %>
 </p>
@@ -16,24 +16,3 @@
 <%= form.label :private_flag, "公開／非公開" %>
 <%= form.select :private_flag, [['公開', false], ['非公開', true]], { include_blank: false, selected: @topic.private_flag }, { class: "browser-default", :id => "private_flag" } %>
 <br>
-<script>
-$(function(){
-  $('#header-image-upload').change(function(e){
-    var file = e.target.files[0];
-    var reader = new FileReader();
- 
-    if(file.type.indexOf("image") < 0){
-      alert("画像ファイルを指定してください。");
-      return false;
-    }
- 
-    reader.onload = (function(file){
-      return function(e){
-        $("#header-image").attr("src", e.target.result);
-        $("#header-image").attr("title", file.name);
-      };
-    })(file);
-    reader.readAsDataURL(file);
-  });
-});
-</script>

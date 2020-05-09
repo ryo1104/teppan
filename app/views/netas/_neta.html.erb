@@ -26,7 +26,7 @@
             <% if neta.user.avatar.present? %>
               <%= image_tag neta.user.avatar, {:class => "circle", :id => "index-author-image"} %>
             <% else %>
-              <%= image_pack_tag "no_user_image.png", {:class => "circle", :id => "index-author-image"} %>
+              <%= image_bundle_tag "no_user_image.png", {:class => "circle", :id => "index-author-image"} %>
             <% end %>
           <% end %>
           <%= atname(neta.user.nickname) %>&nbsp;&nbsp;

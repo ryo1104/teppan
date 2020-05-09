@@ -85,8 +85,36 @@ nav.pagination {
       font-size: 0.8rem;
     }
   }
+  
+  .attachment-gallery {
+    > action-text-attachment,
+    > .attachment {
+      flex: 1 0 33%;
+      padding: 0 0.5em;
+      max-width: 33%;
+    }
+
+    &.attachment-gallery--2,
+    &.attachment-gallery--4 {
+      > action-text-attachment,
+      > .attachment {
+        flex-basis: 50%;
+        max-width: 50%;
+      }
+    }
+  }
+
+  action-text-attachment {
+    .attachment {
+      padding: 0 !important;
+      max-width: 100% !important;
+    }
+  }
 }
 
+trix-editor{
+  min-height: 15rem;
+}
 // figcaption{
 //   .attachment__caption{
 //     .attachment__caption--edited{
@@ -676,6 +704,10 @@ textarea{
     margin: 0.5rem 0 0 0;
   }
   
+  #account-form-field-button{
+    margin: 1.5rem 0 0 0;
+  }
+  
   .col.s5.m6.account_form_name{
     margin-left: 0.5rem;
     // float: left;
@@ -893,6 +925,7 @@ textarea{
   
   .collection.z-depth-0.account-form{
     padding: 1rem 0;
+    min-height: 28rem;
   }
   
   .collection.z-depth-0.account-show{
@@ -1020,6 +1053,9 @@ textarea{
         line-height: 1.4rem;
         font-size: 0.8rem;
       }
+    }
+    :after{
+      content: none !important;
     }
   }
 
@@ -1674,6 +1710,15 @@ textarea{
   
   .collection.z-depth-0.account-form{
     padding: 0.5rem 0;
+    min-height: 20rem;
+  }
+  
+  #account-form-field-row{
+    margin: 0.5rem 0 0 0;
+  }
+  
+  #account-form-field-button{
+    margin: 1.5rem 0 1rem 0;
   }
   
   .form-control.date-select{

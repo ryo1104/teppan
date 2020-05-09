@@ -1,3 +1,4 @@
+<%= javascript_bundle_tag 'user' %>
 <% @page_title = "プロフィール変更" %>
 <% breadcrumb :edit_user, current_user %>
 <div class="page-body-container">
@@ -24,7 +25,7 @@
                       <%= image_tag @user.avatar, {:class => "circle", :id => "user-page-image"} %>
                       <%= link_to "削除", delete_avatar_path(@user.id), :method => :delete %>
                     <% else %>
-                      <%= image_pack_tag "no_user_image.png", {:class => "circle", :id => "user-page-image"} %>
+                      <%= image_bundle_tag "no_user_image.png", {:class => "circle", :id => "user-page-image"} %>
                     <% end %>
                   </div>
                   <label>
@@ -79,24 +80,3 @@
     </div>
   </div>
 </div>
-<script>
-$(function(){
-  $('#user-image-upload').change(function(e){
-    var file = e.target.files[0];
-    var reader = new FileReader();
- 
-    if(file.type.indexOf("image") < 0){
-      alert("画像ファイルを指定してください。");
-      return false;
-    }
- 
-    reader.onload = (function(file){
-      return function(e){
-        $("#user-page-image").attr("src", e.target.result);
-        $("#user-page-image").attr("title", file.name);
-      };
-    })(file);
-    reader.readAsDataURL(file);
-  });
-});
-</script>

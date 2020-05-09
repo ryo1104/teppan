@@ -1,4 +1,4 @@
 class BankSerializer
   include FastJsonapi::ObjectSerializer
-  attributes :id, :code, :name, :namehira
+  attributes :name, :namehira
 end

@@ -5,9 +5,9 @@
     <title><%= page_title %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <%= javascript_pack_tag 'application' %>
-    <%= stylesheet_pack_tag 'application' %>
-    <%= favicon_pack_tag 'favicon.ico' %>
+    <%= javascript_bundle_tag 'application' %>
+    <%= stylesheet_bundle_tag 'application' %>
+    <%= favicon_bundle_tag 'favicon.ico' %>
   </head>
 
   <body>
@@ -27,7 +27,6 @@
         <a href="#" data-target="slide-out" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
       </div>
     </nav>
-    
     <ul id="slide-out" class="sidenav custom">
       <li><%= link_to "１分ネタ", topics_path, method: :get %></li>
       <% if user_signed_in? %>
@@ -38,12 +37,9 @@
         <li><%= link_to "ユーザー登録", new_user_registration_path, class: 'post' %></li>
       <% end %>
     </ul>
-    
-      
     <% flash.each do |key, value| %>
       <%= content_tag(:div, value, class: "#{key}") %>
     <% end %>
-    
     <%= yield %>
   </body>
   
@@ -67,50 +63,5 @@
     </div>
     <div class="footer-copyright orange accent-4">© 2020 Teppan</div>
   </footer>
-  <script>
-    $(document).ready(function(){
-      $('.sidenav').sidenav({
-        edge: 'right',
-      });
-    });
-  </script>
-  <script>
-    $(document).ready(function(){
-    // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
-      $('.modal').modal();
-    });
-  </script>
-  <script>
-    $('.star_rating').raty({
-      score: function() {
-      return $(this).attr('rating-data');
-      },
-      readOnly : true,
-      number   : 5,  
-      half     : true,
-      size     : 24,
-      starHalf : "<%= asset_pack_url('media/images/star-half.png') %>",
-      starOff  : "<%= asset_pack_url('media/images/star-off.png') %>",
-      starOn   : "<%= asset_pack_url('media/images/star-on.png') %>",
-    });
-  </script>
-  <script>
-    $('.new_star_rating').raty({
-      number   : 5,  
-      half     : false,
-      precision:   false,
-      // size     : 32,
-      hints: ['1 : どゆこと？', '2 : つまらん', '3 : 面白い', '4 : ワロタ！', '5 : 殿堂入り！'],
-      starHalf : "<%= asset_pack_url('media/images/star-half.png') %>",
-      starOff  : "<%= asset_pack_url('media/images/star-off.png') %>",
-      starOn   : "<%= asset_pack_url('media/images/star-on.png') %>",
-      target: '#hint1',
-      targetType: 'hint',
-      targetKeep:  true,
-      round:  { down: .25, full: .6, up: .76 },
-      click: function(score, evt) {
-        $("#review_rate").val(score);
-      }
-    });
-  </script>
+  
 </html>

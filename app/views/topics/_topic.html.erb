@@ -4,7 +4,7 @@
       <% if topic.header_image.attached? %>
         <%= image_tag topic.header_image %>
       <% else %>
-        <%= image_pack_tag "teppan_gray.jpeg" %>
+        <%= image_bundle_tag "teppan_gray.jpeg" %>
       <% end %>
     </div>
     <div class="card-content index">
@@ -29,7 +29,7 @@
             <% if topic.user.avatar.present? %>
               <%= image_tag topic.user.avatar, {:class => "circle custom", :id => "index-author-image"} %>
             <% else %>
-              <%= image_pack_tag "no_user_image.png", {:class => "circle custom", :id => "index-author-image"} %>
+              <%= image_bundle_tag "no_user_image.png", {:class => "circle custom", :id => "index-author-image"} %>
             <% end %>
           <% end %>
           <%= atname(topic.user.nickname) %>&nbsp;&nbsp;

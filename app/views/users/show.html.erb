@@ -1,3 +1,4 @@
+<%= javascript_bundle_tag 'user' %>
 <% @page_title = "ユーザーページ" %>
 <% breadcrumb :show_user, @user %>
 <div class="page-body-container">
@@ -9,7 +10,7 @@
           <% if @user.avatar.present? %>
             <%= image_tag @user.avatar, {:class => "circle", :id => "user-page-image"} %>
           <% else %>
-            <%= image_pack_tag "no_user_image.png", {:class => "circle", :id => "user-page-image"} %>
+            <%= image_bundle_tag "no_user_image.png", {:class => "circle", :id => "user-page-image"} %>
           <% end %>
         </div>
       </div>
@@ -188,22 +189,4 @@
     </div>
   </div>
 </div>
-<script>
-$(window).on("load", function(){
-  /*初期表示*/
-  $('.ChangeElem_Panel').hide();
-  $('.ChangeElem_Panel').eq(0).show();
-  $('.ChangeElem_Tab').eq(0).addClass('selected');
-  /*クリックイベント*/
-  $('.ChangeElem_Tab').each(function () {
-    $(this).on('click', function () {
-      var index = $('.ChangeElem_Tab').index(this);
-      $('.ChangeElem_Tab').removeClass('selected');
-      $(this).addClass('selected');
-      $('.ChangeElem_Panel').hide();
-      $('.ChangeElem_Panel').eq(index).show();
-    });
-  });
-});
-</script>
 

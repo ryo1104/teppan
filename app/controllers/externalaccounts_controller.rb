@@ -89,6 +89,12 @@ class ExternalaccountsController < ApplicationController
     items = Bank.ransack(name_or_namehira_start: params[:keyword]).result.order("namehira ASC").limit(5)
     render json: BankSerializer.new(items)
   end
+  
+  def branch_search_autocomplete
+    bank = Bank.find_by(name: params[:bankname])
+    items = bank.branches.ransack(name_or_namehira_start: params[:branchname]).result.order("namehira ASC").limit(5)
+    render json: BankSerializer.new(items)
+  end
 
   private
   def create_params

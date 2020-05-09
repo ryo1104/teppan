@@ -11,7 +11,7 @@
         <% if comment.user.avatar.present? %>
           <%= image_tag comment.user.avatar, {:class => "circle", :id => "index-author-image"} %>
         <% else %>
-          <%= image_pack_tag "no_user_image.png", {:class => "circle", :id => "index-author-image"} %>
+          <%= image_bundle_tag "no_user_image.png", {:class => "circle", :id => "index-author-image"} %>
         <% end %>
       <% end %>
       <%= atname(comment.user.nickname) %>&nbsp;&nbsp;
