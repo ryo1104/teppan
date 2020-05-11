@@ -2,7 +2,7 @@
 <% @page_title = "#"+@tag.hashname %>
 <% breadcrumb :hashtag, @tag %>
 <div class="page-body-container">
-  <p><%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %></p>
+  <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %>
   <%= form_with url: netas_hashtags_path("search"), local: true, method: :get, :id => 'hashtag_search_form' do |f| %>
     <%= f.text_field :keyword, :value => params[:keyword], :autocomplete => 'off', :id => "tag_search_field" %>
     <%= f.hidden_field :search_form, :value => "true" %>

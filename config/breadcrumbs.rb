@@ -77,7 +77,7 @@ end
 # netas#hashtags
 crumb :hashtag do |tag|
   link "#"+"#{tag.hashname}", "/neta/hashtag/#{tag.hashname}"
-  parent :topics
+  parent :root
 end
 
 # subscriptions#show
