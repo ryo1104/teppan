@@ -19,11 +19,9 @@
           <p> (投稿はまだありません) </p>
         <% end %>
         <% if user_signed_in? %>
-          <div class="fixed-action-btn horizontal">
-            <%= link_to new_topic_neta_path(@topic.id), {:class => 'btn-floating light-green accent-4'} do %>
-              <i class="material-icons">create</i>
-            <% end %>
-          </div>
+          <%= link_to new_topic_neta_path(@topic.id), {:class => 'btn-floating new-topic'} do %>
+            <i class="material-icons">create</i>
+          <% end %>
         <% end %>
       </div>
     </div>

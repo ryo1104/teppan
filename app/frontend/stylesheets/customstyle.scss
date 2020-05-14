@@ -355,7 +355,7 @@ textarea{
 
 
 .neta-text{
-  min-height: 50px;
+  min-height: 150px;
 }
 .neta-text-divider{
   color: #bdbdbd;
@@ -811,9 +811,7 @@ textarea{
   }
   
   .user-page-avatar-container{
-    // width: 50px;
-    // height: 50px;
-    padding: 0.5rem 0 0 0;
+    padding: 0.5rem 0 0 0.5rem;
   }
   
   .user-violation-reported{
@@ -823,13 +821,13 @@ textarea{
   .user-tab-menu {
     width: 500px;
   
-    ul { /* .tab-menuの中のulに対する記述 */
+    ul {
       margin: 0;
       padding: 0 0 0 0.5rem;
       font-size: 1rem;
     }
   
-    li { /* .tab-menuの中のli */
+    li {
       display: inline-block;
       width: 6rem;
       height: 25px;

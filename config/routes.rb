@@ -40,7 +40,7 @@ Rails.application.routes.draw do
   
   resources :users, only: [:show, :edit, :update] do
     resources :follows, only: [:create, :destroy]
-    match '/follows/:direction', to: "follows#index", :via => :get
+    get '/follows/:direction', to: "follows#index", as: 'follows_idx'
     resources :violations, only: [:new, :create]
     resources :payments, only: [:new, :create, :index]
     resources :subscriptions, only: [:new, :create, :show, :destroy]
@@ -52,7 +52,7 @@ Rails.application.routes.draw do
   end
   post    '/users/:user_id/accounts/confirm', to: "accounts#confirm", as: 'accounts_new_confirm'
   patch   '/accounts/:id/confirm', to: "accounts#confirm", as: 'accounts_edit_confirm'
-  delete  'users/:id/delete_avatar', to: 'users#delete_avatar', as: 'delete_avatar'
+  delete  '/users/:id/delete_avatar', to: 'users#delete_avatar', as: 'delete_avatar'
   get     '/externalaccounts/bank_search_autocomplete', to: "externalaccounts#bank_search_autocomplete"
   get     '/externalaccounts/branch_search_autocomplete', to: "externalaccounts#branch_search_autocomplete"
 end

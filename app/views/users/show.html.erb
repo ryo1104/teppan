@@ -29,12 +29,12 @@
         <div class="user-page-sns">
           <span class="user-page-follows">
             <% if @my_page %>
-              <%= link_to "/users/#{@user.id}/follows/following" do %>
-                <b>123<%= @following_users_count %></b>&nbsp;フォロー&nbsp;&nbsp;
+              <%= link_to user_follows_idx_path(@user.id, "following") do %>
+                <b><%= @following_users_count %></b>&nbsp;フォロー&nbsp;&nbsp;
               <% end %>
             <% end %>
-            <%= link_to "/users/#{@user.id}/follows/followed" do %>
-              <b>123<%= @followed_users_count %></b>&nbsp;フォロワー&nbsp;&nbsp;
+            <%= link_to user_follows_idx_path(@user.id, "followed") do %>
+              <b><%= @followed_users_count %></b>&nbsp;フォロワー&nbsp;&nbsp;
             <% end %>
           </span>
           <% unless @my_page %>

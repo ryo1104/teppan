@@ -10,7 +10,7 @@ end
 
 # topic#index
 crumb :topics do
-  link "トピック一覧", topics_path
+  link "1分ネタ", topics_path
   parent :root
 end
 
@@ -74,6 +74,11 @@ crumb :edit_user_registration do |user|
   parent :show_user, user
 end
 
+crumb :follow_list do |user|
+  link "フォロワー", user_follows_idx_path(user.id, "followed")
+  parent :show_user, user
+end
+
 # netas#hashtags
 crumb :hashtag do |tag|
   link "#"+"#{tag.hashname}", "/neta/hashtag/#{tag.hashname}"
@@ -92,16 +97,22 @@ crumb :new_subscription do |user|
   parent :show_user, user
 end
 
+# account#new
+crumb :new_account do |user|
+  link "ビジネスアカウント", new_user_account_path(user.id)
+  parent :show_user, user
+end
+
 # account#show
 crumb :show_account do |account|
   link "ビジネスアカウント", account_path(account.id)
   parent :show_user, account.user
 end
 
-# account#show
+# account#edit
 crumb :edit_account do |account|
-  link "お客様情報", edit_account_path(account.id)
-  parent :show_account, account
+  link "ビジネスアカウント", edit_account_path(account.id)
+  parent :show_user, account.user
 end
 
 # idcard#new

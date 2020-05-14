@@ -14,6 +14,7 @@ const js_entry  = {
   "hashtag"         : path.join(frontend_path, 'src', 'hashtag.js'),
   "topic"           : path.join(frontend_path, 'src', 'topic.js'),
   "user"            : path.join(frontend_path, 'src', 'user.js'),
+  "account"         : path.join(frontend_path, 'src', 'account.js'),
   "externalaccount" : path.join(frontend_path, 'src', 'externalaccount.js')
 }
 
