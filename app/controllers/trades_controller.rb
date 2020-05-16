@@ -19,7 +19,8 @@ class TradesController < ApplicationController
       @destination = @tradeable.user.account.stripe_acct_id
       @success_url = neta_trades_url(@tradeable.id)
       @cancel_url = request.url
-      @stripe_session = Trade.get_stripe_session(@tradeable, @destination, @success_url, @cancel_url )
+      @stripe_session = Trade.get_stripe_session(@tradeable, @buyer, @destination, @success_url, @cancel_url )
+      puts @stripe_session.inspect  
     rescue => e
       ErrorUtility.log_and_notify e
       redirect_to "/#{@resource}/#{@id}", alert: e.message and return

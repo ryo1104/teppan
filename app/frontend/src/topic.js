@@ -1,3 +1,22 @@
+import $ from 'jquery';
+
+$(document).ready( function() {
+  /*初期表示*/
+  $('.ChangeElem_Panel').hide();
+  $('.ChangeElem_Panel').eq(0).show();
+  $('.ChangeElem_Tab').eq(0).addClass('selected');
+  /*クリックイベント*/
+  $('.ChangeElem_Tab').each(function () {
+    $(this).on('click', function () {
+      var index = $('.ChangeElem_Tab').index(this);
+      $('.ChangeElem_Tab').removeClass('selected');
+      $(this).addClass('selected');
+      $('.ChangeElem_Panel').hide();
+      $('.ChangeElem_Panel').eq(index).show();
+    });
+  });
+});
+
 $('#header-image-upload').change(function(e){
   const file = e.target.files[0];
   const reader = new FileReader();

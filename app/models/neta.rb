@@ -179,10 +179,16 @@ class Neta < ApplicationRecord
   end
   
   def valuecontent_check
-    if self.valuecontent.body.present?
-      unless self.valuecontent.body.length in: 5..800
-        errors.add(:valuecontent, "は５文字以上、８００字以内で入力してください。")
+    if self.price != 0
+      unless self.valuecontent.body.present?
+        errors.add(:valuecontent, "を入力してください。")
       end
+    # Need attachment checks. Below does not work because at this point blob is not attached..
+    # self.valuecontent.embeds.blobs.each do |blob|
+    #   if blob.byte_size.to_i > 10.megabytes
+    #     errors.add(:valuecontent, " size must be smaller than 10MB")
+    #   end
+    # end
     end
   end
   

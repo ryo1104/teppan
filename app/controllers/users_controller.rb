@@ -12,6 +12,7 @@ class UsersController < ApplicationController
       @followed_users_count = @user.follows_count
       
       if @my_page
+        @draft_netas = @user.netas.includes(:hashtags, :user).where(private_flag: true)
         @following_users_count = @user.following_users_count
         @bought_trades = Trade.where(buyer_id: @user.id, tradeable_type: "Neta")
         @bought_netas = User.bought_netas(@bought_trades)
@@ -48,7 +49,7 @@ class UsersController < ApplicationController
       @my_page = true if @user.id == current_user.id
       if @my_page
         @user.update!(update_params)
-        redirect_to user_path(@user.id), notice: "プロフィールを更新しました！" and return
+        redirect_to user_path(@user.id), notice: "プロフィールを更新しました。" and return
       else
         redirect_to user_path(@user.id), alert: "更新権限がありません。" and return
       end

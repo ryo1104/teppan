@@ -1,41 +1,40 @@
-<% if neta.private_flag == false %>
-  <li class="collection-item custom">
-    <%= link_to neta_path(neta.id) do %>
-      <p class="collection-item-title"><%= neta.title %></p>
-      <p class="collection-item-text">
-        <% if neta.price != 0 %>
-          <span class="neta-price"><%= number_to_currency(neta.price, locale: 'ja') %></span>
-        <% end %>
-      </p>
-      <% if neta.average_rate == "-" %>
-        <span class="star_rating" rating-data="0"></span>
-      <% else %>
-        <span class="star_rating" rating-data="<%= neta.average_rate %>"></span>
-        <span class="star-rating-text">&nbsp;&nbsp;<%= neta.average_rate %></span>
-      <% end %>&nbsp;&nbsp;&nbsp;
-      <i class="material-icons comment custom">chat_bubble_outline</i>
-      <span class="icon-side-count"><%= neta.reviews_count %></span>
-      <p>
-        <% neta.hashtags.each do |tag| %>
-          <div class="chip custom"><%= link_to "#"+tag.hashname, "/neta/hashtag/#{tag.hashname}" %></div>
-        <% end %>
-      </p>
-      <div class="collection-item-footer">
-        <p class="indexitem-footer-text">
-          <%= link_to user_path(neta.user_id) do %>
-            <% if neta.user.avatar.present? %>
-              <%= image_tag neta.user.avatar, {:class => "circle", :id => "index-author-image"} %>
-            <% else %>
-              <%= image_bundle_tag "no_user_image.png", {:class => "circle", :id => "index-author-image"} %>
-            <% end %>
+<li class="collection-item custom">
+  <%= link_to neta_path(neta.id) do %>
+    <p class="collection-item-title"><%= neta.title %></p>
+    <p class="collection-item-text">
+      <% if neta.price != 0 %>
+        <span class="neta-price"><%= number_to_currency(neta.price, locale: 'ja') %></span>
+      <% end %>
+    </p>
+    <% if neta.average_rate == "-" %>
+      <span class="star_rating" rating-data="0"></span>
+    <% else %>
+      <span class="star_rating" rating-data="<%= neta.average_rate %>"></span>
+      <span class="star-rating-text">&nbsp;&nbsp;<%= neta.average_rate %></span>
+    <% end %>&nbsp;&nbsp;&nbsp;
+    <i class="material-icons comment custom">chat_bubble_outline</i>
+    <span class="icon-side-count"><%= neta.reviews_count %></span>
+    <p>
+      <% neta.hashtags.each do |tag| %>
+        <div class="chip custom"><%= link_to "#"+tag.hashname, "/neta/hashtag/#{tag.hashname}" %></div>
+      <% end %>
+    </p>
+    <div class="collection-item-footer">
+      <p class="indexitem-footer-text">
+        <%= link_to user_path(neta.user_id) do %>
+          <% if neta.user.avatar.present? %>
+            <%= image_tag neta.user.avatar, {:class => "circle", :id => "index-author-image"} %>
+          <% else %>
+            <%= image_bundle_tag "no_user_image.png", {:class => "circle", :id => "index-author-image"} %>
           <% end %>
-          <%= atname(neta.user.nickname) %>&nbsp;&nbsp;
-          <%= neta.created_at.to_s(:human) %>&nbsp;&nbsp;
-          <%= neta.pageviews_count %>&nbsp;views&nbsp;&nbsp;
-          <%= neta.public_str %>
-        </p>
-      </div>
-    <% end %>
-  </li>
-<% end %>
+        <% end %>
+        <%= atname(neta.user.nickname) %>&nbsp;&nbsp;
+        <%= neta.created_at.to_s(:human) %>&nbsp;&nbsp;
+        <%= neta.pageviews_count %>&nbsp;views&nbsp;&nbsp;
+        <%= neta.public_str %>
+      </p>
+    </div>
+  <% end %>
+</li>
+
 

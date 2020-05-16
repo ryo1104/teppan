@@ -29,13 +29,17 @@
         <div class="user-page-sns">
           <span class="user-page-follows">
             <% if @my_page %>
-              <%= link_to user_follows_idx_path(@user.id, "following") do %>
-                <b><%= @following_users_count %></b>&nbsp;フォロー&nbsp;&nbsp;
+              <span class="user-page-following">
+                <%= link_to user_follows_idx_path(@user.id, "following") do %>
+                  フォロー&nbsp;&nbsp;<b><%= @following_users_count %></b>
+                <% end %>
+              </span>
+            <% end %>
+            <span class="user-page-followed">
+              <%= link_to user_follows_idx_path(@user.id, "followed") do %>
+                フォロワー&nbsp;&nbsp;<b><%= @followed_users_count %></b>
               <% end %>
-            <% end %>
-            <%= link_to user_follows_idx_path(@user.id, "followed") do %>
-              <b><%= @followed_users_count %></b>&nbsp;フォロワー&nbsp;&nbsp;
-            <% end %>
+            </span>
           </span>
           <% unless @my_page %>
             <% unless @user.is_blocked_by(current_user.id) %>
@@ -74,7 +78,7 @@
       <% end %>
       <div class="user-tab-contents">
         <div class="ChangeElem_Panel">
-          <h2>投稿したネタ(<%= @posted_netas.count %>件)</h2>
+          <h2>ネタ(<%= @posted_netas.count %>件)</h2>
           <% if @userrate == 0 %>
             <b>平均評価：</b><span class="star_rating" rating-data="0"></span>&nbsp;
           <% else %>
@@ -88,7 +92,19 @@
           <% else %>
             <p>（投稿はありません）</p>
           <% end %>
-          <h2>投稿したトピック(<%= @posted_topics.count %>件)</h2>
+          <hr>
+          <% if @my_page %>
+            <h2>下書き(<%= @draft_netas.count %>件)</h2>
+            <% if @draft_netas %>
+              <ul class="collection">
+                <%= render partial: "netas/neta", collection: @draft_netas %>
+              </ul>
+            <% else %>
+              <p>（投稿はありません）</p>
+            <% end %>
+            <hr>
+          <% end %>
+          <h2>トピック(<%= @posted_topics.count %>件)</h2>
           <% if @posted_topics %>
           <div>
             <%= render partial: "topics/topic", collection: @posted_topics %>
@@ -118,9 +134,7 @@
             <% end %>
             <h2>ブックマークしたトピック(<%= @interested_topics.count %>件)</h2>
             <% if @interested_topics %>
-            
               <%= render partial: "topics/topic", collection: @interested_topics %>
-            
             <% else %>
               <p>（トピックはありません）</p>
             <% end %>
@@ -129,13 +143,31 @@
 
         <% if @my_page %>
           <div class="ChangeElem_Panel">
+
+          </div>
+        <% end %>
+        
+        <% if @my_page %>
+          <div class="ChangeElem_Panel">
+            <h2>ユーザー情報</h2>
+            <div class="user-page-links">
+              <%= link_to 'プロフィール変更', edit_user_path(current_user.id), :class => "btn btn-primary withripple custom" %>&nbsp;&nbsp;
+              <% unless @user.authorization %>
+                <%= link_to 'パスワード変更', edit_user_registration_path(current_user), :class => "btn btn-primary withripple custom" %><br>
+              <% end %>
+            </div>
+            <hr>
+            <h2>お支払方法</h2>
+              <%= link_to '有料プラン申込', new_user_subscription_path(@user.id), :method => :get, :class => "btn btn-primary withripple custom" %>
+            <hr>
             <% if @premium_user[0] %>
               <h2>ビジネスアカウント</h2>
                 <% unless @user.account %>
                   <%= link_to '登録', new_user_account_path(@user.id), :method => :get, :class => "btn btn-primary withripple custom" %>
                 <% else %>
-                  <%= link_to '詳細', account_path(@user.account.id), :class => "btn btn-primary withripple custom" %><br><br>
+                  <%= link_to '詳細', account_path(@user.account.id), :class => "btn btn-primary withripple custom" %>
                 <% end %>
+              <hr>
               <h2>販売実績</h2>
               <% if @account_exists && @sold_netas_info[0] %>
                 <table>
@@ -170,21 +202,6 @@
             <br>
           </div>
         <% end %>
-        
-        <% if @my_page %>
-          <div class="ChangeElem_Panel">
-            <h2>アカウント</h2>
-            <div class="user-page-links">
-              <%= link_to 'プロフィール変更', edit_user_path(current_user.id), :class => "btn btn-primary withripple custom" %>&nbsp;&nbsp;
-              <% unless @user.authorization %>
-                <%= link_to 'パスワード変更', edit_user_registration_path(current_user), :class => "btn btn-primary withripple custom" %><br>
-              <% end %>
-            </div><br>
-            <h2>お支払方法</h2>
-
-          </div>
-        <% end %>
-        
       </div>
     </div>
   </div>

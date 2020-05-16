@@ -75,11 +75,11 @@ Rails.application.configure do
   # Whitelist one hostname
   config.hosts << "67b3b214b5b2494dba2b8d4c579439d5.vfs.cloud9.ap-southeast-1.amazonaws.com"
   
-  config.after_initialize do
-    Bullet.enable = true
-    Bullet.alert = true
-    Bullet.bullet_logger = true
-    Bullet.console = true
-    Bullet.rails_logger = true
-  end
+  # config.after_initialize do
+  #   Bullet.enable = true
+  #   Bullet.alert = true
+  #   Bullet.bullet_logger = true
+  #   Bullet.console = true
+  #   Bullet.rails_logger = true
+  # end
 end

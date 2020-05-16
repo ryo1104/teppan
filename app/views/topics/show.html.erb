@@ -1,3 +1,4 @@
+<%= javascript_bundle_tag 'topic' %>
 <% @page_title = @topic.title %>
 <% breadcrumb :show_topic, @topic %>
 <div class="page-body-container">
@@ -10,41 +11,49 @@
     </div>
     <div class="row">
       <div class="col s12 m9 show">
-        <h2 class="h2-topic">投稿ネタ(<%= @netas.count %>件)</h2>
-        <% if @netas.present? %>
-          <ul class="collection">
-          <%= render partial: "netas/neta", :collection => @netas %>
+        <div class="topic-tab-menu">
+          <ul>
+            <li class="ChangeElem_Tab">投稿</li>
+            <li class="ChangeElem_Tab">コメント</li>
           </ul>
-        <% else %>
-          <p> (投稿はまだありません) </p>
-        <% end %>
-        <% if user_signed_in? %>
-          <%= link_to new_topic_neta_path(@topic.id), {:class => 'btn-floating new-topic'} do %>
-            <i class="material-icons">create</i>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col s12 m9 topic-show">
-        <h2 class="h2-topic">トピックへコメント(<%= @comments.count %>件)</h2>
-        <% unless @comments %>
-          <div class="indent-wrapper">
-            <p> (投稿はまだありません) </p>
-          </div>
-          <% if user_signed_in? %>
-            <ul class="collection">
-              <%= render partial: "comments/newcomment", locals: { commentable: @topic, newcomment: @newcomment } %>
-            </ul>
-          <% end %>
-        <% else %>
-          <ul class="collection">
-            <%= render partial: "comments/comment", :collection => @comments %>
-            <% if user_signed_in? %>
-              <%= render partial: "comments/newcomment", locals: { commentable: @topic, newcomment: @newcomment } %>
+        </div>
+        <div class="topic-tab-contents">
+          <div class="ChangeElem_Panel">
+            <h2 class="h2-topic">投稿ネタ(<%= @netas.count %>件)</h2>
+            <% if @netas.present? %>
+              <ul class="collection">
+              <%= render partial: "netas/neta", :collection => @netas %>
+              </ul>
+            <% else %>
+              <p> (投稿はまだありません) </p>
             <% end %>
-          </ul>
-        <% end %>
+            <% if user_signed_in? %>
+              <%= link_to new_topic_neta_path(@topic.id), {:class => 'btn-floating new-topic'} do %>
+                <i class="material-icons">create</i>
+              <% end %>
+            <% end %>
+          </div>
+          <div class="ChangeElem_Panel">
+            <h2 class="h2-topic">トピックへコメント(<%= @comments.count %>件)</h2>
+            <% unless @comments %>
+              <div class="indent-wrapper">
+                <p> (投稿はまだありません) </p>
+              </div>
+              <% if user_signed_in? %>
+                <ul class="collection">
+                  <%= render partial: "comments/newcomment", locals: { commentable: @topic, newcomment: @newcomment } %>
+                </ul>
+              <% end %>
+            <% else %>
+              <ul class="collection">
+                <%= render partial: "comments/comment", :collection => @comments %>
+                <% if user_signed_in? %>
+                  <%= render partial: "comments/newcomment", locals: { commentable: @topic, newcomment: @newcomment } %>
+                <% end %>
+              </ul>
+            <% end %>
+          </div>
+        </div>  
       </div>
     </div>
   <% else %>

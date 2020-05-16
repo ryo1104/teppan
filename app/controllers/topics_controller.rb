@@ -38,7 +38,7 @@ class TopicsController < ApplicationController
     begin
       @topic = Topic.includes({user: [image_attachment: :blob]}).find(params[:id])
       if @topic.private_flag == false || (user_signed_in? && @topic.owner(current_user))
-        @netas = @topic.netas.includes({user: [image_attachment: :blob]}, :hashtags).order("created_at DESC")
+        @netas = @topic.netas.includes({user: [image_attachment: :blob]}, :hashtags).where(private_flag: false).order("created_at DESC")
         @comments = @topic.comments.includes({user: [image_attachment: :blob]})
         if user_signed_in?
           @newcomment = Comment.new

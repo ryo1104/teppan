@@ -29,15 +29,15 @@ class Trade < ApplicationRecord
     end
   end
 
-  def self.get_stripe_session(tradeable, destination, success_path, cancel_path)
+  def self.get_stripe_session(tradeable, buyer, destination, success_path, cancel_path)
     result = Stripe::Checkout::Session.create({
+        customer_email: buyer.email,
         success_url: success_path,
         cancel_url: cancel_path,
         payment_method_types: ['card'],
         line_items: [
           {
             name: tradeable.title,
-            description: 'Comfortable cotton t-shirt',
             amount: tradeable.price,
             currency: 'jpy',
             quantity: 1,

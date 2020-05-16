@@ -1,22 +1,17 @@
-
 <% @page_title = "違反報告・ブロック" %>
 <div class="page-body-container">
   <div class="row">
-    <div class="col s12 m9">
-      <h1 class="h1_class">違反報告フォーム</h1>
-      <div class="card white">
-        <div class="card-content black-text">
-          <%= form_for [@user, @violation] do |f| %>
-            <p>報告対象ユーザー：<%= link_to atname(@user.nickname), user_path(@user.id) %></p><br>
-            <p>違反内容</p><%= f.text_area :text, style: 'width: 100%; height: 200px;', placeholder: "４００字以内", maxlength: 400 %>
-            <br>
-            <p>
-            <%= f.check_box :block, {:class => 'browser-default'}, checked_value = "1", unchecked_value = "0" %>
-            <%= f.label :block, 'ユーザーをブロック' %>
-            </p><br>
-            <%= f.submit "報告する", class: "btn btn-primary withripple custom" %>
-          <% end %>
-        </div>
+    <div class="col s12 m9 show">
+      <h1>違反報告</h1>
+      <div class="card z-depth-0">
+        <%= form_for [@user, @violation] do |f| %>
+          <p>報告対象ユーザー：<%= link_to atname(@user.nickname), user_path(@user.id) %></p>
+          <p>違反内容</p><%= f.text_area :text, style: 'width: 100%; height: 200px;', placeholder: "４００字以内", maxlength: 400 %>
+          <%= f.check_box :block, :class => 'reset-checkbox', :as => :boolean, :required => true %>
+          <%= f.label :block, 'ユーザーをブロック' %>
+          </p><br>
+          <%= f.submit "報告する", class: "btn btn-primary withripple custom" %>
+        <% end %>
       </div>
     </div>
   </div>
