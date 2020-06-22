@@ -2,17 +2,16 @@
 <%= form.label :header_image, "ヘッダー画像 : " %><br>
   <% if @topic.header_image.attached? %>
     <%= @topic.header_image.filename %>&nbsp;&nbsp;
-    <%= link_to "画像を削除", topic_header_image_path(@topic.id), :method => :delete %><br>
+    <%= link_to "画像を削除", delete_header_image_topic_path(@topic.id), :method => :delete %><br>
     <%= image_tag @topic.header_image, :class => 'topic-header-image', :id => 'header-image' %>
   <% else %>
-    <%= image_bundle_tag "teppan_gray.jpeg", :class => 'topic-header-image', :id => 'header-image' %><br>
     <%= form.file_field :header_image, :class => 'file-field custom', :id => 'header-image-upload' %>
   <% end %>
 </p>
-<%= form.label :title, "タイトル" %>
-<%= form.text_field :title, :maxlength => '30' %>
+<%= form.label :title, "テーマ・お題" %>
+<%= form.text_field :title, :maxlength => '30' %><br>
 <%= form.label :content, "本文" %>
-<%= form.rich_text_area :content %>
+<%= form.rich_text_area :content %><br>
 <%= form.label :private_flag, "公開／非公開" %>
 <%= form.select :private_flag, [['公開', false], ['非公開', true]], { include_blank: false, selected: @topic.private_flag }, { class: "browser-default", :id => "private_flag" } %>
 <br>

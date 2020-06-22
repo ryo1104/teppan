@@ -21,8 +21,8 @@
           <%= @user.gender_str %>&nbsp;&nbsp;
           <%= @user.prefecture_name %>&nbsp;&nbsp;
           <% if @premium_user[0] %>
-            <span class="user-page-prouser">認定User&nbsp;
-              <i class="material-icons check">check</i>
+            <span class="user-page-prouser">認定User
+              <i class="material-icons done">done</i>
             </span>
           <% end %>
         </div>
@@ -30,13 +30,13 @@
           <span class="user-page-follows">
             <% if @my_page %>
               <span class="user-page-following">
-                <%= link_to user_follows_idx_path(@user.id, "following") do %>
+                <%= link_to user_followings_path(@user.id) do %>
                   フォロー&nbsp;&nbsp;<b><%= @following_users_count %></b>
                 <% end %>
               </span>
             <% end %>
             <span class="user-page-followed">
-              <%= link_to user_follows_idx_path(@user.id, "followed") do %>
+              <%= link_to user_followers_path(@user.id) do %>
                 フォロワー&nbsp;&nbsp;<b><%= @followed_users_count %></b>
               <% end %>
             </span>
@@ -44,7 +44,7 @@
           <% unless @my_page %>
             <% unless @user.is_blocked_by(current_user.id) %>
               <span id="follows_buttons_<%= @user.id %>">
-                <%= render partial: 'follows/follow', locals: { user: @user, followed_users_count: @followed_users_count } %>
+                <%= render partial: 'followers/follow', locals: { user: @user, followed_users_count: @followed_users_count } %>
               </span>&nbsp;&nbsp;&nbsp;
               <%= link_to new_user_violation_path(@user.id) do %>
                 <i class="material-icons user-more">more_horiz</i>
@@ -61,9 +61,9 @@
   <div class="row">
     <div class="col s12 m9 user-page">
       <div class="user-page-introduction"><%= text_extract_links(simple_format(h(@user.introduction))).html_safe %></div>
+      <hr>
     </div>
   </div>
-  <hr>
   <div class="row">
     <div class="col s12 m9 user-page">
       <% if @my_page %>

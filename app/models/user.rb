@@ -7,13 +7,11 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable#, :confirmable
   has_many  :topics, ->{ order("created_at DESC") }
-  has_many  :requests, ->{ order("created_at DESC") }
   has_many  :netas, ->{ order("created_at DESC") }
   has_many  :pageviews,  ->{ order("created_at DESC") }
   has_many  :interests,  ->{ order("created_at DESC") }
   has_many  :hashtag_hits,  ->{ order("created_at DESC") }
   has_many  :comments
-  has_many  :offers
   has_many  :follows
   has_many  :reviews
   has_many  :violations

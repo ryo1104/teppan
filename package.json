@@ -10,6 +10,7 @@
     "@rails/actiontext": "^6.0.1",
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
+    "@stripe/stripe-js": "^1.5.0",
     "jquery": "^3.4.1",
     "jquery-datetimepicker": "^2.5.21",
     "jquery-ui-dist": "^1.12.1",

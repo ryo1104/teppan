@@ -33,7 +33,7 @@
               <% end %>
             </div>
             <% @neta.hashtags.each do |tag| %>
-              <div class="chip custom"><%= link_to "#"+tag.hashname, "/neta/hashtag/#{tag.hashname}" %></div>
+              <div class="chip custom"><%= link_to "#"+tag.hashname, "/hashtags?keyword=#{tag.hashname}" %></div>
             <% end %>
             <% if @owner %>
               <p><%= link_to "編集", edit_neta_path(@neta.id) %></p>
@@ -64,7 +64,7 @@
                     <i class="material-icons bookmark custom non-active">bookmark_border</i>&nbsp;&nbsp;
                   <% end %>
                 <% else %>
-                  <i class="material-icons bookmark custom">bookmark_border</i>
+                  <i class="material-icons bookmark basic">bookmark_border</i>
                 <% end %>
               </p>
             </div>

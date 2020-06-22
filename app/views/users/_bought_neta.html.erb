@@ -17,7 +17,7 @@
     <span class="icon-side-count"><%= bought_neta.reviews.count %></span>
     <p>
       <% bought_neta.hashtags.each do |tag| %>
-        <div class="chip custom"><%= link_to "#"+tag.hashname, "/neta/hashtag/#{tag.hashname}" %></div>
+        <div class="chip custom"><%= link_to "#"+tag.hashname, "/hashtags?keyword=#{tag.hashname}" %></div>
       <% end %>
     </p>
     <div class="collection-item-footer">

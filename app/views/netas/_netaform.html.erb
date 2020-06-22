@@ -11,8 +11,8 @@
 <% if @qualified %>
   <%= form.number_field :price, :value => @neta.price, :id => 'neta-form-price', min: 0, step: 10 %>&nbsp;&nbsp;円
 <% else %>
-  <%= form.number_field :price, :value => @neta.price, :id => 'neta-form-price', :readonly => true %>&nbsp;&nbsp;円&nbsp;&nbsp;
-  <span id="neta_form_no_price_message">有料投稿はビジネスアカウントの登録が必要です</span>
+  <%= form.number_field :price, :value => @neta.price, :id => 'neta-form-price', :readonly => true %>&nbsp;&nbsp;<span id="neta_form_no_price">円</span>
+  <span id="neta_form_no_price">（有料投稿はビジネスアカウント登録が必要です）</span>
 <% end %>
 <br>
 <%= form.label :private_flag, "公開／非公開" %>

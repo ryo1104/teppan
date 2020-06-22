@@ -1,5 +1,4 @@
-class FollowsController < ApplicationController
-  before_action :authenticate_user!
+class FollowersController < ApplicationController
 
   def create
     begin
@@ -35,21 +34,9 @@ class FollowsController < ApplicationController
   end
   
   def index
-    begin
       @user = User.find(params[:user_id])
-      @follow_direction = params[:direction]
-      
-      if @follow_direction == "following"
-        @direction = "フォロー中"
-        @follow_list = @user.following_users
-      elsif @follow_direction == "followed"
-        @direction = "フォロワー"
-        @follow_list = @user.followed_users
-      end
-    rescue => e
-      ErrorUtility.log_and_notify e
-      redirect_to user_path(params[:user_id]), alert: e.message and return
-    end
+      @direction = "フォロワー"
+      @follow_list = @user.followed_users
   end
   
   private

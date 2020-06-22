@@ -6,6 +6,8 @@ class Trade < ApplicationRecord
   validate  :stripe_charge_id_check
   validates :price, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 10000 }
 
+  $teppan_fee_rate = 0.15
+
   # custom validation
   def stripe_charge_id_check
     if self.stripe_charge_id.present?
@@ -16,67 +18,75 @@ class Trade < ApplicationRecord
       errors.add(:stripe_charge_id, "blank stripe_charge_id")
     end
   end
+  
+  def self.get_seller_revenue(amount)
+    if amount.present?
+      if amount.is_a?(Integer)
+        return (amount * (1 - $teppan_fee_rate) ).floor
+      else
+        raise ArgumentError, 'amount is not a integer.'
+      end
+    else
+      raise ArgumentError, 'amount is nil.'
+    end
+  end
 
   def self.get_ctax(amount)
     if amount.present?
       if amount.is_a?(Integer)
-        return (amount*0.08).floor
+        return (amount*0.1).floor
       else
-        raise ArgumentError, '入力値が整数ではありません。'
+        raise ArgumentError, 'amount is not a integer.'
       end
     else
-      raise ArgumentError, '入力値がありません。'
+      raise ArgumentError, 'amount is nil.'
     end
   end
 
-  def self.get_stripe_session(tradeable, buyer, destination, success_path, cancel_path)
-    result = Stripe::Checkout::Session.create({
-        customer_email: buyer.email,
-        success_url: success_path,
-        cancel_url: cancel_path,
-        payment_method_types: ['card'],
-        line_items: [
-          {
-            name: tradeable.title,
-            amount: tradeable.price,
-            currency: 'jpy',
-            quantity: 1,
-          },
-        ],
-        payment_intent_data: {
-          application_fee_amount: 200,
-          transfer_data: {
-            destination: destination,
-          },
-        },
-      })
+  def self.get_checkout_session(tradeable, buyer, seller, success_path, cancel_path, seller_revenue)
+    result = Stripe::Checkout::Session.create({ customer_email: buyer.email,
+                                                success_url: success_path,
+                                                cancel_url: cancel_path,
+                                                payment_method_types: ['card'],
+                                                line_items: [
+                                                  {
+                                                    name: tradeable.title,
+                                                    amount: tradeable.price,
+                                                    currency: 'jpy',
+                                                    quantity: 1,
+                                                  },
+                                                ],
+                                                payment_intent_data: {
+                                                  transfer_data: {
+                                                    amount: seller_revenue,
+                                                    destination: seller.account.stripe_acct_id,
+                                                  },
+                                                  # receipt_email: buyer.email
+                                                  receipt_email: "ryo_n_1104@yahoo.co.jp"
+                                                },
+                                              })
     stripe_session = JSON.parse(result.to_s)
     return stripe_session
   end
 
   def self.charge(source, buyer, seller, tradeable, charge_amount, seller_revenue)
-    ret_hash = {}
-    if source["object"] == "customer" || source["object"] == "card" #顧客に紐付いているカードで支払い
-      begin
-        charge = Stripe::Charge.create( { amount: charge_amount, 
-                                          currency: 'jpy',
-                                          customer: buyer.stripe_cus_id,
-                                          destination: {
-                                            amount: seller_revenue, #売り手へいくら配分するか
-                                            account: seller.account.stripe_acct_id, #売り手アカウント
-                                          },
-                                        } )
-      rescue => e
-        body = e.json_body
-        err  = body[:error]
-        code = err[:code] if err[:code]
-        message = err[:message] if err[:message]
-        raise StandardError, "Stripe error : #{code}, #{message} "
-      end
+    result_hash = {}
+
+    #顧客に紐付いているカードで支払い
+    if source["object"] == "customer" || source["object"] == "card"
+      charge = Stripe::Charge.create( { amount: charge_amount, 
+                                        currency: 'jpy',
+                                        customer: buyer.stripe_cus_id,
+                                        transfer_data: {
+                                          amount: seller_revenue, #売り手へいくら配分するか
+                                          destination: seller.account.stripe_acct_id, #売り手のアカウント
+                                        },
+                                      } )
       charge_result = JSON.parse(charge.to_s)
-      ret_hash.merge!({"charge_result" => charge_result})
-        
-    elsif source["object"] == "account" #Stripe残高で支払い
+      result_hash.merge!({"charge_result" => charge_result})
+    
+    #Stripe残高で支払い    
+    elsif source["object"] == "account"
       #買い手のStripe残高から代金を徴収
       charge = Stripe::Charge.create({ amount: charge_amount, 
                                         currency: 'jpy',
@@ -92,14 +102,14 @@ class Trade < ApplicationRecord
                                           })
     
       charge_result = JSON.parse(charge.to_s)
-      ret_hash.merge!({"charge_result" => charge_result})
+      result_hash.merge!({"charge_result" => charge_result})
       
       transfer_result = JSON.parse(transfer.to_s)
-      ret_hash.merge!({"transfer_result" => transfer_result})
+      result_hash.merge!({"transfer_result" => transfer_result})
     else
-      raise StandardError, "不明な支払元情報です。"
+      raise StandardError, "不明な支払元です。"
     end
-    return ret_hash
+    return result_hash
   end
   
 end

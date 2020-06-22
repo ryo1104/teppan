@@ -1,0 +1,38 @@
+<% @page_title = @direction %>
+<% breadcrumb :follow_list, @user %>
+<div class="page-body-container">
+  <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %>
+  <div class="row">
+    <div class="col s12 m9 user-page">
+      <h1 class="h1_class"><%= @direction %>(<%= @follow_list.count %>)</h1>
+      <% if @follow_list %>
+        <ul class="collection">
+          <% @follow_list.each do |follow_user| %>
+            <li class="collection-item avatar custom">
+              <%= link_to user_path(follow_user.id) do %>
+                <% if follow_user.avatar.present? %>
+                  <%= image_tag follow_user.avatar, {:class => "circle", :id => "follow-list-image"} %>
+                <% else %>
+                  <%= image_bundle_tag "no_user_image.png", {:class => "circle", :id => "follow-list-image"} %>
+                <% end %>
+                <div class="collection-item-text">
+                  <%= atname(follow_user.nickname) %><br>
+                  <p class="user-page-follows">フォロワー&nbsp;&nbsp;<%= follow_user.follows.count %></p>
+                  <% if follow_user.average_rate == 0 %>
+                    <span class="star_rating" rating-data="0"></span>&nbsp;
+                    <span class="star-rating-text-user-page"><%= follow_user.average_rate %></span>
+                  <% else %>
+                    <span class="star_rating" rating-data="<%= follow_user.average_rate %>"></span>&nbsp;
+                    <span class="star-rating-text-user-page"><%= follow_user.average_rate %></span>
+                  <% end %>
+                </div>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>（ユーザーはいません）</p><br><br>
+      <% end %>
+    </div>
+  </div>
+</div>

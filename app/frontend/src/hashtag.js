@@ -77,7 +77,7 @@ const getAutocomplete = (query, callback) => {
 };
 
 const url = (query) => {
-  return `/neta/tag_search_autocomplete?keyword=${encodeURIComponent(query)}`
+  return `/hashtag_autocomplete?keyword=${encodeURIComponent(query)}`
 };
 
 const items = (data) => {

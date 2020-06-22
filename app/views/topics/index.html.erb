@@ -24,7 +24,7 @@
     <div class="col s12 m12 topics-ranking z-depth-0">
       <b>トレンド</b><br>
       <% @hashtag_ranking.each do |key, value| %>
-        <div class="chip custom"><%= link_to "#"+value[1], "/neta/hashtag/#{value[1]}" %></div>
+        <div class="chip custom"><%= link_to "#"+value[1], "/hashtags?keyword=#{value[1]}" %></div>
       <% end %>
       <br>
     </div>

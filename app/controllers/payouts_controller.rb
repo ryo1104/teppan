@@ -1,5 +1,4 @@
 class PayoutsController < ApplicationController
-  before_action :authenticate_user!
   
   def new
     begin

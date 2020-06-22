@@ -1,3 +1,4 @@
+<%= javascript_bundle_tag 'trade' %>
 <% @page_title = "購入" %>
 <% breadcrumb :new_trade, @tradeable %>
 <div class="page-body-container">
@@ -51,7 +52,7 @@
             <% end %>&nbsp;&nbsp;
           <% end %>
         <% end %>
-        <button class="btn btn-primary stripe-checkout" id="<%= @stripe_session["id"] %>" role="link">BUY</button>
+        <button class="stripe-checkout-button" id="<%= @stripe_session["id"] %>">購入手続きへ</button>
       </div>
     </div>
   </div>

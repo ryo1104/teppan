@@ -1,5 +1,4 @@
 class IdcardsController < ApplicationController
-  before_action :authenticate_user!
   include StripeUtils
   
   def new

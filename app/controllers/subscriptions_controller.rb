@@ -1,5 +1,4 @@
 class SubscriptionsController < ApplicationController
-  before_action :authenticate_user!
   before_action :qualified_user, only: %i[new create]
   before_action :my_info, only: :show
   

@@ -1,5 +1,4 @@
 class ReviewsController < ApplicationController
-  before_action :authenticate_user!
 
   def create
     begin
@@ -26,12 +25,10 @@ class ReviewsController < ApplicationController
   
   def show
     begin
-      @review = Review.includes(:neta, :comments, {user: [image_attachment: :blob]}).find(params[:id])
-      @comments = @review.comments
-      @newcomment = Comment.new
+      @review = Review.includes(:neta, {user: [image_attachment: :blob]}).find(params[:id])
     rescue => e
       ErrorUtility.log_and_notify e
-      redirect_to netas_path, alert: "システムエラーによりレビューを表示できません。" and return
+      redirect_to neta_path, alert: "システムエラーによりレビューを表示できません。" and return
     end
   end
 

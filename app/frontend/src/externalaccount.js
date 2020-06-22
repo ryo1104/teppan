@@ -52,12 +52,12 @@ $(function () {
 });
 
 const bank_search_url = ( bankName ) => {
-   return `/externalaccounts/bank_search_autocomplete?keyword=${encodeURIComponent(bankName)}`
+   return `/bank_autocomplete?keyword=${encodeURIComponent(bankName)}`
 };
 
 const branch_search_url = ( bankName, branchName ) => {
     if ( bankName != null ) {
-        return `/externalaccounts/branch_search_autocomplete?bankname=${encodeURIComponent(bankName)}&branchname=${encodeURIComponent(branchName)}`
+        return `/branch_autocomplete?bankname=${encodeURIComponent(bankName)}&branchname=${encodeURIComponent(branchName)}`
     }
     else{
         return null

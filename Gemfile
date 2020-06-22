@@ -47,7 +47,8 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'spring-commands-rspec'
-  # gem 'bullet'
+  gem 'rails-erd'
+  gem 'bullet'
 end
 
 group :test do
@@ -86,9 +87,6 @@ gem 'zengin_code'
 
 #カウンター
 gem 'counter_culture', '~> 1.0'
-
-#ERD
-# gem 'rails-erd'
 
 #Amazon S3
 gem 'aws-sdk-s3'

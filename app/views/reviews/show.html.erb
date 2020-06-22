@@ -24,38 +24,9 @@
               <%= atname(@review.user.nickname) %>&nbsp;&nbsp;
               <%= @review.updated_at.to_s(:human) %>&nbsp;&nbsp;&nbsp;
             </span>
-            <div class="review-footer-icons">
-              <span id="likes_buttons_<%= @review.class.name.downcase %>_<%= @review.id %>">
-                <%= render partial: 'likes/like', locals: { likeable: @review } %>
-              </span>
-            </div>
           </div>
         </li>
       </ul>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col s12 m9 neta-show">
-      <div class="indent-wrapper">
-        <h1 class="h1_class">コメント(<%= @comments.count %>)</h1>
-      </div>
-      <% unless @comments %>
-        <div class="indent-wrapper">
-          <p> (投稿はまだありません) </p>
-        </div>
-        <% if user_signed_in? %>
-          <ul class="collection z-depth-0">
-            <%= render partial: "comments/newcomment", locals: { commentable: @review, newcomment: @newcomment } %>
-          </ul>
-        <% end %>
-      <% else %>
-        <ul class="collection z-depth-0">
-          <%= render partial: "comments/comment", :collection => @comments %>
-          <% if user_signed_in? %>
-            <%= render partial: "comments/newcomment", locals: { commentable: @review, newcomment: @newcomment } %>
-          <% end %>
-        </ul>
-      <% end %>
     </div>
   </div>
 </div>

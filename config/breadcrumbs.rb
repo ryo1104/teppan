@@ -75,7 +75,7 @@ crumb :edit_user_registration do |user|
 end
 
 crumb :follow_list do |user|
-  link "フォロワー", user_follows_idx_path(user.id, "followed")
+  link "フォロワー", user_followers_path(user.id)
   parent :show_user, user
 end
 

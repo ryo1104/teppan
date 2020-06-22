@@ -15,7 +15,8 @@ const js_entry  = {
   "topic"           : path.join(frontend_path, 'src', 'topic.js'),
   "user"            : path.join(frontend_path, 'src', 'user.js'),
   "account"         : path.join(frontend_path, 'src', 'account.js'),
-  "externalaccount" : path.join(frontend_path, 'src', 'externalaccount.js')
+  "externalaccount" : path.join(frontend_path, 'src', 'externalaccount.js'),
+  "trade"           : path.join(frontend_path, 'src', 'trade.js')
 }
 
 // const img_path = path.join(frontend_path, 'images')
