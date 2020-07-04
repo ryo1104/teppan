@@ -1,6 +1,6 @@
 <li class="collection-item custom">
   <%= link_to review_path(review.id), method: :get do %>
-    <span class="star_rating" rating-data="<%= review.rate %>"></span>
+    <span class="star-rating" rating-data="<%= review.rate %>"></span>
     <span class="star-rating-text">&nbsp;&nbsp;<%= review.rate %></span>
     <p class="review-text"><%= review.text %></p>
     <div class="collection-item-footer">

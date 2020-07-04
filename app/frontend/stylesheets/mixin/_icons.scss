@@ -1,0 +1,4 @@
+@mixin icon-search {
+  @extend .material-icons;
+  color: $tp-green;
+}

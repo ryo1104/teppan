@@ -7,9 +7,9 @@
   <%= link_to neta_path(bought_neta.id) do %>
     <p class="collection-item-title truncate"><%= remove_hashtags(bought_neta.text) %></p>
     <% if bought_neta.average_rate == "-" %>
-      <span class="star_rating" rating-data="0"></span>
+      <span class="star-rating" rating-data="0"></span>
     <% else %>
-      <span class="star_rating" rating-data="<%= bought_neta.average_rate %>"></span>
+      <span class="star-rating" rating-data="<%= bought_neta.average_rate %>"></span>
       <span class="star-rating-text">&nbsp;&nbsp;<%= bought_neta.average_rate %></span>
     <% end %>
     &nbsp;&nbsp;&nbsp;

@@ -1,0 +1,26 @@
+nav.pagination {
+  background-color: white;
+  height: 1.5rem;
+  line-height: 1.5rem;
+  padding: 0;
+  box-shadow: none;
+  .page.current{
+    color: $tp-orange;
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-left: 3px;
+  }
+  a{
+    color: $tp-hyperlink;
+    font-size: 1.3rem;
+  }
+  .page{
+    margin: 0 3px 0 3px;
+  }
+  .next{
+    margin-left: 3px;
+  }
+  .first{
+    margin-left: 0rem;
+  }
+}

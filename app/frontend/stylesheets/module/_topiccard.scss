@@ -1,0 +1,58 @@
+.card.topic{
+  width: 17rem;
+  float: left;
+  margin: 0 3px 7px 3px;
+}
+
+.card-image.topic{
+  img{
+    height: 11rem;
+  }
+}
+
+.card-content.topic{
+  padding: 0.4rem;
+  height:  9.5rem;
+}
+
+.card-content__title{
+  font-size: 1.3rem;
+  color: black;
+  font-weight: bold;
+}
+
+.card-content__star{
+  img{ 
+    width: 1.5rem;
+  }
+}
+
+.card-content__star-count{
+  color: $tp-orange;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.material-icons.card-content__icon{
+  font-size: 1.2rem;
+  color: $tp-orange;
+}
+
+.card-content__icon-count{
+  color: $tp-orange;
+  font-size: 1.2rem;
+}
+
+.card-content__author-image{
+  height: 2rem;
+  width: 2rem;
+}
+
+.card-content__author-name{
+  font-size: 1.1rem;
+  color: black;
+}
+
+  
+
+  

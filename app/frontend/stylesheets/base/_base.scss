@@ -1,0 +1,50 @@
+html {
+	font-size: 62.5%; // Root font size 10px = 16px(browser default) * 62.5%
+}
+
+body{
+  font-size:  1.3em; // default font size 13px = Root (10px) * 1.3
+  background-color: white;
+}
+
+.page-body{
+  margin: 0;
+  padding: 1rem;
+  min-height: 65rem;
+}
+
+a{
+  color: $tp-hyperlink;
+  font-size:  1.3rem;
+}
+
+hr{
+  margin: 1.5rem 0.5rem;
+}
+
+.row{
+  margin-bottom: 1rem;
+}
+
+.notice {
+  background: $tp-notice;
+}
+
+.alert {
+  background: $tp-alert;
+}
+
+.error-message{
+  color: red;
+  font-size:  1.3rem;
+}
+
+h1{
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+h2{
+  font-size: 1.5rem;
+  font-weight: bold;
+}

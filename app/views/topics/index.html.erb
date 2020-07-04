@@ -1,37 +1,38 @@
 <% @page_title = "トピック一覧" %>
 <% breadcrumb :topics %>
-<div class="page-body-container">
-  <div class="row topic-index">
-    <div class="col s6 m6 topic-breadcrumb">
-      <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %>
-    </div>
-    <div class="col s6 m6 topic-search">
-      <%= search_form_for(@search, url: topics_path, html: {method: :get, :class => 'topic-search-form', role: 'form'}) do |f| %>
-        <%= f.text_field :title_or_netas_title_or_user_nickname_cont, :id => 'topic-search-field', :placeholder => 'キーワード検索', :autocomplete => 'off' %>
-        <i class="material-icons" id="topic-search-icon">search</i>
+<div class="page-body">
+  <div class="row">
+    <div class="col s12 m9 topics">
+      <div class="row topics-pageheader">
+        <div class="col s6 m6 topics-breadcrumbs">
+          <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs-tp" %>
+        </div>
+        <div class="col s6 m6 topics-search">
+          <%= search_form_for(@search, url: topics_path, html: {method: :get, :class => 'topics-searchform', role: 'form'}) do |f| %>
+            <%= f.text_field :title_or_netas_title_or_user_nickname_cont, :class => 'topics-searchform__input', :placeholder => 'キーワード検索', :autocomplete => 'off' %>
+            <i class="topics-searchform__icon material-icons">search</i>
+          <% end %>
+        </div>
+      </div>
+      <div class="row topics-items">
+        <div class="col s12 m12 topics-items">
+          <%= render partial: "topics/topic", collection: @topics %>
+        </div>
+      </div>
+      <div class="row topics-pagination">
+        <%= paginate(@topics) %>
+      </div>
+      <h2>トレンド</h2>
+      <div class="row topics-trend">
+        <% @hashtag_ranking.each do |key, value| %>
+          <div class="topics-trend__hashtag"><%= link_to "#"+value[1], "/hashtags?keyword=#{value[1]}" %></div>
+        <% end %>
+      </div>
+      <% if user_signed_in? %>
+        <%= link_to new_topic_path, {:class => 'topics-new btn-floating'} do %>
+          <i class="topics-new__icon material-icons">create</i>
+        <% end %>&nbsp;&nbsp;
       <% end %>
     </div>
   </div>
-  <div class="row topic-index">
-    <div class="col s12 m12 topics-list">
-      <%= render partial: "topics/topic", collection: @topics %>
-    </div>
-  </div>
-  <div class="row topic-index">
-    <div><%= paginate(@topics) %></div>
-  </div>
-  <div class="row topic-index">
-    <div class="col s12 m12 topics-ranking z-depth-0">
-      <b>トレンド</b><br>
-      <% @hashtag_ranking.each do |key, value| %>
-        <div class="chip custom"><%= link_to "#"+value[1], "/hashtags?keyword=#{value[1]}" %></div>
-      <% end %>
-      <br>
-    </div>
-  </div>
-  <% if user_signed_in? %>
-    <%= link_to new_topic_path, {:class => 'btn-floating new-topic'} do %>
-      <i class="material-icons">create</i>
-    <% end %>&nbsp;&nbsp;
-  <% end %>
 </div>

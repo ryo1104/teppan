@@ -1,7 +1,7 @@
 <% @page_title = "レビュー" %>
 <% breadcrumb :show_review, @review %>
-<div class="page-body-container">
-  <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %>
+<div class="page-body">
+  <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs-tp" %>
   <div class="row">
     <div class="col s12 m9 topic-show">
       <div class="indent-wrapper">
@@ -16,7 +16,7 @@
               <%= image_bundle_tag "no_user_image.png", {:class => "circle custom", :id => "mycircle"} %>
             <% end %>
           <% end %>
-          <span class="star_rating" rating-data="<%= @review.rate %>"></span>
+          <span class="star-rating" rating-data="<%= @review.rate %>"></span>
           <span class="star-rating-text">&nbsp;&nbsp;<%= @review.rate %></span>
           <p class="review-text"><%= @review.text %></p>
           <div class="collection-item-footer">

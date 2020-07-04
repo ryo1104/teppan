@@ -11,57 +11,19 @@
   </head>
 
   <body>
-    <nav class="orange accent-4">
-      <div class="nav-wrapper">
-        <a href="<%= root_path %>" class="nav-brand-logo left">Teppan</a>
-        <ul class="nav-contents right hide-on-med-and-down">
-          <li class="hide-on-med-and-down"><%= link_to "１分ネタ", topics_path, method: :get %></li>
-          <% if user_signed_in? %>
-            <li class="hide-on-med-and-down"><%= link_to "マイページ", user_path(current_user) %></li>
-            <li class="hide-on-med-and-down"><%= link_to "ログアウト", destroy_user_session_path, method: :delete %></li>
-          <% else %>
-            <li class="hide-on-med-and-down"><%= link_to "ログイン", new_user_session_path, class: 'post' %></li>
-            <li class="hide-on-med-and-down"><%= link_to "ユーザー登録", new_user_registration_path, class: 'post' %></li>
-          <% end %>
-        </ul>
-        <a href="#" data-target="slide-out" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
-      </div>
-    </nav>
-    <ul id="slide-out" class="sidenav custom">
-      <li><%= link_to "１分ネタ", topics_path, method: :get %></li>
-      <% if user_signed_in? %>
-        <li><%= link_to "マイページ", user_path(current_user) %></li>
-        <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete %></li>
-      <% else %>
-        <li><%= link_to "ログイン", new_user_session_path, class: 'post' %></li>
-        <li><%= link_to "ユーザー登録", new_user_registration_path, class: 'post' %></li>
+    <header>
+      <%= render "layouts/navbar" %>
+    </header>
+    
+    <main>
+      <% flash.each do |key, value| %>
+        <%= content_tag(:div, value, class: "#{key}") %>
       <% end %>
-    </ul>
-    <% flash.each do |key, value| %>
-      <%= content_tag(:div, value, class: "#{key}") %>
-    <% end %>
-    <%= yield %>
+      <%= yield %>
+    </main>
+
+    <footer>
+      <%= render "layouts/footer" %>
+    </footer>
   </body>
-  
-  <footer class="page-footer orange accent-4">
-    <div class="row footer-contents">
-      <div class="col s12 m12 footer-column1">
-        <ul>
-          <li>ご利用ガイド</li>
-          <li>利用規約</li>
-          <li>プライバシーポリシー</li>
-          <li><a href="<%= new_inquiry_path %>" class="page-footer-text">お問合わせ</a></li>
-        </ul>
-        <div class="hide-on-med-and-down">
-          <div class="line-it-button" data-lang="ja" data-type="share-b" data-url="#{<%= root_path %>}" style="display: none;"></div>
-          <script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
-          &nbsp;&nbsp;
-          <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-hashtags="teppan" data-show-count="false"></a>
-          <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-        </div>
-      </div>
-    </div>
-    <div class="footer-copyright orange accent-4">© 2020 Teppan</div>
-  </footer>
-  
 </html>

@@ -9,5 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 $(function() {
-  $(".top-page-subtitle").css("color","#ff9100");
+  $(".top-page-subtitle").css({ 
+    "color":"#ff9800",
+    "font-size":"16px"
+    });
 });

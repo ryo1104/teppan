@@ -1,8 +1,8 @@
 <%= javascript_bundle_tag 'hashtag' %>
 <% @page_title = "新規ネタ" %>
 <% breadcrumb :new_neta, @topic %>
-<div class="page-body-container">
-  <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs custom" %>
+<div class="page-body">
+  <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs-tp" %>
   <div class="row">
     <div class="col s12 m9 topic-show">
       <%= render partial: "topics/topicbody", :locals => { topic: @topic }%>

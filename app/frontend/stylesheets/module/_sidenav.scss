@@ -1,0 +1,10 @@
+.sidenav.custom{
+  width: 16rem;
+  right: 0rem;
+  background-color: white;
+  padding-top: 1.5rem;
+  .sidenav__item{
+    color: $tp-orange;
+    font-size: 1.5rem;
+  }
+}
