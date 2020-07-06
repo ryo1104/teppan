@@ -2,61 +2,58 @@
 <% @page_title = @topic.title %>
 <% breadcrumb :show_topic, @topic %>
 <div class="page-body">
-  <% if @topic.private_flag == false || (user_signed_in? && @topic.owner(current_user)) %>
-    <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs-tp" %>
-    <div class="row">
-      <div class="col s12 m9 show">
-        <%= render partial: "topics/topicbody" %>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col s12 m9 show">
-        <div class="topic-tab-menu">
-          <ul>
-            <li class="ChangeElem_Tab">投稿</li>
-            <li class="ChangeElem_Tab">コメント</li>
-          </ul>
+  <div class="row">
+    <div class="col s12 m6 topic">
+      <% if @topic.private_flag && @owner == false %>
+        <%= @message %>
+      <% else %>
+        <div class="row content-header">
+          <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs-tp" %>
+        </div>  
+        <div class="row topic-body">
+          <%= render partial: "topics/topic" %>
         </div>
-        <div class="topic-tab-contents">
-          <div class="ChangeElem_Panel">
-            <h2 class="h2-topic">投稿ネタ(<%= @netas.count %>件)</h2>
-            <% if @netas.present? %>
-              <ul class="collection">
-              <%= render partial: "netas/neta", :collection => @netas %>
-              </ul>
-            <% else %>
-              <p> (投稿はまだありません) </p>
-            <% end %>
-            <% if user_signed_in? %>
-              <%= link_to new_topic_neta_path(@topic.id), {:class => 'btn-floating new-topic'} do %>
-                <i class="material-icons">create</i>
-              <% end %>
-            <% end %>
+        <div class="row topic-tabs">
+          <div class="topic-tab__menu">
+            <ul>
+              <li class="js-topic-tab__link">投稿</li>
+              <li class="js-topic-tab__link">コメント</li>
+            </ul>
           </div>
-          <div class="ChangeElem_Panel">
-            <h2 class="h2-topic">トピックへコメント(<%= @comments.count %>件)</h2>
-            <% unless @comments %>
-              <div class="indent-wrapper">
-                <p> (投稿はまだありません) </p>
-              </div>
+          <div class="topic-tab__contents">
+            <div class="js-topic-tab__body">
+              <h2 class="topic-tab__title">投稿ネタ(<%= @netas.count %>件)</h2>
+              <% if @netas %>
+                <ul class="topic-tab__netas collection">
+                  <%= render partial: "netas/neta", :collection => @netas %>
+                </ul>
+              <% else %>
+                <p class="topic-tab__nodata"> (投稿はありません) </p>
+              <% end %>
               <% if user_signed_in? %>
-                <ul class="collection">
+                <%= link_to new_topic_neta_path(@topic.id), {:class => 'topic-tab__neta-new'} do %>
+                  <i class="topic-tab__neta-new material-icons">create</i>
+                <% end %>
+              <% end %>
+            </div>
+            <div class="js-topic-tab__body">
+              <h2 class="topic-tab__title">トピックへコメント(<%= @comments.count %>件)</h2>
+              <% if @comments.present? %>
+                <ul class="topic-tab__comments collection">
+                  <%= render partial: "comments/comment", :collection => @comments %>
+                </ul>
+              <% else %>
+                <p class="topic-tab__nodata">(コメントはありません) </p>
+              <% end %>
+              <% if user_signed_in? %>
+                <ul class="topic-tab__comments collection">
                   <%= render partial: "comments/newcomment", locals: { commentable: @topic, newcomment: @newcomment } %>
                 </ul>
               <% end %>
-            <% else %>
-              <ul class="collection">
-                <%= render partial: "comments/comment", :collection => @comments %>
-                <% if user_signed_in? %>
-                  <%= render partial: "comments/newcomment", locals: { commentable: @topic, newcomment: @newcomment } %>
-                <% end %>
-              </ul>
-            <% end %>
-          </div>
-        </div>  
-      </div>
-    </div>
-  <% else %>
-    <%= @message %>
-  <% end %>
+            </div>
+          </div>  
+        </div>
+      <% end %>
+    </div>  
+  </div>
 </div>

@@ -1,37 +1,39 @@
-<%= link_to topic_path(topic.id) do %>
-  <div class="card topic">
-    <div class="card-image topic">
-      <% if topic.header_image.attached? %>
-        <%= image_tag topic.header_image %>
-      <% else %>
-        <%= image_bundle_tag "teppan_gray.jpeg" %>
-      <% end %>
-    </div>
-    <div class="card-content topic">
-      <div class="card-content__title truncate"><%= topic.title %></div>
-      <div class="card-content__postdata">
-        <% if topic.max_rate == 0 %>
-          <span class="js-card-content__star" rating-data="0"></span>
-        <% else %>
-          <span class="js-card-content__star" rating-data="<%= topic.max_rate %>"></span>
-          <span class="card-content__star-count"><%= topic.max_rate %></span>
-        <% end %>
-        <br>
-        <i class="material-icons card-content__icon">create</i>
-        <span class="card-content__icon-count"><%= topic.netas_count %></span>
-        <i class="material-icons card-content__icon">favorite_border</i>
-        <span class="card-content__icon-count"><%= topic.likes_count %></span>
-      </div>
-      <div class="card-content__author">
-        <%= link_to user_path(topic.user_id) do %>
-          <% if topic.user.avatar.present? %>
-            <%= image_tag topic.user.avatar, {:class => "circle card-content__author-image"} %>
-          <% else %>
-            <%= image_bundle_tag "no_user_image.png", {:class => "circle card-content__author-image"} %>
-          <% end %>
-          <span class="card-content__author-name"><%= topic.user.nickname %></span>
-        <% end %>
-      </div>
-    </div>
-  </div>
+<% if @topic.header_image.attached? %>
+  <%= image_tag @topic.header_image, :class => 'topic__header-image' %>
 <% end %>
+<h1 class="topic__title"><%= @topic.title %></h1>
+<div class="topic__text">
+  <%= @topic.content %>
+  <% if user_signed_in? %> 
+    <% if @topic.editable(current_user) %>
+      <%= link_to '編集', edit_topic_path(@topic.id) %>
+    <% end %>
+  <% end %>
+</div>
+<div class="topic__footer">
+  <%= link_to user_path(@topic.user_id) do %>
+    <% if @topic.user.avatar.present? %>
+      <%= image_tag @topic.user.avatar, {:class => "topic__author-image"} %>
+    <% else %>
+      <%= image_bundle_tag "no_user_image.png", {:class => "topic__author-image"} %>
+    <% end %>
+  <% end %>
+  <span class="topic__footer-text">
+    <%= @topic.user.nickname %>&nbsp;&nbsp;
+    <%= @topic.created_at.to_s(:human) %>&nbsp;&nbsp;
+  </span>
+  <div class="topic__footer-icons">
+    <% if (user_signed_in? && @owner == false) %>
+      <span id="likes_buttons_<%= @topic.class.name.downcase %>_<%= @topic.id %>">
+        <%= render partial: 'likes/like', locals: { likeable: @topic } %>
+      </span>
+      <span id="bookmark_buttons_<%= @topic.class.name.downcase %>_<%= @topic.id %>">
+        <%= render partial: 'interests/interest', locals: { interestable: @topic } %>
+      </span>
+    <% else %>
+      <i class="like--large material-icons">favorite_border</i>
+      <span class="like__count"><%= @topic.likes_count %></span>&nbsp;&nbsp;
+      <i class="bookmark--large material-icons">bookmark_border</i>
+    <% end %>
+  </div>
+</div>

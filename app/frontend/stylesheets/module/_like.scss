@@ -1,0 +1,10 @@
+.like--large {
+  &.material-icons {
+    font-size: 1.6rem;
+    color: $tp-orange;
+  }
+}
+
+.like__count {
+  @include icon-sidecount;
+}

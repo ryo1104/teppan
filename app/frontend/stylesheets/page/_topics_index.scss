@@ -1,54 +1,80 @@
-.col.s6.m6.topics-breadcrumbs{
-  padding: 0;
+.topics {
+  &.col.s12.m9 {
+    padding: 0;
+  }
+  
+  &-breadcrumbs {
+    &.col.s6.m6 {
+      padding-left: 1rem;
+    }
+  }
+  
+  &-search{
+    &.col.s6.m6 {
+      padding: 0;
+      height: 3rem;
+    }
+    @include sp {
+      width: 17rem;
+      margin-left: 0rem;
+    }
+    @include pc {
+      width: 20rem;
+      margin-left: 23.5rem;
+    }
+    input[type=text]{
+      font-size: 1.3rem;
+      height: 3rem;
+      width: 17rem;
+      margin: 0 0.5rem 0 0;
+    }
+    &__icon {
+      // @include icon-search;
+      &.material-icons {
+        color: $tp-green;
+        position: relative;
+        @include sp { left: 15rem; }
+        @include pc { left: 15rem; }
+        top: -2.75rem;
+      }
+    }  
+    
+  }
+
+  &-index{
+    &.row {
+      margin: 0;
+    }
+  }
+  
+  &-pagination{
+    &.row {
+      margin: 1rem 0;
+    }
+  }
+  
+  &-trend{
+    &.row {
+      margin: 0;
+    }
+    &__hashtag{
+      @include chip-small;
+    }
+  }
+  
+  &-new {
+    @extend .btn-floating;
+    position: fixed;
+    bottom: 20px;
+    @include sp { right: 2rem; }
+    @include pc { right: 40rem; }
+    background-color: $tp-green;
+    i {
+      font-size: 2.3rem;
+    }
+  }
+  
 }
 
-.col.s6.m6.topics-search{
-  padding: 0;
-  height: 3rem;
-}
 
-.topics-searchform {
-  @include sp {
-    width: 17rem;
-    margin-left: 0rem;
-  }
-  @include pc {
-    width: 20rem;
-    margin-left: 23.5rem;
-  }
-  input[type=text]{
-    font-size: 1.3rem;
-    height: 3rem;
-    width: 17rem;
-    margin: 0 0.5rem 0 0;
-  }
-  &__icon {
-    @include icon-search;
-    position: relative;
-    @include sp { left: 15rem; }
-    @include pc { left: 15rem; }
-    top: -2.75rem;
-  }
-}
 
-.col.s12.m12.topics-items{
-  padding: 0;
-}
-
-.topics-trend{
-  &__hashtag{
-    @include chip-small;
-  }
-}
-
-.topics-new {
-  @extend .btn-floating;
-  position: fixed;
-  bottom: 20px;
-  @include sp { right: 2rem; }
-  @include pc { right: 40rem; }
-  background-color: $tp-green;
-  i {
-    font-size: 2.3rem;
-  }
-}

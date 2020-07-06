@@ -1,0 +1,106 @@
+.topic {
+  
+  &__header {
+    &-image{
+      @include sp { 
+        max-width: 35rem;
+        max-height: 25rem;
+      }
+      @include pc { 
+        max-width: 50rem;
+        max-height: 35rem;
+      }
+    }
+  }
+  
+  &__text{
+    color: black;
+  }
+  
+  &__footer{
+    margin: 0.5rem 0 0 0;
+    width: 100%;
+    font-size: 1rem;
+    
+    &-text {
+      color: $tp-graytext;
+    }
+    
+    &-icons{
+      float: right;
+      margin: 0.5rem 0 0 0;
+      font-size: 1rem;
+    }
+  }
+  
+  &__author-image{
+    @include user-img-sm;
+  }
+}
+
+.topic-tab {
+
+  &__menu {
+    width: 50rem;
+  
+    ul {
+      margin: 0;
+      padding: 0rem;
+      font-size: 1rem;
+    }
+  
+    li {
+      display: inline-block;
+      width: 6rem;
+      height: 2.5rem;
+      width: 8rem;
+      line-height: 1rem;
+      padding: 1rem 1rem 0.5rem;
+      cursor: pointer;
+      border-top-right-radius: 1rem;
+      background-color: $tp-orange-light;
+      color: #e65100;
+      font-size: 1.2rem;
+      text-align: center;
+  
+      &.selected {/* .tab-menuの中のliの内、.selectedが与えられているものに対する記述 */
+        background-color: $tp-orange;
+        color: white;
+      }
+    }
+  }
+  
+  &__title {
+    
+  }
+  
+  &__netas {
+    &.collection {
+      width: 100%;
+    }
+  }
+  
+  &__nodata {
+    color: $tp-graytext;
+  }
+  
+  &__neta-new {
+    @extend .btn-floating;
+    position: fixed;
+    bottom: 2rem;
+    @include sp { right: 15rem; }
+    @include pc { right: 64rem; }
+    background-color: $tp-green;
+
+    &.material-icons {
+      font-size: 2.3rem;
+      color: white;
+    }
+  }
+  
+  &__comments {
+    &.collection {
+      margin: 0;
+    }
+  }
+}

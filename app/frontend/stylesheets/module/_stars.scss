@@ -1,14 +1,20 @@
-.js-card-content__star{
+.js-topics-index__star{
   img {
     height: 1.5rem;
   }
 }
 
-.star-rating-text{
-  color: $tp-orange;
-  font-size: 1.3rem;
-  font-weight: bold;
+.js-neta-index__star{
+  img {
+    height: 1.6rem;
+  }
 }
+
+// .star-rating-text{
+//   color: $tp-orange;
+//   font-size: 1.3rem;
+//   font-weight: bold;
+// }
 
 .new-star-rating{
   img{

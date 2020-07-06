@@ -2,17 +2,17 @@ import $ from 'jquery';
 
 $(document).ready( function() {
   /*初期表示*/
-  $('.ChangeElem_Panel').hide();
-  $('.ChangeElem_Panel').eq(0).show();
-  $('.ChangeElem_Tab').eq(0).addClass('selected');
+  $('.js-topic-tab__body').hide();
+  $('.js-topic-tab__body').eq(0).show();
+  $('.js-topic-tab__link').eq(0).addClass('selected');
   /*クリックイベント*/
-  $('.ChangeElem_Tab').each(function () {
+  $('.js-topic-tab__link').each(function () {
     $(this).on('click', function () {
-      var index = $('.ChangeElem_Tab').index(this);
-      $('.ChangeElem_Tab').removeClass('selected');
+      var index = $('.js-topic-tab__link').index(this);
+      $('.js-topic-tab__link').removeClass('selected');
       $(this).addClass('selected');
-      $('.ChangeElem_Panel').hide();
-      $('.ChangeElem_Panel').eq(index).show();
+      $('.js-topic-tab__body').hide();
+      $('.js-topic-tab__body').eq(index).show();
     });
   });
 });

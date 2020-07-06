@@ -8,22 +8,20 @@
           <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs-tp" %>
         </div>
         <div class="col s6 m6 topics-search">
-          <%= search_form_for(@search, url: topics_path, html: {method: :get, :class => 'topics-searchform', role: 'form'}) do |f| %>
-            <%= f.text_field :title_or_netas_title_or_user_nickname_cont, :class => 'topics-searchform__input', :placeholder => 'キーワード検索', :autocomplete => 'off' %>
-            <i class="topics-searchform__icon material-icons">search</i>
+          <%= search_form_for(@search, url: topics_path, html: {method: :get, :class => 'topics-search__form', role: 'form'}) do |f| %>
+            <%= f.text_field :title_or_netas_title_or_user_nickname_cont, :class => 'topics-search__input', :placeholder => 'キーワード検索', :autocomplete => 'off' %>
+            <i class="topics-search__icon material-icons">search</i>
           <% end %>
         </div>
       </div>
-      <div class="row topics-items">
-        <div class="col s12 m12 topics-items">
-          <%= render partial: "topics/topic", collection: @topics %>
-        </div>
+      <div class="row topics-index">
+        <%= render partial: "topics/topic_card", collection: @topic_cards %>
       </div>
       <div class="row topics-pagination">
-        <%= paginate(@topics) %>
+        <%= paginate(@topic_cards) %>
       </div>
-      <h2>トレンド</h2>
       <div class="row topics-trend">
+        <h2>トレンド</h2>
         <% @hashtag_ranking.each do |key, value| %>
           <div class="topics-trend__hashtag"><%= link_to "#"+value[1], "/hashtags?keyword=#{value[1]}" %></div>
         <% end %>
@@ -31,7 +29,7 @@
       <% if user_signed_in? %>
         <%= link_to new_topic_path, {:class => 'topics-new btn-floating'} do %>
           <i class="topics-new__icon material-icons">create</i>
-        <% end %>&nbsp;&nbsp;
+        <% end %>
       <% end %>
     </div>
   </div>

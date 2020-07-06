@@ -5,7 +5,7 @@ const halfStar  = "/packs/images/star-half.png"
 const offStar   = "/packs/images/star-off.png"
 const onStar    = "/packs/images/star-on.png"
 
-$('.star-rating').raty({
+$('.js-neta-index__star').raty({
   score: function() {
     return $(this).attr('rating-data');
   },
@@ -18,7 +18,7 @@ $('.star-rating').raty({
   starOn   : onStar,
 });
 
-$('.js-card-content__star').raty({
+$('.js-topics-index__star').raty({
   score: function() {
     return $(this).attr('rating-data');
   },

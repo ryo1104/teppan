@@ -1,0 +1,58 @@
+.neta-index {
+  
+  color: black;
+  
+  &__title {
+    font-weight: bold;
+    font-size: 1.3rem;
+    color: black;
+    margin: 0.5rem 0;
+  }
+  
+  &__price {
+    color: $tp-orange;
+    font-weight: bold;
+  }
+  
+  &__star-count {
+    color: $tp-orange;
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin: 0 1rem 0 0.5rem;
+  }
+  
+  &__reviews {
+    &.material-icons {
+      color: $tp-orange;
+      font-size: 1.6rem;
+    }
+    
+    &-count {
+      @include icon-sidecount;
+    }
+  }
+  
+  &__hashtag {
+    @include chip-small;
+  }
+  
+  &__author-image {
+    @include user-img-sm;
+  }
+  
+  &__footer {
+    margin: 0.5rem  0 0 0;
+    
+    &-text {
+      font-size: 1rem;
+      color: $tp-graytext;
+    }
+  }
+}
+
+
+
+.neta-price-inactive{
+  color: #bdbdbd;
+  font-weight: bold;
+}

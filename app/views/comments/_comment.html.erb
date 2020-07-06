@@ -1,31 +1,31 @@
-<li class="collection-item custom" >
-  <p class="comment-text"><%= comment.text %></p>
+<li class="comment-index collection-item" >
+  <div class="comment-index__text"><%= comment.text %></div>
   <% if user_signed_in? && comment.user_id == current_user.id %>
-    <span class="topic-footer-deletelink">
+    <span class="comment-index__delete">
       <%= link_to '削除', comment_path(comment.id), {:method => :delete, :data => {:confirm => "本当に削除しますか？"}} %>
     </span>
   <% end %>
-  <div class="collection-item-footer">
-    <p class="indexitem-footer-text">
-      <%= link_to user_path(comment.user.id) do %>
-        <% if comment.user.avatar.present? %>
-          <%= image_tag comment.user.avatar, {:class => "circle", :id => "index-author-image"} %>
-        <% else %>
-          <%= image_bundle_tag "no_user_image.png", {:class => "circle", :id => "index-author-image"} %>
-        <% end %>
+  <div class="comment-index__footer">
+    <%= link_to user_path(comment.user.id) do %>
+      <% if comment.user.avatar.present? %>
+        <%= image_tag comment.user.avatar, {:class => "comment-index__author-image"} %>
+      <% else %>
+        <%= image_bundle_tag "no_user_image.png", {:class => "comment-index__author-image"} %>
       <% end %>
-      <%= atname(comment.user.nickname) %>&nbsp;&nbsp;
-      <%= comment.updated_at.to_s(:human) %>&nbsp;&nbsp;&nbsp;
-    </p>
-    <p class="topic-footer-icons">
+    <% end %>
+    <span class="comment-index__footer-text">
+      <%= comment.user.nickname %>&nbsp;&nbsp;
+      <%= comment.updated_at.to_s(:human) %>&nbsp;&nbsp;
+    </span>
+    <div class="comment-index__footer-icons">
       <% if user_signed_in? %>
         <span id="likes_buttons_<%= comment.class.name.downcase %>_<%= comment.id %>">
           <%= render partial: 'likes/like', locals: { likeable: comment } %>
         </span>
       <% else %>
-        <i class="material-icons like basic">favorite_border</i>
-        <span class="icon-side-count"><%= comment.likes_count %></span>&nbsp;&nbsp;
+        <i class="like--large material-icons">favorite_border</i>
+        <span class="like__count"><%= comment.likes_count %></span>
       <% end %>
-    </p>
+    </div>
   </div>
 </li>

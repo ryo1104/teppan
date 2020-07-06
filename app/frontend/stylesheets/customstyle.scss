@@ -72,22 +72,6 @@ trix-editor{
 // }
       
 
-
-.collection-avatar{
-  width: 1.8rem;
-  height: 1.8rem;
-  float: left;
-  img{
-    width:  1.8rem;
-    height: 1.8rem;
-  }
-}
-
-.topic-header-image{
-  max-width: 70%;
-  max-height: 20rem
-}
-
 [type="checkbox"].reset-checkbox,
 [type="checkbox"].reset-checkbox:checked,
 [type="checkbox"].reset-checkbox:not(checked) {
@@ -153,14 +137,7 @@ textarea{
 .neta-purchase{
   margin: 0 0 1.5rem 0;
 }
-.neta-price{
-  color: #f57c00;
-  font-weight: bold;
-}
-.neta-price-inactive{
-  color: #bdbdbd;
-  font-weight: bold;
-}
+
 
 // .btn-large.btn-primary.withripple.custom{
 //   background-color: #66cc00;
@@ -269,21 +246,21 @@ textarea{
   color: #757575;
 }
 
-.topic-body-title{
-  font-size: 1.5rem;
-  font-weight: bold;
-  padding: 1rem 0 1rem 0;
-}
-.topic-footer{
-  margin: 0.5rem 0 0 0;
-  width: 100%;
-  font-size: 0.8rem;
-}
-.topic-footer-icons{
-  float: right;
-  margin: 1rem 0 0 0;
-  font-size: 10px;
-}
+// .topic-body-title{
+//   font-size: 1.5rem;
+//   font-weight: bold;
+//   padding: 1rem 0 1rem 0;
+// }
+// .topic-footer{
+//   margin: 0.5rem 0 0 0;
+//   width: 100%;
+//   font-size: 0.8rem;
+// }
+// .topic-footer-icons{
+//   float: right;
+//   margin: 1rem 0 0 0;
+//   font-size: 10px;
+// }
 
 
 .neta-text{
@@ -309,10 +286,10 @@ textarea{
   font-size: 1rem;
 }
 
-.material-icons.like.large{
-  color: #f57c00;
-  font-size: 1.3rem;
-}
+// .material-icons.like.large{
+//   color: #f57c00;
+//   font-size: 1.3rem;
+// }
 
 .material-icons.bookmark.basic{
   color: #f57c00;
@@ -330,10 +307,7 @@ textarea{
 .bookmark-link{
   color: #ffcc80;
 }
-.icon-side-count{
-  color: #f57c00;
-  font-size: 11px;
-}
+
 .material-icons.post.custom{
   font-size: 12px;
   color: #f57c00;
@@ -560,36 +534,6 @@ textarea{
   // .card-content.show{
   //   padding: 0;
   // }
-  
-  .topic-tab-menu {
-    width: 500px;
-  
-    ul {
-      margin: 0;
-      padding: 0rem;
-      font-size: 1rem;
-    }
-  
-    li {
-      display: inline-block;
-      width: 6rem;
-      height: 25px;
-      width: 6rem;
-      line-height: 10px;
-      padding: 10px 10px 5px;
-      cursor: pointer;
-      border-top-right-radius: 10px;
-      background-color: #ffe0b2;
-      color: #e65100;
-      font-size: 12px;
-      text-align: center;
-  
-      &.selected {/* .tab-menuの中のliの内、.selectedが与えられているものに対する記述 */
-        background-color: #ff6d00;
-        color: #fff;
-      }
-    }
-  }
   
   #neta-form-price{
     width: 5rem;
@@ -1134,35 +1078,6 @@ textarea{
     width: 20px;
   }
   
-  .topic-tab-menu {
-    width: 500px;
-  
-    ul {
-      margin: 0;
-      padding: 0rem;
-      font-size: 1rem;
-    }
-  
-    li {
-      display: inline-block;
-      width: 6rem;
-      height: 25px;
-      width: 6rem;
-      line-height: 10px;
-      padding: 10px 10px 5px;
-      cursor: pointer;
-      background-color: #ffe0b2;
-      color: #e65100;
-      border-top-right-radius: 10px;
-      font-size: 12px;
-      text-align: center;
-  
-      &.selected {/* .tab-menuの中のliの内、.selectedが与えられているものに対する記述 */
-        background-color: #ff6d00;
-        color: #fff;
-      }
-    }
-  }  
   
   #neta-form-price{
     width: 7rem;

@@ -1,0 +1,5 @@
+@mixin user-img-sm {
+  @extend .circle;
+  height: 2rem;
+  width: 2rem;
+}

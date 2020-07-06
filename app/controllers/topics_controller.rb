@@ -3,7 +3,7 @@ class TopicsController < ApplicationController
   
   def index
     @search = Topic.includes([header_image_attachment: :blob], {user: [image_attachment: :blob]}, :netas).where(private_flag: false).ransack(params[:q])
-    @topics = @search.result(distinct: true).order("created_at DESC").page(params[:page]).per(5)
+    @topic_cards = @search.result(distinct: true).order("created_at DESC").page(params[:page]).per(5)
     @hashtag_ranking = Hashtag.get_ranking(10)
   end
 
@@ -18,15 +18,16 @@ class TopicsController < ApplicationController
   
   def show
     @topic = Topic.includes({user: [image_attachment: :blob]}).find(params[:id])
-    if @topic.private_flag == false || (user_signed_in? && @topic.owner(current_user))
+    @owner = @topic.owner(current_user)
+    if @topic.private_flag && @owner == false
+      @message = "この投稿は非公開に設定されています。"
+    else
       @netas = @topic.netas.includes({user: [image_attachment: :blob]}, :hashtags).where(private_flag: false).order("created_at DESC")
       @comments = @topic.comments.includes({user: [image_attachment: :blob]})
       if user_signed_in?
         @newcomment = Comment.new
         @topic.add_pageview(current_user)
       end
-    else
-      @message = "この投稿は投稿者が非公開に設定しています。"
     end
   end
 
