@@ -1,6 +1,6 @@
 <li class="comment-new collection-item" >
   <%= form_for [commentable, newcomment] do |f| %>
-    <%= f.text_area :text, :placeholder => 'コメントを書いて下さい', :class => "comment-new__textarea" %>
+    <%= f.text_area :text, :placeholder => 'コメントを書いて下さい', :class => "comment-new__textarea", :maxlength => '200' %>
     <div class="comment-new__footer">
       <%= f.submit "コメント", class: "btn btn-primary withripple custom" %>
     </div>

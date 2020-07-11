@@ -1,24 +1,18 @@
 .js-topics-index__star{
-  img {
-    height: 1.5rem;
-  }
+  @include star-small;
 }
 
 .js-neta-index__star{
-  img {
-    height: 1.6rem;
-  }
+  @include star-small;
 }
 
-// .star-rating-text{
-//   color: $tp-orange;
-//   font-size: 1.3rem;
-//   font-weight: bold;
-// }
+.js-review-index__star{
+  @include star-small;
+}
 
-.new-star-rating{
+.js-review-new__star {
   img{
-    width: 1.4rem;
-    height: 1.4rem;
+    width: 1.8rem;
+    height: 1.8rem;
   }
 }

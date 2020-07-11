@@ -1,17 +1,14 @@
 <li class="neta-index collection-item">
   <%= link_to neta_path(neta.id) do %>
     <div class="neta-index__title"><%= neta.title %></div>
-    <% if neta.price != 0 %>
-      <span class="neta-index__price"><%= number_to_currency(neta.price, locale: 'ja') %></span>
-    <% end %>
     <% if neta.average_rate == "-" %>
       <span class="js-neta-index__star" rating-data="0"></span>
     <% else %>
       <span class="js-neta-index__star" rating-data="<%= neta.average_rate %>"></span>
       <span class="neta-index__star-count"><%= neta.average_rate %></span>
     <% end %>
-    <i class="neta-index__reviews material-icons">chat_bubble_outline</i>
-    <span class="neta-index__reviews-count"><%= neta.reviews_count %></span>
+    <i class="review--large material-icons">chat_bubble_outline</i>
+    <span class="review__count"><%= neta.reviews_count %></span>
     <div class="neta-index__footer">
       <%= link_to user_path(neta.user_id) do %>
         <% if neta.user.avatar.present? %>

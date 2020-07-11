@@ -10,7 +10,7 @@ body{
 .page-body{
   margin: 0;
   padding: 1rem;
-  min-height: 65rem;
+  min-height: 100rem;
 }
 
 a{
@@ -19,7 +19,7 @@ a{
 }
 
 hr{
-  margin: 1.5rem 0.5rem;
+  margin: 1.5rem 0rem;
 }
 
 .row{
@@ -40,11 +40,13 @@ hr{
 }
 
 h1{
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: bold;
+  margin: 2rem 0 1.5rem 0;
 }
 
 h2{
   font-size: 1.5rem;
   font-weight: bold;
+  margin: 2rem 0 1.5rem 0;
 }

@@ -1,0 +1,36 @@
+.bookmark {
+  &--large {
+    &.material-icons {
+      font-size: 1.8rem;
+      color: $tp-orange;
+    }
+  }
+}
+
+.like {
+  &--large {
+    &.material-icons {
+      font-size: 1.6rem;
+      color: $tp-orange;
+    }
+  }
+  
+  &__count {
+    color: $tp-orange;
+    font-size: 1.1rem;
+  }
+}
+
+.review {
+  &--large {
+    &.material-icons {
+      font-size: 1.6rem;
+      color: $tp-orange;    
+    }
+  }
+  
+  &__count {
+    color: $tp-orange;
+    font-size: 1.1rem;
+  }
+}

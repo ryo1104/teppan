@@ -18,7 +18,7 @@ class TopicsController < ApplicationController
   
   def show
     @topic = Topic.includes({user: [image_attachment: :blob]}).find(params[:id])
-    @owner = @topic.owner(current_user)
+    @owner = owner(@topic)
     if @topic.private_flag && @owner == false
       @message = "この投稿は非公開に設定されています。"
     else
@@ -79,6 +79,14 @@ class TopicsController < ApplicationController
   private
   def create_params
     params.require(:topic).permit(:title, :content, :header_image, :private_flag).merge(user_id: current_user.id)
+  end
+  
+  def owner(topic)
+    if user_signed_in?
+      return topic.owner(current_user)
+    else
+      return false
+    end
   end
   
 end

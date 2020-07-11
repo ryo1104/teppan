@@ -31,7 +31,20 @@ $('.js-topics-index__star').raty({
   starOn   : onStar,
 });
 
-$('.new-star-rating').raty({
+$('.js-review-index__star').raty({
+  score: function() {
+    return $(this).attr('rating-data');
+  },
+  readOnly : true,
+  number   : 5,  
+  half     : true,
+  size     : 24,
+  starHalf : halfStar,
+  starOff  : offStar,
+  starOn   : onStar,
+});
+
+$('.js-review-new__star').raty({
   number   : 5,  
   half     : false,
   precision:   false,
@@ -45,6 +58,6 @@ $('.new-star-rating').raty({
   targetKeep:  true,
   round:  { down: .25, full: .6, up: .76 },
   click: function(score, evt) {
-    $("#review_rate").val(score);
+    $("#reviewnew__rate").val(score);
   }
 });

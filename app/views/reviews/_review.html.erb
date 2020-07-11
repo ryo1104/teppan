@@ -1,26 +1,24 @@
-<li class="collection-item custom">
+<li class="review-index collection-item">
   <%= link_to review_path(review.id), method: :get do %>
-    <span class="star-rating" rating-data="<%= review.rate %>"></span>
-    <span class="star-rating-text">&nbsp;&nbsp;<%= review.rate %></span>
-    <p class="review-text"><%= review.text %></p>
-    <div class="collection-item-footer">
-      <div class="indexitem-footer-text">
-        <%= link_to user_path(review.user.id) do %>
-          <% if review.user.avatar.present? %>
-            <%= image_tag review.user.avatar, {:class => "circle", :id => "index-author-image"} %>
-          <% else %>
-            <%= image_bundle_tag "no_user_image.png", {:class => "circle", :id => "index-author-image"} %>
-          <% end %>
+    <span class="js-review-index__star" rating-data="<%= review.rate %>"></span>
+    <span class="review-index__star-count">&nbsp;&nbsp;<%= review.rate %></span>
+    <div class="review-index__text"><%= review.text %></div>
+    <div class="review-index__footer">
+      <%= link_to user_path(review.user.id) do %>
+        <% if review.user.avatar.present? %>
+          <%= image_tag review.user.avatar, {:class => "review-index__author-image"} %>
+        <% else %>
+          <%= image_bundle_tag "no_user_image.png", {:class => "review-index__author-image"} %>
         <% end %>
-        <%= atname(review.user.nickname) %>&nbsp;&nbsp;
+      <% end %>
+      <span class="review-index__footer-text">
+        <%= review.user.nickname %>&nbsp;&nbsp;
         <%= review.updated_at.to_s(:human) %>&nbsp;&nbsp;&nbsp;
-      </div>
-      <div class="review-footer-icons">
-        <i class="material-icons comment custom">chat_bubble_outline</i>
-        <span class="icon-side-count"><%= review.comments_count %></span>&nbsp;&nbsp;
-        <i class="material-icons like basic">favorite_border</i>
-        <span class="icon-side-count"><%= review.likes_count %></span>
-      </div>
+      </span>
+      <span class="review-index__footer-icons">
+        <i class="like--large material-icons">favorite_border</i>
+        <span class="like__count"><%= review.likes_count %></span>
+      </span>
     </div>
   <% end %>
 </li>

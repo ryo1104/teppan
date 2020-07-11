@@ -1,103 +1,95 @@
 <% @page_title = @neta.title %>
 <% breadcrumb :show_neta, @neta %>
 <div class="page-body">
-  <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs-tp" %>
   <div class="row">
-    <div class="col s12 m9 show">
-      <div class="card show z-depth-0">
-        <div class="card-content show">
-          <% if @owner || @neta.private_flag == false %>
-            <h1 class="h1-card"><%= @neta.title %></h1>
-            <div class="neta-text"><%= @neta.content %></div>
-            <div class="neta-purchase">
-              <% if @neta.price != 0 %>
-                <% unless (@purchased || @owner) %>
-                  <% if @for_sale %>
-                    <p class="neta-text-divider">--------  これより先は有料コンテンツです  --------</p>
-                    <span class="neta-price">価格：<%= number_to_currency(@neta.price, locale: 'ja') %></span>&nbsp;&nbsp;
-                    <%= link_to "購入", new_neta_trade_path(@neta.id), {:class => 'btn btn-primary withripple custom' } %>
-                  <% else %>
-                    <p class="neta-text-divider">--------  現在は販売されておりません  --------</p>
-                    <span class="neta-price-inactive"><%= number_to_currency(@neta.price, locale: 'ja') %></span>
-                    <div class="btn btn-primary withripple custom inactive">購入</div>
-                  <% end %>
-                <% else %>
-                  <% if @neta.valuecontent.present? %>
-                    <p class="neta-text-divider">---------  以下、有料部分   ---------</p>
-                    <div class="neta-text"><%= @neta.valuecontent %></div>
-                  <% end %>
-                  <% unless @owner %>
-                    <span class="neta-price-inactive"><%= number_to_currency(@purchased.price, locale: 'ja') %>で購入済み</span>
-                  <% end %>
-                <% end %>
-              <% end %>
-            </div>
-            <% @neta.hashtags.each do |tag| %>
-              <div class="chip custom"><%= link_to "#"+tag.hashname, "/hashtags?keyword=#{tag.hashname}" %></div>
-            <% end %>
-            <% if @owner %>
-              <p><%= link_to "編集", edit_neta_path(@neta.id) %></p>
-            <% end %>
-            <div class="collection-item-footer">
-              <p class="neta-footer-text">
-                <%= link_to user_path(@neta.user_id) do %>
-                  <span class="avatar-card">
-                    <% if @neta.user.avatar.present? %>
-                      <%= image_tag @neta.user.avatar, {:class => "circle custom", :id => "mycircle"} %>
+    <div class="col s12 m6 neta">
+      <% if @neta.private_flag %>
+        <%= @message %>
+      <% else %>
+        <div class="row content-header">
+          <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs-tp" %>
+        </div>
+        <div class="row neta">
+          <h1 class="neta__title"><%= @neta.title %></h1>
+          <div class="neta__text--free"><%= @neta.content %></div>
+          <div class="neta__price">
+            <% if @neta.price != 0 %>
+              <% unless (@purchased || @owner) %>
+                <% if @for_sale %>
+                  <div class="neta__text-divider">--------  これより先は有料コンテンツです  --------</div>
+                  <span class="neta__price--active">価格：<%= number_to_currency(@neta.price, locale: 'ja') %></span>&nbsp;&nbsp;
+                  <%= link_to "購入", new_neta_trade_path(@neta.id), {:class => 'btn btn-primary withripple custom' } %>
+                  <span class="neta__bookmark">
+                    <% if user_signed_in? && @owner == false %>
+                      <span id="bookmark_buttons_<%= @neta.class.name.downcase %>_<%= @neta.id %>">
+                        <%= render partial: 'interests/interest', locals: { interestable: @neta } %>
+                      </span>
                     <% else %>
-                      <%= image_bundle_tag "no_user_image.png", {:class => "circle custom", :id => "mycircle"} %>
+                      <i class="bookmark--large material-icons">bookmark_border</i>
                     <% end %>
                   </span>
-                <% end %>
-                <%= atname(@neta.user.nickname) %>&nbsp;&nbsp;
-                <%= @neta.created_at.to_s(:human) %>&nbsp;&nbsp;
-                <%= @neta.pageviews_count %>&nbsp;views&nbsp;&nbsp;
-                <%= @neta.public_str if @owner %>
-              </p>
-              <p class="neta-footer-icons">
-                <% if user_signed_in? %>
-                  <% unless @owner %>
-                    <span id="bookmark_buttons_<%= @neta.class.name.downcase %>_<%= @neta.id %>">
-                      <%= render partial: 'interests/interest', locals: { interestable: @neta } %>
-                    </span>
-                  <% else %>
-                    <i class="material-icons bookmark custom non-active">bookmark_border</i>&nbsp;&nbsp;
-                  <% end %>
                 <% else %>
-                  <i class="material-icons bookmark basic">bookmark_border</i>
+                  <p class="neta__text-divider">--------  現在は販売されておりません  --------</p>
+                  <span class="neta__price--inactive"><%= number_to_currency(@neta.price, locale: 'ja') %></span>
+                  <div class="btn btn-primary withripple custom inactive">購入</div>
                 <% end %>
-              </p>
-            </div>
-          <% else %>
-            <%= @message %>
-          <% end %>
-        </div>
-      </div>
-    </div>
-  </div>
-  <% unless @neta.private_flag %>
-    <div class="row">
-      <div class="col s12 m9 neta-show">
-        <div class="indent-wrapper">
-          <h1 class="h1_class">レビュー(<%= @reviews.count %>件)</h1>
-        </div>
-        <% if @reviews %>
-          <ul class="collection">
-          <%= render partial: "reviews/review", collection: @reviews %>
-          </ul>
-        <% else %>
-          <div class="indent-wrapper">
-            <p> (レビューはありません) </p>
+              <% else %>
+                <% if @neta.valuecontent.present? %>
+                  <p class="neta__text-divider">---------  以下、有料部分   ---------</p>
+                  <div class="neta__text--value"><%= @neta.valuecontent %></div>
+                <% end %>
+                <% unless @owner %>
+                  <span class="neta__price--inactive"><%= number_to_currency(@purchased.price, locale: 'ja') %>で購入済み</span>
+                <% end %>
+              <% end %>
+            <% end %>
           </div>
-        <% end %>
-        <% unless @owner %>
-          <% if @neta.price == 0 || @purchased %>
+          <% @neta.hashtags.each do |tag| %>
+            <div class="neta__hashtag"><%= link_to "#"+tag.hashname, "/hashtags?keyword=#{tag.hashname}" %></div>
+          <% end %>
+          <% if @owner %>
+            <div class="neta__edit-link"><%= link_to "編集", edit_neta_path(@neta.id) %></div>
+          <% end %>
+          <div class="neta__footer">
+            <%= link_to user_path(@neta.user_id) do %>
+              <% if @neta.user.avatar.present? %>
+                <%= image_tag @neta.user.avatar, {:class => "neta__author-image"} %>
+              <% else %>
+                <%= image_bundle_tag "no_user_image.png", {:class => "neta__author-image"} %>
+              <% end %>
+            <% end %>
+            <span class="neta__footer-text">
+              <%= @neta.user.nickname %>&nbsp;&nbsp;
+              <%= @neta.created_at.to_s(:human) %>&nbsp;&nbsp;
+            </span>
+          </div>
+        </div>  
+        <div class="row neta__review">
+          <h1>レビュー(<%= @reviews.count %>件)</h1>
+          <% if @reviews.present? %>
+            <ul class="neta__review-index collection">
+              <%= render partial: "reviews/review", collection: @reviews %>
+            </ul>
+          <% else %>
+            <p class="neta__review-nodata"> (レビューはありません) </p>
+          <% end %>
+          <% unless @owner %>
             <% unless @myreview.present? %>
-              <%= render partial: "reviews/reviewform", locals: { neta: @neta, newreview: @newreview } %>
+              <% if @for_sale %> 
+                <% if @purchased %>
+                  <ul class="neta__review-index collection">
+                    <%= render partial: "reviews/reviewform", locals: { neta: @neta, newreview: @newreview } %>
+                  </ul>
+                <% end %>
+              <% else %>
+                <ul class="neta__review-index collection">
+                  <%= render partial: "reviews/reviewform", locals: { neta: @neta, newreview: @newreview } %>
+                </ul>
+              <% end %>
             <% end %>
           <% end %>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
     </div>
-  <% end %>
+  </div>
 </div>

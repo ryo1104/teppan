@@ -1,0 +1,12 @@
+@mixin star-small {
+  img {
+    height: 1.5rem;
+  }
+}
+
+@mixin star-count {
+  color: $tp-orange;
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin: 0 1rem 0 0.5rem;
+}

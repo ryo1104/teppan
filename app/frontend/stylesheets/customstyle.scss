@@ -2,67 +2,20 @@
 
 
 
-.collection{
-  background-color: #ffffff;
-}
+// .collection{
+//   background-color: #ffffff;
+// }
 
-.avatar-card{
-  width: 1.8rem;
-  height: 1.8rem;
-  img{
-    width:  1.8rem;
-    height: 1.8rem;
-  }
-}
+// .avatar-card{
+//   width: 1.8rem;
+//   height: 1.8rem;
+//   img{
+//     width:  1.8rem;
+//     height: 1.8rem;
+//   }
+// }
 
-.trix-content {
-  * {
-    color: black;
-  }
-  a{
-    color: #66cc00;
-  }
-  .attachment--preview {
-    text-align: left;
-    img{
-      max-width: 50%;
-    }
-    .attachment__caption{
-      text-align: left;
-      color: #757575;
-      font-size: 0.8rem;
-    }
-  }
-  
-  .attachment-gallery {
-    > action-text-attachment,
-    > .attachment {
-      flex: 1 0 33%;
-      padding: 0 0.5em;
-      max-width: 33%;
-    }
 
-    &.attachment-gallery--2,
-    &.attachment-gallery--4 {
-      > action-text-attachment,
-      > .attachment {
-        flex-basis: 50%;
-        max-width: 50%;
-      }
-    }
-  }
-
-  action-text-attachment {
-    .attachment {
-      padding: 0 !important;
-      max-width: 100% !important;
-    }
-  }
-}
-
-trix-editor{
-  min-height: 15rem;
-}
 // figcaption{
 //   .attachment__caption{
 //     .attachment__caption--edited{
@@ -86,57 +39,57 @@ trix-editor{
   display: none;
 }
 
-label.custom{
-  font-size: .85rem;
-  color: #757575;
-}
+// label.custom{
+//   font-size: .85rem;
+//   color: #757575;
+// }
 
-textarea{
-  border-color: darkgray;
-}
+// textarea{
+//   border-color: darkgray;
+// }
 
-.collection-item.custom{
-  padding: 10px 10px;
-  line-height: 1.6rem;
-  border-bottom: 1px solid #e0e0e0;
-  p{
-    word-wrap: break-word;
-    margin: 0;
-  }
-}
+// .collection-item.custom{
+//   padding: 10px 10px;
+//   line-height: 1.6rem;
+//   border-bottom: 1px solid #e0e0e0;
+//   p{
+//     word-wrap: break-word;
+//     margin: 0;
+//   }
+// }
 
-.collection-item-title{
-  color: black;
-  font-weight: bold;
-  font-size: 1rem;
-}
-.collection-item-text { color: black; }
-.collection-item-postdata { color: #f57c00; }
-.collection-item-footer{
-  min-height: 20px;
-  color: #757575;
-  font-size: 11px;
-}
+// .collection-item-title{
+//   color: black;
+//   font-weight: bold;
+//   font-size: 1rem;
+// }
+// .collection-item-text { color: black; }
+// .collection-item-postdata { color: #f57c00; }
+// .collection-item-footer{
+//   min-height: 20px;
+//   color: #757575;
+//   font-size: 11px;
+// }
 
 
-.review-text{
-  min-height: 20px;
-  color: black;
-}
-.review-footer-text{
-  font-size: 11px;
-  color: #757575;
-}
-.review-footer-icons{
-  float: right;
-}
-.comment-text{
-  min-height: 2rem;
-}
+// .review-text{
+//   min-height: 20px;
+//   color: black;
+// }
+// .review-footer-text{
+//   font-size: 11px;
+//   color: #757575;
+// }
+// .review-footer-icons{
+//   float: right;
+// }
+// .comment-text{
+//   min-height: 2rem;
+// }
 
-.neta-purchase{
-  margin: 0 0 1.5rem 0;
-}
+// .neta-purchase{
+//   margin: 0 0 1.5rem 0;
+// }
 
 
 // .btn-large.btn-primary.withripple.custom{
@@ -263,95 +216,6 @@ textarea{
 // }
 
 
-.neta-text{
-  min-height: 150px;
-}
-.neta-text-divider{
-  color: #bdbdbd;
-}
-.neta-footer-text{
-  float: left;
-  font-size: 11px;
-}
-.neta-footer-icons{
-  float: right;
-  font-size: 10px;
-}
-.neta-review-count{
-  color: #f57c00;
-}
-
-.material-icons.like.basic{
-  color: #f57c00;
-  font-size: 1rem;
-}
-
-// .material-icons.like.large{
-//   color: #f57c00;
-//   font-size: 1.3rem;
-// }
-
-.material-icons.bookmark.basic{
-  color: #f57c00;
-  font-size: 1rem;
-}
-.material-icons.bookmark.large{
-  color: #f57c00;
-  font-size: 1.5rem;
-}
-.material-icons.bookmark.non-active{
-  color: #bdbdbd;
-  font-size: 1rem;
-}
-
-.bookmark-link{
-  color: #ffcc80;
-}
-
-.material-icons.post.custom{
-  font-size: 12px;
-  color: #f57c00;
-}
-
-.material-icons.share.custom{
-  color: #f57c00;
-  font-size: 12px;
-}
-.material-icons.comment.custom{
-  color: #f57c00;
-  font-size: 12px;   
-}
-.material-icons.follow.custom{
-  font-size: 16px;
-  // color: #f57c00;
-}
-.blank.icon{
-  width: 100px;
-  height: 5px;
-  color: white;
-}
-
-.neta-body-firsthalf{
-  min-height: 50px;
-  font-size: 11px;
-}
-
-#neta_form_title{
-  font-size: 1rem;
-}
-
-#neta-form-text{
-  width: 100%;
-  height: 15rem;
-}
-
-#topic_title{
-  font-size: 14px;
-}
-
-#topic_text{
-  font-size: 14px;
-}
 
 @include sp // screen and (max-width:767px)
 {

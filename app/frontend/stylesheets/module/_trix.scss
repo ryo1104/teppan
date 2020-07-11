@@ -1,0 +1,55 @@
+.trix-content {
+  * {
+    color: black;
+    line-height: 2.3rem;
+    font-size: 1.4rem;
+  }
+  a{
+    color: $tp-hyperlink;
+  }
+  .attachment--preview {
+    text-align: left;
+    img{
+      @include sp { 
+        max-width: 35rem;
+      }
+      @include pc { 
+        max-width: 50rem;
+      }
+    }
+    .attachment__caption{
+      text-align: left;
+      color: $tp-graytext;
+      font-size: 1rem;
+    }
+  }
+  
+  .attachment-gallery {
+    > action-text-attachment,
+    > .attachment {
+      flex: 1 0 33%;
+      padding: 0 0.5em;
+      max-width: 33%;
+    }
+
+    &.attachment-gallery--2,
+    &.attachment-gallery--4 {
+      > action-text-attachment,
+      > .attachment {
+        flex-basis: 50%;
+        max-width: 50%;
+      }
+    }
+  }
+
+  action-text-attachment {
+    .attachment {
+      padding: 0 !important;
+      max-width: 100% !important;
+    }
+  }
+}
+
+.trix-editor{
+  min-height: 15rem;
+}

@@ -1,13 +1,4 @@
 class NetasController < ApplicationController
-  # skip_before_action :authenticate_user!, only: %i[index]
-
-  # def index
-  #   @search = Neta.includes({user: [image_attachment: :blob]}, :hashtags).where(private_flag: false).ransack(params[:q])
-  #   @netas = @search.result(distinct: true).order("created_at DESC").page(params[:page]).per(20)
-  #   @hashtag_ranking = Hashtag.get_ranking(10)
-  #   @neta_ranking = Ranking.includes(:rankable).where(rankable_type: "Neta")
-  #   @view_history = Pageview.get_history("Neta", current_user.id, 30, 5) if user_signed_in?
-  # end
   
   def new
     @topic = Topic.find(params[:topic_id])
@@ -40,17 +31,17 @@ class NetasController < ApplicationController
   def show
     @neta = Neta.find(params[:id])
     @owner = @neta.owner(current_user)
-    if @owner || @neta.private_flag == false
+    if @neta.private_flag
+      @message = "このネタは投稿者が非公開に設定しています。"
+    else
       @reviews = @neta.reviews.includes({user: [image_attachment: :blob]})
-      @myreview = @reviews.where(user_id: current_user.id)
-      @newreview = Review.new unless @myreview.present?
       @for_sale = @neta.for_sale if @neta.price != 0
       unless @owner
         @purchased = @neta.trades.find_by(buyer_id: current_user.id)
+        @myreview = @reviews.where(user_id: current_user.id)
+        @newreview = Review.new unless @myreview.present?
         @neta.add_pageview(current_user)
-      end
-    else
-      @message = "このネタは投稿者が非公開に設定しています。"
+      end      
     end
   end
   

@@ -1,0 +1,66 @@
+.review {
+
+  &-new {
+    &__prompt {
+      margin: 0.5rem 0;
+      font-weight: bold;
+      font-size: 1.4rem;
+    }
+    
+    &__rate {
+      height: 4rem;
+    }
+    
+    &__hint {
+      height: 1.6rem; 
+      color: $tp-orange;
+    }
+    
+    &__textarea {
+      width: 100%; 
+      height: 6rem;
+    }
+    
+    &__user {
+      &-name {
+        color: black;
+        font-size: 1.1rem;
+      }
+    }
+    
+    &__author-image {
+      @include user-img-sm;
+    }
+  }
+
+  &-index {
+    
+    &__star-count {
+      @include star-count;
+    }
+    
+    &__text {
+      font-size: 1.3rem;
+      color: black;
+      margin: 0.5rem 0;
+    }
+    
+    &__footer {
+      margin: 0.5rem  0 0 0;
+  
+      &-text {
+        font-size: 1.1rem;
+        color: $tp-graytext;
+      }
+      
+      &-icons {
+        float: right;
+      }
+    }
+    
+    &__author-image {
+      @include user-img-sm;
+    }
+  }
+  
+}

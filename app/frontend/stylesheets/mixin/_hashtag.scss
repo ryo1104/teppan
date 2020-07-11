@@ -1,0 +1,10 @@
+@mixin hashtag-small{
+  @extend .chip;
+  height: 2.4rem;
+  line-height: 2.4rem;
+  background-color: $tp-hashtag;
+  a{
+    font-size: 1.1rem;
+    color: $tp-graytext;
+  }
+}

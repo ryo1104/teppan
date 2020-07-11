@@ -1,9 +1,0 @@
-@mixin icon-search {
-  @extend .material-icons;
-  color: $tp-green;
-}
-
-@mixin icon-sidecount {
-  color: $tp-orange;
-  font-size: 1.1rem;
-}

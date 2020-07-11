@@ -15,7 +15,7 @@
         </div>
         <div class="row topic-tabs">
           <div class="topic-tab__menu">
-            <ul>
+            <ul class="topic-tab__menu-list collection">
               <li class="js-topic-tab__link">投稿</li>
               <li class="js-topic-tab__link">コメント</li>
             </ul>
@@ -47,7 +47,7 @@
               <% end %>
               <% if user_signed_in? %>
                 <ul class="topic-tab__comments collection">
-                  <%= render partial: "comments/newcomment", locals: { commentable: @topic, newcomment: @newcomment } %>
+                  <%= render partial: "comments/commentform", locals: { commentable: @topic, newcomment: @newcomment } %>
                 </ul>
               <% end %>
             </div>

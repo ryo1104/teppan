@@ -1,0 +1,77 @@
+.neta {
+  
+  &__title {
+    
+  }
+  
+  &__text {
+    &--free {
+      color: black;
+      min-height: 4rem;
+    }
+    
+    &--value {
+      color: black;
+      min-height: 10rem;
+    }
+    
+    &-divider {
+      color: $tp-graytext;
+      margin: 0 0 0.5rem 0;
+    }
+  }
+  
+  &__price {
+    margin: 0 0 1rem 0;
+    &--active {
+      color: $tp-orange;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+    
+    &--inactive {
+      color: $tp-graytext;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+  }
+  
+  &__bookmark {
+    float: right;
+  }
+  
+  &__hashtag {
+    @include hashtag-small;
+  }
+  
+  &__edit-link {
+    
+  }
+  
+  &__author-image {
+    @include user-img-sm;
+  }
+  
+  &__footer {
+    margin: 0.5rem 0 0 0;
+    width: 100%;
+    font-size: 1rem;
+    
+    &-text {
+      color: $tp-graytext;
+    }
+  }
+  
+  &__review {
+    
+    &-index {
+      &.collection {
+        
+      }
+    }
+    
+    &-nodata {
+      
+    }
+  }
+}

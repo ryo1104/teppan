@@ -19,16 +19,15 @@
   
   &__footer{
     margin: 0.5rem 0 0 0;
-    width: 100%;
-    font-size: 1rem;
     
     &-text {
+      font-size: 1.1rem;
       color: $tp-graytext;
     }
     
     &-icons{
       float: right;
-      margin: 0.5rem 0 0 0;
+      margin: 0.5rem 0.5rem 0 0;
       font-size: 1rem;
     }
   }
@@ -41,12 +40,12 @@
 .topic-tab {
 
   &__menu {
-    width: 50rem;
   
     ul {
       margin: 0;
       padding: 0rem;
       font-size: 1rem;
+      border: none;
     }
   
     li {

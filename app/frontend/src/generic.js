@@ -11,6 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
 $(function() {
   $(".top-page-subtitle").css({ 
     "color":"#ff9800",
-    "font-size":"16px"
+    "font-size":"20px"
     });
 });
