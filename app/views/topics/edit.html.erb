@@ -1,22 +1,25 @@
 <%= javascript_bundle_tag 'topic' %>
-<% @page_title = @topic.title + " - 編集中" %>
+<% @page_title = @topic.title + "（編集）" %>
 <% breadcrumb :edit_topic, @topic %>
 <div class="page-body">
-  <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs-tp" %>
   <div class="row">
-    <div class="col s12 m9 show">
-      <div class="card z-depth-0">
+    <div class="col s12 m6 topic">
+      <div class="row content-header">
+        <%= render partial: "layouts/breadcrumbs" %>
+      </div>
+      <div class="row topic-edit">
+        <h1>トピック編集</h1>
         <%= form_with model: @topic, local: true, method: :patch do |form| %>
           <% if @topic.errors.any? %>
             <%= render :partial => "errorform" %>
           <% end %>
           <%= render :partial => "topicform", locals: { form: form } %>
-          <%= button_tag :type => "submit", class: "btn btn-primary withripple custom" do %>
-            <i class="material-icons left">refresh</i>更新
+          <%= button_tag :type => "submit", class: "topic-new__submit btn waves-effect" do %>
+            <i class="topic-edit__submit material-icons left">refresh</i>更新
           <% end %>
-          <%= link_to topic_path(@topic.id), {:method => :delete, :class => 'btn btn-primary withripple custom', data: { confirm: "本当にトピックを削除しますか？" }} do %>
-            <i class="material-icons left">delete</i>
-            <span>トピックを削除</span><br>
+          <%= link_to topic_path(@topic.id), {:method => :delete, :class => 'topic-new__submit btn waves-effect', data: { confirm: "本当にトピックを削除しますか？" }} do %>
+            <i class="topic-edit__submit material-icons left">delete</i>
+            <span>削除</span>
           <% end %>
         <% end %>
       </div>

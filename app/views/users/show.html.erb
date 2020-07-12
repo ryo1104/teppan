@@ -68,7 +68,7 @@
     <div class="col s12 m9 user-page">
       <% if @my_page %>
       <div class="user-tab-menu">
-        <ul>
+        <ul class="user-tab-menu">
           <li class="ChangeElem_Tab">投稿</li>
           <li class="ChangeElem_Tab">購入</li>
           <li class="ChangeElem_Tab">販売</li>
@@ -94,7 +94,7 @@
           <% end %>
           <hr>
           <% if @my_page %>
-            <h2>下書き(<%= @draft_netas.count %>件)</h2>
+            <h2>下書きネタ</h2>
             <% if @draft_netas %>
               <ul class="collection">
                 <%= render partial: "netas/neta", collection: @draft_netas %>
@@ -104,13 +104,16 @@
             <% end %>
             <hr>
           <% end %>
-          <h2>トピック(<%= @posted_topics.count %>件)</h2>
+          <h2>トピック</h2>
           <% if @posted_topics %>
-          <div>
-            <%= render partial: "topics/topic", collection: @posted_topics %>
-          </div>
-          <% else %>
-            <p>（投稿はありません）</p><br>
+            <div>
+              <%= render partial: "topics/topic_card", collection: @posted_topics %>
+            </div>
+          <% end %>
+          <% if @draft_topics %>
+            <div>
+              <%= render partial: "topics/topic_card", collection: @draft_topics %>
+            </div>
           <% end %>
         </div>
         
@@ -134,7 +137,7 @@
             <% end %>
             <h2>ブックマークしたトピック(<%= @interested_topics.count %>件)</h2>
             <% if @interested_topics %>
-              <%= render partial: "topics/topic", collection: @interested_topics %>
+              <%= render partial: "topics/topic_card", collection: @interested_topics %>
             <% else %>
               <p>（トピックはありません）</p>
             <% end %>

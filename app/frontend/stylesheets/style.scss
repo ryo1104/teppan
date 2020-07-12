@@ -3,6 +3,7 @@
 
 @import "/base/_base.scss";
 
+@import "/mixin/_button.scss";
 @import "/mixin/_hashtag.scss";
 @import "/mixin/_star.scss";
 @import "/mixin/_user-img.scss";
@@ -14,6 +15,7 @@
 @import "/module/_pagination.scss";
 @import "/module/_stars.scss";
 @import "/module/_icons.scss";
+@import "/module/_topic_form.scss";
 @import "/module/_trix.scss";
 
 @import "/collection/_topic.scss";
@@ -22,6 +24,8 @@
 @import "/collection/_review.scss";
 
 @import "/page/_topics_index.scss";
+@import "/page/_topics_new.scss";
+@import "/page/_topics_edit.scss";
 @import "/page/_topics_show.scss";
 @import "/page/_netas_show.scss";
 @import "customstyle.scss";

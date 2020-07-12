@@ -9,7 +9,7 @@ class NetasController < ApplicationController
   
   def create
     if session[:last_created_at].to_i > session_params[:timestamp].to_i
-      redirect_to topic_path(params[:topic_id]), alert: "���でに投稿済です。" and return
+      redirect_to topic_path(params[:topic_id]), alert: "すでに投稿済です。" and return
     else
       @topic = Topic.find(params[:topic_id])
       @neta = @topic.netas.new(create_params)

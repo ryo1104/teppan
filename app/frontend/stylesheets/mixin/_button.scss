@@ -1,0 +1,8 @@
+@mixin button-normal {
+  background-image: linear-gradient(to bottom, $btn-gradient-top, $btn-gradient-bottom);
+  border-radius: $btn-border-radius;
+  height: 3rem;
+  min-width: 9rem;
+  line-height: 3rem;
+  font-size: 1.3rem;
+}

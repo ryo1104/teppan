@@ -4,11 +4,9 @@
     &-image{
       @include sp { 
         max-width: 35rem;
-        max-height: 25rem;
       }
       @include pc { 
         max-width: 50rem;
-        max-height: 35rem;
       }
     }
   }
@@ -87,7 +85,7 @@
     @extend .btn-floating;
     position: fixed;
     bottom: 2rem;
-    @include sp { right: 15rem; }
+    @include sp { right: 2rem; }
     @include pc { right: 64rem; }
     background-color: $tp-green;
 

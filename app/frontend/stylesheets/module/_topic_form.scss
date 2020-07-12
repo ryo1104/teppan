@@ -1,0 +1,52 @@
+.topic-form {
+  
+  &__header-img {
+    
+    margin: 0 0 1rem 0;
+    
+    &-label {
+      
+    }
+    
+    &-filename {
+      margin: 0 1rem 0 0;
+    }
+    
+    &-deletelink {
+      
+    }
+    
+    &-content{
+      max-width: 100%;
+    }
+    
+    &-filefield {
+      font-size: 1.2rem;
+    }
+  }
+  
+  &__title {
+
+    margin: 0 0 1rem 0;
+
+    &-text {
+      font-size: 1.4rem !important;
+    }
+  }
+  
+  &__content {
+    margin: 0 0 1rem 0;
+  }
+
+  &__private {
+    margin: 0 0 2rem 0;
+  }
+    
+}
+
+#topic-form__private-flag {
+  width: 9rem;
+  height: 3.3rem;
+  font-size: 1.2rem;
+  border-color: $tp-grayline;
+}

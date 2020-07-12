@@ -8,7 +8,7 @@
         <%= @message %>
       <% else %>
         <div class="row content-header">
-          <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs-tp" %>
+          <%= render partial: "layouts/breadcrumbs" %>
         </div>  
         <div class="row topic-body">
           <%= render partial: "topics/topic" %>

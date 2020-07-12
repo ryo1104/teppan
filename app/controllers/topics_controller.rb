@@ -12,8 +12,12 @@ class TopicsController < ApplicationController
   end
   
   def create
-    @topic = Topic.create!(create_params)
-    redirect_to topics_path, notice: "トピックを作成しました。" and return
+    @topic = Topic.new(create_params)
+    if @topic.save
+      redirect_to topics_path, notice: "トピックを作成しました。" and return
+    else
+      render :new and return
+    end
   end
   
   def show
@@ -33,18 +37,18 @@ class TopicsController < ApplicationController
 
   def edit
     @topic = Topic.find(params[:id])
-    unless @topic.owner(current_user)
+    unless owner(@topic)
       redirect_to topic_path(@topic.id), alert: "権限がありません。" and return
     end
   end
   
   def update
     @topic = Topic.find(params[:id])
-    if @topic.owner(current_user)
-      if @topic.update!(create_params)
+    if owner(@topic)
+      if @topic.update(create_params)
         redirect_to topic_path(@topic.id), notice: "トピックを更新しました。" and return
       else
-        redirect_to topic_path(@topic.id), alert: "更新に失敗しました。" and return
+        render :edit and return
       end
     else
       redirect_to topic_path(@topic.id), alert: "権限がありません。" and return
@@ -53,18 +57,14 @@ class TopicsController < ApplicationController
   
   def destroy
     @topic = Topic.includes(:netas, :pageviews, :interests).find(params[:id])
-    if @topic.owner(current_user)
-      if @topic.is_deleteable
-        if @topic.destroy!
-          redirect_to topics_path, notice: "トピックを削除しました。" and return
-        else
-          redirect_to topic_path(@topic.id), alert: "更新に失敗しました。" and return
-        end
+    if owner(@topic)
+      if @topic.destroy
+        redirect_to topics_path, notice: "トピックを削除しました。" and return
       else
-        redirect_to topic_path(@topic.id), alert: "このトピックに属する投稿があるため、削除できません。" and return
+        render :edit and return
       end
     else
-      redirect_to topic_path(@topic.id), alert: "削除する権限がありません。" and return
+      redirect_to topic_path(@topic.id), alert: "権限がありません。" and return
     end
   end
   
@@ -77,6 +77,7 @@ class TopicsController < ApplicationController
   end
   
   private
+  
   def create_params
     params.require(:topic).permit(:title, :content, :header_image, :private_flag).merge(user_id: current_user.id)
   end

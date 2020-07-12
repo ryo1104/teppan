@@ -17,7 +17,7 @@ $(document).ready( function() {
   });
 });
 
-$('#header-image-upload').change(function(e){
+$('.topic-form__header-img-filefield').change(function(e){
   const file = e.target.files[0];
   const reader = new FileReader();
 
@@ -28,8 +28,8 @@ $('#header-image-upload').change(function(e){
 
   reader.onload = (function(file){
     return function(e){
-      $("#header-image").attr("src", e.target.result);
-      $("#header-image").attr("title", file.name);
+      $('.topic-form__header-img-content').attr("src", e.target.result);
+      $('.topic-form__header-img-content').attr("title", file.name);
     };
   })(file);
   reader.readAsDataURL(file);

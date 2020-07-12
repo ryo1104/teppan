@@ -1,0 +1,12 @@
+.topic-edit {
+  
+  &__submit {
+    &.btn.waves-effect {
+      @include button-normal;
+    }
+    
+    &.material-icons.left {
+      margin: 0;
+    }
+  }
+}

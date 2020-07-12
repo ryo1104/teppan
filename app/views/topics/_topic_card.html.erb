@@ -1,35 +1,35 @@
 <%= link_to topic_path(topic_card.id) do %>
-  <div class="topics-index-item card">
-    <div class="topics-index-item card-image">
+  <div class="topics-index card">
+    <div class="topics-index card-image">
       <% if topic_card.header_image.attached? %>
         <%= image_tag topic_card.header_image %>
       <% else %>
         <%= image_bundle_tag "teppan_gray.jpeg" %>
       <% end %>
     </div>
-    <div class="topics-index-item card-content">
-      <div class="topics-index-item__title truncate"><%= topic_card.title %></div>
-      <div class="topics-index-item__postdata">
+    <div class="topics-index card-content">
+      <div class="topics-index__title truncate"><%= topic_card.title %></div>
+      <div class="topics-index__postdata">
         <% if topic_card.max_rate == 0 %>
           <span class="js-topics-index__star" rating-data="0"></span>
         <% else %>
           <span class="js-topics-index__star" rating-data="<%= topic_card.max_rate %>"></span>
-          <span class="topics-index-item__star-count"><%= topic_card.max_rate %></span>
+          <span class="topics-index__star-count"><%= topic_card.max_rate %></span>
         <% end %>
         <br>
-        <i class="topics-index-item__neta-icon material-icons">create</i>
-        <span class="topics-index-item__icon-count"><%= topic_card.netas_count %></span>
-        <i class="topics-index-item__like-icon material-icons">favorite_border</i>
-        <span class="topics-index-item__icon-count"><%= topic_card.likes_count %></span>
+        <i class="topics-index__neta-icon material-icons">create</i>
+        <span class="topics-index__icon-count"><%= topic_card.netas_count %></span>
+        <i class="topics-index__like-icon material-icons">favorite_border</i>
+        <span class="topics-index__icon-count"><%= topic_card.likes_count %></span>
       </div>
-      <div class="topics-index-item__author">
+      <div class="topics-index__author">
         <%= link_to user_path(topic_card.user_id) do %>
           <% if topic_card.user.avatar.present? %>
-            <%= image_tag topic_card.user.avatar, {:class => "topics-index-item__author-image"} %>
+            <%= image_tag topic_card.user.avatar, {:class => "topics-index__author-image"} %>
           <% else %>
-            <%= image_bundle_tag "no_user_image.png", {:class => "topics-index-item__author-image"} %>
+            <%= image_bundle_tag "no_user_image.png", {:class => "topics-index__author-image"} %>
           <% end %>
-          <span class="topics-index-item__author-name"><%= topic_card.user.nickname %></span>
+          <span class="topics-index__author-name"><%= topic_card.user.nickname %></span>
         <% end %>
       </div>
     </div>

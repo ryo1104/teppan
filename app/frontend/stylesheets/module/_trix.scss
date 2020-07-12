@@ -1,3 +1,9 @@
+trix-editor{
+  @include sp { min-height: 15rem; }
+  @include pc { min-height: 25rem; }
+  font-size: 1.4rem;
+}
+
 .trix-content {
   * {
     color: black;
@@ -50,6 +56,3 @@
   }
 }
 
-.trix-editor{
-  min-height: 15rem;
-}

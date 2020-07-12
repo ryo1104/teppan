@@ -13,6 +13,7 @@ class UsersController < ApplicationController
       
       if @my_page
         @draft_netas = @user.netas.includes(:hashtags, :user).where(private_flag: true)
+        @draft_topics = @user.topics.includes([header_image_attachment: :blob], :netas, :user).where(private_flag: true)
         @following_users_count = @user.following_users_count
         @bought_trades = Trade.where(buyer_id: @user.id, tradeable_type: "Neta")
         @bought_netas = User.bought_netas(@bought_trades)
