@@ -2,7 +2,15 @@
   background-image: linear-gradient(to bottom, $btn-gradient-top, $btn-gradient-bottom);
   border-radius: $btn-border-radius;
   height: 3rem;
-  min-width: 9rem;
+  min-width: 10rem;
   line-height: 3rem;
+  color: white;
   font-size: 1.3rem;
+  font-weight: bold;
+  
+  input {
+    color: white;
+    font-size: 1.3rem;
+    font-weight: bold;
+  }
 }

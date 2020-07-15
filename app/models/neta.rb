@@ -13,7 +13,7 @@ class Neta < ApplicationRecord
   has_many        :hashtags, through: :hashtag_netas
   validate        :content_check
   validate        :valuecontent_check
-  validates       :title,     presence: true, length: { in: 5..50 }
+  validates       :title,     presence: true, length: { in: 5..35 }
   validates       :valuetext, length: { maximum: 800 }
   validates       :price,     presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 10000 }
   validates       :private_flag, inclusion: { in: [true, false] }
@@ -72,10 +72,14 @@ class Neta < ApplicationRecord
   end
   
   def for_sale
-    if self.user.premium_user[0]
-      if self.user.account.present?
-        if self.user.account.stripe_status == "verified"
-          return true
+    if self.price != 0
+      if self.user.premium_user[0]
+        if self.user.account.present?
+          if self.user.account.stripe_status == "verified"
+            return true
+          else
+            return false
+          end
         else
           return false
         end
@@ -84,7 +88,7 @@ class Neta < ApplicationRecord
       end
     else
       return false
-    end
+    end  
   end
   
   def public_str

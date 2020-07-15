@@ -1,0 +1,25 @@
+.top-page {
+  
+  &__logo {
+    &-container {
+      margin: 15rem 0 3rem 0;
+    }
+    
+    &-img {
+      @include sp {
+        width: 20rem;
+        height: 16rem;
+      }
+      @include pc {
+        width: 26rem;
+        height: 21rem;
+      }
+    }
+  }
+  
+  &__subtitle {
+    color: $tp-orange;
+    @include sp { font-size: 1.8rem; }
+    @include pc { font-size: 2.6rem; }
+  }
+}

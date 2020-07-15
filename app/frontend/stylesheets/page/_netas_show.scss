@@ -1,4 +1,4 @@
-.neta {
+.neta-show {
   
   &__title {
     
@@ -16,13 +16,14 @@
     }
     
     &-divider {
-      color: $tp-graytext;
+      color: $tp-gray;
       margin: 0 0 0.5rem 0;
     }
   }
   
   &__price {
-    margin: 0 0 1rem 0;
+    margin: 0 0 3rem 0;
+
     &--active {
       color: $tp-orange;
       font-size: 1.4rem;
@@ -30,7 +31,7 @@
     }
     
     &--inactive {
-      color: $tp-graytext;
+      color: $tp-gray;
       font-size: 1.4rem;
       font-weight: bold;
     }
@@ -55,10 +56,10 @@
   &__footer {
     margin: 0.5rem 0 0 0;
     width: 100%;
-    font-size: 1rem;
+    font-size: 1.2rem;
     
     &-text {
-      color: $tp-graytext;
+      color: $tp-gray;
     }
   }
   

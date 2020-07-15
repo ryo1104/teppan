@@ -1,0 +1,63 @@
+.neta-form {
+  
+  &__title {
+    
+    &-text {
+      font-size: 1.4rem !important;
+    }
+  }
+  
+  &__content {
+    margin: 0 0 1rem 0;
+    &-textarea {
+      &:before {
+        color: $tp-lightgray !important;
+      }
+    }
+  }
+  
+  &__valuecontent {
+    margin: 0 0 1rem 0;
+  }
+  
+  &__hashtags {
+    margin: 0 0 1rem 0;
+  }
+  
+  &__price {
+    margin: 0 0 1rem 0;
+    
+    &-field {
+      &--active {
+        width: 8rem !important;
+        height: 2.5rem !important;
+        font-size: 1.4rem !important;
+        text-align: right;
+      }
+      &--inactive {
+        width: 8rem !important;
+        height: 2.5rem !important;
+        font-size: 1.4rem !important;
+        text-align: right;
+        color: $tp-lightgray !important;
+      }
+    }
+    
+    &-invalid {
+      font-size: 1.3rem;
+      color: $tp-lightgray;
+    }
+  }
+  
+  &__private {
+    margin: 0 0 2rem 0;
+  }
+  
+}
+
+#neta-form__private-flag {
+  width: 9rem;
+  height: 3.3rem;
+  font-size: 1.2rem;
+  border-color: $tp-lightgray;
+}

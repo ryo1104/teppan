@@ -2,23 +2,24 @@
 <% @page_title = "ネタ編集" %>
 <% breadcrumb :edit_neta, @neta %>
 <div class="page-body">
-  <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs-tp" %>
   <div class="row">
-    <div class="col s12 m9 show">
-      <h1 class="h1_class">投稿ネタ（編集）</h1>
-      <div class="card z-depth-0">
+    <div class="col s12 m6 content">
+      <div class="row content-header">
+        <%= render partial: "layouts/breadcrumbs" %>
+      </div>
+      <div class="row neta-edit">
+        <h1>ネタ（編集）</h1>
         <%= form_with model: @neta, local: true, method: :patch do |form| %>
           <% if @neta.errors.any? %>
             <%= render :partial => "errorform" %>
           <% end %>
           <%= render :partial => "netaform", locals: { form: form } %>
-          <%= button_tag :type => "submit", data: {disable_with: '保存中...'}, class: "btn btn-primary withripple custom" do %>
+          <%= button_tag :type => "submit", data: {disable_with: '保存中...'}, class: "neta-edit__update btn waves-effect" do %>
             <i class="material-icons left">refresh</i>更新
-          <% end %>&nbsp;&nbsp;
+          <% end %>
           <% if @editable %>
-            <%= link_to neta_path(@neta.id), {:method => :delete, :class => 'btn btn-primary withripple custom', data: { confirm: "本当に削除しますか？" }} do %>
-              <i class="material-icons left">delete</i>
-              <span>削除</span><br>
+            <%= link_to neta_path(@neta.id), {:method => :delete, :class => 'neta-edit__delete btn waves-effect', data: { confirm: "本当に削除しますか？" }} do %>
+              <i class="material-icons left">delete</i>削除
             <% end %>
           <% end %>
         <% end %>

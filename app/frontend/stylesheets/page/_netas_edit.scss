@@ -1,0 +1,23 @@
+.neta-edit {
+  
+  &__update {
+    &.btn.waves-effect {
+      @include button-normal;
+    }
+    
+    &.material-icons.left {
+      margin: 0;
+    }
+  }
+  
+  &__delete {
+    &.btn.waves-effect {
+      @include button-normal;
+      margin-left: 1rem;
+    }
+    
+    &.material-icons.left {
+      margin: 0;
+    }
+  }
+}

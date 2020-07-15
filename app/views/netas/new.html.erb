@@ -2,23 +2,20 @@
 <% @page_title = "新規ネタ" %>
 <% breadcrumb :new_neta, @topic %>
 <div class="page-body">
-  <%= render partial: "layouts/breadcrumbs" %>
   <div class="row">
-    <div class="col s12 m9 topic-show">
-      <%= render partial: "topics/topic", :locals => { topic: @topic }%>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col s12 m9 show">
-      <h1>新規ネタ</h1>
-      <div class="card z-depth-0">
+    <div class="col s12 m6 content">
+      <div class="row content-header">
+        <%= render partial: "layouts/breadcrumbs" %>
+      </div>
+      <div class="row neta-new">
+        <h1>新規ネタ</h1>
         <%= form_with model: [@topic, @neta], local: true, method: :post do |form| %>
           <% if @neta.errors.any? %>
             <%= render :partial => "errorform" %>
           <% end %>
           <%= render :partial => "netaform", locals: { form: form } %>
-          <%= button_tag :type => "submit", data: {disable_with: '保存中...'}, class: "btn btn-primary withripple custom" do %>
-            <i class="material-icons left">create</i>投稿
+          <%= button_tag :type => "submit", data: {disable_with: '保存中...'}, class: "neta-new__submit btn waves-effect" do %>
+            <i class="neta-new__submit material-icons left">create</i>投稿
           <% end %>
         <% end %>
       </div>

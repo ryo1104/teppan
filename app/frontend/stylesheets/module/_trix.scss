@@ -1,14 +1,19 @@
-trix-editor{
-  @include sp { min-height: 15rem; }
-  @include pc { min-height: 25rem; }
-  font-size: 1.4rem;
+trix-editor {
+  @include sp { 
+    min-height: 15rem;
+    font-size: 1.3rem;
+  }
+  @include pc {
+    min-height: 25rem; 
+    font-size: 1.4rem;
+  }
 }
 
 .trix-content {
   * {
     color: black;
     line-height: 2.3rem;
-    font-size: 1.4rem;
+    // font-size: 1.3rem;
   }
   a{
     color: $tp-hyperlink;
@@ -25,7 +30,7 @@ trix-editor{
     }
     .attachment__caption{
       text-align: left;
-      color: $tp-graytext;
+      color: $tp-gray;
       font-size: 1rem;
     }
   }

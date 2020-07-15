@@ -3,7 +3,7 @@
 <% breadcrumb :show_topic, @topic %>
 <div class="page-body">
   <div class="row">
-    <div class="col s12 m6 topic">
+    <div class="col s12 m6 content">
       <% if @topic.private_flag && @owner == false %>
         <%= @message %>
       <% else %>

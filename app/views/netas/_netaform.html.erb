@@ -1,21 +1,31 @@
-<%= form.label :title, "タイトル／キャッチフレーズ" %>
-<%= form.text_field :title, :value => @neta.title, :id => 'neta_form_title', :minlength => '5', :maxlength => '30' %>
-<%= form.label :content, "本文" %>
-<%= form.rich_text_area :content, :value => @neta.content, :id => "neta_form_content" , :placeholder => '８００字以内' %>
+<div class="neta-form__title">
+  <%= form.label :title, "タイトル／キャッチフレーズ", :class => "neta-form__title-label" %>
+  <%= form.text_field :title, :value => @neta.title, :class => 'neta-form__title-text', :minlength => '5', :maxlength => '35' %>
+</div>
+<div class="neta-form__content">
+  <%= form.label :content, "本文", :class => "neta-form__content-label" %>
+  <%= form.rich_text_area :content, :value => @neta.content, :class => "neta-form__content-textarea" , :placeholder => '８００字以内' %>
+</div>
 <% if @qualified %>
-  <%= form.label :value_content, "有料部分" %>
-  <%= form.rich_text_area :valuecontent, :value => @neta.valuetext, :id => "neta_form_value_content", placeholder: "有料部分（８００字以内）" %>
+<div class="neta-form__valuecontent">
+  <%= form.label :value_content, "有料部分", :class => "neta-form__valuecontent-label" %>
+  <%= form.rich_text_area :valuecontent, :value => @neta.valuetext, :class => "neta-form__valuecontent-textarea", :placeholder => '有料部分（８００字以内）' %>
+</div>
 <% end %>
-<%= form.text_field :tags, :value => @current_tags, :autocomplete => 'off', :id => 'tag_post_field' %>
-<%= form.label :price, "価格", :value => 'neta-form-price' %><br>
-<% if @qualified %>
-  <%= form.number_field :price, :value => @neta.price, :id => 'neta-form-price', min: 0, step: 10 %>&nbsp;&nbsp;円
-<% else %>
-  <%= form.number_field :price, :value => @neta.price, :id => 'neta-form-price', :readonly => true %>&nbsp;&nbsp;<span id="neta_form_no_price">円</span>
-  <span id="neta_form_no_price">（有料投稿はビジネスアカウント登録が必要です）</span>
-<% end %>
-<br>
-<%= form.label :private_flag, "公開／非公開" %>
-<%= form.select :private_flag, [['公開', false], ['非公開', true]], { include_blank: false, selected: @neta.private_flag }, { class: "browser-default", :id => "private_flag" } %>
+<div class="neta-form__hashtags">
+  <%= form.text_field :tags, :value => @current_tags, :autocomplete => 'off', :id => 'js-tag_post_field' %>
+</div>
+<div class="neta-form__price">
+  <%= form.label :price, "価格", :value => 'neta-form__price-label' %>
+  <% if @qualified %>
+    <%= form.number_field :price, :value => @neta.price, :class => 'neta-form__price-field--active', min: 0, step: 10 %>&nbsp;&nbsp;円
+  <% else %>
+    <%= form.number_field :price, :value => @neta.price, :class => 'neta-form__price-field--inactive', :readonly => true %>&nbsp;&nbsp;<span class="neta-form__price-invalid">円</span>
+    <div class="neta-form__price-invalid">（有料投稿はビジネスアカウント登録が必要です）</div>
+  <% end %>
+</div>
+<div class="neta-form__private">
+  <%= form.label :private_flag, "公開／非公開", :class => 'neta-form__private-label' %>
+  <%= form.select :private_flag, [['公開', false], ['非公開', true]], { include_blank: false, selected: @neta.private_flag }, { class: "browser-default", :id => "neta-form__private-flag" } %>
+</div>
 <%= form.hidden_field :timestamp, :value => @stale_form_check_timestamp %>
-<br>

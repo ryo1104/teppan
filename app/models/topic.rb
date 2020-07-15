@@ -7,7 +7,7 @@ class Topic < ApplicationRecord
   has_many      :interests, as: :interestable, dependent: :destroy
   has_many      :comments,  as: :commentable, dependent: :destroy
   has_many      :likes,     as: :likeable, dependent: :destroy
-  validates     :title,     presence: true, uniqueness: { case_sensitive: true }, length: { maximum: 30 }
+  validates     :title,     presence: true, uniqueness: { case_sensitive: true }, length: { maximum: 35 }
   validate      :content_check
   validate      :header_image_type, if: :was_attached?
 

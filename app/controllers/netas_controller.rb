@@ -31,11 +31,11 @@ class NetasController < ApplicationController
   def show
     @neta = Neta.find(params[:id])
     @owner = @neta.owner(current_user)
-    if @neta.private_flag
+    if @neta.private_flag && !@owner
       @message = "このネタは投稿者が非公開に設定しています。"
     else
       @reviews = @neta.reviews.includes({user: [image_attachment: :blob]})
-      @for_sale = @neta.for_sale if @neta.price != 0
+      @for_sale = @neta.for_sale
       unless @owner
         @purchased = @neta.trades.find_by(buyer_id: current_user.id)
         @myreview = @reviews.where(user_id: current_user.id)

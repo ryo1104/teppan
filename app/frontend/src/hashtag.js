@@ -11,7 +11,7 @@ const initialize = () => {
 };
 
 const addSelectize = () => {
-  $('#tag_post_field').selectize({
+  $('#js-tag_post_field').selectize({
     searchField: ['text', 'sub_text'], // 入力値のフィルター対象、ひらがなでも検索結果を絞り込めるようにする
     labelField: 'label', // 表示させるラベル
     valueField: 'value', // inputのvalue
@@ -96,7 +96,7 @@ const renderOption = (item, escape) => {
 };
 
 const renderOptionCreate = (item, escape) => {
-  return `<div><span>${escape(item.input) ? item.input : ''}</span></div>`
+  return `<div><span>${escape(item.input) ? "#"+item.input : ''}</span></div>`
 };
 
 
