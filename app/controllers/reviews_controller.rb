@@ -1,45 +1,23 @@
 class ReviewsController < ApplicationController
 
   def create
-    begin
-      @neta = Neta.find(params[:neta_id])
-      create_params = filter_create_params
-      unless create_params == false
-        @review = @neta.reviews.create!(create_params)
-        update_avg_res = @neta.update_average_rate
-        if update_avg_res[0]
-          redirect_to neta_path(params[:neta_id]) and return
-        else
-          Rails.logger.error "Neta::update_average_rate returned false : #{update_avg_res[1]}"
-          redirect_to neta_path(params[:neta_id]), alert: "レビューを投稿できませんでした。" and return
-        end
-      else
-        Rails.logger.error "create_params is invalid. Params : #{params}"
-        redirect_to neta_path(params[:neta_id]), alert: "レビューを投稿できませんでした。" and return
+    @neta = Neta.find(params[:neta_id])
+    @review = @neta.reviews.new(create_params)
+    if @review.valid?
+      Review.transaction do
+        @review.save
+        @neta.update_average_rate
       end
-    rescue => e
-      ErrorUtility.log_and_notify e
-      redirect_to neta_path(params[:neta_id]), alert: "システムエラーによりレビューを投稿できませんでした。" and return
-    end 
-  end
-  
-  def show
-    begin
-      @review = Review.includes(:neta, {user: [image_attachment: :blob]}).find(params[:id])
-    rescue => e
-      ErrorUtility.log_and_notify e
-      redirect_to neta_path, alert: "システムエラーによりレビューを表示できません。" and return
+      redirect_to neta_path(@neta.id) and return
+    else
+      render :new and return
     end
   end
 
   private
-  def filter_create_params
-    ret_params = params.require(:review).permit(:text, :rate).merge(user_id: current_user.id)
-    if ret_params[:rate].blank?
-      return false
-    else
-      return ret_params
-    end
+  
+  def create_params
+    params.require(:review).permit(:text, :rate).merge(user_id: current_user.id)
   end
 
 end

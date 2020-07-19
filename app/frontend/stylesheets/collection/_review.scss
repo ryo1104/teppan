@@ -46,6 +46,7 @@
     
     &__star-count {
       @include star-count;
+      margin: 0 0 0 1.5rem;
     }
     
     &__text {

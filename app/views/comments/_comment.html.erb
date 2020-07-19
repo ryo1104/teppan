@@ -1,10 +1,11 @@
 <li class="comment-index collection-item" >
-  <div class="comment-index__text"><%= comment.text %></div>
-  <% if user_signed_in? && comment.user_id == current_user.id %>
-    <span class="comment-index__delete">
-      <%= link_to '削除', comment_path(comment.id), {:method => :delete, :data => {:confirm => "本当に削除しますか？"}} %>
-    </span>
-  <% end %>
+  <div class="comment-index__text">
+    <% if comment.is_deleted %>
+      （このコメントは削除されました）
+    <% else %>
+      <%= comment.text %>
+    <% end %>
+  </div>
   <div class="comment-index__footer">
     <%= link_to user_path(comment.user.id) do %>
       <% if comment.user.avatar.present? %>
@@ -15,10 +16,19 @@
     <% end %>
     <span class="comment-index__footer-text">
       <%= comment.user.nickname %>&nbsp;&nbsp;
-      <%= comment.updated_at.to_s(:human) %>&nbsp;&nbsp;
+      <%= comment.created_at.to_s(:human) %>&nbsp;&nbsp;
     </span>
+    <% if comment.user_id == current_user.id %>
+      <span class="comment-index__delete">
+        <% unless comment.is_deleted %>
+          <% if comment.commentable_type == "Topic" %>
+            <%= link_to '削除', topic_comment_path(comment.commentable_id, comment.id), {:method => :delete, :data => {:confirm => "本当に削除しますか？"}} %>
+          <% end %>
+        <% end %>
+      </span>
+    <% end %>
     <div class="comment-index__footer-icons">
-      <% if user_signed_in? %>
+      <% unless comment.is_deleted %>
         <span id="likes_buttons_<%= comment.class.name.downcase %>_<%= comment.id %>">
           <%= render partial: 'likes/like', locals: { likeable: comment } %>
         </span>

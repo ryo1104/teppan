@@ -27,7 +27,7 @@ class TopicsController < ApplicationController
       @message = "この投稿は非公開に設定されています。"
     else
       @netas = @topic.netas.includes({user: [image_attachment: :blob]}, :hashtags).where(private_flag: false).order("created_at DESC")
-      @comments = @topic.comments.includes({user: [image_attachment: :blob]})
+      @comments = @topic.comments.includes({user: [image_attachment: :blob]}).order("created_at DESC")
       if user_signed_in?
         @newcomment = Comment.new
         @topic.add_pageview(current_user)

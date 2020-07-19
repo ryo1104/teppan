@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_28_171948) do
+ActiveRecord::Schema.define(version: 2020_07_19_062400) do
 
   create_table "accounts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "user_id"
@@ -108,6 +108,7 @@ ActiveRecord::Schema.define(version: 2020_03_28_171948) do
     t.integer "commentable_id"
     t.string "commentable_type"
     t.integer "likes_count", default: 0, null: false
+    t.boolean "is_deleted", default: false, null: false
   end
 
   create_table "copycheck_statuses", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|

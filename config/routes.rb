@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   resources :topics do
     resources :netas, only: [:new, :create]
-    resources :comments, only: [:create]
+    resources :comments, only: [:create, :destroy]
     resources :likes, only: [:create, :destroy]
     resources :interests, only: [:create, :destroy]
     delete :delete_header_image, on: :member
@@ -16,8 +16,7 @@ Rails.application.routes.draw do
   end
   resources :hashtags, only: [:index]
   resources :hashtag_autocomplete, only: [:index]
-  resources :reviews, only: [:show]
-
+  
   resources :comments, only: [:show] do
     resources :likes, only: [:create, :destroy]
   end

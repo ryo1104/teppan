@@ -1,0 +1,12 @@
+<div class="page-body">
+  <div class="row">
+    <div class="col s12 m6 content">
+      <% if @review.errors.any? %>
+        <%= render :partial => "errorform" %>
+      <% end %>
+      <ul class="review-new collection">
+        <%= render partial: "reviews/reviewform", locals: { neta: @neta, newreview: @review } %>
+      </ul>
+    </div>
+  </div>
+</div>

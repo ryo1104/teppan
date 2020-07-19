@@ -34,7 +34,7 @@ class NetasController < ApplicationController
     if @neta.private_flag && !@owner
       @message = "このネタは投稿者が非公開に設定しています。"
     else
-      @reviews = @neta.reviews.includes({user: [image_attachment: :blob]})
+      @reviews = @neta.reviews.includes({user: [image_attachment: :blob]}).order("created_at DESC")
       @for_sale = @neta.for_sale
       unless @owner
         @purchased = @neta.trades.find_by(buyer_id: current_user.id)
