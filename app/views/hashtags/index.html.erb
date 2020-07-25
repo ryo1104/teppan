@@ -1,20 +1,22 @@
-<%= javascript_bundle_tag 'hashtag' %>
+<%= javascript_bundle_tag 'hashtag-search' %>
 <% @page_title = "#"+@tag.hashname %>
 <% breadcrumb :hashtag, @tag %>
 <div class="page-body">
-  <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs-tp" %>
-  <%= form_with url: hashtags_path, local: true, method: :get, :id => 'hashtag_search_form' do |f| %>
-    <%= f.text_field :keyword, :value => params[:keyword], :autocomplete => 'off', :id => "tag_search_field" %>
-    <%= f.hidden_field :hashname, :value => "search" %>
-    <%= f.submit '検索', class: "btn btn-primary withripple custom", :name => nil %>
-  <% end %>
   <div class="row">
-    <div class="col s12 m9 show">
+    <div class="col s12 m6 content">
+      <div class="row content-header">
+        <%= render partial: "layouts/breadcrumbs" %>
+      </div> 
+      <%= form_with url: hashtags_path, local: true, method: :get, :class => 'hashtag-index__search-form', :id => 'hashtag_search_form' do |f| %>
+        <%= f.text_field :keyword, :value => params[:keyword], :class => "js-hashtag-index__search-input" %>
+        <%= f.hidden_field :hashname, :value => "search" %>
+        <i class="hashtag-index__search-icon material-icons">search</i>
+      <% end %>
       <% unless @netas %>
-        <p> (ネタの投稿はまだありません) </p><br>
+        <div> (ネタの投稿はまだありません) </div>
       <% else %>
         <h1>#<%= @tag.hashname %></h1>
-        <ul class="collection">
+        <ul class="hashtag-index__netas collection">
           <%= render partial: "netas/neta", :collection => @netas %>
         </ul>
       <% end %>

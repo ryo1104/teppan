@@ -1,3 +1,4 @@
+<%= javascript_bundle_tag 'hashtag-entry' %>
 <div class="neta-form__title">
   <%= form.label :title, "タイトル／キャッチフレーズ", :class => "neta-form__title-label" %>
   <%= form.text_field :title, :value => @neta.title, :class => 'neta-form__title-text', :minlength => '5', :maxlength => '35' %>
@@ -16,7 +17,7 @@
   <%= form.text_field :tags, :value => @current_tags, :autocomplete => 'off', :id => 'js-tag_post_field' %>
 </div>
 <div class="neta-form__price">
-  <%= form.label :price, "価格", :value => 'neta-form__price-label' %>
+  <%= form.label :price, "価格", :class => 'neta-form__price-label' %>
   <% if @qualified %>
     <%= form.number_field :price, :value => @neta.price, :class => 'neta-form__price-field--active', min: 0, step: 10 %>&nbsp;&nbsp;円
   <% else %>

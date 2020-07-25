@@ -1,0 +1,51 @@
+.user-register-edit {
+  
+  &__form {
+    margin: 0 0 2rem 0;
+  }
+  
+  &__field {
+    max-width: 28rem;
+    height: 7rem;
+  }
+  
+  &__email {
+    height: 2rem;
+  }
+  
+  &__password {
+    height: 2rem;
+    &-message {
+      color: $tp-gray
+    }
+  }
+  
+  &__pending-message {
+    
+  }
+  
+  &__submit {
+    &.btn.waves-effect {
+      @include button-normal;
+      margin-bottom: 2rem;
+    }
+    
+    &.material-icons.left {
+      margin: 0;
+    }
+  }
+}
+
+.user-register-destroy {
+  &__submit {
+    &.btn.waves-effect {
+      @include button-normal;
+      margin-bottom: 2rem;
+    }
+    
+    &.material-icons.left {
+      margin: 0;
+    }
+  }
+
+}

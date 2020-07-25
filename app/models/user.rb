@@ -83,69 +83,17 @@ class User < ApplicationRecord
     self.prefecture_code = JpPrefecture::Prefecture.find(name: prefecture_name).code
   end
   
-  def self.create_from_auth!(auth)
-    if auth.present?
-      case auth['provider']
-      
-      when "yahoojp" then
-        email = auth['info']['email']
-        nickname = email.split("@")[0]
-        
-        case auth['info']['gender']
-        when "male" then
-          gender = 1
-        when "female" then
-          gender = 2
-        else
-          gender = nil
-        end
-        
-        if auth['info']['address']['country'] == "jp"
-          if auth['info']['address']['region'].present?
-            prefecture = JpPrefecture::Prefecture.find(name: auth['info']['address']['region'])
-            if prefecture
-              prefecture_code = prefecture.code
-            else
-              prefecture_code = nil
-            end
-          else
-            prefecture_code = nil
-          end
-        else
-          prefecture_code = nil
-        end
-        
-      when "google_oauth2" then
-        email = auth['info']['email']
-        nickname = email.split("@")[0]
-        gender = nil
-        prefecture_code = nil
-        
-      when "twitter" then
-        nickname = auth['info']['nickname']
-        email = nickname + "@hoge.com" 
-        #twitter APIでPrivacyPolicy等の設定をすれば取得可能になる
-        # email = auth['info']['email']
-        gender = nil
-        prefecture_code = nil
-        
+  def self.create_from_auth(auth_inputs)
+    if auth_inputs.present?
+      auth_inputs.merge!(password: Devise.friendly_token[0,20])    
+      user = self.new(auth_inputs)
+      if user.save
+        return [true, user]
       else
-        return [false, "unknown provider"]
+        return [false, "failed to create user. #{user.error} "]
       end
     else
-      return [false, "auth is empty"]
-    end
-    
-    begin
-      user = self.create!(email: email, password: Devise.friendly_token[0,20], nickname: nickname, gender: gender, prefecture_code: prefecture_code)
-    rescue => e
-      return [false, "exception rescued while creating User : #{e.message}"]
-    end
-    
-    if user.present?
-      return [true, user]
-    else
-      return [false, "failed to create user. email: #{email}, nickname: #{nickname}, gender: #{gender}, prefecture_code: #{prefecture_code} "]
+      return [false, "auth_inputs is empty"]
     end
   end
   

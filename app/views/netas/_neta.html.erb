@@ -1,5 +1,5 @@
-<%= link_to neta_path(neta.id) do %>
-  <li class="neta-index collection-item">
+<li class="neta-index collection-item">
+  <%= link_to neta_path(neta.id) do %>
     <div class="neta-index__title"><%= neta.title %></div>
     <% if neta.average_rate == "-" %>
       <span class="js-neta-index__star" rating-data="0"></span>
@@ -22,6 +22,7 @@
         <%= neta.created_at.to_s(:human) %>&nbsp;&nbsp;
       </span>
     </div>
-  </li>
-<% end %>
+  <% end %>
+</li>
+
 

@@ -1,0 +1,31 @@
+.hashtag-index {
+
+  &__search {
+    &-form {
+      height: 4rem;
+      width: 21rem;
+      input {
+        font-size: 1.3rem !important;
+      }
+    }
+    
+    &-input {
+
+    }
+
+    &-icon {
+      &.material-icons {
+        color: $tp-green;
+        position: relative;
+        @include sp { left: 18.5rem; }
+        @include pc { left: 18.5rem; }
+        top: -3.6rem;
+      }
+    }
+  }
+  
+  &__netas {
+    
+  }
+
+}

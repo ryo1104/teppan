@@ -70,7 +70,7 @@ end
 
 # user#edit_registration
 crumb :edit_user_registration do |user|
-  link "パスワード変更", edit_user_registration_path(user.id)
+  link "ログイン情報変更", edit_user_registration_path(user.id)
   parent :show_user, user
 end
 

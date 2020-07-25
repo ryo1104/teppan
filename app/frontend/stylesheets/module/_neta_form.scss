@@ -18,6 +18,11 @@
   
   &__valuecontent {
     margin: 0 0 1rem 0;
+    &-textarea {
+      &:before {
+        color: $tp-lightgray !important;
+      }
+    }
   }
   
   &__hashtags {

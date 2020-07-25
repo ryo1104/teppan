@@ -11,17 +11,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
   def create
-    begin
-      email = params[:user][:email]
-      if email.present?
-        super
-      else
-        redirect_to new_user_registration_path, alert: "emailアドレスを入力して下さい。" and return
-      end
-    rescue => e
-      ErrorUtility.log_and_notify e
-      redirect_to new_user_registration_path, alert: e.message and return
-    end
+    super
   end
 
   # GET /resource/edit

@@ -10,13 +10,14 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const frontend_path = path.join(__dirname, 'app', 'frontend')
 const js_entry  = { 
-  "application"     : path.join(frontend_path, 'src', 'application.js'),
-  "hashtag"         : path.join(frontend_path, 'src', 'hashtag.js'),
-  "topic"           : path.join(frontend_path, 'src', 'topic.js'),
-  "user"            : path.join(frontend_path, 'src', 'user.js'),
   "account"         : path.join(frontend_path, 'src', 'account.js'),
+  "application"     : path.join(frontend_path, 'src', 'application.js'),
   "externalaccount" : path.join(frontend_path, 'src', 'externalaccount.js'),
-  "trade"           : path.join(frontend_path, 'src', 'trade.js')
+  "hashtag-entry"   : path.join(frontend_path, 'src', 'hashtag-entry.js'),
+  "hashtag-search"  : path.join(frontend_path, 'src', 'hashtag-search.js'),
+  "topic"           : path.join(frontend_path, 'src', 'topic.js'),
+  "trade"           : path.join(frontend_path, 'src', 'trade.js'),
+  "user"            : path.join(frontend_path, 'src', 'user.js')
 }
 
 // const img_path = path.join(frontend_path, 'images')

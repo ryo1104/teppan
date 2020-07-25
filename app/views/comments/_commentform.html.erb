@@ -1,6 +1,6 @@
 <li class="comment-new collection-item" >
   <%= form_with model: [commentable, newcomment], local: true, method: :post do |f| %>
     <%= f.text_area :text, :placeholder => 'コメントを書いて下さい', :class => "comment-new__textarea", :required => true, :maxlength => '200' %>
-    <%= button_tag "コメント", :type => "submit", data: {disable_with: '保存中...'}, class: "neta-new__submit btn waves-effect" %>
+    <%= button_tag "コメント", :type => "submit", data: {disable_with: '保存中...'}, class: "comment-new__submit btn waves-effect" %>
   <% end %>
 </li>

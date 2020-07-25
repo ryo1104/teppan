@@ -1,53 +1,53 @@
-<% @page_title = "パスワード変更" %>
+<% @page_title = "ログイン情報変更" %>
 <% breadcrumb :edit_user_registration, current_user %>
 <div class="page-body">
-  <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs-tp" %>
   <div class="row">
-    <div class="col s12 m6 user-page">
-      <h1 class="h1_class">メールアドレス・パスワード編集</h1>
-      <ul class="collection z-depth-0 user-page">
-        <li class="collection-item">
-          <%= form_for(resource, as: resource_name, url: user_registration_path, html: { method: :put }) do |f| %>
-            <%= devise_error_messages! %>
-          
-            <div class="field">
-              <%= f.label :email %><br>
-              <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-            </div>
-          
-            <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-              <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
-            <% end %>
-            
-            <div class="field">
-              <%= f.label :current_password %><br>
-              <%= f.password_field :current_password, autocomplete: "current-password" %>
-            </div>
-          
-            <div class="field">
-              <%= f.label :new_password %>
-              <% if @minimum_password_length %>
-                <em>最短<%= @minimum_password_length %>文字</em>
-              <% end %><br>
-              <%= f.password_field :password, autocomplete: "new-password" %>
-            </div>
-          
-            <div class="field">
-              <%= f.label :password_confirmation %><br>
-              <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-            </div>
-          
-            <%= button_tag :type => "submit", class: "btn btn-primary withripple custom" do %>
-              <i class="material-icons left">refresh</i>更新
-            <% end %>
-          
+    <div class="col s12 m6 content">
+      <div class="row content-header">
+        <%= render partial: "layouts/breadcrumbs" %>
+      </div>
+      <h1>メールアドレス・パスワード編集</h1>
+      <%= form_with model: @user, url: user_registration_path, method: :put, :class => 'user-register-edit__form', :local => true do |f| %>
+        <div class="user-register-edit__field--error">
+          <%= render :partial => "/users/shared/error_messages" %>
+        </div>
+      
+        <div class="user-register-edit__field">
+          <%= f.label :email, :class => 'user-register-edit__email-label' %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "off", :class => 'user-register-edit__email' %>
+        </div>
+      
+        <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+          <div class="user-register-edit__pending-message">Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+        <% end %>
+        
+        <div class="user-register-edit__field">
+          <%= f.label :current_password, :class => 'user-register-edit__password-label' %>
+          <%= f.password_field :current_password, autocomplete: "off", :class => 'user-register-edit__password' %>
+        </div>
+      
+        <div class="user-register-edit__field">
+          <%= f.label :new_password, :class => 'user-register-edit__password-label' %>
+          <% if @minimum_password_length %>
+            <span class="user-register-edit__password-message">(<%= @minimum_password_length %> 文字以上)</span>
           <% end %>
-        </li>
-      </ul>
-      <h1 class="h1_class">退会</h1>
-      <%= link_to registration_path(resource_name), {:method => :delete, :class => 'btn btn-primary withripple custom', data: { confirm: "本当に退会しますか？" }} do %>
-        <i class="material-icons left">exit_to_app</i>
-        <span>退会</span><br>
+          <%= f.password_field :password, autocomplete: "off", :class => 'user-register-edit__password' %>
+        </div>
+      
+        <div class="user-register-edit__field">
+          <%= f.label :password_confirmation, :class => 'user-register-edit__password-label' %>
+          <%= f.password_field :password_confirmation, autocomplete: "off", :class => 'user-register-edit__password' %>
+        </div>
+      
+        <%= button_tag :type => "submit", :class => "user-register-edit__submit btn waves-effect" do %>
+          <i class="user-register-edit__submit material-icons left">refresh</i>更新
+        <% end %>
+      <% end %>
+      <hr>
+      <h1>退会</h1>
+      <%= link_to user_registration_path(resource_name), {:method => :delete, :class => 'user-register-destroy__submit btn waves-effect', data: { confirm: "本当に退会しますか？" }} do %>
+        <i class="user-register-destroy__submit material-icons left">exit_to_app</i>
+        <span>退会</span>
       <% end %>
     </div>
   </div>

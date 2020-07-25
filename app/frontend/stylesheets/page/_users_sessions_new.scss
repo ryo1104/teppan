@@ -1,0 +1,33 @@
+.user-session-new {
+  &__signup {
+    &.btn.waves-effect {
+      @include button-normal;
+      margin-bottom: 2rem;
+    }
+  }
+  
+  &__form {
+    margin: 0 0 2rem 0;
+  }
+  
+  &__field {
+    max-width: 28rem;
+    height: 7rem;
+  }
+  
+  &__email {
+    height: 2rem;
+  }
+  
+  &__password {
+    height: 2rem;
+  }
+  
+  &__login {
+    &.btn.waves-effect.waves-input-wrapper {
+      @include button-normal;
+      margin-bottom: 2rem;
+    }
+  }
+
+}

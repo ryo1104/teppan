@@ -23,16 +23,16 @@ module ApplicationHelper
     text.gsub(/[#＃][\w\p{Han}ぁ-ヶｦ-ﾟー]+/){|word| ""}
   end
   
-  def devise_error_messages
-    return "" if resource.errors.empty?
-    html = ""
-    # エラーメッセージ用のHTMLを生成
-    messages = resource.errors.full_messages.each do |msg|
-      html += <<-EOF
-      <div class="error-message">#{msg}</div><br>
-      EOF
-    end
-    html.html_safe
-  end
+  # def devise_error_messages
+  #   return "" if resource.errors.empty?
+  #   html = ""
+  #   # エラーメッセージ用のHTMLを生成
+  #   messages = resource.errors.full_messages.each do |msg|
+  #     html += <<-EOF
+  #     <div class="error-message">#{msg}</div><br>
+  #     EOF
+  #   end
+  #   html.html_safe
+  # end
 
 end

@@ -1,0 +1,19 @@
+<div class="user-oauth-login__yahoo">
+  <span class="yconnectLogin"></span>
+  <noscript><a href="/auth/yahoojp">Yahoo Japan IDでログイン</a></noscript>
+  <script type="text/javascript">
+    window.yconnectInit = function() {
+        YAHOO.JP.yconnect.TextButton.init({
+            type: "b",
+            url: "/auth/yahoojp"
+        });
+    };
+  </script>
+  <script type="text/javascript" src="https://s.yimg.jp/images/login/yconnect/button/1.0.1/button-min.js"></script>
+</div>
+<div class="user-oauth-login__google">
+  <%= link_to 'Googleでログイン', '/auth/google_oauth2' %>
+</div>
+<div class="user-oauth-login__twitter">
+  <%= link_to 'Twitterでログイン', '/auth/twitter' %>
+</div>

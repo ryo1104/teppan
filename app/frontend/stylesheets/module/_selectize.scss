@@ -4,18 +4,21 @@
     display: inline-flex;
     margin: 0 0.5rem 0 0;
     .selectize-input{
-      width: 15rem;
-      height: 2.2rem;
-      font-size: 0.8rem;
-      padding: 5px;
+      @include sp { width: 22rem; }
+      @include pc { width: 15rem; }
+      height: 3.5rem;
+      font-size: 1.3rem;
+      // padding: 5px;
       background-image: none !important;
-      background-color: #fff !important;
+      // background-color: #fff !important;
+      border: none;
       div{
-        line-height: 1.4rem;
+        vertical-align: middle;
+        display: block;
       }
       input{
-        line-height: 1.4rem;
-        font-size: 0.8rem;
+        // line-height: 2.4rem;
+        font-size: 1.3rem;
       }
     }
     :after{

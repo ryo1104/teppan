@@ -2,13 +2,8 @@ import $ from 'jquery';
 require('selectize');
 
 $(document).ready(function() {
-  initialize();
-});
-
-const initialize = () => {
-  searchSelectize();
   addSelectize();
-};
+});
 
 const addSelectize = () => {
   $('#js-tag_post_field').selectize({
@@ -20,34 +15,8 @@ const addSelectize = () => {
     createOnBlur: true, // 画面外をタッチすると新規単語を追加
     delimiter: ',',
     maxItems: 10,
-    loadThrottle: 500,
+    loadThrottle: 300,
     placeholder: 'ハッシュタグ',
-    load: (query, callback) => {
-      if (!query.length) return callback();
-      getAutocomplete(query, callback)
-    },
-    render: {
-      option: (item, escape) => {
-        return renderOption(item, escape)
-      },
-      option_create: (item, escape) => {
-        return renderOptionCreate(item, escape)
-      }
-    }
-  })
-};
-
-const searchSelectize = () => {
-  $('#tag_search_field').selectize({
-    searchField: ['text', 'sub_text'], // 入力値のフィルター対象、ひらがなでも検索結果を絞り込めるようにする
-    labelField: 'label', // 表示させるラベル
-    valueField: 'value', // inputのvalue
-    closeAfterSelect: true,
-    create: true, // 新規単語を追加を許可
-    createOnBlur: true, // 画面外をタッチすると新規単語を追加
-    maxItems: 1,//検索フォームのCSSがSelectize.Singleでなくてはならないので１で固定
-    loadThrottle: 500,
-    placeholder: 'ハッシュタグを検索',
     load: (query, callback) => {
       if (!query.length) return callback();
       getAutocomplete(query, callback)
@@ -98,9 +67,6 @@ const renderOption = (item, escape) => {
 const renderOptionCreate = (item, escape) => {
   return `<div><span>${escape(item.input) ? "#"+item.input : ''}</span></div>`
 };
-
-
-
 
 
 
