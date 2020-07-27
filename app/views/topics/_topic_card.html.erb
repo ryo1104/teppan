@@ -14,7 +14,7 @@
           <span class="js-topics-index__star" rating-data="0"></span>
         <% else %>
           <span class="js-topics-index__star" rating-data="<%= topic_card.max_rate %>"></span>
-          <span class="topics-index__star-count"><%= topic_card.max_rate %></span>
+          <span class="topics-index__star-count"><%= format("%.2f", topic_card.max_rate) %></span>
         <% end %>
         <br>
         <i class="topics-index__neta-icon material-icons">create</i>

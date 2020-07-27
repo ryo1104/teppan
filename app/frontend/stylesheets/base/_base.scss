@@ -73,3 +73,14 @@ h2{
 i.left {
   margin-right: 0;
 }
+
+.clearfix {
+	display: block;
+	clear: both;
+}
+
+.clearfix::after {
+  content: "";
+  display: block;
+  clear: both;
+}

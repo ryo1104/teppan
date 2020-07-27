@@ -31,6 +31,19 @@ $('.js-topics-index__star').raty({
   starOn   : onStar,
 });
 
+$('.js-user-profile__star').raty({
+  score: function() {
+    return $(this).attr('rating-data');
+  },
+  readOnly : true,
+  number   : 5,  
+  half     : true,
+  size     : 24,
+  starHalf : halfStar,
+  starOff  : offStar,
+  starOn   : onStar,
+});
+
 $('.js-review-index__star').raty({
   score: function() {
     return $(this).attr('rating-data');

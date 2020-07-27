@@ -1,6 +1,6 @@
 <li class="review-index collection-item">
   <span class="js-review-index__star" rating-data="<%= review.rate %>"></span>
-  <span class="review-index__star-count"><%= review.rate %></span>
+  <span class="review-index__star-count"><%= format("%.1f", review.rate) %></span>
   <div class="review-index__text"><%= review.text %></div>
   <div class="review-index__footer">
     <%= link_to user_path(review.user.id) do %>

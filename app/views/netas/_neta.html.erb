@@ -5,7 +5,7 @@
       <span class="js-neta-index__star" rating-data="0"></span>
     <% else %>
       <span class="js-neta-index__star" rating-data="<%= neta.average_rate %>"></span>
-      <span class="neta-index__star-count"><%= neta.average_rate %></span>
+      <span class="neta-index__star-count"><%= format("%.2f", neta.average_rate) %></span>
     <% end %>
     <i class="review--large material-icons">chat_bubble_outline</i>
     <span class="review__count"><%= neta.reviews_count %></span>

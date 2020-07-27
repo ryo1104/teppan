@@ -39,7 +39,7 @@
 .user-register-destroy {
   &__submit {
     &.btn.waves-effect {
-      @include button-normal;
+      @include button-delete;
       margin-bottom: 2rem;
     }
     

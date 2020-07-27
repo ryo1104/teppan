@@ -1,0 +1,35 @@
+.follow-button {
+  background-color: $tp-orange;
+  border-radius: 1.2rem;
+  display: inline-block;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: white;
+  height: 2.6rem;
+  width: 11rem;
+  text-align: center;
+  line-height: 2.5rem;
+  margin: 0.2rem 0;
+  a{
+    color: white;
+  };
+  
+  &-outline {
+    background-color: white;
+    border: 1px solid;
+    border-color: $tp-orange;
+    border-radius: 1.2rem;
+    display: inline-block;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: $tp-orange;
+    height: 2.6rem;
+    width: 11rem;
+    text-align: center;
+    line-height: 2.5rem;
+    margin: 0.2rem 0;
+    a{
+      color: #ff6d00;
+    };
+  }
+}

@@ -1,209 +1,70 @@
-<%= javascript_bundle_tag 'user' %>
-<% @page_title = "ユーザーページ" %>
+<% @page_title = @user.nickname %>
 <% breadcrumb :show_user, @user %>
 <div class="page-body">
-  <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs-tp" %>
   <div class="row">
-    <div class="col s12 m9 user-page">
-      <div class="col s3 m3 user-page-left">
-        <div class="user-page-avatar-container">
-          <% if @user.avatar.present? %>
-            <%= image_tag @user.avatar, {:class => "circle", :id => "user-page-image"} %>
-          <% else %>
-            <%= image_bundle_tag "no_user_image.png", {:class => "circle", :id => "user-page-image"} %>
-          <% end %>
-        </div>
+    <div class="col s12 m6 content">
+      <div class="row content-header">
+        <%= render partial: "layouts/breadcrumbs" %>
       </div>
-      <div class="col s9 m9 user-page-info">
-        <h1><%= @user.nickname %></h1>
-        <div class="user-page-basic">
-          <%= @user.age %>歳&nbsp;&nbsp;
-          <%= @user.gender_str %>&nbsp;&nbsp;
-          <%= @user.prefecture_name %>&nbsp;&nbsp;
-          <% if @premium_user[0] %>
-            <span class="user-page-prouser">認定User
-              <i class="material-icons done">done</i>
-            </span>
-          <% end %>
+      <div class="row user-profile__upper">
+        <div class="col s3 m3 user-profile__left">
+          <div class="user-profile__avatar-container">
+            <% if @user.avatar.present? %>
+              <%= image_tag @user.avatar, { :class => "user-profile__avatar-img" } %>
+            <% else %>
+              <%= image_bundle_tag "no_user_image.png", { :class => "user-profile__avatar-img" } %>
+            <% end %>
+          </div>
         </div>
-        <div class="user-page-sns">
-          <span class="user-page-follows">
-            <% if @my_page %>
-              <span class="user-page-following">
-                <%= link_to user_followings_path(@user.id) do %>
-                  フォロー&nbsp;&nbsp;<b><%= @following_users_count %></b>
+        <div class="col s9 m9 user-profile__right">
+          <h1 class="user-profile__nickname"><%= @user.nickname %></h1>
+          <div class="user-profile__basic">
+            <% if @userrate == 0 %>
+              ネタ評価&nbsp;&nbsp;<span class="js-user-profile__star" rating-data="0"></span>&nbsp;
+            <% else %>
+              ネタ評価<br>
+              <span class="js-user-profile__star" rating-data="<%= @userrate %>"></span>&nbsp;&nbsp;
+              <span class="user-profile__rating"><%= @userrate %></span>
+            <% end %>
+          </div>
+          <div class="user-profile__sns">
+            <span class="user-profile__follow">
+              <% if @my_page %>
+                <span class="user-profile__following">
+                  <%= link_to user_followings_path(@user.id) do %>
+                    フォロー&nbsp;&nbsp;1234<%= @following_users_count %>
+                  <% end %>
+                </span>
+              <% end %>
+              <span class="user-profile__followed">
+                <%= link_to user_followers_path(@user.id) do %>
+                  フォロワー&nbsp;&nbsp;1234<%= @followed_users_count %>
                 <% end %>
               </span>
-            <% end %>
-            <span class="user-page-followed">
-              <%= link_to user_followers_path(@user.id) do %>
-                フォロワー&nbsp;&nbsp;<b><%= @followed_users_count %></b>
-              <% end %>
             </span>
-          </span>
-          <% unless @my_page %>
-            <% unless @user.is_blocked_by(current_user.id) %>
-              <span id="follows_buttons_<%= @user.id %>">
-                <%= render partial: 'followers/follow', locals: { user: @user, followed_users_count: @followed_users_count } %>
-              </span>&nbsp;&nbsp;&nbsp;
-              <%= link_to new_user_violation_path(@user.id) do %>
-                <i class="material-icons user-more">more_horiz</i>
-              <% end %>
-            <% else %>
-              &nbsp;&nbsp;
-              <span class="user-violation-reported"><違反報告済></span>
-            <% end %>
-          <% end %>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col s12 m9 user-page">
-      <div class="user-page-introduction"><%= text_extract_links(simple_format(h(@user.introduction))).html_safe %></div>
-      <hr>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col s12 m9 user-page">
-      <% if @my_page %>
-      <div class="user-tab-menu">
-        <ul class="user-tab-menu">
-          <li class="ChangeElem_Tab">投稿</li>
-          <li class="ChangeElem_Tab">購入</li>
-          <li class="ChangeElem_Tab">販売</li>
-          <li class="ChangeElem_Tab">アカウント</li>
-        </ul>
-      </div>
-      <% end %>
-      <div class="user-tab-contents">
-        <div class="ChangeElem_Panel">
-          <h2>ネタ(<%= @posted_netas.count %>件)</h2>
-          <% if @userrate == 0 %>
-            <b>平均評価：</b><span class="star-rating" rating-data="0"></span>&nbsp;
-          <% else %>
-            <b>平均評価：</b><span class="star-rating" rating-data="<%= @userrate %>"></span>&nbsp;
-            <span class="star-rating-text-user-page"><%= @userrate %></span>
-          <% end %><br>
-          <% if @posted_netas %>
-            <ul class="collection">
-              <%= render partial: "netas/neta", collection: @posted_netas %>
-            </ul>
-          <% else %>
-            <p>（投稿はありません）</p>
-          <% end %>
-          <hr>
-          <% if @my_page %>
-            <h2>下書きネタ</h2>
-            <% if @draft_netas %>
-              <ul class="collection">
-                <%= render partial: "netas/neta", collection: @draft_netas %>
-              </ul>
-            <% else %>
-              <p>（投稿はありません）</p>
-            <% end %>
-            <hr>
-          <% end %>
-          <h2>トピック</h2>
-          <% if @posted_topics %>
-            <div>
-              <%= render partial: "topics/topic_card", collection: @posted_topics %>
-            </div>
-          <% end %>
-          <% if @draft_topics %>
-            <div>
-              <%= render partial: "topics/topic_card", collection: @draft_topics %>
-            </div>
-          <% end %>
-        </div>
-        
-        <% if @my_page %>
-          <div class="ChangeElem_Panel">
-            <h2>購入したネタ(<%= @bought_netas.count %>件)</h2>
-            <% if @bought_netas %>
-            <ul class="collection">
-              <%= render partial: "users/bought_neta", collection: @bought_netas %>
-            </ul>
-            <% else %>
-              <p>（トピックはありません）</p>
-            <% end %>
-            <h2>ブックマークしたネタ(<%= @interested_netas.count %>件)</h2>
-            <% if @interested_netas %>
-            <ul class="collection">
-              <%= render partial: "netas/neta", collection: @interested_netas %>
-            </ul>
-            <% else %>
-              <p>（トピックはありません）</p>
-            <% end %>
-            <h2>ブックマークしたトピック(<%= @interested_topics.count %>件)</h2>
-            <% if @interested_topics %>
-              <%= render partial: "topics/topic_card", collection: @interested_topics %>
-            <% else %>
-              <p>（トピックはありません）</p>
-            <% end %>
-          </div> 
-        <% end %>
-
-        <% if @my_page %>
-          <div class="ChangeElem_Panel">
-
-          </div>
-        <% end %>
-        
-        <% if @my_page %>
-          <div class="ChangeElem_Panel">
-            <h2>ユーザー情報</h2>
-            <div class="user-page-links">
-              <%= link_to 'プロフィール変更', edit_user_path(current_user.id), :class => "btn btn-primary withripple custom" %>&nbsp;&nbsp;
-              <% unless @user.authorization %>
-                <%= link_to 'パスワード変更', edit_user_registration_path(current_user), :class => "btn btn-primary withripple custom" %><br>
-              <% end %>
-            </div>
-            <hr>
-            <h2>お支払方法</h2>
-              <%= link_to '有料プラン申込', new_user_subscription_path(@user.id), :method => :get, :class => "btn btn-primary withripple custom" %>
-            <hr>
-            <% if @premium_user[0] %>
-              <h2>ビジネスアカウント</h2>
-                <% unless @user.account %>
-                  <%= link_to '登録', new_user_account_path(@user.id), :method => :get, :class => "btn btn-primary withripple custom" %>
-                <% else %>
-                  <%= link_to '詳細', account_path(@user.account.id), :class => "btn btn-primary withripple custom" %>
+            <% unless @my_page %>
+              <% unless @user.is_blocked_by(current_user.id) %>
+                <span id="follows_buttons_<%= @user.id %>">
+                  <%= render partial: 'followers/follow', locals: { user: @user, followed_users_count: @followed_users_count } %>
+                </span>
+                <%= link_to new_user_violation_path(@user.id) do %>
+                  <i class="user-profile__more material-icons">more_horiz</i>
                 <% end %>
-              <hr>
-              <h2>販売実績</h2>
-              <% if @account_exists && @sold_netas_info[0] %>
-                <table>
-                  <thead>
-                    <tr>
-                      <th class="table_header_item">日時</th>
-                      <th class="table_header_item">ネタ</th>
-                      <th class="table_header_item">価格</th>
-                      <th class="table_header_item">購入者</th>
-                      <th class="table_header_item">評価</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <%= render partial: "users/sold_trade", collection: @sold_netas_info[1] %>
-                  </tbody>
-                </table>
               <% else %>
-                (販売履歴はありません)<br>
+                <span class="user-profile__reported"><違反報告済></span>
               <% end %>
-            <% else %>
-              有料ネタの販売を開始するためには、下記の条件を両方満たす必要があります。<br>
-              ・無料ネタ&nbsp;<b>3つ以上</b>投稿<br>
-              ・レビュー平均&nbsp;<b>3.0以上</b><br>
-              <br>
-              <b>無料ネタ実績</b><br>
-              ネタ　：<%= @premium_user[2] %>件<br>
-              評価平均
-              <span class="star-rating" rating-data="<%=@premium_user[1] %>"></span>
-              <span class="star-rating-text">&nbsp;&nbsp;<%= @premium_user[1] %></span>
-              <br>
-            <% end %><br>
-            <br>
+            <% end %>
           </div>
+        </div>
+      </div>
+      <div class="row user-profile__lower">
+        <div class="user-profile__introduction"><%= text_extract_links(simple_format(h(@user.introduction))).html_safe %></div>
+      </div>
+      <div class="row user-contents">
+        <% if @my_page %>
+          <%= render partial: "users/mypage" %>
+        <% else %>
+          <%= render partial: "users/notmypage" %>
         <% end %>
       </div>
     </div>

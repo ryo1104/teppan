@@ -1,0 +1,138 @@
+.user {
+
+  &-profile {
+
+    min-height: 5rem;
+
+    &__left {
+      margin: 0;
+      padding: 0;
+    }
+    
+    &__right {
+      &.col.s9.m9 {
+        line-height: 2rem;
+        padding: 0;
+      }
+    }
+
+    &__nickname {
+      margin: 0.5rem 0 1rem 0;
+    }
+    
+    &__avatar {
+      &-container {
+        padding: 0.5rem 0 0 0;
+      }
+      
+      &-img {
+        @include user-img-lg
+      }
+    }
+    
+    &__basic {
+      font-size: 1.3rem;
+      margin: 0.2rem 0;
+      line-height: 2rem;
+    }
+    
+    &__prouser {
+      color: $tp-green;
+      &-icon {
+        &.material-icons {
+          font-size: 2rem;
+        }
+      }
+    }
+    
+    &__sns {
+      margin: 0.5rem 0 0 0;
+    }
+    
+    &__rating {
+      color: $tp-orange;
+      font-size: 1.6rem;
+      font-weight: bold;
+    }
+    
+    &__follow {
+      font-size: 1.4rem;
+      line-height: 1rem;
+      margin: 0.5rem 1rem 0.5rem 0;
+      color: $tp-orange;
+      
+      &ing {
+        margin: 0 1rem 0 0;
+      }
+      a{
+        color: $tp-orange;
+        font-size: 1.4rem;
+        font-weight: bold;
+      }
+    }
+    
+    &__more {
+      &.material-icons {
+        font-size: 1.3rem;
+        color: $tp-gray;
+      }
+    }
+    
+    &__reported {
+      font-size: 1.3rem;
+      color: red;
+    }
+    
+    &__introduction {
+      line-height: 2.2rem;
+    }
+  }
+
+  &-contents {
+
+    &__tab {
+      &-menu {
+        margin: 0;
+        padding: 0 0 0 0.5rem;
+      }
+      &-index {
+        display: inline-block;
+        width: 8rem;
+        height: 3rem;
+        line-height: 1rem;
+        padding: 10px 10px 5px;
+        cursor: pointer;
+        background-color: $tp-orange-light;
+        color: $tp-orange-dark; // #e65100
+        border-top-right-radius: 10px;
+        font-size: 1.2rem;
+        text-align: center;
+        &.selected {/* .tab-menuの中のliの内、.selectedが与えられているものに対する記述 */
+          background-color: $tp-orange;
+          color: #fff;
+        }
+      }
+      &-panel {
+        background-color: #fff;
+        min-height: 360px;
+      }
+    }
+    
+    &__netas {
+      &.collection {
+
+      }
+    }
+    
+    &__topics {
+      
+    }
+    
+    &__links {
+      &.btn.waves-effect {
+        @include button-normal;
+      }
+    }
+  }
+  
+}

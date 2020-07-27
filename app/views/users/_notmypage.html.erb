@@ -1,0 +1,17 @@
+<h2>ネタ(<%= @posted_netas.count %>件)</h2>
+<% if @posted_netas.count != 0 %>
+  <ul class="user-contents__netas collection">
+    <%= render partial: "netas/neta", collection: @posted_netas %>
+  </ul>
+<% else %>
+  <div>（投稿はありません）</div>
+<% end %>
+<hr>
+<h2>トピック(<%= @posted_topics.count %>件)</h2>
+<% if @posted_topics.count != 0 %>
+  <div class="user-contents__topics">
+    <%= render partial: "topics/topic_card", collection: @posted_topics %>
+  </div>
+<% else %>
+  <div>（投稿はありません）</div>
+<% end %>
