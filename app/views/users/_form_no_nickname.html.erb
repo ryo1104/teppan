@@ -1,0 +1,7 @@
+<%= form_with model: @user, local: true, method: :patch, :class => "user-edit-form" do |f| %>
+  <div class="user-edit-form__message">ユーザー名を登録して下さい。</div>
+  <div class="user-edit-form__nickname">
+    <%= f.text_field :nickname, placeholder: @temp_nickname, :class => "user-edit-form__nickname-input" %>
+  </div>
+  <%= f.submit "保存", :class => "user-edit-form__submit btn waves-effect" %>
+<% end %>

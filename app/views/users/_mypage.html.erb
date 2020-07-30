@@ -1,56 +1,53 @@
 <%= javascript_bundle_tag 'user' %>
 
-<ul class="user-contents__tab-menu">
-  <li class="user-contents__tab-index">投稿</li>
-  <li class="user-contents__tab-index">購入</li>
-  <li class="user-contents__tab-index">販売</li>
-  <li class="user-contents__tab-index">アカウント</li>
+<ul class="user-show-contents__tab-menu">
+  <li class="user-show-contents__tab-index">投稿</li>
+  <li class="user-show-contents__tab-index">購入</li>
+  <li class="user-show-contents__tab-index">販売</li>
+  <li class="user-show-contents__tab-index">アカウント</li>
 </ul>
 
-<div class="user-contents__tab-panel">
+<div class="user-show-contents__tab-panel">
 
   <h2>投稿ネタ(<%= @posted_netas.count %>件)</h2>
   <% if @posted_netas.count != 0 %>
-    <ul class="user-contents__netas collection">
+    <ul class="user-show-contents__netas collection">
       <%= render partial: "netas/neta", collection: @posted_netas %>
     </ul>
   <% else %>
     <p>（投稿はありません）</p>
   <% end %>
 
-  <hr>
-
   <% if @draft_netas.count != 0 %>
+    <hr>
     <h2>下書きネタ(<%= @draft_netas.count %>件)</h2>
-    <ul class="user-contents__netas collection">
+    <ul class="user-show-contents__netas collection">
       <%= render partial: "netas/neta", collection: @draft_netas %>
     </ul>
   <% end %>
 
   <hr>
-
   <h2>投稿トピック(<%= @posted_topics.count %>件)</h2>
   <% if @posted_topics.count != 0 %>
-    <div class="user-contents__topics clearfix">
+    <div class="user-show-contents__topics clearfix">
       <%= render partial: "topics/topic_card", collection: @posted_topics %>
     </div>
   <% end %>
   
-  <hr>
-  
   <% if @draft_topics.count != 0 %>
+    <hr>
     <h2>下書きトピック(<%= @draft_topics.count %>件)</h2>
-    <div class="user-contents__topics">
+    <div class="user-show-contents__topics">
       <%= render partial: "topics/topic_card", collection: @draft_topics %>
     </div>
   <% end %>
 </div>
 
-<div class="user-contents__tab-panel">
+<div class="user-show-contents__tab-panel">
 
   <h2>購入ネタ(<%= @bought_netas.count %>件)</h2>
   <% if @bought_netas.count != 0 %>
-    <ul class="user-contents__netas collection">
+    <ul class="user-show-contents__netas collection">
       <%= render partial: "users/bought_neta", collection: @bought_netas %>
     </ul>
   <% else %>
@@ -61,7 +58,7 @@
 
   <h2>ブックマークしたネタ(<%= @interested_netas.count %>件)</h2>
   <% if @interested_netas.count != 0 %>
-    <ul class="user-contents__netas collection">
+    <ul class="user-show-contents__netas collection">
       <%= render partial: "netas/neta", collection: @interested_netas %>
     </ul>
   <% else %>
@@ -72,7 +69,7 @@
   
   <h2>ブックマークしたトピック(<%= @interested_topics.count %>件)</h2>
   <% if @interested_topics.count != 0 %>
-    <div class="user-contents__topics">
+    <div class="user-show-contents__topics">
       <%= render partial: "topics/topic_card", collection: @interested_topics %>
     </div>
   <% else %>
@@ -80,20 +77,14 @@
   <% end %>
 </div>
 
-<div class="user-contents__tab-panel">
-
-  <div class="user-contents__links">
-    <h2>お支払方法</h2>
-      <%= link_to '有料プラン申込', new_user_subscription_path(@user.id), :method => :get, :class => "user-contents__links btn waves-effect" %>
-    <hr>
-  </div>
+<div class="user-show-contents__tab-panel">
   
   <% if @premium_user[0] %>
     <h2>ビジネスアカウント</h2>
       <% unless @user.account %>
-        <%= link_to '登録', new_user_account_path(@user.id), :method => :get, :class => "user-contents__links btn waves-effect" %>
+        <%= link_to '登録', new_user_account_path(@user.id), :method => :get, :class => "user-show-contents__links btn waves-effect" %>
       <% else %>
-        <%= link_to '詳細', account_path(@user.account.id), :class => "user-contents__links btn waves-effect" %>
+        <%= link_to '詳細', account_path(@user.account.id), :class => "user-show-contents__links btn waves-effect" %>
       <% end %>
     <hr>
     <h2>販売実績</h2>
@@ -116,28 +107,36 @@
       (販売履歴はありません)<br>
     <% end %>
   <% else %>
-    有料ネタの販売を開始するためには、下記の条件を両方満たす必要があります。<br>
-    ・無料ネタ&nbsp;<b>3つ以上</b>投稿<br>
-    ・レビュー平均&nbsp;<b>3.0以上</b><br>
-    <br>
-    <b>無料ネタ実績</b><br>
-    ネタ　：<%= @premium_user[2] %>件<br>
-    評価平均
-    <span class="star-rating" rating-data="<%=@premium_user[1] %>"></span>
-    <span class="star-rating-text">&nbsp;&nbsp;<%= @premium_user[1] %></span>
-    <br>
+    <div class="user-show-contents__n-advance">
+      <br>
+      有料ネタの販売を開始するためには、下記の条件を<strong>両方</strong>満たす必要があります。<br>
+      ・無料ネタ&nbsp;<b>3つ以上</b>投稿<br>
+      ・レビュー平均&nbsp;<b>3.0以上</b><br>
+      <br>
+      <b>無料ネタ実績</b><br>
+      ネタ　：<%= @premium_user[2] %>件<br>
+      評価平均
+      <span class="js-user-show-profile__star" rating-data="<%=@premium_user[1] %>"></span>
+      <span class="user-show-contents__rating">&nbsp;&nbsp;<%= format("%.2f", @premium_user[1]) %></span><br>
+    </div>
   <% end %><br>
   <br>
 </div>
 
-<div class="user-contents__tab-panel">
+<div class="user-show-contents__tab-panel">
 
-  <div class="user-contents__links">
+  <div class="user-show-contents__links">
     <h2>ユーザー情報</h2>
-      <%= link_to 'プロフィール変更', edit_user_path(current_user.id), :class => "user-contents__links btn waves-effect" %>&nbsp;&nbsp;
+      <%= link_to 'プロフィール編集', edit_user_path(current_user.id), :class => "user-show-contents__links btn waves-effect" %>&nbsp;&nbsp;
     <% unless @user.authorization %>
-      <%= link_to 'パスワード変更', edit_user_registration_path(current_user), :class => "user-contents__links btn waves-effect" %><br>
+      <%= link_to 'パスワード変更', edit_user_registration_path(current_user), :class => "user-show-contents__links btn waves-effect" %><br>
     <% end %>
+  </div>
+
+  <hr>  
+  <div class="user-show-contents__links">
+    <h2>お申込プラン</h2>
+      <%= link_to '有料プラン申込', new_user_subscription_path(@user.id), :method => :get, :class => "user-show-contents__links btn waves-effect" %>
   </div>
 
 </div>

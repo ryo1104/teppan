@@ -22,31 +22,10 @@
   line-height: 2rem;
 }
 
-.user-profile-completion{
-  padding: 0 1rem 0 0;
-  font-size: 0.8rem;
-}
-.progress.custom{
-  width: 100%;
-}
-
-.material-icons.photo-upload.custom{
-  font-size: 1.2rem;
-  color: #f57c00;
-}
-#user-image-upload{
-  display: none;
-}
-
 
 @include sp // screen and (max-width:767px)
 {
 
-  .col.s12.m12.top-page-logo-container{
-    font-size: 20px;
-    margin-top: 60px;
-  }
-  
   .stripe-checkout-button{
     // background-color: #66cc00;
     background-image: linear-gradient(to bottom, #4ade25, #66bb00);
@@ -71,32 +50,7 @@
       font-size:  13px;
     }
   }
-  
 
-
-  .file-field.custom{
-    font-size: 90%;
-    background-color: #f5f5f5;
-  }
-  
-  
-  #user-page-image{
-    width: 4.5rem;
-    height: 4.5rem;
-  }
-  
-  #user_nickname{
-    height: 2rem;
-    font-size: 1rem;
-  }
-  
-  .birth_date_fields{
-    margin: 10px, 0px, 10px, 0px;
-  }
-  
-  .form-control.date-select{
-    display: inline-block;
-  }
   
   .idcard-form{
     padding: 0.5rem;
@@ -105,45 +59,12 @@
   #idcard_frontback{
     width: 30%;
   }
-  
-  #_birthdate_1i{
-    width: 4.5rem;
-    height: 2.2rem;
-  }
-  #_birthdate_2i{
-    width: 4.5rem;
-    height: 2.2rem;
-  }
-  #_birthdate_3i{
-    width: 4.5rem;
-    height: 2.2rem;
-  }
-
-  #user_birthdate{
-    width: 8rem;
-    font-size: 1rem;
-    height: 2.5rem;
-  }
-  
-  #user_prefecture_code{
-    display: inline-block;
-    width: 7rem;
-    height: 2.2rem;
-    font-size: 1rem;
-  }
-  
-  .gender_form{
-    margin: 0.5rem 0;
-  }
-
 
 }   
 
 @include pc
 {
 
-
-  
   .stripe-checkout-button{
     // background-color: #66cc00;
     background-image: linear-gradient(to bottom, #4ade25, #66bb00);
@@ -169,43 +90,16 @@
     }
   }
 
-
-  
   .user-violation-reported{
     color: red;
   }
 
-
-  
   #follow-list-image{
     width: 3rem;
     height: 3rem;
     float: left;
   }
-  
 
-  
-  .user-form-nickname{
-    margin: 1rem 0;
-    #user_nickname{
-      font-size: 14px;
-      height: 2.5rem;
-    }
-  }
-  
-  #user_birthdate{
-    width: 10rem;
-    font-size: 1rem;
-  }
-  
-  .form-control.file{
-    margin: 0 0 20px 0;
-  }
-  
-  .birth_date_fields{
-    margin: 10px, 0px, 10px, 0px;
-  }
-  
   .collection.z-depth-0.account-form{
     padding: 0.5rem 0;
     min-height: 20rem;
@@ -253,10 +147,6 @@
   }
   .google-login{
     margin: 10px 0 10px 0;
-  }
-
-  .copycheck-data.center-align{
-    padding: 5px 5px 5px 5px;
   }
 
 }

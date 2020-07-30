@@ -54,6 +54,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def after_sign_up_path_for(resource)
     edit_user_path(resource.id) # Nicknameの登録を促すためにUser#editにredirectさせる
   end
+  
+  def after_update_path_for(resource)
+    user_path(resource.id)
+  end
 
   # The path used after sign up for inactive accounts.
   # def after_inactive_sign_up_path_for(resource)

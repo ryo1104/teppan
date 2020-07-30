@@ -2,23 +2,23 @@ import $ from 'jquery';
 
 $(document).ready( function() {
   /*初期表示*/
-  $('.user-contents__tab-panel').hide();
-  $('.user-contents__tab-panel').eq(0).show();
-  $('.user-contents__tab-index').eq(0).addClass('selected');
+  $('.user-show-contents__tab-panel').hide();
+  $('.user-show-contents__tab-panel').eq(0).show();
+  $('.user-show-contents__tab-index').eq(0).addClass('selected');
   /*クリックイベント*/
-  $('.user-contents__tab-index').each(function () {
+  $('.user-show-contents__tab-index').each(function () {
     $(this).on('click', function () {
-      var index = $('.user-contents__tab-index').index(this);
-      $('.user-contents__tab-index').removeClass('selected');
+      var index = $('.user-show-contents__tab-index').index(this);
+      $('.user-show-contents__tab-index').removeClass('selected');
       $(this).addClass('selected');
-      $('.user-contents__tab-panel').hide();
-      $('.user-contents__tab-panel').eq(index).show();
+      $('.user-show-contents__tab-panel').hide();
+      $('.user-show-contents__tab-panel').eq(index).show();
     });
   });
 });
 
 
-$('#user-image-upload').change(function(e){
+$('.js-user-edit-form__image-upload').change(function(e){
   const file = e.target.files[0];
   const reader = new FileReader();
 
@@ -26,11 +26,11 @@ $('#user-image-upload').change(function(e){
     alert("画像ファイルを指定してください。");
     return false;
   }
-
+  
   reader.onload = (function(file){
     return function(e){
-      $("#user-page-image").attr("src", e.target.result);
-      $("#user-page-image").attr("title", file.name);
+      $('.user-edit-form__avatar-img').attr("src", e.target.result);
+      $('.user-edit-form__avatar-img').attr("title", file.name);
     };
   })(file);
   reader.readAsDataURL(file);

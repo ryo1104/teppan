@@ -21,6 +21,7 @@ class User < ApplicationRecord
   has_one   :externalaccount, :through => :account
   has_one   :idcard, :through => :account
   has_one_attached :image
+  has_rich_text   :introduction
   validates :email, presence: true, uniqueness: { case_sensitive: false }
   validate  :image_content_type, if: :was_attached?
   validate  :gender_code_check
@@ -147,37 +148,37 @@ class User < ApplicationRecord
     return self.netas.includes(:reviews).where(price: 0)
   end
   
-  def profile_gauge
-    done = 0
-    total = 0
-    if self.nickname.present?
-      done +=1
-    end
-    total += 1
-    if self.image.attachment.present?
-      done += 1
-    end
-    total += 1
-    if self.birthdate.present?
-      done += 1
-    end
-    total += 1
-    if self.gender.present?
-      done += 1
-    end
-    total += 1
-    if self.prefecture_code.present?
-      done += 1
-    end
-    total += 1
-    if self.introduction.present?
-      done += 1
-    end
-    total += 1
+  # def profile_gauge
+  #   done = 0
+  #   total = 0
+  #   if self.nickname.present?
+  #     done +=1
+  #   end
+  #   total += 1
+  #   if self.image.attachment.present?
+  #     done += 1
+  #   end
+  #   total += 1
+  #   if self.birthdate.present?
+  #     done += 1
+  #   end
+  #   total += 1
+  #   if self.gender.present?
+  #     done += 1
+  #   end
+  #   total += 1
+  #   if self.prefecture_code.present?
+  #     done += 1
+  #   end
+  #   total += 1
+  #   if self.introduction.present?
+  #     done += 1
+  #   end
+  #   total += 1
     
-    val = (100*done/total)
-    return val.round(0)
-  end
+  #   val = (100*done/total)
+  #   return val.round(0)
+  # end
   
   def premium_user
     netas = self.free_netas
@@ -510,7 +511,7 @@ class User < ApplicationRecord
   
   def gender_code_check
     if self.gender.present?
-      if self.gender < 1 || self.gender > 2
+      if self.gender < 0 || self.gender > 3
         errors.add(:gender, "Invalid gender code")
       end
     end

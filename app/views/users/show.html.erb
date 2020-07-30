@@ -6,37 +6,37 @@
       <div class="row content-header">
         <%= render partial: "layouts/breadcrumbs" %>
       </div>
-      <div class="row user-profile__upper">
-        <div class="col s3 m3 user-profile__left">
-          <div class="user-profile__avatar-container">
+      <div class="row user-show-profile__upper">
+        <div class="col s3 m3 user-show-profile__left">
+          <div class="user-show-profile__avatar-container">
             <% if @user.avatar.present? %>
-              <%= image_tag @user.avatar, { :class => "user-profile__avatar-img" } %>
+              <%= image_tag @user.avatar, { :class => "user-show-profile__avatar-img" } %>
             <% else %>
-              <%= image_bundle_tag "no_user_image.png", { :class => "user-profile__avatar-img" } %>
+              <%= image_bundle_tag "no_user_image.png", { :class => "user-show-profile__avatar-img" } %>
             <% end %>
           </div>
         </div>
-        <div class="col s9 m9 user-profile__right">
-          <h1 class="user-profile__nickname"><%= @user.nickname %></h1>
-          <div class="user-profile__basic">
+        <div class="col s9 m9 user-show-profile__right">
+          <h1 class="user-show-profile__nickname"><%= @user.nickname %></h1>
+          <div class="user-show-profile__basic">
             <% if @userrate == 0 %>
-              ネタ評価&nbsp;&nbsp;<span class="js-user-profile__star" rating-data="0"></span>&nbsp;
+              ネタ評価&nbsp;&nbsp;<span class="js-user-show-profile__star" rating-data="0"></span>&nbsp;
             <% else %>
               ネタ評価<br>
-              <span class="js-user-profile__star" rating-data="<%= @userrate %>"></span>&nbsp;&nbsp;
-              <span class="user-profile__rating"><%= @userrate %></span>
+              <span class="js-user-show-profile__star" rating-data="<%= @userrate %>"></span>&nbsp;&nbsp;
+              <span class="user-show-profile__rating"><%= format("%.2f", @userrate ) %></span>
             <% end %>
           </div>
-          <div class="user-profile__sns">
-            <span class="user-profile__follow">
+          <div class="user-show-profile__sns">
+            <span class="user-show-profile__follow">
               <% if @my_page %>
-                <span class="user-profile__following">
+                <span class="user-show-profile__following">
                   <%= link_to user_followings_path(@user.id) do %>
                     フォロー&nbsp;&nbsp;1234<%= @following_users_count %>
                   <% end %>
                 </span>
               <% end %>
-              <span class="user-profile__followed">
+              <span class="user-show-profile__followed">
                 <%= link_to user_followers_path(@user.id) do %>
                   フォロワー&nbsp;&nbsp;1234<%= @followed_users_count %>
                 <% end %>
@@ -48,19 +48,19 @@
                   <%= render partial: 'followers/follow', locals: { user: @user, followed_users_count: @followed_users_count } %>
                 </span>
                 <%= link_to new_user_violation_path(@user.id) do %>
-                  <i class="user-profile__more material-icons">more_horiz</i>
+                  <i class="user-show-profile__more material-icons">more_horiz</i>
                 <% end %>
               <% else %>
-                <span class="user-profile__reported"><違反報告済></span>
+                <span class="user-show-profile__reported"><違反報告済></span>
               <% end %>
             <% end %>
           </div>
         </div>
       </div>
-      <div class="row user-profile__lower">
-        <div class="user-profile__introduction"><%= text_extract_links(simple_format(h(@user.introduction))).html_safe %></div>
+      <div class="row user-show-profile__lower">
+        <div class="user-show-profile__introduction"><%= @user.introduction %></div>
       </div>
-      <div class="row user-contents">
+      <div class="row user-show-contents">
         <% if @my_page %>
           <%= render partial: "users/mypage" %>
         <% else %>

@@ -27,13 +27,14 @@ class UsersController < ApplicationController
   
   def edit
     @user = User.find(params[:id])
-    @my_page = true if @user.id == current_user.id
-    if @my_page
+    if @user.id == current_user.id
+      @my_page = true
       if @user.nickname.blank?
         @no_nickname = true 
         @temp_nickname = @user.email.split('@')[0]
+      else
+        @no_nickname = false
       end
-      @profile_gauge = @user.profile_gauge
     else
       redirect_to user_path(@user.id), alert: "編集権限がありません。" and return
     end

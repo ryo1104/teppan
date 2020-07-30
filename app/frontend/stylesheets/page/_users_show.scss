@@ -1,4 +1,4 @@
-.user {
+.user-show {
 
   &-profile {
 
@@ -84,7 +84,7 @@
     }
     
     &__introduction {
-      line-height: 2.2rem;
+
     }
   }
 
@@ -132,6 +132,16 @@
       &.btn.waves-effect {
         @include button-normal;
       }
+    }
+    
+    &__n-advance {
+      padding: 1rem;
+    }
+    
+    &__rating {
+      color: $tp-orange;
+      font-size: 1.6rem;
+      font-weight: bold;
     }
   }
   

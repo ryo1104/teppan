@@ -8,12 +8,12 @@
       </div>
       <div class="row neta-edit">
         <h1>ネタ（編集）</h1>
-        <%= form_with model: @neta, local: true, method: :patch do |form| %>
+        <%= form_with model: @neta, local: true, method: :patch, :class => "neta-edit__form" do |form| %>
           <% if @neta.errors.any? %>
             <%= render :partial => "errorform" %>
           <% end %>
           <%= render :partial => "netaform", locals: { form: form } %>
-          <%= button_tag :type => "submit", data: {disable_with: '保存中...'}, class: "neta-edit__update btn waves-effect" do %>
+          <%= button_tag :type => "submit", data: {disable_with: '保存中...'}, :class => "neta-edit__update btn waves-effect" do %>
             <i class="material-icons left">refresh</i>更新
           <% end %>
           <% if @editable %>

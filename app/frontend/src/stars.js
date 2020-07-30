@@ -31,7 +31,7 @@ $('.js-topics-index__star').raty({
   starOn   : onStar,
 });
 
-$('.js-user-profile__star').raty({
+$('.js-user-show-profile__star').raty({
   score: function() {
     return $(this).attr('rating-data');
   },

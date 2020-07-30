@@ -1,11 +1,23 @@
 trix-editor {
   @include sp { 
     min-height: 15rem;
+    max-height: 30rem;
     font-size: 1.3rem;
   }
   @include pc {
-    min-height: 25rem; 
+    min-height: 25rem;
+    max-height: 30rem;
     font-size: 1.4rem;
+  }
+  overflow-y: auto;
+  ul {
+    li {
+      list-style-type: disc !important;
+      margin-left: 1.5rem;
+    }
+  }
+  ol {
+    padding-left: 1.5rem;
   }
 }
 
@@ -17,6 +29,16 @@ trix-editor {
   }
   a{
     color: $tp-hyperlink;
+  }
+  ul {
+    padding-left: 0.5rem;
+    li {
+      list-style-type: disc;
+      margin-left: 1.2rem;
+    }
+  }
+  ol {
+    padding-left: 0.5rem;
   }
   .attachment--preview {
     text-align: left;
