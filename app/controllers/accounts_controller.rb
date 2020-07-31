@@ -2,37 +2,27 @@ class AccountsController < ApplicationController
   include StripeUtils
   
   def new
-    begin
-      @user = User.find(params[:user_id])
-      if qualified(@user)
-        if @user.account.present?
-          redirect_to edit_account_path(@user.account.id), alert: "すでに出金用アカウントが存在します。" and return
-        else
-          @account = Account.new
-        end
+    @user = User.find(params[:user_id])
+    if qualified(@user)
+      unless @user.account.present?
+        @account = Account.new
       else
-        redirect_to user_path(current_user.id), alert: "アカウントを作成するユーザー条件を満たしていません。" and return
+        redirect_to edit_account_path(@user.account.id), alert: "すでにビジネスアカウントが存在します。" and return
       end
-    rescue => e
-      ErrorUtility.log_and_notify e
-      redirect_to user_path(params[:user_id]), alert: "エラーが発生しました。" and return
+    else
+      redirect_to user_path(current_user.id), alert: "ビジネスアカウントを作成するユーザー条件を満たしていません。" and return
     end
   end
   
   def confirm
-    begin
-      @mode = params[:mode]
-      if @mode == "new"
-        @user = User.find(params[:user_id])
-        @account = Account.new(create_params)
-      elsif @mode == "edit"
-        @account = Account.find(params[:id])
-        @account.assign_attributes(update_params)
-        @user = @account.user
-      end
-    rescue => e
-      ErrorUtility.log_and_notify e
-      redirect_to user_path(params[:user_id]), alert: "エラーが発生しました。" and return
+    @mode = params[:mode]
+    if @mode == "new"
+      @user = User.find(params[:user_id])
+      @account = Account.new(create_params)
+    elsif @mode == "edit"
+      @account = Account.find(params[:id])
+      @account.assign_attributes(update_params)
+      @user = @account.user
     end
   end
   

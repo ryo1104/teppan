@@ -1,0 +1,32 @@
+.account-form {
+  &__name {
+    
+  }
+  
+  &__birthdate {
+    width: 15rem;
+  }
+  
+  &__address {
+    
+  }
+  
+  &__postal-code {
+    margin: 1rem 0 0 0;
+  }
+  
+  &__user-agreement {
+    margin: 1rem 0;
+    &-tag {
+      font-size: 1.4rem !important;
+      padding-left: 1rem !important;
+      color: black !important;
+    }
+  }
+  
+  &__submit {
+    &.btn.waves-effect {
+      @include button-normal;
+    }
+  }
+}

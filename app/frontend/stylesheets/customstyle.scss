@@ -1,26 +1,14 @@
 
 
-[type="checkbox"].reset-checkbox,
-[type="checkbox"].reset-checkbox:checked,
-[type="checkbox"].reset-checkbox:not(checked) {
-  opacity: 1;
-  position: relative;
-}
-
-[type="checkbox"].reset-checkbox+span::before,
-[type="checkbox"].reset-checkbox+span::after,
-[type="checkbox"].reset-checkbox:checked+span::before,
-[type="checkbox"].reset-checkbox:checked+span::after {
-  display: none;
-}
 
 
-.dropdown-content li>a, .dropdown-content li>span {
-  color: #000!important;
-  font-size: 1rem;
-  height: 2rem;
-  line-height: 2rem;
-}
+
+// .dropdown-content li>a, .dropdown-content li>span {
+//   color: #000!important;
+//   font-size: 1rem;
+//   height: 2rem;
+//   line-height: 2rem;
+// }
 
 
 @include sp // screen and (max-width:767px)
@@ -100,48 +88,6 @@
     float: left;
   }
 
-  .collection.z-depth-0.account-form{
-    padding: 0.5rem 0;
-    min-height: 20rem;
-  }
-  
-  #account-form-field-row{
-    margin: 0.5rem 0 0 0;
-  }
-  
-  #account-form-field-button{
-    margin: 1.5rem 0 1rem 0;
-  }
-  
-  .form-control.date-select{
-    display: inline-block;
-    height: 30px;
-  }
-  
-  #_birthdate_1i{
-    width: 70px;
-  }
-  #_birthdate_2i{
-    width: 70px;
-  }
-  #_birthdate_3i{
-    width: 70px;
-  }
-  
-  #user_prefecture_code{
-    display: inline-block;
-    width: 100px;
-    height: 30px;
-    margin-bottom: 10px;
-  }
-  
-  .prefecture_form{
-    margin: 5px 0 5px 0;
-  }
-  .gender_form{
-    margin: 10px 0 20px 0;
-  }
-  
   .yahoo-login{
     margin: 10px 0 10px 0;
   }

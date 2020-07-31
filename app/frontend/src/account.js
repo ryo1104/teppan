@@ -1,17 +1,14 @@
 require('jquery-jpostal-ja');
 
 $(function () {
-	$('#zip').jpostal({
+	$('#js-zip').jpostal({
 		postcode : [
-			'#zip'
+			'#js-zip'
 		],
 		address : {
-      "#prefecture"         : "%3",
-      "#address_city"       : "%4",
-      "#address_town"       : "%5",
-      "#prefecture_kana"    : "%8",
-      "#address_city_kana"  : "%9",
-      "#address_town_kana"  : "%10"
+      "#js-prefecture"         : "%3",
+      "#js-address_city"       : "%4",
+      "#js-address_town"       : "%5"
 		}
 	});
 });

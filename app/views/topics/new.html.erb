@@ -11,7 +11,7 @@
         <h1>新規トピック</h1>
         <%= form_with model: @topic, local: true, method: :post do |form| %>
           <% if @topic.errors.any? %>
-            <%= render :partial => "errorform" %>
+            <%= render :partial => "topics/errorform" %>
           <% end %>
           <%= render :partial => "topicform", locals: { form: form } %>
           <%= button_tag :type => "submit", class: "topic-new__submit btn waves-effect" do %>

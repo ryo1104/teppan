@@ -1,88 +1,70 @@
 <%= javascript_bundle_tag 'account' %>
-<div class="col s12 m12 push-m1" id="account-form-field-row">
-  <div class="col s5 m4 account_form_name">
-    <%= label_tag '姓（漢字）' %><br>
-    <%= f.text_field :last_name_kanji, :id => "form_account_name", :required => true %><br>
-    <%= label_tag '姓（カナ）' %><br>
-    <%= f.text_field :last_name_kana, :id => "form_account_name", :required => true %>
+<div class="row account-form__name">
+  <div class="col s6 m4 account-form__name-last">
+    <%= f.label :last_name_kanji, '姓（漢字）', :class => "account-form__name-last-kanji-label" %><br>
+    <%= f.text_field :last_name_kanji, :class => "account-form__name-last-kanji-input", :required => true %><br>
+    <%= f.label :last_name_kana, '姓（カナ）', :class => "account-form__name-last-kana-label" %><br>
+    <%= f.text_field :last_name_kana, :class => "account-form__name-last-kana-input", :required => true %>
   </div>
-  <div class="col s5 m4 account_form_name">
-    <%= label_tag '名（漢字）' %><br>
-    <%= f.text_field :first_name_kanji, :id => "form_account_name", :required => true %><br>
-    <%= label_tag '名（カナ）' %><br>
-    <%= f.text_field :first_name_kana, :id => "form_account_name", :required => true %>
-  </div>
-</div>
-<div class="col s12 m12 push-m1" id="account-form-field-row">
-  <div class="col s4 m4">
-    <%= label_tag '性別' %>
-    <%= f.select :gender, [["男性","male"], ["女性","female"]], {}, {:class => "browser-default"} %>
+  <div class="col s6 m4 account-form__name-first">
+    <%= f.label :first_name_kanji, '名（漢字）', :class => "account-form__name-first-kanji-label" %><br>
+    <%= f.text_field :first_name_kanji, :class => "account-form__name-first-kanji-input", :required => true %><br>
+    <%= f.label :first_name_kana, '名（カナ）', :class => "account-form__name-first-kana-label" %><br>
+    <%= f.text_field :first_name_kana, :class => "account-form__name-first-kana-input", :required => true %>
   </div>
 </div>
-<div class="col s12 m12 push-m1" id="account-form-field-row">
-  <div class="col s6 m4">
-    <%= label_tag '生年月日' %>
-    <%= f.date_field :birthdate, :value => user.birthdate, :required => true %>
+<% if false %>
+  <div class="account-form__gender">
+    <%= f.label :gender, '性別', :class => "account-form__gender-label" %>
+    <%= f.select :gender, [["",""], ["男性","male"], ["女性","female"]], {}, {:class => "browser-default"} %>
   </div>
+<% end %>
+<div class="account-form__birthdate">
+  <%= f.label :birthdate, '生年月日', :class => "account-form__birthdate-label" %>
+  <%= f.date_field :birthdate, :value => user.birthdate, :required => true, :class => "account-form__birthdate-field" %>
 </div>
-<div class="col s12 m12 push-m1" id="account-form-field-row">
-  <div class="col s4 m4">
-    <%= label_tag '郵便番号' %>
-    <%= f.text_field :postal_code, :id => "zip", :placeholder => "例) 100-8111", :required => true, :autocomplete => 'off' %>
-  </div>
+<div class="account-form__postal-code">
+  <%= f.label :postal_code, '郵便番号', :class => "account-form__postal-code-label" %>
+  <%= f.text_field :postal_code, :id => "js-zip", :class => "account-form__postal-code-input", :placeholder => "例) 100-8111", :required => true, :autocomplete => 'off' %>
 </div>
-<div class="col s12 m12 push-m1" id="account-form-field-row">
-  <div class="col s6 m6">
-    <%= label_tag '都道府県・市区郡' %>
+<div class="row account-form__address">
+  <div class="col s12 m2 account-form__address-head">
+    <%= f.label :state, '都道府県・市区郡', :class => "account-form__address-label" %>
   </div>
-</div>
-<div class="col s12 m12 push-m1" id="account-form-field-row">
-  <div class="col s4 m2">
-    <%= f.text_field :state, :id => "prefecture", :placeholder => "例) 東京都", :required => true %>
+  <div class="col s4 m2 account-form__address-prefecture">
+    <%= f.text_field :state, :id => "js-prefecture", :placeholder => "例) 東京都", :required => true %>
   </div>
-  <div class="col s8 m3">
-    <%= f.text_field :city,  :id => "address_city", :placeholder => "例) 千代田区", :required => true %>
+  <div class="col s8 m3 account-form__address-city">
+    <%= f.text_field :city,  :id => "js-address_city", :placeholder => "例) 千代田区", :required => true %>
   </div>
-  <div class="col s12 m5 account-form">
-    <%= f.text_field :town,  :id => "address_town", :placeholder => "例) 千代田", :required => true %>
+  <div class="col s12 m5 account-form__address-town">
+    <%= f.text_field :town,  :id => "js-address_town", :placeholder => "例) 千代田", :required => true %>
   </div>
-</div>
-<div class="col s12 m12 push-m1" id="account-form-field-row">
-  <div class="col s12 m10 account-form">
-    <%= label_tag '番地・号（漢字）' %>
+  <div class="col s12 m10 account-form__address-line-kanji">
+    <%= f.label :kanji_line1, '番地・号（漢字）', :class => "account-form__address-line-kanji-label" %>
     <%= f.text_field :kanji_line1, :placeholder => "例) 1-1-1", :required => true %>
     <%= f.text_field :kanji_line2, :placeholder => "マンション・建物名" %>
   </div>
-</div>
-<div class="col s12 m12 push-m1" id="account-form-field-row">
-  <div class="col s12 m10 account-form">
-    <%= label_tag '番地・号（カナ）' %>
+  <div class="col s12 m10 account-form__address-line-kana">
+    <%= f.label :kana_line1, '番地・号（カナ）', :class => "account-form__address-line-kana-label" %>
     <%= f.text_field :kana_line1, :placeholder => "例) 1-1-1", :required => true %>
     <%= f.text_field :kana_line2, :placeholder => "マンション・建物名（半角カナ）" %>
   </div>
 </div>
-<div class="col s12 m12 push-m1" id="account-form-field-row">
-  <div class="col s12 m6">
-    <%= label_tag 'メールアドレス' %>
-    <%= f.text_field :email, :value => user.email, :required => true %>
-  </div>
+<div class="account-form__email">
+  <%= f.label :email, 'メールアドレス', :class => "account-form__email-label" %>
+  <%= f.text_field :email, :value => user.email, :required => true %>
 </div>
-<div class="col s12 m12 push-m1" id="account-form-field-row">
-  <div class="col s12 m4 account-form">
-    <%= label_tag '電話番号' %>
-    <%= f.telephone_field :phone, size:15, maxlength:14, :required => true, :placeholder => "例) 090-1234-5678" %>
-  </div>
+<div class="account-form__phone">
+  <%= f.label :phone, '電話番号', :class => "account-form__phone" %>
+  <%= f.telephone_field :phone, :size => 15, :maxlength => 14, :required => true, :placeholder => "例) 090-1234-5678" %>
 </div>
-<div class="col s12 m12 push-m1" id="account-form-field-row">
-  <div class="col s12 m12 account-form">
-    <label class="custom">
-      <%= f.check_box :user_agreement, :class => 'reset-checkbox', :as => :boolean, :required => true %>
-      <span id="account-form-policies">利用規約に同意</span>
-    </label>
-  </div>
+<div class="account-form__user-agreement">
+  <%= f.label :user_agreement do %>
+    <%= f.check_box :user_agreement, :class => 'reset-checkbox', :as => :boolean, :required => true %>
+    <span class="account-form__user-agreement-tag">利用規約に同意</span>
+  <% end %>
 </div>
-<div class="col s12 m12 push-m1" id="account-form-field-row">
-  <div class="col s12 m12 account-form">
-    <%= f.submit "確認画面へ", data: {disable_with: '送信中...'}, class: "btn btn-primary withripple custom" %>
-  </div>
+<div class="account-form__submit">
+  <%= f.submit "確認画面へ", data: {disable_with: '送信中...'}, :class => "account-form__submit btn waves-effect" %>
 </div>
