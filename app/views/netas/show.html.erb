@@ -45,7 +45,7 @@
             <% end %>
           </div>
           <% @neta.hashtags.each do |tag| %>
-            <div class="neta-show__hashtag"><%= link_to "#"+tag.hashname, "/hashtags?keyword=#{tag.hashname}" %></div>
+            <div class="neta-show__hashtag"><%= link_to "#"+tag.hashname, "/hashtags/netas?keyword=#{tag.hashname}" %></div>
           <% end %>
           <% if @owner %>
             <div class="neta-show__edit-link"><%= link_to "編集", edit_neta_path(@neta.id) %></div>

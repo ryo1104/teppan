@@ -14,8 +14,11 @@ Rails.application.routes.draw do
     resources :reviews, only: [:create]
     resources :interests, only: [:create, :destroy]
   end
-  resources :hashtags, only: [:index]
-  resources :hashtag_autocomplete, only: [:index]
+  
+  namespace :hashtags do 
+    resources :netas, only: [:index]
+    resources :autocomplete, only: [:index]
+  end
   
   resources :comments, only: [:show] do
     resources :likes, only: [:create, :destroy]

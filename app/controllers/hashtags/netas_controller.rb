@@ -1,4 +1,4 @@
-class HashtagsController < ApplicationController
+class Hashtags::NetasController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[index]
 
   def index

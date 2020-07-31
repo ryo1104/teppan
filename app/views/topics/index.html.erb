@@ -23,7 +23,7 @@
       <div class="row topics-trend">
         <h2>トレンド</h2>
         <% @hashtag_ranking.each do |key, value| %>
-          <div class="topics-trend__hashtag"><%= link_to "#"+value[1], "/hashtags?keyword=#{value[1]}" %></div>
+          <div class="topics-trend__hashtag"><%= link_to "#"+value[1], "/hashtags/netas?keyword=#{value[1]}" %></div>
         <% end %>
       </div>
       <% if user_signed_in? %>

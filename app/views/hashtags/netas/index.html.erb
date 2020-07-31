@@ -1,4 +1,4 @@
-<%= javascript_bundle_tag 'hashtag-search' %>
+<%= javascript_bundle_tag 'hashtag-autocomplete' %>
 <% @page_title = "#"+@tag.hashname %>
 <% breadcrumb :hashtag, @tag %>
 <div class="page-body">
@@ -7,7 +7,7 @@
       <div class="row content-header">
         <%= render partial: "layouts/breadcrumbs" %>
       </div> 
-      <%= form_with url: hashtags_path, local: true, method: :get, :class => 'hashtag-index__search-form', :id => 'hashtag_search_form' do |f| %>
+      <%= form_with url: hashtags_netas_path, local: true, method: :get, :class => 'hashtag-index__search-form', :id => 'hashtag_search_form' do |f| %>
         <%= f.text_field :keyword, :value => params[:keyword], :class => "js-hashtag-index__search-input" %>
         <%= f.hidden_field :hashname, :value => "search" %>
         <i class="hashtag-index__search-icon material-icons">search</i>
