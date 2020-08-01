@@ -6,9 +6,9 @@ Rails.application.routes.draw do
     resources :comments, only: [:create, :destroy]
     resources :likes, only: [:create, :destroy]
     resources :interests, only: [:create, :destroy]
-    delete :delete_header_image, on: :member
+    resource  :headerimage, only: [:destroy], :module => 'topics'
   end
-
+  
   resources  :netas, only: [:show, :edit, :update, :destroy] do
     resources :trades, only: [:new, :create]
     resources :reviews, only: [:create]

@@ -12,7 +12,7 @@ class TopicsController < ApplicationController
   end
   
   def create
-    @topic = Topic.new(create_params)
+    @topic = Topic.new(post_params)
     if @topic.save
       redirect_to topics_path, notice: "トピックを作成しました。" and return
     else
@@ -45,7 +45,7 @@ class TopicsController < ApplicationController
   def update
     @topic = Topic.find(params[:id])
     if owner(@topic)
-      if @topic.update(create_params)
+      if @topic.update(post_params)
         redirect_to topic_path(@topic.id), notice: "トピックを更新しました。" and return
       else
         render :edit and return
@@ -68,17 +68,9 @@ class TopicsController < ApplicationController
     end
   end
   
-  def delete_header_image
-    @topic = Topic.find(params[:topic_id])
-    if @topic.header_image.attached?
-      @topic.header_image.purge
-    end
-    redirect_to edit_topic_path(@topic.id) and return
-  end
-  
   private
   
-  def create_params
+  def post_params
     params.require(:topic).permit(:title, :content, :header_image, :private_flag).merge(user_id: current_user.id)
   end
   

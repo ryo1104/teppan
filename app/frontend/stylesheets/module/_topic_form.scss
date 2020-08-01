@@ -5,7 +5,8 @@
     margin: 0 0 1rem 0;
     
     &-label {
-      
+      font-size: 1.2rem;
+      color: #616161;
     }
     
     &-filename {
@@ -18,10 +19,11 @@
     
     &-content{
       max-width: 100%;
+      max-height: 40rem;
     }
     
     &-filefield {
-      font-size: 1.2rem;
+      display: none;
     }
   }
   
