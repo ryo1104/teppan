@@ -1,0 +1,55 @@
+.account-confirm {
+  &__dm-header {
+    height: 1.2rem;
+    margin-top: 0.5rem;
+  }
+  
+  &__message {
+    font-size: 1.4rem;
+  }
+  
+  &__show-info {
+    padding: 1rem;
+  }
+  
+  &__name {
+    font-size: 1.3rem;
+    margin: 0.5rem 0;
+  }
+  
+  &__email {
+    font-size: 1.3rem;
+    margin: 0.5rem 0;
+  }
+  
+  &__phone {
+    font-size: 1.3rem;
+    margin: 0.5rem 0;
+  }
+  
+  &__gender {
+    font-size: 1.3rem;
+    margin: 0.5rem 0;
+  }
+  
+  &__birthdate {
+    font-size: 1.3rem;
+    margin: 0.5rem 0;
+  }
+  
+  &__address {
+    font-size: 1.3rem;
+    margin: 0.5rem 0;
+    &-info {
+      &.col.s8.m8 {
+        padding: 0 2.1rem;
+      }
+    }
+  }
+  
+  &__submit {
+    &.btn.waves-effect {
+      @include button-normal      
+    }
+  }
+}

@@ -27,35 +27,27 @@ class AccountsController < ApplicationController
   end
   
   def create
-    begin
-      @user = User.find(params[:user_id])
-      if qualified(@user)
-        @account = Account.new(create_params)
-        if params[:back]
-          render :new and return
-        else
-          @account.transaction do
-            @account.save!
-            @stripe_result = @account.create_stripe_account(request.remote_ip)
-          end
-          if @stripe_result[0]
-            @account.update!(user_id: @user.id, stripe_acct_id: @stripe_result[1]["id"], stripe_status: @stripe_result[1]["personal_info"]["verification"]["status"] )
-            redirect_to account_path(@account.id), notice: "出金用アカウントが作成されました。" and return
-          else
-            Rails.logger.error "create_stripe_account returned false : #{@stripe_result[1]}"
-            redirect_to user_path(@user.id), alert: "出金用アカウントが作成できませんでした。" and return
-          end
-        end
+    @user = User.find(params[:user_id])
+    if qualified(@user)
+      @account = Account.new(create_params)
+      if params[:back]
+        render :new and return
       else
-        Rails.logger.info "User ID #{current_user.id} is not qualified to create a sellers account."
-        redirect_to user_path(current_user.id), alert: "アカウントを作成するユーザー条件を満たしていません。" and return
+        @account.transaction do
+          @account.save!
+          @stripe_result = @account.create_stripe_account(request.remote_ip)
+        end
+        if @stripe_result[0]
+          @account.update!(user_id: @user.id, stripe_acct_id: @stripe_result[1]["id"], stripe_status: @stripe_result[1]["personal_info"]["verification"]["status"] )
+          redirect_to account_path(@account.id), notice: "出金用アカウントが作成されました。" and return
+        else
+          Rails.logger.error "create_stripe_account returned false : #{@stripe_result[1]}"
+          redirect_to user_path(@user.id), alert: "出金用アカウントが作成できませんでした。" and return
+        end
       end
-    rescue Stripe::PermissionError => e
-      ErrorUtility.log_and_notify e
-      redirect_to user_path(current_user.id), alert: "アカウント情報の取得に失敗しました。" and return
-    rescue => e
-      ErrorUtility.log_and_notify e
-      redirect_to new_user_account_path(params[:user_id]), alert: "システムエラーが発生しました。" and return
+    else
+      Rails.logger.info "User ID #{current_user.id} is not qualified to create a sellers account."
+      redirect_to user_path(current_user.id), alert: "アカウントを作成するユーザー条件を満たしていません。" and return
     end
   end
   

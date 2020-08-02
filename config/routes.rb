@@ -33,7 +33,6 @@ Rails.application.routes.draw do
     :passwords     => "users/passwords",
     :confirmations => "users/confirmations"
   }
-  match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
 
   resources :users, only: [:show, :edit, :update] do
     resources :followers, only: [:create, :destroy, :index]
@@ -46,6 +45,8 @@ Rails.application.routes.draw do
     end
     resource  :avatar, only: [:destroy], :module => 'users'
   end
+
+  match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
 
   resources :accounts, only: [:show, :edit, :update, :destroy] do
     patch :confirm, on: :member
