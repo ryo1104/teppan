@@ -44,7 +44,7 @@ Rails.application.routes.draw do
     resources :accounts, only: [:new, :create] do
       post :confirm, on: :collection
     end
-    delete :delete_avatar, on: :member
+    resource  :avatar, only: [:destroy], :module => 'users'
   end
 
   resources :accounts, only: [:show, :edit, :update, :destroy] do

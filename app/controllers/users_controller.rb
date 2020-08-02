@@ -56,16 +56,6 @@ class UsersController < ApplicationController
     end
   end
   
-  def delete_avatar
-    @user = User.find(params[:id])
-    if @user.id == current_user.id
-      if @user.image.attached?
-        @user.image.purge
-      end
-    end
-    redirect_to edit_user_path(@user.id) and return
-  end
-  
   private
   def update_params
     params.require(:user).permit(:nickname, :image, :birthdate, :gender, :prefecture_code, :introduction)
