@@ -1,0 +1,22 @@
+<% @page_title = "お問い合わせ" %>
+<div class="page-body">
+  <div class="row">
+    <div class="col s12 m6 content">
+      <h1>お問い合わせ承りました</h1>
+      <div class="inquiries-create">
+        <div class="inquiries-create__message">
+          この度はお問い合わせ頂きありがとうございます。<br>
+          担当者より返信させて頂くまで今しばらくお待ち下さい。
+        </div>
+        <b>お問い合わせ内容</b><br>
+        <div class="inquiries-create__question collection">
+          <%= simple_format(@inquiry.message) %>
+        </div>
+        <b>ご返信先メールアドレス</b><br>
+        <div class="inquiries-create__question collection">
+          <%= @inquiry.email %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

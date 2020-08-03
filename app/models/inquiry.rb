@@ -1,5 +1,4 @@
 class Inquiry < ApplicationRecord
-  validates :email, length: {maximum:255}, format: {with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i}, allow_blank: true
-  validates :email, presence: true
-  validates :message, presence: true
+  validates :email, presence: true, length: {maximum:255}, format: {with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i}
+  validates :message, presence: true, length: {maximum:400}
 end

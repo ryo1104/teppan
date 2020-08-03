@@ -39,15 +39,15 @@ class AccountsController < ApplicationController
         end
         if @stripe_result[0]
           @account.update!(user_id: @user.id, stripe_acct_id: @stripe_result[1]["id"], stripe_status: @stripe_result[1]["personal_info"]["verification"]["status"] )
-          redirect_to account_path(@account.id), notice: "出金用アカウントが作成されました。" and return
+          redirect_to account_path(@account.id), notice: "ビジネスアカウントが作成されました。" and return
         else
           Rails.logger.error "create_stripe_account returned false : #{@stripe_result[1]}"
-          redirect_to user_path(@user.id), alert: "出金用アカウントが作成できませんでした。" and return
+          redirect_to user_path(@user.id), alert: "ビジネスアカウントを作成できませんでした。" and return
         end
       end
     else
       Rails.logger.info "User ID #{current_user.id} is not qualified to create a sellers account."
-      redirect_to user_path(current_user.id), alert: "アカウントを作成するユーザー条件を満たしていません。" and return
+      redirect_to user_path(current_user.id), alert: "ビジネスアカウントを作成するユーザー条件を満たしていません。" and return
     end
   end
   
@@ -91,10 +91,10 @@ class AccountsController < ApplicationController
         if @stripe_result_acct[0]
           @account_info = @stripe_result_acct[1]
           @account.update!(stripe_status: @account_info["personal_info"]["verification"]["status"])
-          redirect_to account_path(@account.id), notice: "アカウント情報が更新されました。" and return
+          redirect_to account_path(@account.id), notice: "ビジネスアカウント情報が更新されました。" and return
         else
           Rails.logger.error "update_stripe_account returned false : #{@stripe_result_acct[1]}"
-          redirect_to edit_account_path(@account.id), alert: "アカウント情報を更新できませんでした。" and return
+          redirect_to edit_account_path(@account.id), alert: "ビジネスアカウント情報を更新できませんでした。" and return
         end
       end
     rescue Stripe::PermissionError => e
@@ -116,7 +116,7 @@ class AccountsController < ApplicationController
         @account_info = stripe_result_acct[1]
       else
         Rails.logger.error "get_stripe_account returned false : #{stripe_result_acct[1]}"
-        redirect_to user_path(current_user.id), alert: "アカウント情報を取得できませんでした。" and return
+        redirect_to user_path(current_user.id), alert: "ビジネスアカウント情報を取得できませんでした。" and return
       end
 
       if @account_info["personal_info"]["verification"]["status"].present?
@@ -138,7 +138,7 @@ class AccountsController < ApplicationController
       
     rescue Stripe::PermissionError => e
       ErrorUtility.log_and_notify e
-      redirect_to user_path(current_user.id), alert: "アカウント情報の取得に失敗しました。" and return
+      redirect_to user_path(current_user.id), alert: "ビジネスアカウント情報の取得に失敗しました。" and return
     rescue => e
       ErrorUtility.log_and_notify e
       redirect_to user_path(current_user.id), alert: "システムエラーが発生しました。しばらく時間をおいて再度お試しください。" and return

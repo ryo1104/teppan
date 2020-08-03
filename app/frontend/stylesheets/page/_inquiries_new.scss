@@ -1,0 +1,34 @@
+.inquiries-new {
+  &.collection {
+    
+  }
+  
+  &__form {
+    padding: 1rem;
+  }
+  
+  &__email {
+    &-label {
+      
+    }
+    &-input {
+      
+    }
+  }
+  
+  &__message {
+    &-label {
+      
+    }
+    &-input {
+      height: 16rem;
+      padding: 0.5rem;
+    }
+  }
+  
+  &__submit {
+    &.btn.waves-effect {
+      @include button-normal;
+    }
+  }
+}

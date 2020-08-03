@@ -5,7 +5,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable#, :confirmable
+         :recoverable, :rememberable, :validatable, :confirmable
   has_many  :topics, ->{ order("netas_count DESC") }
   has_many  :netas, ->{ order("average_rate DESC") }
   has_many  :pageviews,  ->{ order("created_at DESC") }

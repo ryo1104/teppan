@@ -1,10 +1,19 @@
-<h2><%= @inquiry.email %> 様</h2>
-　<p>
-　  この度は、お問い合わせ頂きありがとうございます。<br>
-　  下記のとおりご質問を受付けました。
-　  担当者より返信させて頂くまで今しばらくお待ち下さい。
-　</p>
-  <p>ご質問内容</p>
-  <p><%= @inquiry.message %></p>
-
-  <p>今後とも Teppan をよろしくお願い致します。</p>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h2><%= @inquiry.email %> 様</h2>
+    <p>
+      この度は、お問い合わせ頂きありがとうございます。<br>
+      下記のとおりご質問を受付けました。
+      担当者より返信させて頂くまで今しばらくお待ち下さい。
+    </p>
+    <br><br>
+    <p><b>お問い合わせ内容</b></p>
+    <p><b><%= simple_format(@inquiry.message) %></b></p>
+    <br><br>
+    <p>今後とも Teppan をよろしくお願い申し上げます。</p>
+  </body>
+</html>
