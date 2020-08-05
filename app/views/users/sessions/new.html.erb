@@ -6,18 +6,19 @@
       <hr>
       <h2>ログイン</h2>  
       <%= form_with model: @user, url: user_session_path, :class => 'user-session-new__form', :local => true do |f| %>
-        <div class="user-session-new__field--error">
+        <div class="user-session-new__error">
           <%= render :partial => "/users/shared/error_messages" %>
         </div>
-        <div class="user-session-new__field">
+        <div class="user-session-new__email">
           <%= f.label :email, :class => 'user-session-new__email-label' %>
-          <%= f.email_field :email, autofocus: true, autocomplete: "off", :class => 'user-session-new__email' %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "off", :class => 'user-session-new__email-input' %>
         </div>
-        <div class="user-session-new__field">
+        <div class="user-session-new__password">
           <%= f.label :password, :class => 'user-session-new__password-label' %>
-          <%= f.password_field :password, autocomplete: "off", :class => 'user-session-new__password' %>
+          <%= f.password_field :password, autocomplete: "off", :class => 'user-session-new__password-input' %>
         </div>
-        <%= f.submit "ログイン", :class => "user-session-new__login btn waves-effect" %>
+        <%= f.submit "ログイン", :class => "user-session-new__submit btn waves-effect" %><br>
+        <%= link_to 'パスワードをお忘れの場合', new_user_password_path(current_user) %><br>
       <% end %>
       <hr>
       <h2>他のアカウントでログイン</h2>

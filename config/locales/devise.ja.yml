@@ -8,7 +8,7 @@ ja:
       send_instructions: "アカウントの確認方法をメールでご連絡します。"
       send_paranoid_instructions: "あなたのメールアドレスが登録済みの場合、アカウントの確認方法をメールでご連絡します。"
     failure:
-      already_authenticated: "既にログイン済みです。"
+      already_authenticated: "既にログインしています。"
       inactive: 'アカウントが有効になっていません。'
       invalid: '入力情報が間違っています'
       locked: "アカウントがロックされています。"
@@ -19,22 +19,24 @@ ja:
       unconfirmed: "続ける前に、お送りしましたメールにてアカウントのご確認をお願い致します。"
     mailer:
       confirmation_instructions:
-        subject: "[Teppan]アカウント本登録のご案内"
+        subject: "[Teppan] アカウント本登録のご案内"
+      password_change:
+        subject: "[Teppan] パスワード変更完了"
       reset_password_instructions:
-        subject: "[Teppan]パスワード再設定のご案内"
+        subject: "[Teppan] パスワード再設定のご案内"
       unlock_instructions:
-        subject: "[Teppan]アカウントのロック解除"
+        subject: "[Teppan] アカウントのロック解除"
     omniauth_callbacks:
       failure: "%{kind} から承認されませんでした。理由：%{reason}"
       success: "%{kind} から承認されました。"
     passwords:
       no_token: "パスワードリセットのメール以外からは、このページにアクセスする事ができません。もしパスワードリセットのメールから来ている場合は、正しいURLでアクセスしていることを確認して下さい。"
-      send_instructions: "パスワードのリセット方法をメールでご連絡します。"
+      send_instructions: ""
       send_paranoid_instructions: "メールアドレスが登録済みの場合、パスワード復旧用ページヘのリンクをメールでご連絡します。"
-      updated: "パスワードを変更しました。ログイン済みです"
+      updated: "パスワードを変更しました。"
       updated_not_active: "パスワードを変更しました。"
     registrations:
-      destroyed: "アカウントを削除しました。ぜひまたのご利用をお待ちしております！"
+      destroyed: "アカウントを削除しました。またのご利用をお待ちしております。"
       signed_up: "ようこそ！アカウント登録を受け付けました。"
       signed_up_but_inactive: "アカウントは登録されていますが、有効になっていないため利用できません。"
       signed_up_but_locked: "アカウントは登録されていますが、ロックされているため利用できません。"

@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col s12 m6 content">
       <h2>ユーザー登録</h2>
-      <%= form_with model: @user, url: user_registration_path, :class => 'user-register-new__form', :local => true do |f| %>
+      <%= form_with model: @user, url: user_registration_path, :local => true, :class => 'user-register-new__form' do |f| %>
         <div class="user-register-new__field--error">
           <%= render :partial => "/users/shared/error_messages" %>
         </div>

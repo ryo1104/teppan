@@ -46,7 +46,7 @@ const getAutocomplete = (query, callback) => {
 };
 
 const url = (query) => {
-  return `/hashtag_autocomplete?keyword=${encodeURIComponent(query)}`
+  return `/hashtags/autocomplete?keyword=${encodeURIComponent(query)}`
 };
 
 const items = (data) => {

@@ -16,17 +16,17 @@
   }
   
   &__email {
-    height: 2rem;
+    height: 6rem;
   }
   
   &__password {
-    height: 2rem;
+    height: 6rem;
   }
   
-  &__login {
+  &__submit {
     &.btn.waves-effect.waves-input-wrapper {
       @include button-normal;
-      margin-bottom: 2rem;
+      margin: 2rem 0;
     }
   }
 
