@@ -18,24 +18,26 @@
       <%= comment.user.nickname %>&nbsp;&nbsp;
       <%= comment.created_at.to_s(:human) %>&nbsp;&nbsp;
     </span>
-    <% if comment.user_id == current_user.id %>
-      <span class="comment-index__delete">
-        <% unless comment.is_deleted %>
-          <% if comment.commentable_type == "Topic" %>
-            <%= link_to '削除', topic_comment_path(comment.commentable_id, comment.id), {:method => :delete, :data => {:confirm => "本当に削除しますか？"}} %>
+    <% if user_signed_in? %>
+      <% if comment.user_id == current_user.id %>
+        <span class="comment-index__delete">
+          <% unless comment.is_deleted %>
+            <% if comment.commentable_type == "Topic" %>
+              <%= link_to '削除', topic_comment_path(comment.commentable_id, comment.id), {:method => :delete, :data => {:confirm => "本当に削除しますか？"}} %>
+            <% end %>
           <% end %>
-        <% end %>
-      </span>
-    <% end %>
-    <div class="comment-index__footer-icons">
-      <% unless comment.is_deleted %>
-        <span id="likes_buttons_<%= comment.class.name.downcase %>_<%= comment.id %>">
-          <%= render partial: 'likes/like', locals: { likeable: comment } %>
         </span>
-      <% else %>
-        <i class="like--large material-icons">favorite_border</i>
-        <span class="like__count"><%= comment.likes_count %></span>
       <% end %>
-    </div>
+      <div class="comment-index__footer-icons">
+        <% unless comment.is_deleted %>
+          <span id="likes_buttons_<%= comment.class.name.downcase %>_<%= comment.id %>">
+            <%= render partial: 'likes/like', locals: { likeable: comment } %>
+          </span>
+        <% else %>
+          <i class="like-large material-icons">favorite_border</i>
+          <span class="like__count"><%= comment.likes_count %></span>
+        <% end %>
+      </div>
+    <% end %>
   </div>
 </li>

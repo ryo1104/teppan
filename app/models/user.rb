@@ -84,6 +84,14 @@ class User < ApplicationRecord
     self.prefecture_code = JpPrefecture::Prefecture.find(name: prefecture_name).code
   end
   
+  def temp_nickname
+    if self.email.present?
+      self.email.split('@')[0]
+    else
+      return nil
+    end
+  end
+  
   def self.create_from_auth(auth_inputs)
     if auth_inputs.present?
       auth_inputs.merge!(password: Devise.friendly_token[0,20])    
@@ -526,10 +534,12 @@ class User < ApplicationRecord
   end
 
   def age_check
-    if self.birthdate.present? 
+    if self.birthdate.present?
       if self.birthdate > Time.zone.today.prev_year(13)
-        errors.add(:birthdate, "１３歳未満は登録できません。")
+        errors.add(:birthdate, "：１３歳未満はご利用できません。")
       end
+    else
+      errors.add(:birthdate, "を入力して下さい。")
     end
   end
   

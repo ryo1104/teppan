@@ -21,11 +21,11 @@
         <%= f.text_field :nickname, placeholder: @user.nickname, :class => "user-edit-form__nickname-input" %>
       </div>
       <div class="user-edit-form__birthdate">
-        <%= f.label :birthdate, "生年月日（任意）", :class => "user-edit-form__birthdate-label" %><br>
+        <%= f.label :birthdate, "生年月日", :class => "user-edit-form__birthdate-label" %><br>
         <%= f.date_field :birthdate, :class => "user-edit-form__birthdate-input" %>
       </div>
       <div class="user-edit-form__gender">
-        <div class="user-edit-form__gender-message">性別(公開されることはありません）</div>
+        <div class="user-edit-form__gender-message">性別</div>
         <%= f.radio_button :gender, 1, :style => "opacity: unset; position: relative;" %>
         <%= f.label :gender_1, "男性", :class => "user-edit-form__gender-label" %>
         <%= f.radio_button :gender, 2, :style => "opacity: unset; position: relative;" %>

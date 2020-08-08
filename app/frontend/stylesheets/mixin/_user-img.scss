@@ -9,3 +9,9 @@
   height: 6rem;
   width: 6rem;
 }
+
+@mixin user-img-xl {
+  @extend .circle;
+  height: 10rem;
+  width: 10rem;
+}

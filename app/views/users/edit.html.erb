@@ -3,16 +3,19 @@
 <div class="page-body">
   <div class="row">
     <div class="col s12 m6 content">
-      <% unless @no_nickname %>
-      <div class="row content-header">
+      <% if @has_nickname %>
+        <div class="row content-header">
         <%= render partial: "layouts/breadcrumbs" %>
       </div>
       <% end %>
       <div class="row user-edit">
-        <% if @no_nickname %>
-          <%= render partial: "users/form_no_nickname" %>
+        <% if @user.errors.any? %>
+          <%= render :partial => "users/errorform" %>
+        <% end %>
+        <% if @user.nickname.present? %>
+          <%= render :partial => "users/form_normal" %>
         <% else %>
-          <%= render partial: "users/form_normal" %>
+          <%= render :partial => "users/form_initial" %>
         <% end %>
       </div>
     </div>

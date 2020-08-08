@@ -12,7 +12,7 @@
         <div class="user-password-edit__field">
           <%= f.label :password, "新しいパスワード", :class => 'user-password-edit__field-label' %>
           <% if @minimum_password_length %>
-            <em>(<%= @minimum_password_length %>文字以上)</em><br />
+            <span class="user-password-edit__field-label">(<%= @minimum_password_length %>文字以上)</span><br />
           <% end %>
           <%= f.password_field :password, autofocus: true, autocomplete: "off", :class => 'user-password-edit__field-input' %>
         </div>

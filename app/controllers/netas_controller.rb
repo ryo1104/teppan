@@ -15,10 +15,9 @@ class NetasController < ApplicationController
       @neta = @topic.netas.new(create_params)
       if @neta.valid? && @neta.check_hashtags(tag_array)
         Neta.transaction do
-          @neta.save!
+          @neta.save
           @neta.add_hashtags(tag_array)
         end
-        #@copy_check_obj = Copycheck.create(neta_id: @neta.id, text: @neta.text+" "+@neta.valuetext)
         session[:last_created_at] = Time.zone.now.to_i
         redirect_to neta_path(@neta.id), notice: "ネタを投稿しました。"
       else

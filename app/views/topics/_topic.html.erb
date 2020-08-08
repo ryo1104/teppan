@@ -31,9 +31,9 @@
         <%= render partial: 'interests/interest', locals: { interestable: @topic } %>
       </span>
     <% else %>
-      <i class="like--large material-icons">favorite_border</i>
-      <span class="like__count"><%= @topic.likes_count %></span>&nbsp;&nbsp;
-      <i class="bookmark--large material-icons">bookmark_border</i>
+      <i class="like-large--inactive material-icons">favorite_border</i>
+      <span class="like__count--inactive"><%= @topic.likes_count %></span>&nbsp;&nbsp;
+      <i class="bookmark-large--inactive material-icons">bookmark_border</i>
     <% end %>
   </div>
 </div>

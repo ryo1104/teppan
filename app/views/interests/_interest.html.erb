@@ -1,22 +1,22 @@
 <% if interestable.class.name == "Topic" %>
   <% if interestable.potential_interest(current_user.id) == true %>
     <%= link_to topic_interests_path(interestable.id), :method => :post, remote: true do %>
-      <i class="bookmark--large material-icons">bookmark_border</i>
+      <i class="bookmark-large material-icons">bookmark_border</i>
     <% end %>
   <% else %>
     <%= link_to topic_interest_path(interestable.id, interestable.interests.find_by(user: current_user).id), :method => :delete, remote: true do %>
-      <i class="bookmark--large material-icons">bookmark</i>
+      <i class="bookmark-large material-icons">bookmark</i>
     <% end %>
   <% end %>
 <% else %>
   <% if interestable.class.name == "Neta" %>
     <% if interestable.interests.find_by(user: current_user) %>
       <%= link_to neta_interest_path(interestable.id, interestable.interests.find_by(user: current_user).id), :method => :delete, remote: true do %>
-        <i class="bookmark--large material-icons">bookmark</i>
+        <i class="bookmark-large material-icons">bookmark</i>
       <% end %>
     <% else %>
       <%= link_to neta_interests_path(interestable.id), :method => :post, remote: true do %>
-        <i class="bookmark--large material-icons">bookmark_border</i>
+        <i class="bookmark-large material-icons">bookmark_border</i>
       <% end %>
     <% end %>
   <% end %>

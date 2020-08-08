@@ -46,15 +46,21 @@ hr{
 
 .notice {
   background: $tp-notice;
+  padding: 0 1rem;
 }
 
 .alert {
   background: $tp-alert;
+  padding: 0 1rem;
 }
 
 .error-message{
   color: $tp-errormessage;
   font-size:  1.3rem;
+}
+
+.field_with_errors {
+  display: inline;
 }
 
 h1{

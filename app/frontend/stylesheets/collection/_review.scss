@@ -1,47 +1,5 @@
 .review {
 
-  &-new {
-    &__prompt {
-      margin: 0.5rem 0;
-      font-weight: bold;
-      font-size: 1.4rem;
-    }
-    
-    &__rate {
-      height: 4rem;
-    }
-    
-    &__hint {
-      height: 1.6rem; 
-      color: $tp-orange;
-    }
-    
-    &__textarea {
-      width: 100%; 
-      height: 6rem;
-      border-color: $tp-lightgray;
-    }
-    
-    &__user {
-      margin: 0.5rem 0 1rem 0;
-
-      &-name {
-        color: $tp-gray;
-        font-size: 1.1rem;
-      }
-    }
-    
-    &__author-image {
-      @include user-img-sm;
-    }
-    
-    &__submit {
-      &.btn.waves-effect {
-        @include button-normal;
-      }
-    }
-  }
-
   &-index {
     
     &__star-count {

@@ -1,0 +1,14 @@
+<%= form_with model: @user, local: true, method: :patch, :class => "user-edit-form" do |f| %>
+  <div class="user-edit-form__message">
+    ユーザー名と生年月日を入力して下さい。
+  </div>
+  <div class="user-edit-form__nickname">
+    <%= f.label :nickname, "ユーザー名", :class => "user-edit-form__nickname-label" %>
+    <%= f.text_field :nickname, placeholder: @user.temp_nickname, :class => "user-edit-form__nickname-input" %>
+  </div>
+  <div class="user-edit-form__birthdate">
+    <%= f.label :birthdate, "生年月日", :class => "user-edit-form__birthdate-label" %><br>
+    <%= f.date_field :birthdate, :class => "user-edit-form__birthdate-input" %>
+  </div>
+  <%= f.submit "進む", :class => "user-edit-form__submit btn waves-effect" %>
+<% end %>

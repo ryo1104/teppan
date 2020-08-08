@@ -1,23 +1,39 @@
 .bookmark {
-  &--large {
+  &-large {
     &.material-icons {
       font-size: 1.8rem;
       color: $tp-orange;
+    }
+    &--inactive {
+      &.material-icons {
+        font-size: 1.8rem;
+        color: $tp-lightgray;
+      }
     }
   }
 }
 
 .like {
-  &--large {
+  &-large {
     &.material-icons {
       font-size: 1.6rem;
       color: $tp-orange;
+    }
+    &--inactive {
+      &.material-icons {
+        font-size: 1.8rem;
+        color: $tp-lightgray;
+      }
     }
   }
   
   &__count {
     color: $tp-orange;
     font-size: 1.1rem;
+    &--inactive {
+      color: $tp-lightgray;
+      font-size: 1.1rem;
+    }
   }
 }
 
