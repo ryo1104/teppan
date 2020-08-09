@@ -102,3 +102,6 @@ gem 'fast_jsonapi'
 
 #Phone number
 gem 'telephone_number'
+
+#環境変数
+gem 'dotenv-rails'

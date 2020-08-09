@@ -538,8 +538,6 @@ class User < ApplicationRecord
       if self.birthdate > Time.zone.today.prev_year(13)
         errors.add(:birthdate, "：１３歳未満はご利用できません。")
       end
-    else
-      errors.add(:birthdate, "を入力して下さい。")
     end
   end
   

@@ -32,7 +32,7 @@ Rails.application.configure do
   config.active_storage.service = :amazon
 
   # Don't care if the mailer can't send.
-  config.action_mailer.default_url_options = { protocol: 'https', host: 'https://67b3b214b5b2494dba2b8d4c579439d5.vfs.cloud9.ap-southeast-1.amazonaws.com/' }
+  config.action_mailer.default_url_options = { protocol: 'https', host: 'https://3c355ca7c62a41d683a0526b64642f45.vfs.cloud9.ap-southeast-1.amazonaws.com/' }
   config.action_mailer.perform_caching = false
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.delivery_method = :smtp
@@ -73,7 +73,7 @@ Rails.application.configure do
   config.web_console.whitelisted_ips = '202.32.34.208'
 
   # Whitelist one hostname
-  config.hosts << "67b3b214b5b2494dba2b8d4c579439d5.vfs.cloud9.ap-southeast-1.amazonaws.com"
+  config.hosts << "3c355ca7c62a41d683a0526b64642f45.vfs.cloud9.ap-southeast-1.amazonaws.com"
   
   # config.after_initialize do
   #   Bullet.enable = true
