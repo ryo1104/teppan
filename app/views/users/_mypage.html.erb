@@ -56,10 +56,10 @@
 
   <hr>
 
-  <h2>ブックマークしたネタ(<%= @interested_netas.count %>件)</h2>
-  <% if @interested_netas.count != 0 %>
+  <h2>ブックマークしたネタ(<%= @bookmarked_netas.count %>件)</h2>
+  <% if @bookmarked_netas.count != 0 %>
     <ul class="user-show-contents__netas collection">
-      <%= render partial: "netas/neta", collection: @interested_netas %>
+      <%= render partial: "netas/neta", collection: @bookmarked_netas %>
     </ul>
   <% else %>
     <p>（ネタはありません）</p>
@@ -67,10 +67,10 @@
 
   <hr>
   
-  <h2>ブックマークしたトピック(<%= @interested_topics.count %>件)</h2>
-  <% if @interested_topics.count != 0 %>
+  <h2>ブックマークしたトピック(<%= @bookmarked_topics.count %>件)</h2>
+  <% if @bookmarked_topics.count != 0 %>
     <div class="user-show-contents__topics">
-      <%= render partial: "topics/topic_card", collection: @interested_topics %>
+      <%= render partial: "topics/topic_card", collection: @bookmarked_topics %>
     </div>
   <% else %>
     <p>（トピックはありません）</p>

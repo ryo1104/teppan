@@ -22,7 +22,7 @@
                   <span class="neta-show__bookmark">
                     <% if user_signed_in? && @owner == false %>
                       <span id="bookmark_buttons_<%= @neta.class.name.downcase %>_<%= @neta.id %>">
-                        <%= render partial: 'interests/interest', locals: { interestable: @neta } %>
+                        <%= render partial: 'bookmarks/bookmark', locals: { bookmarkable: @neta } %>
                       </span>
                     <% else %>
                       <i class="bookmark-large material-icons">bookmark_border</i>

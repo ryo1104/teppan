@@ -10,8 +10,8 @@ class UsersController < ApplicationController
       @following_users_count = @user.following_users_count
       @bought_trades = Trade.where(buyer_id: @user.id, tradeable_type: "Neta")
       @bought_netas = User.bought_netas(@bought_trades)
-      @interested_netas = @user.interested_netas
-      @interested_topics = @user.interested_topics
+      @bookmarked_netas = @user.bookmarked_netas
+      @bookmarked_topics = @user.bookmarked_topics
       @account_exists = true if @user.account.present?
       if @account_exists
         @sold_netas_info = @user.get_sold_netas_info
@@ -51,7 +51,7 @@ class UsersController < ApplicationController
   private
   
   def get_user(id)
-    @user = User.includes({netas: [:reviews, :hashtags]}, :interests).find(id)
+    @user = User.includes({netas: [:reviews, :hashtags]}, :bookmarks).find(id)
   end
   
   def update_params

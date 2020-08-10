@@ -56,7 +56,7 @@ class TopicsController < ApplicationController
   end
   
   def destroy
-    @topic = Topic.includes(:netas, :pageviews, :interests).find(params[:id])
+    @topic = Topic.includes(:netas, :pageviews, :bookmarks).find(params[:id])
     if owner(@topic)
       if @topic.destroy
         redirect_to topics_path, notice: "トピックを削除しました。" and return

@@ -9,7 +9,7 @@ class User < ApplicationRecord
   has_many  :topics, ->{ order("netas_count DESC") }
   has_many  :netas, ->{ order("average_rate DESC") }
   has_many  :pageviews,  ->{ order("created_at DESC") }
-  has_many  :interests,  ->{ order("created_at DESC") }
+  has_many  :bookmarks,  ->{ order("created_at DESC") }
   has_many  :hashtag_hits,  ->{ order("created_at DESC") }
   has_many  :comments
   has_many  :follows
@@ -221,21 +221,21 @@ class User < ApplicationRecord
     return Neta.includes({user: [image_attachment: :blob]}, :hashtags).where(id: b_netaids)
   end
   
-  def interested_netas
+  def bookmarked_netas
     i_netaids = []
-    self.interests.each do |interest|
-      if interest.interestable_type == "Neta"
-        i_netaids << interest.interestable_id
+    self.bookmarks.each do |bookmark|
+      if bookmark.bookmarkable_type == "Neta"
+        i_netaids << bookmark.bookmarkable_id
       end
     end
     return Neta.includes({user: [image_attachment: :blob]}, :hashtags).where(id: i_netaids).order("created_at DESC")
   end
   
-  def interested_topics
+  def bookmarked_topics
     i_topicids = []
-    self.interests.each do |interest|
-      if interest.interestable_type == "Topic"
-        i_topicids << interest.interestable_id
+    self.bookmarks.each do |bookmark|
+      if bookmark.bookmarkable_type == "Topic"
+        i_topicids << bookmark.bookmarkable_id
       end
     end
     return Topic.includes([header_image_attachment: :blob], {user: [image_attachment: :blob]}, :netas).where(id: i_topicids).order("created_at DESC")

@@ -1,0 +1,1 @@
+$('#bookmark_buttons_<%= @bookmarkable.class.name.downcase %>_<%= @bookmarkable.id %>').html("<%= j(render partial: 'bookmarks/bookmark', locals: {bookmarkable: @bookmarkable}) %>");

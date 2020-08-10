@@ -7,7 +7,7 @@ class Neta < ApplicationRecord
   has_many        :reviews
   has_many        :trades, as: :tradeable
   has_many        :pageviews, as: :pageviewable
-  has_many        :interests, as: :interestable
+  has_many        :bookmarks, as: :bookmarkable
   has_many        :rankings, as: :rankable
   has_many        :hashtag_netas
   has_many        :hashtags, through: :hashtag_netas
@@ -114,9 +114,18 @@ class Neta < ApplicationRecord
       return true
     elsif self.pageviews.present?
       return true
-    elsif self.interests.present?
+    elsif self.bookmarks.present?
       return true
     elsif self.rankings.present?
+      return true
+    else
+      return false
+    end
+  end
+  
+  def bookmarked(user_id)
+    bookmark = self.bookmarks.find_by(user_id: user_id)
+    if bookmark.present?
       return true
     else
       return false

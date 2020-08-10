@@ -28,7 +28,7 @@
         <%= render partial: 'likes/like', locals: { likeable: @topic } %>
       </span>
       <span id="bookmark_buttons_<%= @topic.class.name.downcase %>_<%= @topic.id %>">
-        <%= render partial: 'interests/interest', locals: { interestable: @topic } %>
+        <%= render partial: 'bookmarks/bookmark', locals: { bookmarkable: @topic } %>
       </span>
     <% else %>
       <i class="like-large--inactive material-icons">favorite_border</i>

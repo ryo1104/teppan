@@ -1,0 +1,21 @@
+<% if bookmarkable.bookmarked(current_user.id) %>
+  <% if bookmarkable.class.name == "Topic" %>
+    <%= link_to topic_bookmark_path(bookmarkable.id, bookmarkable.bookmarks.find_by(user: current_user).id), :method => :delete, remote: true do %>
+      <i class="bookmark-large material-icons">bookmark</i>
+    <% end %>
+  <% elsif bookmarkable.class.name == "Neta" %>
+    <%= link_to neta_bookmark_path(bookmarkable.id, bookmarkable.bookmarks.find_by(user: current_user).id), :method => :delete, remote: true do %>
+      <i class="bookmark-large material-icons">bookmark</i>
+    <% end %>
+  <% end %>
+<% else %>
+  <% if bookmarkable.class.name == "Topic" %>
+    <%= link_to topic_bookmarks_path(bookmarkable.id), :method => :post, remote: true do %>
+      <i class="bookmark-large material-icons">bookmark_border</i>
+    <% end %>
+  <% elsif bookmarkable.class.name == "Neta" %>
+    <%= link_to neta_bookmarks_path(bookmarkable.id), :method => :post, remote: true do %>
+      <i class="bookmark-large material-icons">bookmark_border</i>
+    <% end %>
+  <% end %>
+<% end %>

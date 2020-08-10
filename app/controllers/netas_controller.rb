@@ -80,7 +80,7 @@ class NetasController < ApplicationController
   end
   
   def destroy
-    @neta = Neta.includes(:trades, :interests, :reviews, :pageviews, :rankings, :hashtag_netas).find(params[:id])
+    @neta = Neta.includes(:trades, :bookmarks, :reviews, :pageviews, :rankings, :hashtag_netas).find(params[:id])
     if @neta.owner(current_user)
       if @neta.has_dependents
         redirect_to neta_path(params[:id]), alert: "このネタに属する取引等があるため、削除できません。" and return

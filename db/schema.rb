@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_10_044522) do
+ActiveRecord::Schema.define(version: 2020_08_10_072128) do
 
   create_table "accounts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "user_id"
@@ -86,6 +86,14 @@ ActiveRecord::Schema.define(version: 2020_08_10_044522) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["code"], name: "index_banks_on_code", unique: true
+  end
+
+  create_table "bookmarks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+    t.integer "bookmarkable_id"
+    t.string "bookmarkable_type"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "branches", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -197,14 +205,6 @@ ActiveRecord::Schema.define(version: 2020_08_10_044522) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "interests", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
-    t.integer "interestable_id"
-    t.string "interestable_type"
-    t.integer "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "likes", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "user_id"
     t.integer "likeable_id"
@@ -220,11 +220,10 @@ ActiveRecord::Schema.define(version: 2020_08_10_044522) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "topic_id"
-    t.text "valuetext"
     t.integer "reviews_count", default: 0, null: false
     t.integer "pageviews_count", default: 0, null: false
     t.float "average_rate", default: 0.0
-    t.integer "interests_count", default: 0, null: false
+    t.integer "bookmarks_count", default: 0, null: false
     t.boolean "private_flag", default: false, null: false
   end
 
@@ -280,7 +279,7 @@ ActiveRecord::Schema.define(version: 2020_08_10_044522) do
     t.datetime "updated_at", null: false
     t.integer "pageviews_count", default: 0, null: false
     t.integer "likes_count", default: 0, null: false
-    t.integer "interests_count", default: 0, null: false
+    t.integer "bookmarks_count", default: 0, null: false
     t.integer "netas_count", default: 0, null: false
     t.integer "comments_count", default: 0, null: false
     t.boolean "private_flag", default: false, null: false

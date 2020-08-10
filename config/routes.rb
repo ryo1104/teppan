@@ -5,14 +5,14 @@ Rails.application.routes.draw do
     resources :netas, only: [:new, :create]
     resources :comments, only: [:create, :destroy]
     resources :likes, only: [:create, :destroy]
-    resources :interests, only: [:create, :destroy]
+    resources :bookmarks, only: [:create, :destroy]
     resource  :headerimage, only: [:destroy], :module => 'topics'
   end
   
   resources  :netas, only: [:show, :edit, :update, :destroy] do
     resources :trades, only: [:new, :create]
     resources :reviews, only: [:create]
-    resources :interests, only: [:create, :destroy]
+    resources :bookmarks, only: [:create, :destroy]
   end
   
   namespace :hashtags do 

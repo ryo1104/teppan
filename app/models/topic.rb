@@ -4,7 +4,7 @@ class Topic < ApplicationRecord
   has_rich_text :content
   has_many      :netas, dependent: :restrict_with_error
   has_many      :pageviews, as: :pageviewable, dependent: :destroy
-  has_many      :interests, as: :interestable, dependent: :destroy
+  has_many      :bookmarks, as: :bookmarkable, dependent: :destroy
   has_many      :comments,  as: :commentable, dependent: :destroy
   has_many      :likes,     as: :likeable, dependent: :destroy
   validates     :title,     presence: true, uniqueness: { case_sensitive: true }, length: { maximum: 35 }
@@ -53,12 +53,12 @@ class Topic < ApplicationRecord
     return editable
   end
   
-  def potential_interest(user_id)
-    interest = self.interests.find_by(user_id: user_id)
-    if interest.present?
-      return false
-    else
+  def bookmarked(user_id)
+    bookmark = self.bookmarks.find_by(user_id: user_id)
+    if bookmark.present?
       return true
+    else
+      return false
     end
   end
   
