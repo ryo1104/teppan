@@ -1,0 +1,10 @@
+
+いつもTeppanをご利用頂き誠にありがとうございます。
+
+<% if @resource.try(:unconfirmed_email?) %>
+お客様のメールアドレスを<%= @resource.unconfirmed_email %>に変更する旨を承りました。
+<% else %>
+お客様のメールアドレスが<%= @resource.email %>に変更されたことをお知らせ致します。
+<% end %>
+
+Teppan運営チーム

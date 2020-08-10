@@ -1,7 +1,8 @@
-<p>Hello <%= @email %>!</p>
-
+<br>
+<p>いつもTeppanをご利用頂き誠にありがとうございます。</p>
 <% if @resource.try(:unconfirmed_email?) %>
-  <p>We're contacting you to notify you that your email is being changed to <%= @resource.unconfirmed_email %>.</p>
+  <p>お客様のメールアドレスを<%= @resource.unconfirmed_email %>に変更する旨を承りました。</p>
 <% else %>
-  <p>We're contacting you to notify you that your email has been changed to <%= @resource.email %>.</p>
+  <p>お客様のメールアドレスが<%= @resource.email %>に変更されたことをお知らせ致します。</p>
 <% end %>
+<p>Teppan運営チーム</p>

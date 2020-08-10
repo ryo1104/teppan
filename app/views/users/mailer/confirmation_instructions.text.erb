@@ -1,0 +1,10 @@
+<%= @email %> 様
+
+この度はTeppanにお申し込み頂き、誠にありがとうございます。
+下記URLにアクセス頂き、本登録が完了致します。
+
+<%= confirmation_url(@resource, confirmation_token: @token) %>
+
+今後ともTeppanをよろしくお願い致します。
+
+Teppan運営チーム

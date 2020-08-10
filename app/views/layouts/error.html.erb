@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width:device-width, maximum-scale=1.0, minimum-scale=0.5,user-scalable=yes,initial-scale=1.0">
+    <title><%= page_title %></title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= javascript_bundle_tag 'application' %>
+    <%= stylesheet_bundle_tag 'application' %>
+    <%= favicon_bundle_tag 'favicon.ico' %>
+  </head>
+
+  <body>
+    <header>
+      <%= render "layouts/navbar" %>
+    </header>
+    
+    <main>
+      <% flash.each do |key, value| %>
+        <%= content_tag(:div, value, class: "#{key}") %>
+      <% end %>
+      <%= yield %>
+    </main>
+
+    <footer>
+      <%= render "layouts/footer" %>
+    </footer>
+  </body>
+</html>
