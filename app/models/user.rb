@@ -30,6 +30,7 @@ class User < ApplicationRecord
   validates :introduction, length: { maximum: 800 }
   validate  :stripe_cus_id_check
   validates :follows_count, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :unregistered, inclusion: { in: [true, false] }
   
   jp_prefecture :prefecture_code
   
@@ -501,6 +502,14 @@ class User < ApplicationRecord
       return [true, sold_netas_info]
     else
       return [false, "No sold netas found for user_id #{self.id}"]
+    end
+  end
+  
+  def can_unregister
+    if self.get_balance[0]
+      return [false, "User cash balance remaining"]
+    else
+      return [true, ""]
     end
   end
   

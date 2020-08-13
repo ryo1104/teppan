@@ -10,7 +10,11 @@ class Users::SessionsController < Devise::SessionsController
 
   # POST /resource/sign_in
   def create
-    super
+    if registered_user
+      super
+    else
+      redirect_to new_user_session_path, alert: "メールアドレスまたはパスワードが無効です。" and return
+    end
   end
 
   # DELETE /resource/sign_out
@@ -24,4 +28,19 @@ class Users::SessionsController < Devise::SessionsController
   # def configure_sign_in_params
   #   devise_parameter_sanitizer.permit(:sign_in, keys: [:attribute])
   # end
+  
+  private
+  
+  def registered_user
+    if params["user"]["email"].present?
+      user = User.find_by(email: params["user"]["email"])
+      if user.present?
+        if user.unregistered 
+          return false
+        end
+      end
+    end
+    return true
+  end
+  
 end
