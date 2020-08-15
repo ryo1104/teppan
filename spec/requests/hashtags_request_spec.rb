@@ -1,5 +1,4 @@
 require 'rails_helper'
 
-RSpec.describe "Hashtags", type: :request do
-
+RSpec.describe 'Hashtags', type: :request do
 end

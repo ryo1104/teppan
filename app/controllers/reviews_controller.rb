@@ -1,5 +1,4 @@
 class ReviewsController < ApplicationController
-
   def create
     @neta = Neta.find(params[:neta_id])
     @review = @neta.reviews.new(create_params)
@@ -15,9 +14,8 @@ class ReviewsController < ApplicationController
   end
 
   private
-  
+
   def create_params
     params.require(:review).permit(:text, :rate).merge(user_id: current_user.id)
   end
-
 end

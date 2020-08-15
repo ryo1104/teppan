@@ -1,9 +1,9 @@
 FactoryBot.define do
   factory :neta do
     # sequence(:text) { |n| "Neta text with over 20 characters #{n}" }
-    title { "ネタテスト　タイトル" }
-    content { "ネタテスト　本文" }
-    price { "0" }
+    title { 'ネタテスト　タイトル' }
+    content { 'ネタテスト　本文' }
+    price { '0' }
     private_flag { false }
     trait :with_user do
       association :user, factory: :user

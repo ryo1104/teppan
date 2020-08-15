@@ -13,7 +13,7 @@ class InquiriesController < ApplicationController
       render :new
     end
   end
-  
+
   private
 
   def inquiry_params

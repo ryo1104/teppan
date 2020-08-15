@@ -12,7 +12,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # POST /resource
   def create
     if unregistered_user
-      redirect_to new_user_registration_path, alert: "メールアドレスまたはパスワードが無効です。" and return
+      redirect_to new_user_registration_path, alert: 'メールアドレスまたはパスワードが無効です。' and return
     else
       super
     end
@@ -30,24 +30,24 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # DELETE /resource
   def destroy
-    if user_signed_in? && resource.class.name == "User"
+    if user_signed_in? && resource.class.name == 'User'
       if resource.id == current_user.id
         user = User.find(resource.id)
         if user.can_unregister[0]
           if user.update(unregistered: true)
             sign_out(resource)
           else
-            redirect_to user_path(current_user.id), alert: "退会処理に失敗しました。" and return
+            redirect_to user_path(current_user.id), alert: '退会処理に失敗しました。' and return
           end
         else
-          redirect_to user_path(current_user.id), alert: "必要なデータを削除して下さい。" and return
+          redirect_to user_path(current_user.id), alert: '必要なデータを削除して下さい。' and return
         end
       else
-        redirect_to user_path(current_user.id), alert: "権限がありません。" and return
+        redirect_to user_path(current_user.id), alert: '権限がありません。' and return
       end
     else
       redirect_to root_path and return
-    end 
+    end
   end
 
   # GET /resource/cancel
@@ -75,7 +75,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def after_sign_up_path_for(resource)
     edit_user_path(resource.id) # Nicknameの登録を促すためにUser#editにredirectさせる
   end
-  
+
   def after_update_path_for(resource)
     user_path(resource.id)
   end
@@ -84,19 +84,16 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # def after_inactive_sign_up_path_for(resource)
   #   super(resource)
   # end
-  
+
   private
-  
+
   def unregistered_user
-    if params["user"]["email"].present?
-      user = User.find_by(email: params["user"]["email"])
+    if params['user']['email'].present?
+      user = User.find_by(email: params['user']['email'])
       if user.present?
-        if user.unregistered 
-          return true
-        end
+        return true if user.unregistered
       end
     end
-    return false
+    false
   end
-  
 end

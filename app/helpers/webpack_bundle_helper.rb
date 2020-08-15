@@ -3,6 +3,7 @@ module WebpackBundleHelper
 
   def asset_bundle_path(entry, **options)
     raise BundleNotFound, "Could not find bundle with name #{entry}" unless manifest.key? entry
+
     asset_path(manifest.fetch(entry), **options)
   end
 
@@ -16,9 +17,7 @@ module WebpackBundleHelper
 
     # async と defer を両方指定した場合、ふつうは async が優先されるが、
     # defer しか対応してない古いブラウザの挙動を考えるのが面倒なので、両方指定は防いでおく
-    if options[:async]
-      options.delete(:defer)
-    end
+    options.delete(:defer) if options[:async]
 
     javascript_include_tag '', **options
   end
@@ -36,9 +35,10 @@ module WebpackBundleHelper
   # image_bundle_tag の場合は、entry はちゃんと拡張子付きで書いて欲しい
   def image_bundle_tag(entry, **options)
     raise ArgumentError, "Extname is missing with #{entry}" unless File.extname(entry).present?
+
     image_tag asset_bundle_path("images/#{entry}"), **options
   end
-  
+
   def favicon_bundle_tag(entry, **options)
     path = asset_bundle_path("images/#{entry}")
     favicon_link_tag(path, options)

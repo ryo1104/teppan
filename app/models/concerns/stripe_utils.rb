@@ -5,17 +5,16 @@ module StripeUtils
   require 'nkf'
 
   included do
-    Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
+    Stripe.api_key = ENV['STRIPE_SECRET_KEY']
   end
-  
+
   module ClassMethods
     def hankaku(str)
-      if str == nil
-        return nil
+      if str.nil?
+        nil
       else
-        return NKF.nkf('-w -Z4', str)
+        NKF.nkf('-w -Z4', str)
       end
     end
   end
-
 end

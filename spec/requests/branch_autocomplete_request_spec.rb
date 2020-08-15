@@ -1,5 +1,4 @@
 require 'rails_helper'
 
-RSpec.describe "BranchAutocompletes", type: :request do
-
+RSpec.describe 'BranchAutocompletes', type: :request do
 end

@@ -1,6 +1,6 @@
 module ErrorUtils
   extend ActiveSupport::Concern
-  
+
   class ErrorUtility
     def self.log_and_notify(e)
       Rails.logger.error "#{e.class} / #{e.message}"

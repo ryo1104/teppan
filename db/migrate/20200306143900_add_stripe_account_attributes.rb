@@ -1,5 +1,4 @@
 class AddStripeAccountAttributes < ActiveRecord::Migration[6.0]
-
   def up
     add_column :accounts, :last_name_kanji,   :string, null: false
     add_column :accounts, :last_name_kana,    :string, null: false
@@ -39,5 +38,4 @@ class AddStripeAccountAttributes < ActiveRecord::Migration[6.0]
     remove_column :accounts, :phone,             :string, null: false
     remove_column :accounts, :user_agreement,    :boolean, default: false, null: false
   end
-  
 end

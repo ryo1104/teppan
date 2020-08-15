@@ -2,85 +2,80 @@ class TradesController < ApplicationController
   before_action :load_tradeable, except: :webhook
   include StripeUtils
   protect_from_forgery except: :webhook
-  
+
   def new
-    begin
-      @buyer = current_user
-      @cards = @buyer.get_cards
-      buyer_balance = @buyer.get_balance
-      buyer_balance[0] == true ? @balance = buyer_balance[1] : @balance = 0
+    @buyer = current_user
+    @cards = @buyer.get_cards
+    buyer_balance = @buyer.get_balance
+    @balance = buyer_balance[0] == true ? buyer_balance[1] : 0
 
-      @price = @tradeable.price
-      @ctax = Trade.get_ctax(@price)
-      @charge_amount = @price + @ctax
-      @seller = @tradeable.user
-      @seller_revenue = Trade.get_seller_revenue(@price)
+    @price = @tradeable.price
+    @ctax = Trade.get_ctax(@price)
+    @charge_amount = @price + @ctax
+    @seller = @tradeable.user
+    @seller_revenue = Trade.get_seller_revenue(@price)
 
-      @success_url = trade_webhook_url
-      @cancel_url = request.url
-      @stripe_session = Trade.get_checkout_session(@tradeable, @buyer, @seller, @success_url, @cancel_url, @seller_revenue )
-      puts @stripe_session
+    @success_url = trade_webhook_url
+    @cancel_url = request.url
+    @stripe_session = Trade.get_checkout_session(@tradeable, @buyer, @seller, @success_url, @cancel_url, @seller_revenue)
+    puts @stripe_session
 
-      @stale_form_check_timestamp = Time.zone.now.to_i
-    rescue => e
-      ErrorUtility.log_and_notify e
-      redirect_to "/#{@resource}/#{@id}", alert: e.message and return
-    end
+    @stale_form_check_timestamp = Time.zone.now.to_i
+  rescue StandardError => e
+    ErrorUtility.log_and_notify e
+    redirect_to "/#{@resource}/#{@id}", alert: e.message and return
   end
-  
+
   def create
-    begin
-      # if session[:last_created_at].to_i > session_params[:timestamp].to_i
-      #   redirect_to "/#{@resource}/#{@id}", alert: "すでに決済されています。" and return
-      # else
-      #   # 取引情報を取得
-      #   buyer = current_user
-      #   seller = User.find(@tradeable.user_id)
-      #   @trade_inputs = get_trade_inputs(buyer, seller, charge_params)
-      #   unless @trade_inputs[0]
-      #     redirect_to "/#{@resource}/#{@id}/trades/new", alert: @trade_inputs[1] and return
-      #   end
+  # if session[:last_created_at].to_i > session_params[:timestamp].to_i
+  #   redirect_to "/#{@resource}/#{@id}", alert: "すでに決済されています。" and return
+  # else
+  #   # 取引情報を取得
+  #   buyer = current_user
+  #   seller = User.find(@tradeable.user_id)
+  #   @trade_inputs = get_trade_inputs(buyer, seller, charge_params)
+  #   unless @trade_inputs[0]
+  #     redirect_to "/#{@resource}/#{@id}/trades/new", alert: @trade_inputs[1] and return
+  #   end
 
-      #   # 引き落とし元を取得
-      #   @stripe_source = buyer.set_source(charge_params.merge!({"charge_amount" => @trade_inputs[1]["charge_amount"]}))
-      #   if @stripe_source[0]
-      #     buyer.reload
-      #   else
-      #     redirect_to "/#{@resource}/#{@id}/trades/new", alert: "支払い元の情報が取得できませんでした。" and return
-      #   end
-        
-      #   # 決済処理
-      #   @result_hash = Trade.charge(@stripe_source[1], buyer, seller, @tradeable, @trade_inputs[1]["charge_amount"], @trade_inputs[1]["seller_revenue"])
-        
-      #   # 取引・決済内容を記録
-      #   if @result_hash["charge_result"]["id"].present?
-      #     @tradeable.trades.create!(buyer_id: buyer.id, seller_id: seller.id, price: @trade_inputs[1]["price"], stripe_charge_id: @result_hash["charge_result"]["id"], tradetype: "TRADE", tradestatus: "DONE")
-      #     @message = "#{seller.nickname}さんからネタを購入しました。"
-      #     @stale_form_check_timestamp = Time.zone.now.to_i
-      #     session[:last_created_at] = @stale_form_check_timestamp
-      #   else
-      #     redirect_to "/#{@resource}/#{@id}/trades/new", alert: "決済できませんでした。" and return
-      #   end
-      # end
-      
-    rescue => e
-      ErrorUtility.log_and_notify e
-      redirect_to "/#{@resource}/#{@id}/trades/new", alert: e.message and return
-    end
+  #   # 引き落とし元を取得
+  #   @stripe_source = buyer.set_source(charge_params.merge!({"charge_amount" => @trade_inputs[1]["charge_amount"]}))
+  #   if @stripe_source[0]
+  #     buyer.reload
+  #   else
+  #     redirect_to "/#{@resource}/#{@id}/trades/new", alert: "支払い元の情報が取得できませんでした。" and return
+  #   end
+
+  #   # 決済処理
+  #   @result_hash = Trade.charge(@stripe_source[1], buyer, seller, @tradeable, @trade_inputs[1]["charge_amount"], @trade_inputs[1]["seller_revenue"])
+
+  #   # 取引・決済内容を記録
+  #   if @result_hash["charge_result"]["id"].present?
+  #     @tradeable.trades.create!(buyer_id: buyer.id, seller_id: seller.id, price: @trade_inputs[1]["price"], stripe_charge_id: @result_hash["charge_result"]["id"], tradetype: "TRADE", tradestatus: "DONE")
+  #     @message = "#{seller.nickname}さんからネタを購入しました。"
+  #     @stale_form_check_timestamp = Time.zone.now.to_i
+  #     session[:last_created_at] = @stale_form_check_timestamp
+  #   else
+  #     redirect_to "/#{@resource}/#{@id}/trades/new", alert: "決済できませんでした。" and return
+  #   end
+  # end
+  rescue StandardError => e
+    ErrorUtility.log_and_notify e
+    redirect_to "/#{@resource}/#{@id}/trades/new", alert: e.message and return
   end
-  
+
   def webhook
     payload = request.body.read
     event = nil
     endpoint_secret = 'whsec_hspHG6T5r7u5rqFsNVc56avVccoCbj4B'
-  
+
     # Verify webhook signature and extract the event
     # See https://stripe.com/docs/webhooks/signatures for more information.
     sig_header = request.env['HTTP_STRIPE_SIGNATURE']
-    
+
     begin
-      event = Stripe::Webhook.construct_event( payload, sig_header, endpoint_secret )
-      puts "event = "
+      event = Stripe::Webhook.construct_event(payload, sig_header, endpoint_secret)
+      puts 'event = '
       puts event.inspect
     rescue JSON::ParserError => e
       status 400  # Invalid payload
@@ -89,27 +84,26 @@ class TradesController < ApplicationController
       status 400  # Invalid signature
       return
     end
-  
+
     # Handle the checkout.session.completed event
     if event['type'] == 'checkout.session.completed'
-      puts "webhook reached successfully!"
+      puts 'webhook reached successfully!'
       session = event['data']['object']
-      
+
       # Fulfill the purchase...
       # handle_checkout_session(session)
     end
-  
+
     status 200
   end
 
-  
   private
-  
+
   def load_tradeable
     @resource, @id = request.path.split('/')[1, 2]
     @tradeable = @resource.singularize.classify.constantize.find(@id)
   end
-  
+
   def charge_params
     params.permit(:stripeToken, :card_id, :user_points, :price)
   end
@@ -117,56 +111,52 @@ class TradesController < ApplicationController
   def session_params
     params.permit(:timestamp)
   end
-  
-  def get_trade_inputs(buyer, seller, charge_params)
 
+  def get_trade_inputs(buyer, seller, charge_params)
     if charge_params[:price].present?
       if charge_params[:price].to_i != 0
         price = charge_params[:price].to_i
       else
-        return [false, "有料ネタではありません。"]
+        return [false, '有料ネタではありません。']
       end
     else
-      return [false, "価格が入力されていません。"]
+      return [false, '価格が入力されていません。']
     end
-    
+
     if seller.premium_user
-      unless seller.account.stripe_acct_id.present?
-        return [false, "売り手の販売アカウント情報が取得できませんでした。"]
-      end
+      return [false, '売り手の販売アカウント情報が取得できませんでした。'] unless seller.account.stripe_acct_id.present?
     else
-      return [false, "認定ユーザーではありません。"]
+      return [false, '認定ユーザーではありません。']
     end
 
     ctax = Trade.get_ctax(price)
-    unless ctax == 0
-      charge_amount = price + ctax 
-      seller_revenue = (0.9*(price)).floor
+    if ctax == 0
+      return [false, '消費税計算に問題が生じました。']
     else
-      return [false, "消費税計算に問題が生じました。"]
+      charge_amount = price + ctax
+      seller_revenue = (0.9 * price).floor
     end
-    
+
     if charge_params[:user_points].present?
       buyer_balance = buyer.get_balance
       if buyer_balance[0]
         if buyer_balance[1] >= charge_amount
           user_points = charge_params[:user_points]
         else
-          return [false, "残高不足です。"]
+          return [false, '残高不足です。']
         end
       else
-        return [false, "残高の取得に失敗しました。"]
+        return [false, '残高の取得に失敗しました。']
       end
     end
-    
-    trade_inputs = {}
-    trade_inputs.merge!({"price" => price})
-    trade_inputs.merge!({"ctax" => ctax})
-    trade_inputs.merge!({"charge_amount" => charge_amount})
-    trade_inputs.merge!({"user_points" => user_points})
-    trade_inputs.merge!({"seller_revenue" => seller_revenue})
-    
-    return [true, trade_inputs]
-  end
 
+    trade_inputs = {}
+    trade_inputs.merge!({ 'price' => price })
+    trade_inputs.merge!({ 'ctax' => ctax })
+    trade_inputs.merge!({ 'charge_amount' => charge_amount })
+    trade_inputs.merge!({ 'user_points' => user_points })
+    trade_inputs.merge!({ 'seller_revenue' => seller_revenue })
+
+    [true, trade_inputs]
+  end
 end

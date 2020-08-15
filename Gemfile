@@ -31,77 +31,80 @@ gem 'bootsnap', '>= 1.4.2', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'rspec-rails'#, '~> 4.0.0.beta4'
-  gem 'factory_bot_rails'#, '~> 5.0.2'
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'factory_bot_rails' # , '~> 5.0.2'
+  gem 'pry-rails'
   gem 'rails-controller-testing'
-  gem 'hirb'
-  gem 'hirb-unicode'
+  gem 'rspec-rails' # , '~> 4.0.0.beta4'
+  # gem 'hirb'
+  # gem 'hirb-unicode'
+  gem 'unicode-display_width', '>= 1.4.0'
 end
 
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem 'web-console', '>= 3.3.0'
-  gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'listen' # , '>= 3.0.5', '< 3.2'
+  gem 'web-console' # , '>= 3.3.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
-  gem 'spring-commands-rspec'
-  gem 'rails-erd'
   gem 'bullet'
+  gem 'rails-erd'
+  gem 'rubocop', require: false
+  gem 'rubocop-rails', require: false
+  gem 'spring'
+  gem 'spring-commands-rspec'
+  gem 'spring-watcher-listen' # , '~> 2.0.0'
 end
 
 group :test do
   # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '>= 2.15'
+  gem 'capybara' # '>= 2.15'
   gem 'selenium-webdriver'
   # Easy installation and use of web drivers to run system tests with browsers
-  gem 'webdrivers'
   gem 'faker'
+  gem 'webdrivers'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
+gem 'devise'
+gem 'jp_prefecture'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-gem 'material_icons'
-gem 'pry-rails'
-gem 'devise'
-gem 'paperclip'
 gem 'kaminari'
-gem 'ransack'
-gem 'rails-i18n'
-gem 'jp_prefecture'
+gem 'material_icons'
 gem 'omniauth'
-gem 'omniauth-yahoojp'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-twitter'
+gem 'omniauth-yahoojp'
+gem 'paperclip'
+gem 'rails-i18n'
+gem 'ransack'
 
 # breadcrumbs
 gem 'gretel'
 
-#課金サービス
+# 課金サービス
 gem 'stripe'
 gem 'zengin_code'
 
-#カウンター
+# カウンター
 gem 'counter_culture', '~> 1.0'
 
-#Amazon S3
+# Amazon S3
 gem 'aws-sdk-s3'
 
-#Error pages
+# Error pages
 gem 'rambulance'
 
-#Hiragana
+# 読み仮名
 gem 'rubyfuri'
 
-#Serializer
+# Serializer
 gem 'fast_jsonapi'
 
-#Phone number
+# Phone number
 gem 'telephone_number'
 
-#環境変数
+# 環境変数
 gem 'dotenv-rails'

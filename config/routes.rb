@@ -2,63 +2,62 @@ Rails.application.routes.draw do
   root 'top#index'
 
   resources :topics do
-    resources :netas, only: [:new, :create]
-    resources :comments, only: [:create, :destroy]
-    resources :likes, only: [:create, :destroy]
-    resources :bookmarks, only: [:create, :destroy]
-    resource  :headerimage, only: [:destroy], :module => 'topics'
+    resources :netas, only: %i[new create]
+    resources :comments, only: %i[create destroy]
+    resources :likes, only: %i[create destroy]
+    resources :bookmarks, only: %i[create destroy]
+    resource  :headerimage, only: [:destroy], module: 'topics'
   end
-  
-  resources  :netas, only: [:show, :edit, :update, :destroy] do
-    resources :trades, only: [:new, :create]
+
+  resources :netas, only: %i[show edit update destroy] do
+    resources :trades, only: %i[new create]
     resources :reviews, only: [:create]
-    resources :bookmarks, only: [:create, :destroy]
+    resources :bookmarks, only: %i[create destroy]
   end
-  
-  namespace :hashtags do 
+
+  namespace :hashtags do
     resources :netas, only: [:index]
     resources :autocomplete, only: [:index]
   end
-  
+
   resources :comments, only: [:show] do
-    resources :likes, only: [:create, :destroy]
+    resources :likes, only: %i[create destroy]
   end
 
-  resources :copychecks, only: [:new, :create, :show, :update, :index]
-  resources :inquiries, only: [:new, :create]
+  resources :copychecks, only: %i[new create show update index]
+  resources :inquiries, only: %i[new create]
 
-  devise_for :users, :controllers => {
-    :sessions      => "users/sessions",
-    :registrations => "users/registrations",
-    :passwords     => "users/passwords",
-    :confirmations => "users/confirmations"
+  devise_for :users, controllers: {
+    sessions: 'users/sessions',
+    registrations: 'users/registrations',
+    passwords: 'users/passwords',
+    confirmations: 'users/confirmations'
   }
 
-  resources :users, only: [:show, :edit, :update] do
-    resources :followers, only: [:create, :destroy, :index]
+  resources :users, only: %i[show edit update] do
+    resources :followers, only: %i[create destroy index]
     resources :followings, only: [:index]
-    resources :violations, only: [:new, :create]
-    resources :payments, only: [:new, :create, :index]
-    resources :subscriptions, only: [:new, :create, :show, :destroy]
-    resources :accounts, only: [:new, :create] do
+    resources :violations, only: %i[new create]
+    resources :payments, only: %i[new create index]
+    resources :subscriptions, only: %i[new create show destroy]
+    resources :accounts, only: %i[new create] do
       post :confirm, on: :collection
     end
-    resource  :avatar, only: [:destroy], :module => 'users'
+    resource :avatar, only: [:destroy], module: 'users'
   end
 
-  match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
+  match '/auth/:provider/callback', to: 'sessions#create', via: %i[get post]
 
-  resources :accounts, only: [:show, :edit, :update, :destroy] do
+  resources :accounts, only: %i[show edit update destroy] do
     patch :confirm, on: :member
-    resources :externalaccounts, only: [:new, :create]
-    resources :payouts, only: [:new, :create]
-    resources :idcards, only: [:new, :create, :index]
+    resources :externalaccounts, only: %i[new create]
+    resources :payouts, only: %i[new create]
+    resources :idcards, only: %i[new create index]
   end
-  resources :externalaccounts, only: [:edit, :update]
-  resources :idcards, only: [:edit, :update, :destroy]
+  resources :externalaccounts, only: %i[edit update]
+  resources :idcards, only: %i[edit update destroy]
   resources :bank_autocomplete, only: [:index]
   resources :branch_autocomplete, only: [:index]
 
-  post    '/trades/webhook', to: "trades#webhook", as: 'trade_webhook'
-  
+  post '/trades/webhook', to: 'trades#webhook', as: 'trade_webhook'
 end

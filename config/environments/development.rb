@@ -37,12 +37,12 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    port:                 587,
-    address:              'smtp.gmail.com',
-    domain:               'gmail.com',
-    user_name:            ENV['GMAIL_USER_NAME'],
-    password:             ENV['GMAIL_USER_PASSWORD'],
-    authentication:       'login',
+    port: 587,
+    address: 'smtp.gmail.com',
+    domain: 'gmail.com',
+    user_name: ENV['GMAIL_USER_NAME'],
+    password: ENV['GMAIL_USER_PASSWORD'],
+    authentication: 'login',
     enable_starttls_auto: true
   }
 
@@ -73,8 +73,8 @@ Rails.application.configure do
   config.web_console.whitelisted_ips = '202.32.34.208'
 
   # Whitelist one hostname
-  config.hosts << "3c355ca7c62a41d683a0526b64642f45.vfs.cloud9.ap-southeast-1.amazonaws.com"
-  
+  config.hosts << '3c355ca7c62a41d683a0526b64642f45.vfs.cloud9.ap-southeast-1.amazonaws.com'
+
   # config.after_initialize do
   #   Bullet.enable = true
   #   Bullet.alert = true

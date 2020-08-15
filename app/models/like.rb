@@ -2,8 +2,8 @@ class Like < ApplicationRecord
   belongs_to  :user
   belongs_to  :likeable, polymorphic: true
   counter_culture :likeable
-  validates :user_id, uniqueness: {:scope => [:likeable_type, :likeable_id], message: "このいいねはすでに存在します。" }
-  
+  validates :user_id, uniqueness: { scope: %i[likeable_type likeable_id], message: 'このいいねはすでに存在します。' }
+
   # def parent_path
   #   if self.likeable_type == "comment"
   #     comment = comment.find(self.likeable_id)

@@ -1,28 +1,28 @@
 module ApplicationHelper
-  require "uri" 
+  require 'uri'
 
   def page_title
-    title = "Teppan"
-    if @page_title
-      title = @page_title + " | " + title 
-    else
-      title = title + " | ネタ話のフリマサイト" 
-    end
+    title = 'Teppan'
+    title = if @page_title
+              @page_title + ' | ' + title
+            else
+              title + ' | ネタ話のフリマサイト'
+            end
   end
-  
+
   def text_extract_links(text)
-    URI.extract(text, ['http','https']).uniq.each do |url|
-      sub_text = ""
-      sub_text << "<a href=" << url << " target=\"_blank\">" << url << "</a>"
+    URI.extract(text, %w[http https]).uniq.each do |url|
+      sub_text = ''
+      sub_text << '<a href=' << url << ' target="_blank">' << url << '</a>'
       text.gsub!(url, sub_text)
     end
-    return text
+    text
   end
-  
+
   def remove_hashtags(text)
-    text.gsub(/[#＃][\w\p{Han}ぁ-ヶｦ-ﾟー]+/){|word| ""}
+    text.gsub(/[#＃][\w\p{Han}ぁ-ヶｦ-ﾟー]+/) { |_word| '' }
   end
-  
+
   # def devise_error_messages
   #   return "" if resource.errors.empty?
   #   html = ""
@@ -34,5 +34,4 @@ module ApplicationHelper
   #   end
   #   html.html_safe
   # end
-
 end
