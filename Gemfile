@@ -86,7 +86,7 @@ gem 'gretel'
 
 # 課金サービス
 gem 'stripe'
-gem 'zengin_code'
+gem 'zengin_code', require: false
 
 # カウンター
 gem 'counter_culture', '~> 1.0'

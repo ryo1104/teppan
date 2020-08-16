@@ -28,7 +28,7 @@ RSpec.describe Follow, type: :model do
     end
 
     it 'is invalid with a duplicate pair of user_id and follower_id' do
-      follow = create(:follow, user: user, follower_id: 100)
+      create(:follow, user: user, follower_id: 100)
       follow = build(:follow, user: user, follower_id: 100)
       follow.valid?
       expect(follow.errors[:user_id]).to include('このフォローはすでに存在します。')

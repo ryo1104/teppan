@@ -3,7 +3,8 @@ class Hashtags::NetasController < ApplicationController
 
   def index
     hashname = params[:keyword]
-    if @tag = Hashtag.find_by(hashname: hashname)
+    @tag = Hashtag.find_by(hashname: hashname)
+    if @tag.present?
       @tag.add_hit(current_user) if user_signed_in?
       @netas = @tag.netas.includes(:hashtag_netas, :hashtags, { user: [image_attachment: :blob] }).order('average_rate DESC')
     else

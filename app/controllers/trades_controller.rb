@@ -1,6 +1,6 @@
 class TradesController < ApplicationController
-  before_action :load_tradeable, except: :webhook
   include StripeUtils
+  before_action :load_tradeable, except: :webhook
   protect_from_forgery except: :webhook
 
   def new
@@ -15,15 +15,12 @@ class TradesController < ApplicationController
     @seller = @tradeable.user
     @seller_revenue = Trade.get_seller_revenue(@price)
 
-    @success_url = trade_webhook_url
-    @cancel_url = request.url
-    @stripe_session = Trade.get_checkout_session(@tradeable, @buyer, @seller, @success_url, @cancel_url, @seller_revenue)
+    @success_path = neta_trades_path(@tradeable.id)
+    @cancel_path = request.url
+    @stripe_session = Trade.get_checkout_session(@tradeable, @buyer, @seller, @success_path, @cancel_path, @seller_revenue)
     puts @stripe_session
 
     @stale_form_check_timestamp = Time.zone.now.to_i
-  rescue StandardError => e
-    ErrorUtility.log_and_notify e
-    redirect_to "/#{@resource}/#{@id}", alert: e.message and return
   end
 
   def create
@@ -59,15 +56,12 @@ class TradesController < ApplicationController
   #     redirect_to "/#{@resource}/#{@id}/trades/new", alert: "決済できませんでした。" and return
   #   end
   # end
-  rescue StandardError => e
-    ErrorUtility.log_and_notify e
-    redirect_to "/#{@resource}/#{@id}/trades/new", alert: e.message and return
   end
 
   def webhook
     payload = request.body.read
     event = nil
-    endpoint_secret = 'whsec_hspHG6T5r7u5rqFsNVc56avVccoCbj4B'
+    endpoint_secret = 'whsec_NodS8zvHRCtGfc3Ao5BWkK71phCCRFDv'
 
     # Verify webhook signature and extract the event
     # See https://stripe.com/docs/webhooks/signatures for more information.
@@ -77,10 +71,10 @@ class TradesController < ApplicationController
       event = Stripe::Webhook.construct_event(payload, sig_header, endpoint_secret)
       puts 'event = '
       puts event.inspect
-    rescue JSON::ParserError => e
+    rescue JSON::ParserError
       status 400  # Invalid payload
       return
-    rescue Stripe::SignatureVerificationError => e
+    rescue Stripe::SignatureVerificationError
       status 400  # Invalid signature
       return
     end
@@ -91,7 +85,7 @@ class TradesController < ApplicationController
       session = event['data']['object']
 
       # Fulfill the purchase...
-      # handle_checkout_session(session)
+      handle_checkout_session(session)
     end
 
     status 200

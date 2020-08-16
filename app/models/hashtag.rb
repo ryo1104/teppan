@@ -30,7 +30,6 @@ class Hashtag < ApplicationRecord
   def self.fix_netacount
     hashtags = Hashtag.all
     hashtags.each do |hashtag|
-      neta_count = 0
       neta_count = hashtag.netas.count
       hashtag.update!(neta_count: neta_count)
     end
@@ -45,7 +44,7 @@ class Hashtag < ApplicationRecord
     hashtag_ranking
   end
 
-  def update_hiragana(force: false)
+  def update_hiragana
     rubyfuri = Rubyfuri::Client.new(ENV['YAHOOJP_KEY'])
     update(hiragana: rubyfuri.furu(hashname))
   end

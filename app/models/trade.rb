@@ -60,10 +60,9 @@ class Trade < ApplicationRecord
                                                     destination: seller.account.stripe_acct_id
                                                   },
                                                   # receipt_email: buyer.email
-                                                  receipt_email: 'ryo_n_1104@yahoo.co.jp'
+                                                  receipt_email: ENV['ADMIN_EMAIL_ADDRESS']
                                                 } })
-    stripe_session = JSON.parse(result.to_s)
-    stripe_session
+    JSON.parse(result.to_s)
   end
 
   def self.charge(source, buyer, seller, tradeable, charge_amount, seller_revenue)

@@ -17,7 +17,7 @@ class ViolationsController < ApplicationController
       follow = @violater.follows.find_by(follower_id: current_user.id)
       follow.destroy! if follow.present?
       redirect_to user_path(@violater.id), notice: "#{@violater.nickname}さんに対する違反報告を受け付けました。" and return
-      end
+    end
   rescue StandardError => e
     ErrorUtility.log_and_notify e
     redirect_to user_path(params[:user_id]), alert: 'システムエラーにより違反報告を登録できませんでした。' and return

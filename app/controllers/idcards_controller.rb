@@ -4,9 +4,6 @@ class IdcardsController < ApplicationController
   def new
     @account = Account.find(params[:account_id])
     @idcard = Idcard.new
-  rescue StandardError => e
-    ErrorUtility.log_and_notify e
-    redirect_to account_path(params[:account_id]), alert: e.message and return
   end
 
   def create
@@ -37,18 +34,12 @@ class IdcardsController < ApplicationController
       end
     else
       render :new
-      end
-  rescue StandardError => e
-    ErrorUtility.log_and_notify e
-    redirect_to account_path(params[:account_id]), alert: 'エラーが発生しました。' and return
+    end
   end
 
   def index
     @account = Account.find(params[:account_id])
     @idcards = @account.idcards
-  rescue StandardError => e
-    ErrorUtility.log_and_notify e
-    redirect_to account_path(params[:account_id]), alert: e.message and return
   end
 
   def destroy
@@ -57,9 +48,6 @@ class IdcardsController < ApplicationController
     idcard.image.purge
     idcard.destroy!
     redirect_to account_path(account_id), notice: 'ファイルを削除しました。' and return
-  rescue StandardError => e
-    ErrorUtility.log_and_notify e
-    redirect_to user_path(current_user.id), alert: e.message and return
   end
 
   private

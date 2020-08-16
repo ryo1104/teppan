@@ -17,7 +17,6 @@ class Ranking < ApplicationRecord
     netas = Neta.where(created_at: from..to)
     fulllist = {}
     netas.each_with_index do |neta, _i|
-      score = 0
       score = neta.pageviews_count + neta.bookmarks_count * 5 + neta.reviews_count * neta.average_rate * 10 + neta.price * 0.1
       fulllist.merge!({ neta.id => score })
     end

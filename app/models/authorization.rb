@@ -5,8 +5,9 @@ class Authorization < ApplicationRecord
   include JpPrefecture
 
   def self.find_from_auth(auth)
-    if auth = find_by_provider_and_uid(auth['provider'], auth['uid'])
-      [true, auth]
+    auth_obj = find_by_provider_and_uid(auth['provider'], auth['uid'])
+    if auth_obj.present?
+      [true, auth_obj]
     else
       [false, "cannot find Auth record : provider #{auth['provider']}, uid #{auth['uid']}"]
     end
@@ -41,7 +42,7 @@ class Authorization < ApplicationRecord
                    1
                  when 'female'
                    2
-        end
+                 end
 
         if auth['info']['address']['country'] == 'jp'
           if auth['info']['address']['region'].present?

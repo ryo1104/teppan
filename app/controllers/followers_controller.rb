@@ -5,7 +5,7 @@ class FollowersController < ApplicationController
       redirect_to user_path(params[:user_id]), alert: 'すでにこのユーザーをフォローしています。' and return
     else
       Follow.create!(create_params)
-      end
+    end
 
     @user.reload
     @followed_users = @user.followed_users

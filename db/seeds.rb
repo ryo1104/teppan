@@ -13,9 +13,9 @@ ZenginCode::Bank.all.each do |original_code, original_bank|
   bank.touch unless bank.new_record?
   bank.save!
 
-  original_bank.branches.each do |original_code, original_branch|
-    puts "-- #{bank.code}:#{bank.name} #{original_code}:#{original_branch.name}"
-    branch = bank.branches.find_or_initialize_by(code: original_code)
+  original_bank.branches.each do |original_branch_code, original_branch|
+    puts "-- #{bank.code}:#{bank.name} #{original_branch_code}:#{original_branch.name}"
+    branch = bank.branches.find_or_initialize_by(code: original_branch_code)
     branch.name = original_branch.name
     branch.namekana = original_branch.kana
     branch.namehira = original_branch.hira
