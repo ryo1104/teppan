@@ -16,7 +16,7 @@
                   <%= image_bundle_tag "no_user_image.png", {:class => "circle", :id => "follow-list-image"} %>
                 <% end %>
                 <div class="collection-item-text">
-                  <%= atname(follow_user.nickname) %><br>
+                  <%= follow_user.nickname %><br>
                   <p class="user-page-follows">フォロワー&nbsp;&nbsp;<%= follow_user.follows.count %></p>
                   <% if follow_user.average_rate == 0 %>
                     <span class="star-rating" rating-data="0"></span>&nbsp;
