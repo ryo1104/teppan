@@ -3,17 +3,32 @@
     a {
       font-size: 1.3rem;
     }
+    &--icon {
+      width: 3rem;
+      height: 2rem;
+      margin: 0 0.5rem 0 0.2rem;
+    }
   }
   
   &__google {
     a {
       font-size: 1.3rem;
     }
+    &--icon {
+      width: 3rem;
+      height: 3rem;
+      margin: 0.5rem 0.5rem 0 0.1rem;
+    }
   }
   
   &__twitter {
     a {
       font-size: 1.3rem;
+    }
+    &--icon {
+      width: 3.2rem;
+      height: 3.2rem;
+      margin: 0.2rem 0.4rem 0 0;
     }
   }
 }

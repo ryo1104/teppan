@@ -3,9 +3,10 @@ class User < ApplicationRecord
   include JpPrefecture
 
   # Include default devise modules. Others available are:
-  # :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :confirmable, :trackable
+  # :lockable, :timeoutable
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable,
+         :confirmable, :trackable, :omniauthable, omniauth_providers: [:google_oauth2, :twitter, :yahoojp]
+         
   has_many  :topics, -> { order('netas_count DESC') }
   has_many  :netas, -> { order('average_rate DESC') }
   has_many  :pageviews,  -> { order('created_at DESC') }
@@ -15,7 +16,6 @@ class User < ApplicationRecord
   has_many  :follows
   has_many  :reviews
   has_many  :violations
-  has_one   :authorization
   has_one   :subscription
   has_one   :account
   has_one   :externalaccount, through: :account
@@ -80,19 +80,26 @@ class User < ApplicationRecord
   def temp_nickname
     email.split('@')[0] if email.present?
   end
+  
+  def self.find_or_create_for_oauth(auth)
 
-  def self.create_from_auth(auth_inputs)
-    if auth_inputs.present?
-      auth_inputs.merge!(password: Devise.friendly_token[0, 20])
-      user = new(auth_inputs)
-      if user.save
-        [true, user]
-      else
-        [false, "failed to create user. #{user.error} "]
-      end
+    if auth.provider == 'twitter'
+      email = auth.info.name + '@twitter-hoge.com' # twitter APIでPrivacyPolicy等の設定をすればauth.info.emailから取得可能になる
     else
-      [false, 'auth_inputs is empty']
+      email = auth.info.email
     end
+
+    user = User.find_by(email: email)
+    unless user
+      user = User.new(email: email,
+                      provider: auth.provider,
+                      uid: auth.uid,
+                      nickname: auth.info.name,
+                      password: Devise.friendly_token[0, 20] )
+      user.skip_confirmation!
+      user.save
+    end
+    user
   end
 
   def following_users

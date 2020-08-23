@@ -10,17 +10,14 @@
     margin: 0 0 2rem 0;
   }
   
-  &__field {
-    max-width: 28rem;
-    height: 7rem;
-  }
-  
   &__email {
     height: 6rem;
+    max-width: 28rem;
   }
   
   &__password {
     height: 6rem;
+    max-width: 28rem;
   }
   
   &__submit {

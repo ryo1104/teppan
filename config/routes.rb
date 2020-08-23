@@ -31,8 +31,10 @@ Rails.application.routes.draw do
     sessions: 'users/sessions',
     registrations: 'users/registrations',
     passwords: 'users/passwords',
-    confirmations: 'users/confirmations'
+    confirmations: 'users/confirmations',
+    omniauth_callbacks: 'users/omniauth_callbacks'
   }
+  # match '/auth/:provider/callback', to: 'sessions#create', via: %i[get post]
 
   resources :users, only: %i[show edit update] do
     resources :followers, only: %i[create destroy index]
@@ -45,8 +47,6 @@ Rails.application.routes.draw do
     end
     resource :avatar, only: [:destroy], module: 'users'
   end
-
-  match '/auth/:provider/callback', to: 'sessions#create', via: %i[get post]
 
   resources :accounts, only: %i[show edit update destroy] do
     patch :confirm, on: :member
