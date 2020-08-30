@@ -1,6 +1,7 @@
 class TradesController < ApplicationController
   include StripeUtils
   before_action :load_tradeable, except: :webhook
+  skip_before_action :authenticate_user!, only: :webhook
   protect_from_forgery except: :webhook
 
   def new
@@ -85,10 +86,10 @@ class TradesController < ApplicationController
       session = event['data']['object']
 
       # Fulfill the purchase...
-      handle_checkout_session(session)
+      fulfill_order(session)
     end
 
-    status 200
+    # status 200
   end
 
   private
@@ -104,6 +105,11 @@ class TradesController < ApplicationController
 
   def session_params
     params.permit(:timestamp)
+  end
+  
+  def fulfill_order(checkout_session)
+    # TODO: fill in with your own logic
+    puts "Fulfilling order for #{checkout_session.inspect}"
   end
 
   def get_trade_inputs(buyer, seller, charge_params)

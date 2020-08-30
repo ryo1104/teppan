@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_22_171251) do
+ActiveRecord::Schema.define(version: 2020_08_30_063447) do
 
   create_table "accounts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "user_id"
@@ -298,7 +298,6 @@ ActiveRecord::Schema.define(version: 2020_08_22_171251) do
     t.string "nickname"
     t.date "birthdate"
     t.integer "gender", default: 0
-    t.integer "prefecture_code"
     t.string "stripe_cus_id"
     t.integer "follows_count", default: 0, null: false
     t.datetime "created_at", null: false

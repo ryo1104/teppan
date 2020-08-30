@@ -1,4 +1,5 @@
 class NetasController < ApplicationController
+
   def new
     @topic = Topic.find(params[:topic_id])
     @neta = @topic.netas.new
@@ -120,7 +121,4 @@ class NetasController < ApplicationController
     params.require(:neta).permit(:timestamp)
   end
 
-  def check_login
-    redirect_to action: :show unless user_signed_in?
-  end
 end

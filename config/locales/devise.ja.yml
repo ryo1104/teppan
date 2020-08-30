@@ -16,7 +16,7 @@ ja:
       not_found_in_database: "メールアドレスまたはパスワードが無効です。"
       timeout: "一定時間が経過したため、再度ログインが必要です"
       unauthenticated: "これより先はログイン又はユーザー登録が必要です。"
-      unconfirmed: "続ける前に、お送りしましたメールにてアカウントのご確認をお願い致します。"
+      unconfirmed: "アカウントの本登録が完了しておりません。お送りしましたメールにて、アカウントのご確認をお願い致します。"
     mailer:
       confirmation_instructions:
         subject: "[Teppan] アカウント本登録のご案内"

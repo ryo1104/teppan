@@ -1,11 +1,10 @@
 class User < ApplicationRecord
   include StripeUtils
-  include JpPrefecture
 
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable,
-         :confirmable, :trackable, :omniauthable, omniauth_providers: [:google_oauth2, :twitter, :yahoojp]
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :confirmable,
+         :trackable, :omniauthable, omniauth_providers: [:google_oauth2, :twitter, :yahoojp]
          
   has_many  :topics, -> { order('netas_count DESC') }
   has_many  :netas, -> { order('average_rate DESC') }
@@ -23,16 +22,14 @@ class User < ApplicationRecord
   has_one_attached :image
   has_rich_text :introduction
   validates :email, presence: true, uniqueness: { case_sensitive: false }
+  validate  :nickname
   validate  :image_content_type, if: :was_attached?
   validate  :gender_code_check
-  validate  :prefecture_code_check
   validate  :age_check
   validates :introduction, length: { maximum: 800 }
   validate  :stripe_cus_id_check
   validates :follows_count, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :unregistered, inclusion: { in: [true, false] }
-
-  jp_prefecture :prefecture_code
 
   def avatar
     image if image.attached?
@@ -62,19 +59,6 @@ class User < ApplicationRecord
     else
       ' - '
     end
-  end
-
-  def prefecture_name
-    name = JpPrefecture::Prefecture.find(code: prefecture_code).try(:name)
-    if name.present?
-      name
-    else
-      ' - '
-    end
-  end
-
-  def prefecture_name=(prefecture_name)
-    self.prefecture_code = JpPrefecture::Prefecture.find(name: prefecture_name).code
   end
 
   def temp_nickname
@@ -151,38 +135,6 @@ class User < ApplicationRecord
   def free_netas
     netas.includes(:reviews).where(price: 0)
   end
-
-  # def profile_gauge
-  #   done = 0
-  #   total = 0
-  #   if self.nickname.present?
-  #     done +=1
-  #   end
-  #   total += 1
-  #   if self.image.attachment.present?
-  #     done += 1
-  #   end
-  #   total += 1
-  #   if self.birthdate.present?
-  #     done += 1
-  #   end
-  #   total += 1
-  #   if self.gender.present?
-  #     done += 1
-  #   end
-  #   total += 1
-  #   if self.prefecture_code.present?
-  #     done += 1
-  #   end
-  #   total += 1
-  #   if self.introduction.present?
-  #     done += 1
-  #   end
-  #   total += 1
-
-  #   val = (100*done/total)
-  #   return val.round(0)
-  # end
 
   def premium_user
     netas = free_netas
@@ -506,12 +458,6 @@ class User < ApplicationRecord
   def gender_code_check
     if gender.present?
       errors.add(:gender, 'Invalid gender code') if gender < 0 || gender > 3
-    end
-  end
-
-  def prefecture_code_check
-    if prefecture_code.present?
-      errors.add(:prefecture_code, 'Invalid prefecture code') if prefecture_code < 1 || prefecture_code > 47
     end
   end
 
