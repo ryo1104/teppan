@@ -3,7 +3,7 @@ html {
 }
 
 body{
-  @include sp { font-size:  1.3em; } 
+  @include sp { font-size:  1.5em; } 
   @include pc { font-size:  1.4em; } 
   background-color: white;
 }

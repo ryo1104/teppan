@@ -74,7 +74,7 @@ Rails.application.configure do
 
   # Whitelist one hostname
   config.hosts << '3c355ca7c62a41d683a0526b64642f45.vfs.cloud9.ap-southeast-1.amazonaws.com'
-  config.hosts << 'ec2-52-221-234-187.ap-southeast-1.compute.amazonaws.com'
+  config.hosts << 'ec2-3-1-20-116.ap-southeast-1.compute.amazonaws.com'
 
   # config.after_initialize do
   #   Bullet.enable = true

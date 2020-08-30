@@ -12,13 +12,11 @@ class Neta < ApplicationRecord
   has_many        :hashtag_netas
   has_many        :hashtags, through: :hashtag_netas
   accepts_nested_attributes_for :hashtags
-  validate        :content_check
-  validate        :valuecontent_check
-  validate        :hashtag_check
   validates       :title,     presence: true, length: { in: 5..35 }
-  validates       :valuetext, length: { maximum: 800 }
   validates       :price,     presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 10_000 }
   validates       :private_flag, inclusion: { in: [true, false] }
+  validate        :content_check
+  validate        :valuecontent_check
 
   def self.average_rate(netas)
     gross_count = 0

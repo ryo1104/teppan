@@ -97,7 +97,7 @@
       }
       &-index {
         display: inline-block;
-        width: 8rem;
+        width: 8.5rem;
         height: 3rem;
         line-height: 1rem;
         padding: 10px 10px 5px;
@@ -105,7 +105,8 @@
         background-color: $tp-orange-light;
         color: $tp-orange-dark; // #e65100
         border-top-right-radius: 10px;
-        font-size: 1.2rem;
+        font-size: 1.3rem;
+        font-weight: bold;
         text-align: center;
         &.selected {/* .tab-menuの中のliの内、.selectedが与えられているものに対する記述 */
           background-color: $tp-orange;
