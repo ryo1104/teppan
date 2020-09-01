@@ -1,13 +1,13 @@
 @mixin user-img-sm {
   @extend .circle;
-  height: 2rem;
-  width: 2rem;
+  height: 2.5rem;
+  width: 2.5rem;
 }
 
 @mixin user-img-lg {
   @extend .circle;
-  height: 6rem;
-  width: 6rem;
+  height: 7rem;
+  width: 7rem;
 }
 
 @mixin user-img-xl {

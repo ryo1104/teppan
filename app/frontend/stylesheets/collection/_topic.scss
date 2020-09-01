@@ -18,11 +18,10 @@
   }
   
   &__title {
-    &.truncate {
-      font-size: 1.3rem;
-      color: black;
-      font-weight: bold;
-    }
+    min-height: 3.5rem;
+    font-size: 1.3rem;
+    color: black;
+    font-weight: bold;
   }
   
   &__author-image {
@@ -44,13 +43,7 @@
     &.material-icons {
       font-size: 1.2rem;
       color: $tp-orange;
-    }
-  }
-  
-  &__like-icon {
-    &.material-icons {
-      font-size: 1.2rem;
-      color: $tp-orange;
+      margin-left: 0.5rem;
     }
   }
   

@@ -407,6 +407,7 @@ DEPENDENCIES
   kaminari
   listen
   material_icons
+  mini_magick (~> 4.10)
   mysql2 (>= 0.4.4)
   omniauth
   omniauth-google-oauth2

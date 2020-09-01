@@ -6,7 +6,7 @@
       <%= f.label :image do %>
         <div class="user-edit-form__avatar-container">
           <% if @user.avatar.present? %>
-            <%= image_tag @user.avatar, { :class => "user-edit-form__avatar-img" } %>
+            <%= image_tag @user.avatar.variant(resize_to_fill: [70, 70], gravity: "Center"), { :class => "user-edit-form__avatar-img" } %>
             <%= link_to "画像変更", user_avatar_path(@user.id), :method => :delete, :class => "user-edit-form__delete-avatar-link" %>
           <% else %>
             <%= image_bundle_tag "no_user_image.png", { :class => "user-edit-form__avatar-img" } %>

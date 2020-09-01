@@ -2,13 +2,13 @@
   <div class="topics-index card">
     <div class="topics-index card-image">
       <% if topic_card.header_image.attached? %>
-        <%= image_tag topic_card.header_image %>
+        <%= image_tag topic_card.header_image.variant(resize_to_fill: [170, 110], gravity: "Center") %>
       <% else %>
         <%= image_bundle_tag "teppan_gray.jpeg" %>
       <% end %>
     </div>
     <div class="topics-index card-content">
-      <div class="topics-index__title truncate"><%= topic_card.title %></div>
+      <div class="topics-index__title"><%= truncate(topic_card.title, length: 25) %></div>
       <div class="topics-index__postdata">
         <% if topic_card.max_rate == 0 %>
           <span class="js-topics-index__star" rating-data="0"></span>
@@ -16,11 +16,8 @@
           <span class="js-topics-index__star" rating-data="<%= topic_card.max_rate %>"></span>
           <span class="topics-index__star-count"><%= format("%.2f", topic_card.max_rate) %></span>
         <% end %>
-        <br>
         <i class="topics-index__neta-icon material-icons">create</i>
         <span class="topics-index__icon-count"><%= topic_card.netas_count %></span>
-        <i class="topics-index__like-icon material-icons">favorite_border</i>
-        <span class="topics-index__icon-count"><%= topic_card.likes_count %></span>
       </div>
       <div class="topics-index__author">
         <%= link_to user_path(topic_card.user_id) do %>
