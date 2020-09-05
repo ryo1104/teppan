@@ -53,6 +53,5 @@ class UsersController < ApplicationController
 
   def my_page
     @my_page = @user.id == current_user.id
-    @my_page
   end
 end

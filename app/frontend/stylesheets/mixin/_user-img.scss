@@ -4,6 +4,12 @@
   width: 2.5rem;
 }
 
+@mixin user-img-md {
+  @extend .circle;
+  height: 5rem;
+  width: 5rem;
+}
+
 @mixin user-img-lg {
   @extend .circle;
   height: 7rem;

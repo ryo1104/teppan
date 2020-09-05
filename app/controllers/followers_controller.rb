@@ -1,4 +1,10 @@
 class FollowersController < ApplicationController
+
+  def index
+    @user = User.find(params[:user_id])
+    @followers = @user.followed_users
+  end
+
   def create
     @user = User.find(params[:user_id])
     if @user.follows.find_by(follower_id: current_user.id).present?
@@ -6,12 +12,8 @@ class FollowersController < ApplicationController
     else
       Follow.create!(create_params)
     end
-
     @user.reload
     @followed_users = @user.followed_users
-  rescue StandardError => e
-    ErrorUtility.log_and_notify e
-    redirect_to user_path(params[:user_id]), alert: e.message and return
   end
 
   def destroy
@@ -24,15 +26,6 @@ class FollowersController < ApplicationController
     else
       redirect_to user_path(params[:user_id]), alert: 'このユーザーのフォローが存在しません。' and return
     end
-  rescue StandardError => e
-    ErrorUtility.log_and_notify e
-    redirect_to user_path(params[:user_id]), alert: e.message and return
-  end
-
-  def index
-    @user = User.find(params[:user_id])
-    @direction = 'フォロワー'
-    @follow_list = @user.followed_users
   end
 
   private

@@ -1,0 +1,28 @@
+<li class="follow-list collection-item">
+  <%= link_to user_path(follower.id) do %>
+    <div class="row follow-list">
+      <div class="col s3 m3">
+        <% if follower.avatar.present? %>
+          <%= image_tag follower.avatar.variant(resize_to_fill: [50, 50], gravity: "Center"), { :class => "follow-list__avatar-img" } %>
+        <% else %>
+          <%= image_bundle_tag "no_user_image.png", { :class => "follow-list__avatar-img" } %>
+        <% end %>
+      </div>
+      <div class="col s9 m9">
+        <div class="follow-list__nickname"><%= follower.nickname %></div>
+        <div class="follow-list__rating">
+          <% if follower.average_rate == 0 %>
+            <span class="js-follow-list__star" rating-data="0"></span>
+          <% else %>
+            <span class="js-follow-list__star" rating-data="<%= follower.average_rate %>"></span>
+            <span class="follow-list__rate"><%= format("%.2f", follower.average_rate ) %></span>
+          <% end %>
+        </div>
+        <div class="follow-list__follow-info">
+          <span class="follow-list__followers">フォロワー</span>
+          <span class="follow-list__followers--count"><%= follower.follows.count %></span>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</li>

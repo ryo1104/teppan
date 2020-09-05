@@ -74,7 +74,12 @@ crumb :edit_user_registration do |user|
   parent :show_user, user
 end
 
-crumb :follow_list do |user|
+crumb :following_list do |user|
+  link 'フォロー中', user_followings_path(user.id)
+  parent :show_user, user
+end
+
+crumb :followed_list do |user|
   link 'フォロワー', user_followers_path(user.id)
   parent :show_user, user
 end

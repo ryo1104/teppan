@@ -1,38 +1,21 @@
-<% @page_title = @direction %>
-<% breadcrumb :follow_list, @user %>
+<% @page_title = 'フォロワー' %>
+<% breadcrumb :followed_list, @user %>
 <div class="page-body">
-  <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs-tp" %>
   <div class="row">
-    <div class="col s12 m9 user-page">
-      <h1 class="h1_class"><%= @direction %>(<%= @follow_list.count %>)</h1>
-      <% if @follow_list %>
-        <ul class="collection">
-          <% @follow_list.each do |follow_user| %>
-            <li class="collection-item avatar custom">
-              <%= link_to user_path(follow_user.id) do %>
-                <% if follow_user.avatar.present? %>
-                  <%= image_tag follow_user.avatar, {:class => "circle", :id => "follow-list-image"} %>
-                <% else %>
-                  <%= image_bundle_tag "no_user_image.png", {:class => "circle", :id => "follow-list-image"} %>
-                <% end %>
-                <div class="collection-item-text">
-                  <%= follow_user.nickname %><br>
-                  <p class="user-page-follows">フォロワー&nbsp;&nbsp;<%= follow_user.follows.count %></p>
-                  <% if follow_user.average_rate == 0 %>
-                    <span class="star-rating" rating-data="0"></span>&nbsp;
-                    <span class="star-rating-text-user-page"><%= follow_user.average_rate %></span>
-                  <% else %>
-                    <span class="star-rating" rating-data="<%= follow_user.average_rate %>"></span>&nbsp;
-                    <span class="star-rating-text-user-page"><%= follow_user.average_rate %></span>
-                  <% end %>
-                </div>
-              <% end %>
-            </li>
-          <% end %>
-        </ul>
-      <% else %>
-        <p>（ユーザーはいません）</p><br><br>
-      <% end %>
+    <div class="col s12 m6 content">
+      <div class="row content-header">
+        <%= render partial: "layouts/breadcrumbs" %>
+      </div>
+      <div class="row follow-index">
+        <h1 class="following-index__title">フォロワー(<%= @followers.count %>)</h1>
+        <% if @followers %>
+          <ul class="follow-list collection">
+            <%= render partial: "followers/follower", collection: @followers %>
+          </ul>
+        <% else %>
+          <p>（ユーザーはいません）</p><br><br>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>

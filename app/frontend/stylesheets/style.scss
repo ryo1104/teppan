@@ -23,10 +23,11 @@
 @import "/module/_trix.scss";
 @import "/module/_user_oauth.scss";
 
-@import "/collection/_topic.scss";
-@import "/collection/_neta.scss";
 @import "/collection/_comment.scss";
+@import "/collection/_follow.scss";
+@import "/collection/_neta.scss";
 @import "/collection/_review.scss";
+@import "/collection/_topic.scss";
 
 @import "/page/_accounts_confirm.scss";
 @import "/page/_accounts_new.scss";

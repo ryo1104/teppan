@@ -44,6 +44,19 @@ $('.js-user-show-profile__star').raty({
   starOn   : onStar,
 });
 
+$('.js-follow-list__star').raty({
+  score: function() {
+    return $(this).attr('rating-data');
+  },
+  readOnly : true,
+  number   : 5,  
+  half     : true,
+  size     : 24,
+  starHalf : halfStar,
+  starOff  : offStar,
+  starOn   : onStar,
+});
+
 $('.js-review-index__star').raty({
   score: function() {
     return $(this).attr('rating-data');

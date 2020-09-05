@@ -12,7 +12,7 @@
     &__right {
       &.col.s9.m9 {
         line-height: 2rem;
-        padding: 0;
+        padding-left: 0.5rem;
       }
     }
 
@@ -81,6 +81,10 @@
     &__reported {
       font-size: 1.3rem;
       color: red;
+    }
+    
+    &__lower {
+      margin-top: 2rem;
     }
     
     &__introduction {
