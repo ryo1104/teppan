@@ -18,12 +18,12 @@ class Hashtag < ApplicationRecord
   end
 
   def add_netacount
-    neta_count = self.neta_count
+    neta_count = netas.count
     update!(neta_count: neta_count + 1)
   end
 
   def reduce_netacount
-    neta_count = self.neta_count
+    neta_count = netas.count
     update!(neta_count: neta_count - 1) unless neta_count == 0
   end
 
@@ -45,7 +45,7 @@ class Hashtag < ApplicationRecord
   end
 
   def update_hiragana
-    rubyfuri = Rubyfuri::Client.new(ENV['YAHOOJP_KEY'])
+    rubyfuri = Rubyfuri::Client.new(ENV['YAHOOJP_ID'])
     update(hiragana: rubyfuri.furu(hashname))
   end
 end

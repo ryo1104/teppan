@@ -1,17 +1,7 @@
 # frozen_string_literal: true
 
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
-  # You should configure your model like this:
-  # devise :omniauthable, omniauth_providers: [:twitter]
 
-  # You should also create an action method in this controller like this:
-  # def twitter
-  # end
-
-  # More info at:
-  # https://github.com/plataformatec/devise#omniauth
-
-  
   def google_oauth2
     callback_from(:google_oauth2)
   end
@@ -32,7 +22,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       flash[:notice] = I18n.t('devise.omniauth_callbacks.success', kind: provider.capitalize)
       sign_in_and_redirect @user
     else
-      # session["devise.#{provider}_data"] = request.env['omniauth.auth'].except("extra")
       redirect_to new_user_registration_url
     end
   end

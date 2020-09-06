@@ -78,49 +78,68 @@
 </div>
 
 <div class="user-show-contents__tab-panel">
-  
-  <% if @premium_user[0] %>
-    <h2>ビジネスアカウント</h2>
-      <% unless @user.account %>
-        <%= link_to '登録', new_user_account_path(@user.id), :method => :get, :class => "user-show-contents__links btn waves-effect" %>
-      <% else %>
-        <%= link_to '詳細', account_path(@user.account.id), :class => "user-show-contents__links btn waves-effect" %>
-      <% end %>
-    <hr>
-    <h2>販売実績</h2>
-    <% if @account_exists && @sold_netas_info[0] %>
-      <table>
-        <thead>
-          <tr>
-            <th class="table_header_item">日時</th>
-            <th class="table_header_item">ネタ</th>
-            <th class="table_header_item">価格</th>
-            <th class="table_header_item">購入者</th>
-            <th class="table_header_item">評価</th>
-          </tr>
-        </thead>
-        <tbody>
-          <%= render partial: "users/sold_trade", collection: @sold_netas_info[1] %>
-        </tbody>
-      </table>
+
+  <% unless @premium_user[0] %>
+  <div class="user-show-contents__n-advance">
+    <br>
+    有料ネタの販売を開始するためには、下記の条件を<strong>両方</strong>満たす必要があります。<br>
+    ・無料ネタ&nbsp;<b>3つ以上</b>投稿<br>
+    ・レビュー平均&nbsp;<b>3.0以上</b><br>
+    <br>
+    <b>無料ネタ実績</b><br>
+    <span>ネタ　：<%= @premium_user[2] %>件</span>
+    <% if @premium_user[2] >= 3 %>
+      <span class="user-show-contents__free-neta-check--pass material-icons">check_circle</span>
     <% else %>
-      (販売履歴はありません)<br>
+      <span class="user-show-contents__free-neta-check--fail material-icons">cancel</span>
+    <% end %>
+    <br>
+    評価平均
+    <span class="js-user-show-profile__star" rating-data="<%=@premium_user[1] %>"></span>
+    <span class="user-show-contents__rating">&nbsp;&nbsp;<%= format("%.2f", @premium_user[1]) %></span>
+    <% if @premium_user[1] >= 3 %>
+      <span class="user-show-contents__free-neta-check--pass material-icons">check_circle</span>
+    <% else %>
+      <span class="user-show-contents__free-neta-check--fail material-icons">cancel</span>
+    <% end %>
+    <br>
+  </div>
+  <hr>
+  <% end %>
+
+  <h2>ビジネスアカウント</h2>
+  <% unless @account_exists %>
+    <% if @premium_user[0] %>
+      <%= link_to '登録', new_user_account_path(@user.id), :method => :get, :class => "user-show-contents__links btn waves-effect" %>
+    <% else %>
+      <div class="user-show-contents__links--inactive btn">登録</div>
     <% end %>
   <% else %>
-    <div class="user-show-contents__n-advance">
-      <br>
-      有料ネタの販売を開始するためには、下記の条件を<strong>両方</strong>満たす必要があります。<br>
-      ・無料ネタ&nbsp;<b>3つ以上</b>投稿<br>
-      ・レビュー平均&nbsp;<b>3.0以上</b><br>
-      <br>
-      <b>無料ネタ実績</b><br>
-      ネタ　：<%= @premium_user[2] %>件<br>
-      評価平均
-      <span class="js-user-show-profile__star" rating-data="<%=@premium_user[1] %>"></span>
-      <span class="user-show-contents__rating">&nbsp;&nbsp;<%= format("%.2f", @premium_user[1]) %></span><br>
-    </div>
-  <% end %><br>
+    <%= link_to '詳細', account_path(@user.account.id), :class => "user-show-contents__links btn waves-effect" %>
+  <% end %>
+  <hr>
+
+  <h2>販売実績</h2>
+  <% if @account_exists && @sold_netas_info[0] %>
+    <table>
+      <thead>
+        <tr>
+          <th class="table_header_item">日時</th>
+          <th class="table_header_item">ネタ</th>
+          <th class="table_header_item">価格</th>
+          <th class="table_header_item">購入者</th>
+          <th class="table_header_item">評価</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render partial: "users/sold_trade", collection: @sold_netas_info[1] %>
+      </tbody>
+    </table>
+  <% else %>
+    (販売履歴はありません)<br>
+  <% end %>
   <br>
+
 </div>
 
 <div class="user-show-contents__tab-panel">

@@ -27,3 +27,18 @@
     font-size: 1.3rem;
   }
 }
+
+@mixin button-inactive {
+  background-color: $tp-lightgray;
+  border-radius: $btn-border-radius;
+  height: 3rem;
+  min-width: 10rem;
+  line-height: 3rem;
+  color: white;
+  font-size: 1.3rem;
+
+  input {
+    color: white;
+    font-size: 1.3rem;
+  }
+}

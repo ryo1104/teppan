@@ -62,6 +62,14 @@ class Neta < ApplicationRecord
   def editable
     trades.count == 0
   end
+  
+  def is_free
+    if price == 0
+      true
+    else
+      false
+    end
+  end
 
   def for_sale
     if price != 0
@@ -137,8 +145,8 @@ class Neta < ApplicationRecord
       tag_array.uniq.map do |tag_name|
         hashtag = Hashtag.find_or_create_by(hashname: tag_name)
         hashtag.update_hiragana
-        hashtags << hashtag
         hashtag.add_netacount
+        hashtags << hashtag
       end
     end
   end

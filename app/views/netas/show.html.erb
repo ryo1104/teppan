@@ -47,7 +47,7 @@
           <% @neta.hashtags.each do |tag| %>
             <div class="neta-show__hashtag"><%= link_to "#"+tag.hashname, "/hashtags/netas?keyword=#{tag.hashname}" %></div>
           <% end %>
-          <% if @owner %>
+          <% if @owner && !@reviews %>
             <div class="neta-show__edit-link"><%= link_to "編集", edit_neta_path(@neta.id) %></div>
           <% end %>
           <div class="neta-show__footer">
@@ -65,28 +65,26 @@
           </div>
         </div>  
         <div class="row neta-show__review">
-          <% unless @owner %>
-            <% unless @myreview.present? %>
-              <% if @for_sale %> 
-                <% if @purchased %>
-                  <ul class="neta-show__review-index collection">
-                    <%= render partial: "reviews/reviewform", locals: { neta: @neta, newreview: @newreview } %>
-                  </ul>
-                <% end %>
-              <% else %>
+          <% if !@owner && !@myreview %>
+            <% if @is_free %>
+              <ul class="neta-show__review-index collection">
+                <%= render partial: "reviews/reviewform", locals: { neta: @neta, newreview: @newreview } %>
+              </ul>
+            <% else %>
+              <% if @for_sale && @purchased %>
                 <ul class="neta-show__review-index collection">
                   <%= render partial: "reviews/reviewform", locals: { neta: @neta, newreview: @newreview } %>
                 </ul>
               <% end %>
+            <% end %>
+          <% else %>
+            <h2>レビュー(<%= @reviews.count %>件)</h2>
+            <% if @reviews.present? %>
+              <ul class="neta-show__review-index collection">
+                <%= render partial: "reviews/review", collection: @reviews %>
+              </ul>
             <% else %>
-              <h2>レビュー(<%= @reviews.count %>件)</h2>
-              <% if @reviews.present? %>
-                <ul class="neta-show__review-index collection">
-                  <%= render partial: "reviews/review", collection: @reviews %>
-                </ul>
-              <% else %>
-                <p class="neta-show__review-nodata"> (レビューはありません) </p>
-              <% end %>
+              <p class="neta-show__review-nodata"> (レビューはありません) </p>
             <% end %>
           <% end %>
         </div>

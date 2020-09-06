@@ -137,10 +137,26 @@
       &.btn.waves-effect {
         @include button-normal;
       }
+      &--inactive.btn{
+        @include button-inactive;
+      }
     }
     
     &__n-advance {
       padding: 1rem;
+    }
+    
+    &__free-neta-check {
+      &--pass.material-icons {
+        font-size: 1.8rem;
+        color: $tp-green;
+        margin: 0 0 0 1rem;
+      }
+      &--fail.material-icons {
+        font-size: 1.8rem;
+        color: $tp-orange-dark;
+        margin: 0 0 0 1rem;
+      }
     }
     
     &__rating {
