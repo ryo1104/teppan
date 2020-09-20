@@ -10,87 +10,87 @@
         <div class="account-confirm__message">下記内容にお間違いがないかご確認ください。</div>
         <div class="account-confirm__show-info collection">
           <div class="row account-confirm__name">
-            <div class="col s4 m4">お名前（漢字）</div><div class="col s8 m8">：<%= @account.last_name_kanji %>&nbsp;<%= @account.first_name_kanji %></div>
+            <div class="col s4 m4">お名前（漢字）</div><div class="col s8 m8">：<%= @account_form.last_name_kanji %>&nbsp;<%= @account_form.first_name_kanji %></div>
           </div>
           <div class="row account-confirm__name">
-            <div class="col s4 m4">お名前（カナ）</div><div class="col s8 m8">：<%= @account.last_name_kana %>&nbsp;<%= @account.first_name_kana %></div>
+            <div class="col s4 m4">お名前（カナ）</div><div class="col s8 m8">：<%= @account_form.last_name_kana %>&nbsp;<%= @account_form.first_name_kana %></div>
           </div>
           <div class="row account-confirm__email">
-            <div class="col s4 m4">メールアドレス</div><div class="col s8 m8">：<%= @account.email %></div>
+            <div class="col s4 m4">メールアドレス</div><div class="col s8 m8">：<%= @account_form.email %></div>
           </div>
           <div class="row account-confirm__phone">
-            <div class="col s4 m4">お電話番号</div><div class="col s8 m8">：<%= @account.national_phone_number %></div>
+            <div class="col s4 m4">お電話番号</div><div class="col s8 m8">：<%= @account_form.national_phone_number %></div>
           </div>
           <div class="row account-confirm__gender">
             <div class="col s4 m4">性別</div>
             <div class="col s8 m8">：
-              <%= "男性" if @account.gender == "male" %>
-              <%= "女性" if @account.gender == "female" %>
+              <%= "男性" if @account_form.gender == "male" %>
+              <%= "女性" if @account_form.gender == "female" %>
             </div>
           </div>
           <div class="row account-confirm__birthdate">
-            <div class="col s4 m4">生年月日</div><div class="col s8 m8">：<%= @account.birthdate %></div>
+            <div class="col s4 m4">生年月日</div><div class="col s8 m8">：<%= @account_form.birthdate %></div>
           </div>
           <div class="row account-confirm__address">
             <div class="col s4 m4">ご住所</div>
             <div class="col s8 m8 account-confirm__address-info">
-              <%= @account.postal_code %><br>
-              <%= @account.state %>
-              <%= @account.city %><br>
-              <%= @account.town %>
-              <%= @account.kanji_line1 %>
-              <%= @account.kanji_line2 %><br>
+              <%= @account_form.postal_code %><br>
+              <%= @account_form.state %>
+              <%= @account_form.city %><br>
+              <%= @account_form.town %>
+              <%= @account_form.kanji_line1 %>
+              <%= @account_form.kanji_line2 %><br>
             </div>
           </div>
           <div class="row account-confirm__user-agreement">
             <div class="col s4 m4">利用規約</div>
-            <div class="col s8 m8">：<%= @account.user_agreement? ? "同意する" : "同意しない" %></div>
+            <div class="col s8 m8">：<%= @account_form.user_agreement ? "同意する" : "同意しない" %></div>
           </div>
         </div>
 
         <% if @mode == "new" %>
-          <%= form_with model: [@user, @account], local: true, method: :post do |f| %>
-            <%= f.hidden_field :last_name_kanji, :value => @account.last_name_kanji %>
-            <%= f.hidden_field :last_name_kana, :value => @account.last_name_kana %>
-            <%= f.hidden_field :first_name_kanji, :value => @account.first_name_kanji %>
-            <%= f.hidden_field :first_name_kana, :value => @account.first_name_kana %>
-            <%= f.hidden_field :gender, :value => @account.gender %>
-            <%= f.hidden_field :email, :value => @account.email %>
-            <%= f.hidden_field :birthdate, :value => @account.birthdate %>
-            <%= f.hidden_field :postal_code, :value => @account.postal_code %>
-            <%= f.hidden_field :state, :value => @account.state %>
-            <%= f.hidden_field :city, :value => @account.city %>
-            <%= f.hidden_field :town, :value => @account.town %>
-            <%= f.hidden_field :kanji_line1, :value => @account.kanji_line1 %>
-            <%= f.hidden_field :kanji_line2, :value => @account.kanji_line2 %>
-            <%= f.hidden_field :kana_line1, :value => @account.kana_line1 %>
-            <%= f.hidden_field :kana_line2, :value => @account.kana_line2 %>
-            <%= f.hidden_field :phone, :value => @account.phone %>
-            <%= f.hidden_field :user_agreement, :value => @account.user_agreement %>
+          <%= form_with model: [@user, @account_form], url: user_accounts_path, local: true, method: :post do |f| %>
+            <%= f.hidden_field :last_name_kanji, :value => @account_form.last_name_kanji %>
+            <%= f.hidden_field :last_name_kana, :value => @account_form.last_name_kana %>
+            <%= f.hidden_field :first_name_kanji, :value => @account_form.first_name_kanji %>
+            <%= f.hidden_field :first_name_kana, :value => @account_form.first_name_kana %>
+            <%= f.hidden_field :gender, :value => @account_form.gender %>
+            <%= f.hidden_field :email, :value => @account_form.email %>
+            <%= f.hidden_field :birthdate, :value => @account_form.birthdate %>
+            <%= f.hidden_field :postal_code, :value => @account_form.postal_code %>
+            <%= f.hidden_field :state, :value => @account_form.state %>
+            <%= f.hidden_field :city, :value => @account_form.city %>
+            <%= f.hidden_field :town, :value => @account_form.town %>
+            <%= f.hidden_field :kanji_line1, :value => @account_form.kanji_line1 %>
+            <%= f.hidden_field :kanji_line2, :value => @account_form.kanji_line2 %>
+            <%= f.hidden_field :kana_line1, :value => @account_form.kana_line1 %>
+            <%= f.hidden_field :kana_line2, :value => @account_form.kana_line2 %>
+            <%= f.hidden_field :phone, :value => @account_form.phone %>
+            <%= f.hidden_field :user_agreement, :value => @account_form.user_agreement %>
             <%= f.submit '入力画面に戻る', name: 'back', :class => "account-confirm__submit btn waves-effect" %>&nbsp;&nbsp;
             <%= f.submit '保存する', data: {disable_with: '保存中...'}, :class => "account-confirm__submit btn waves-effect" %>
           <% end %>
         <% end %>
       
         <% if @mode == "edit" %>
-          <%= form_with model: @account, local: true, method: :patch do |f| %>
-            <%= f.hidden_field :last_name_kanji, :value => @account.last_name_kanji %>
-            <%= f.hidden_field :last_name_kana, :value => @account.last_name_kana %>
-            <%= f.hidden_field :first_name_kanji, :value => @account.first_name_kanji %>
-            <%= f.hidden_field :first_name_kana, :value => @account.first_name_kana %>
-            <%= f.hidden_field :gender, :value => @account.gender %>
-            <%= f.hidden_field :email, :value => @account.email %>
-            <%= f.hidden_field :birthdate, :value => @account.birthdate %>
-            <%= f.hidden_field :postal_code, :value => @account.postal_code %>
-            <%= f.hidden_field :state, :value => @account.state %>
-            <%= f.hidden_field :city, :value => @account.city %>
-            <%= f.hidden_field :town, :value => @account.town %>
-            <%= f.hidden_field :kanji_line1, :value => @account.kanji_line1 %>
-            <%= f.hidden_field :kanji_line2, :value => @account.kanji_line2 %>
-            <%= f.hidden_field :kana_line1, :value => @account.kana_line1 %>
-            <%= f.hidden_field :kana_line2, :value => @account.kana_line2 %>
-            <%= f.hidden_field :phone, :value => @account.phone %>
-            <%= f.hidden_field :user_agreement, :value => @account.user_agreement %>
+          <%= form_with model: @account_form, url: account_path, local: true, method: :patch do |f| %>
+            <%= f.hidden_field :last_name_kanji, :value => @account_form.last_name_kanji %>
+            <%= f.hidden_field :last_name_kana, :value => @account_form.last_name_kana %>
+            <%= f.hidden_field :first_name_kanji, :value => @account_form.first_name_kanji %>
+            <%= f.hidden_field :first_name_kana, :value => @account_form.first_name_kana %>
+            <%= f.hidden_field :gender, :value => @account_form.gender %>
+            <%= f.hidden_field :email, :value => @account_form.email %>
+            <%= f.hidden_field :birthdate, :value => @account_form.birthdate %>
+            <%= f.hidden_field :postal_code, :value => @account_form.postal_code %>
+            <%= f.hidden_field :state, :value => @account_form.state %>
+            <%= f.hidden_field :city, :value => @account_form.city %>
+            <%= f.hidden_field :town, :value => @account_form.town %>
+            <%= f.hidden_field :kanji_line1, :value => @account_form.kanji_line1 %>
+            <%= f.hidden_field :kanji_line2, :value => @account_form.kanji_line2 %>
+            <%= f.hidden_field :kana_line1, :value => @account_form.kana_line1 %>
+            <%= f.hidden_field :kana_line2, :value => @account_form.kana_line2 %>
+            <%= f.hidden_field :phone, :value => @account_form.phone %>
+            <%= f.hidden_field :user_agreement, :value => @account_form.user_agreement %>
             <%= f.submit '入力画面に戻る', name: 'back', :class => "account-confirm__submit btn waves-effect" %>&nbsp;&nbsp;
             <%= f.submit '保存する', data: {disable_with: '保存中...'}, :class => "account-confirm__submit btn waves-effect" %>
           <% end %>

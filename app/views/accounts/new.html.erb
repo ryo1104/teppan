@@ -8,8 +8,8 @@
       </div> 
       <div class="row account-new">
         <h1>お客様情報</h1>
-        <%= form_with model: [@user, @account], local: true, method: :post, url: {action: 'confirm'}, :class => "account-new__form" do |form| %>
-          <% if @account.errors.any? %>
+        <%= form_with model: [@user, @account_form], method: :post, url: confirm_user_accounts_path, local: true, :class => "account-new__form" do |form| %>
+          <% if @account_form.errors.any? %>
             <%= render :partial => "accounts/errorform" %>
           <% end %>
           <input type="hidden", name="mode", value="new" >

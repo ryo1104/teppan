@@ -7,7 +7,7 @@ class AccountsController < ApplicationController
       if @user.account.present?
         redirect_to edit_account_path(@user.account.id), alert: 'すでにビジネスアカウントが存在します。' and return
       else
-        @account = Account.new
+        @account_form = StripeAccountForm.new
       end
     else
       redirect_to user_path(current_user.id), alert: 'ビジネスアカウントを作成するユーザー条件を満たしていません。' and return
@@ -18,10 +18,10 @@ class AccountsController < ApplicationController
     @mode = params[:mode]
     if @mode == 'new'
       @user = User.find(params[:user_id])
-      @account = Account.new(create_params)
+      @account_form = StripeAccountForm.new(form_params)
     elsif @mode == 'edit'
       @account = Account.find(params[:id])
-      @account.assign_attributes(update_params)
+      @account_form = StripeAccountForm.new(form_params)
       @user = @account.user
     end
   end
@@ -29,20 +29,27 @@ class AccountsController < ApplicationController
   def create
     @user = User.find(params[:user_id])
     if qualified(@user)
-      @account = Account.new(create_params)
+      @account_form = StripeAccountForm.new(form_params)
       if params[:back]
         render :new and return
       else
-        @account.transaction do
-          @account.save!
-          @stripe_result = @account.create_stripe_account(request.remote_ip)
-        end
-        if @stripe_result[0]
-          @account.update!(user_id: @user.id, stripe_acct_id: @stripe_result[1]['id'], stripe_status: @stripe_result[1]['personal_info']['verification']['status'])
-          redirect_to account_path(@account.id), notice: 'ビジネスアカウントが作成されました。' and return
+        if @account_form.valid?
+          @account = Account.new
+          @stripe_result = @account.create_stripe_account(@account_form, request.remote_ip)
+          if @stripe_result[0]
+            @account.assign_attributes(user_id: @user.id, stripe_acct_id: @stripe_result[1]['id'], stripe_status: @stripe_result[1]['personal_info']['verification']['status'])
+            if @account.save
+              redirect_to account_path(@account.id), notice: 'ビジネスアカウントが作成されました。' and return
+            else
+              Rails.logger.error "Failed to save StripeAccount record : user_id : #{@user.id}, stripe_acct_id : #{@stripe_result[1]['id']}"
+              redirect_to user_path(@user.id), alert: "ビジネスアカウントを作成できませんでした。" and return
+            end
+          else
+            Rails.logger.error "create_stripe_account returned false : #{@stripe_result[1]}"
+            redirect_to user_path(@user.id), alert: "ビジネスアカウントを作成できませんでした。#{@stripe_result[1]}" and return
+          end
         else
-          Rails.logger.error "create_stripe_account returned false : #{@stripe_result[1]}"
-          redirect_to user_path(@user.id), alert: 'ビジネスアカウントを作成できませんでした。' and return
+          render :new and return
         end
       end
     else
@@ -53,8 +60,12 @@ class AccountsController < ApplicationController
 
   def edit
     @account = Account.find(params[:id])
-    if @account.user_id == current_user.id
-      # @stripe_account = account.get_stripe_account
+    if my_info(@account.user_id)
+      @stripe_account_info = @account.get_stripe_account
+      if @stripe_account_info[0]
+        @account_form = StripeAccountForm.new
+        @account_form.set_info(@stripe_account_info[1])
+      end
       # @account_info = Account.extract_account_info(@stripe_account)
       # stripe_result_acct = @account.get_stripe_account
       # if stripe_result_acct[0]
@@ -69,43 +80,34 @@ class AccountsController < ApplicationController
   rescue Stripe::PermissionError => e
     ErrorUtility.log_and_notify e
     redirect_to user_path(current_user.id), alert: '口座情報にアクセス権限がありません。' and return
-  rescue StandardError => e
-    ErrorUtility.log_and_notify e
-    redirect_to user_path(current_user.id), alert: 'エラーが発生しました。' and return
   end
 
   def update
     @account = Account.find(params[:id])
-    redirect_to user_path(current_user.id), alert: 'アクセス権限がありません。' and return unless @account.user_id == current_user.id
-
-    if params[:back]
-      @account.assign_attributes(update_params)
-      render :edit and return
-    else
-      @account.transaction do
-        @account.update!(update_params)
-        @stripe_result_acct = @account.update_stripe_account(request.remote_ip)
-      end
-      if @stripe_result_acct[0]
-        @account_info = @stripe_result_acct[1]
-        @account.update!(stripe_status: @account_info['personal_info']['verification']['status'])
-        redirect_to account_path(@account.id), notice: 'ビジネスアカウント情報が更新されました。' and return
+    if my_info(@account.user_id)
+      @account_form = StripeAccountForm.new(form_params)
+      if params[:back]
+        render :edit and return
       else
-        Rails.logger.error "update_stripe_account returned false : #{@stripe_result_acct[1]}"
-        redirect_to edit_account_path(@account.id), alert: 'ビジネスアカウント情報を更新できませんでした。' and return
+        @stripe_result = @account.update_stripe_account(@account_form, request.remote_ip)
+        if @stripe_result[0]
+          @account_info = @stripe_result[1]
+          @account.update!(stripe_status: @account_info['personal_info']['verification']['status'])
+          redirect_to account_path(@account.id), notice: 'ビジネスアカウント情報が更新されました。' and return
+        else
+          Rails.logger.error "update_stripe_account returned false : #{@stripe_result[1]}"
+          redirect_to edit_account_path(@account.id), alert: 'ビジネスアカウントを更新できませんでした。' and return
+        end
       end
     end
   rescue Stripe::PermissionError => e
     ErrorUtility.log_and_notify e
     redirect_to user_path(current_user.id), alert: '口座情報にアクセス権限がありません。' and return
-  rescue StandardError => e
-    ErrorUtility.log_and_notify e
-    redirect_to edit_account_path(params[:id]), alert: 'エラーが発生しました。' and return
   end
 
   def show
     @account = Account.includes(:externalaccount).find(params[:id])
-    redirect_to user_path(current_user.id), alert: 'アクセス権限がありません。' and return unless @account.user_id == current_user.id
+    my_info(@account.user_id)
 
     stripe_result_acct = @account.get_stripe_account
     if stripe_result_acct[0]
@@ -132,45 +134,47 @@ class AccountsController < ApplicationController
   rescue Stripe::PermissionError => e
     ErrorUtility.log_and_notify e
     redirect_to user_path(current_user.id), alert: 'ビジネスアカウント情報の取得に失敗しました。' and return
-  rescue StandardError => e
-    ErrorUtility.log_and_notify e
-    redirect_to user_path(current_user.id), alert: 'システムエラーが発生しました。しばらく時間をおいて再度お試しください。' and return
   end
 
   def destroy
     @account = Account.find(params[:id])
-    redirect_to user_path(current_user.id), alert: 'アクセス権限がありません。' and return unless @account.user_id == current_user.id
-
-    if @account.zero_balance
-      stripe_result_acct = @account.delete_stripe_account
-      if stripe_result_acct[0]
-        @delete_result = stripe_result_acct[1]
-        if @account.destroy!
-          Rails.logger.error "account.destroy succeeded. Account id : #{@account.id}, @delete_result = #{@delete_result}"
-          redirect_to user_path(current_user.id), alert: '出金用アカウントを削除しました。' and return
+    if my_info(@account.user_id)
+      if @account.zero_balance
+        stripe_result_acct = @account.delete_stripe_account
+        if stripe_result_acct[0]
+          @delete_result = stripe_result_acct[1]
+          if @account.destroy!
+            Rails.logger.error "account.destroy succeeded. Account id : #{@account.id}, @delete_result = #{@delete_result}"
+            redirect_to user_path(current_user.id), alert: '出金用アカウントを削除しました。' and return
+          else
+            Rails.logger.error "account.destroy failed. Account id : #{@account.id}"
+            redirect_to account_path(@account.id), alert: '出金用アカウントを削除できませんでした。' and return
+          end
         else
-          Rails.logger.error "account.destroy failed. Account id : #{@account.id}"
+          Rails.logger.error "delete_stripe_account returned false : #{stripe_result_acct[1]}"
           redirect_to account_path(@account.id), alert: '出金用アカウントを削除できませんでした。' and return
         end
       else
-        Rails.logger.error "delete_stripe_account returned false : #{stripe_result_acct[1]}"
-        redirect_to account_path(@account.id), alert: '出金用アカウントを削除できませんでした。' and return
+        redirect_to account_path(@account.id), alert: 'アカウントに残高が残っています。' and return
       end
-    else
-      redirect_to account_path(@account.id), alert: 'アカウントに残高が残っています。' and return
     end
   rescue Stripe::PermissionError => e
     ErrorUtility.log_and_notify e
     redirect_to user_path(current_user.id), alert: '口座情報にアクセス権限がありません。' and return
-  rescue StandardError => e
-    ErrorUtility.log_and_notify e
-    redirect_to account_path(params[:id]), alert: 'エラーが発生しました。' and return
   end
 
   private
 
+  def my_info(user_id)
+    if current_user.id == user_id
+      true
+    else
+      raise ErrorUtils::AccessDeniedError, "current_user.id : #{current_user.id} is accessing account info for user_id : #{user_id}"
+    end
+  end
+
   def qualified(user)
-    if current_user.id == user.id && current_user.premium_user[0]
+    if my_info(user.id) && current_user.premium_user[0]
       true
     else
       false
@@ -178,15 +182,15 @@ class AccountsController < ApplicationController
   end
 
   def create_params
-    params.require(:account).permit(:last_name_kanji, :last_name_kana, :first_name_kanji, :first_name_kana,
-                                    :postal_code, :state, :city, :town, :kanji_line1, :kanji_line2, :kana_line1, :kana_line2,
-                                    :gender, :birthdate, :phone, :email, :user_agreement).merge(user_id: current_user.id)
+    params.require(:stripe_account_form).permit(:last_name_kanji, :last_name_kana, :first_name_kanji, :first_name_kana,
+                                                :postal_code, :state, :city, :town, :kanji_line1, :kanji_line2, :kana_line1, :kana_line2,
+                                                :gender, :birthdate, :phone, :email, :user_agreement).merge(user_id: current_user.id)
   end
 
-  def update_params
-    params.require(:account).permit(:last_name_kanji, :last_name_kana, :first_name_kanji, :first_name_kana,
-                                    :postal_code, :state, :city, :town, :kanji_line1, :kanji_line2, :kana_line1, :kana_line2,
-                                    :gender, :birthdate, :phone, :email, :user_agreement)
+  def form_params
+    params.require(:stripe_account_form).permit(:last_name_kanji, :last_name_kana, :first_name_kanji, :first_name_kana,
+                                                :postal_code, :state, :city, :town, :kanji_line1, :kanji_line2, :kana_line1, :kana_line2,
+                                                :gender, :birthdate, :phone, :email, :user_agreement)
   end
 
   def hankaku(str)

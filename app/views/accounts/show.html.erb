@@ -1,11 +1,13 @@
 <% @page_title = "ビジネスアカウント" %>
 <% breadcrumb :show_account, @account %>
 <div class="page-body">
-  <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs-tp" %>
   <div class="row">
-    <div class="col s12 m9 user-page">
+    <div class="col s12 m6 content">
+      <div class="row content-header">
+        <%= render partial: "layouts/breadcrumbs" %>
+      </div>
+      <div class="row account-show">
       <% if @account_info["payouts_enabled"] == true %>
-      <div>
         <h1>ビジネスアカウント</h1>
         <div class="collection z-depth-0 account-show">
           <h2>残高</h2>
@@ -24,43 +26,39 @@
           <br><br>
         </div>
         <%= link_to 'アカウントを削除', account_path(@account.id), {:method => :delete, :class => "btn btn-primary withripple custom", data: { confirm: "本当に削除しますか？" }} %><br>
-      </div>
       <% else %>
-      <div>
         <h1>ビジネスアカウント登録</h1>
-        <div class="collection z-depth-0 account-show">
-          <div>
-            <h2>お客様情報</h2>
-            <%= render :partial => "personal", locals: { account_info: @account_info } %>
-            <%= link_to '変更', edit_account_path(@account.id), :class => "btn btn-primary withripple custom" %>&nbsp;&nbsp;
-            <br><br>
-            <h2>ご本人様確認</h2>
-            <% if @account_info["personal_info"]["verification"]["status"] == "verified" %>
-              確認済<br>
-            <% else %>
-              <% if @account.idcards.present? %>
-                <%= link_to '変更', account_idcards_path(@account.id), :class => "btn btn-primary withripple custom" %>&nbsp;&nbsp;
-              <% end %>
-              <%= link_to '登録', new_account_idcard_path(@account.id), :class => "btn btn-primary withripple custom" %><br>
-            <% end %><br>
-            <h2>振込先 銀行口座</h2>
-            <% if @account_info["bank_info"]["bank_name"].present? %>
-              <%= render :partial => "bankaccount", locals: { account_info: @account_info } %>
-              <%= link_to '口座変更', edit_externalaccount_path(@account.externalaccount.id), :class => "btn btn-primary withripple custom" %><br>
-            <% else %>
-              <%= link_to '登録', new_account_externalaccount_path(@account.id), :class => "btn btn-primary withripple custom" %><br>
-            <% end %><br>
-            <br>
-            <h2>不足情報</h2>
-            <% @account_info["requirements"]["eventually_due"].map do |pending_item| %>
-              <%= pending_item %><br>
+        <div>
+          <h2>お客様情報</h2>
+          <%= render :partial => "personal", locals: { account_info: @account_info } %>
+          <%= link_to '変更', edit_account_path(@account.id), :class => "account-show__btn btn waves-effect" %>
+          <br><br>
+          <h2>ご本人様確認</h2>
+          <% if @account_info["personal_info"]["verification"]["status"] == "verified" %>
+            確認済<br>
+          <% else %>
+            <% if @account.idcards.present? %>
+              <%= link_to '変更', account_idcards_path(@account.id), :class => "account-show__btn btn waves-effect" %>&nbsp;&nbsp;
             <% end %>
-            <br>
-            <%= link_to '申請を取消', account_path(@account.id), {:method => :delete, :class => "btn btn-primary withripple custom", data: { confirm: "本当に申請を取消しますか？" }} %><br>
-          </div>
+            <%= link_to '登録', new_account_idcard_path(@account.id), :class => "account-show__btn btn waves-effect" %><br>
+          <% end %><br>
+          <h2>振込先 銀行口座</h2>
+          <% if @account_info["bank_info"]["bank_name"].present? %>
+            <%= render :partial => "bankaccount", locals: { account_info: @account_info } %>
+            <%= link_to '口座変更', edit_externalaccount_path(@account.externalaccount.id), :class => "account-show__btn btn waves-effect" %><br>
+          <% else %>
+            <%= link_to '登録', new_account_externalaccount_path(@account.id), :class => "account-show__btn btn waves-effect" %><br>
+          <% end %><br>
+          <br>
+          <h2>不足情報</h2>
+          <% @account_info["requirements"]["eventually_due"].map do |pending_item| %>
+            <%= t("accounts.show."+pending_item) %><br>
+          <% end %>
+          <br>
+          <%= link_to '申請を取消', account_path(@account.id), {:method => :delete, :class => "account-show__btn btn waves-effect", data: { confirm: "本当に申請を取消しますか？" }} %><br>
         </div>
-      </div>
       <% end %>
+      </div>
     </div>
   </div>
 </div>

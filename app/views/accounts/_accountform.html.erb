@@ -13,12 +13,10 @@
     <%= f.text_field :first_name_kana, :class => "account-form__name-first-kana-input", :required => true %>
   </div>
 </div>
-<% if false %>
-  <div class="account-form__gender">
-    <%= f.label :gender, '性別', :class => "account-form__gender-label" %>
-    <%= f.select :gender, [["",""], ["男性","male"], ["女性","female"]], {}, {:class => "browser-default"} %>
-  </div>
-<% end %>
+<div class="account-form__gender">
+  <%= f.label :gender, '性別', :class => "account-form__gender-label" %>
+  <%= f.select :gender, [["",""], ["男性","male"], ["女性","female"]], {}, {:class => "browser-default"} %>
+</div>
 <div class="account-form__birthdate">
   <%= f.label :birthdate, '生年月日', :class => "account-form__birthdate-label" %>
   <%= f.date_field :birthdate, :value => user.birthdate, :required => true, :class => "account-form__birthdate-field" %>

@@ -1,0 +1,5 @@
+ja:
+  accounts:
+    show:
+      external_account: '銀行口座情報'
+      individual.verification.document: 'ご本人様確認'

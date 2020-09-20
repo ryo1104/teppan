@@ -1,23 +1,51 @@
-お名前（漢字）：<%= account_info["personal_info"]["last_name_kanji"] %>&nbsp;<%= account_info["personal_info"]["first_name_kanji"] %><br>
-お名前（カナ）：<%= account_info["personal_info"]["last_name_kana"] %>&nbsp;<%= account_info["personal_info"]["first_name_kana"] %><br>
-性別：<%= account_info["personal_info"]["gender"] %><br>
-生年月日：
-  <%= account_info["personal_info"]["dob"]["year"] %>年
-  <%= account_info["personal_info"]["dob"]["month"] %>月
-  <%= account_info["personal_info"]["dob"]["day"] %>日
-<br>
-ご住所：<br>
-<%= account_info["personal_info"]["postal_code"] %><br>
-<%= account_info["personal_info"]["kanji_state"] %>
-<%= account_info["personal_info"]["kanji_city"] %>
-<%= account_info["personal_info"]["kanji_town"] %>
-<%= account_info["personal_info"]["kanji_line1"] %>
-<%= account_info["personal_info"]["kanji_line2"] %><br>
-<%= account_info["personal_info"]["kana_state"] %>
-<%= account_info["personal_info"]["kana_city"] %>
-<%= account_info["personal_info"]["kana_town"] %>
-<%= account_info["personal_info"]["kana_line1"] %>
-<%= account_info["personal_info"]["kana_line2"] %><br>
-お電話番号：
-<%= account_info["personal_info"]["phone"] %><br>
-メールアドレス：<%= account_info["personal_info"]["email"] %><br>
+<table class="striped">
+  <tbody>
+    <tr>
+      <td>お名前（漢字）</td>
+      <td><%= account_info["personal_info"]["last_name_kanji"] %>&nbsp;<%= account_info["personal_info"]["first_name_kanji"] %></td>
+    </tr>
+    <tr>
+      <td>お名前（カナ）</td>
+      <td><%= account_info["personal_info"]["last_name_kana"] %>&nbsp;<%= account_info["personal_info"]["first_name_kana"] %></td>
+    </tr>
+    <tr>
+      <td>性別</td>
+      <td><%= account_info["personal_info"]["gender"] %></td>
+    </tr>
+    <tr>
+      <td>生年月日</td>
+      <td>
+        <%= account_info["personal_info"]["dob"]["year"] %>年
+        <%= account_info["personal_info"]["dob"]["month"] %>月
+        <%= account_info["personal_info"]["dob"]["day"] %>日
+      </td>
+    </tr>
+    <tr>
+      <td>郵便番号</td>
+      <td><%= account_info["personal_info"]["postal_code"] %></td>
+    </tr>
+    <tr>
+      <td>ご住所</td>
+      <td>
+        <%= account_info["personal_info"]["kanji_state"] %>
+        <%= account_info["personal_info"]["kanji_city"] %>
+        <%= account_info["personal_info"]["kanji_town"] %><br>
+        <%= account_info["personal_info"]["kanji_line1"] %><br>
+        <%= account_info["personal_info"]["kanji_line2"] %><br>
+        <%= account_info["personal_info"]["kana_state"] %>
+        <%= account_info["personal_info"]["kana_city"] %>
+        <%= account_info["personal_info"]["kana_town"] %><br>
+        <%= account_info["personal_info"]["kana_line1"] %><br>
+        <%= account_info["personal_info"]["kana_line2"] %>
+      </td>
+    </tr>
+    <tr>
+      <td>お電話番号</td>
+      <td><%= account_info["personal_info"]["phone"] %></td>
+    </tr>
+    <tr>
+      <td>メールアドレス</td>
+      <td><%= account_info["personal_info"]["email"] %></td>
+    </tr>
+  </tbody>
+</table>

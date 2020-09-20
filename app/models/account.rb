@@ -1,4 +1,6 @@
 class Account < ApplicationRecord
+  include StripeUtils
+
   belongs_to  :user
   has_one     :externalaccount, dependent: :destroy
   has_many    :idcards, dependent: :destroy
@@ -6,24 +8,7 @@ class Account < ApplicationRecord
   validates   :user_id, presence: true, uniqueness: true
   validates   :stripe_acct_id, uniqueness: { case_sensitive: true }, allow_nil: true
   validate    :stripe_acct_id_check
-  validates   :last_name_kanji, presence: true
-  validates   :last_name_kana, presence: true
-  validates   :first_name_kanji, presence: true
-  validates   :first_name_kana, presence: true
-  validates   :gender, presence: true
-  validates   :email, presence: true
-  validates   :birthdate, presence: true
-  validates   :postal_code, presence: true
-  validates   :state, presence: true
-  validates   :city, presence: true
-  validates   :town, presence: true
-  validates   :kanji_line1, presence: true
-  validates   :kanji_line2, presence: true
-  validates   :kana_line1, presence: true
-  validates   :kana_line2, presence: true
-  validates   :phone, telephone_number: { country: :jp, types: %i[fixed_line mobile] } # uses gem 'telephone_number'
-  validates   :user_agreement, presence: true
-  include StripeUtils
+
 
   # custom validation
   def stripe_acct_id_check
@@ -51,13 +36,13 @@ class Account < ApplicationRecord
     end
   end
 
-  def create_stripe_account(remote_ip)
-    stripe_inputs = stripe_inputs_create(remote_ip)
+  def create_stripe_account(account_form, remote_ip)
+    stripe_inputs = stripe_inputs_create(account_form, remote_ip)
     inputs_check = check_stripe_inputs(stripe_inputs, 'create')
     if inputs_check[0]
       begin
         stripe_account_obj = JSON.parse(Stripe::Account.create(stripe_inputs).to_s)
-      rescue StandardError => e
+      rescue => e
         ErrorUtility.log_and_notify e
         return [false, "Stripe error - #{e.message}"]
       end
@@ -72,16 +57,14 @@ class Account < ApplicationRecord
     end
   end
 
-  def update_stripe_account(remote_ip)
+  def update_stripe_account(account_form, remote_ip)
     if stripe_acct_id
-      stripe_inputs = stripe_inputs_update(remote_ip)
-      puts 'stripe_inputs = '
-      puts stripe_inputs
+      stripe_inputs = stripe_inputs_create(account_form, remote_ip)
       inputs_check = check_stripe_inputs(stripe_inputs, 'update')
       if inputs_check[0]
         begin
           stripe_account_obj = JSON.parse(Stripe::Account.update(stripe_acct_id, stripe_inputs).to_s)
-        rescue StandardError => e
+        rescue => e
           ErrorUtility.log_and_notify e
           return [false, "Stripe error - #{e.message}"]
         end
@@ -146,17 +129,17 @@ class Account < ApplicationRecord
     if balance_res[0]
       balance_hash = balance_res[1]
 
-      available_bal = if balance_hash['available'][0]['amount'].present?
-                        balance_hash['available'][0]['amount']
-                      else
-                        0
-                      end
+      if balance_hash['available'][0]['amount'].present?
+        available_bal = balance_hash['available'][0]['amount']
+      else
+        available_bal = 0
+      end
 
-      pending_bal = if balance_hash['pending'][0]['amount'].present?
-                      balance_hash['pending'][0]['amount']
-                    else
-                      0
-                    end
+      if balance_hash['pending'][0]['amount'].present?
+        pending_bal = balance_hash['pending'][0]['amount']
+      else
+        pending_bal = 0
+      end
 
       if available_bal == 0 && pending_bal == 0
         true
@@ -168,14 +151,14 @@ class Account < ApplicationRecord
     end
   end
 
-  def stripe_inputs_create(remote_ip)
+  def stripe_inputs_create(account_form, remote_ip)
     ac_params = {
       business_type: 'individual',
       type: 'custom',
       country: 'JP',
-      individual: stripe_inputs_individual
+      individual: account_form.stripe_inputs_individual
     }
-    if user_agreement
+    if account_form.user_agreement
       ac_params.merge!(
         tos_acceptance: {
           date: Time.parse(Time.zone.now.to_s).to_i,
@@ -186,12 +169,12 @@ class Account < ApplicationRecord
     ac_params
   end
 
-  def stripe_inputs_update(remote_ip)
+  def stripe_inputs_update(account_form, remote_ip)
     ac_params = {
       business_type: 'individual',
-      individual: stripe_inputs_individual
+      individual: account_form.stripe_inputs_individual
     }
-    if user_agreement
+    if account_form.user_agreement
       ac_params.merge!(
         tos_acceptance: {
           date: Time.parse(Time.zone.now.to_s).to_i,
@@ -200,44 +183,6 @@ class Account < ApplicationRecord
       )
     end
     ac_params
-  end
-
-  def stripe_inputs_individual
-    indiv = {
-      last_name: last_name_kanji.present? ? last_name_kanji : nil,
-      last_name_kanji: last_name_kanji.present? ? last_name_kanji : nil,
-      last_name_kana: last_name_kana.present? ? last_name_kana : nil,
-      first_name: first_name_kanji.present? ? first_name_kanji : nil,
-      first_name_kanji: first_name_kanji.present? ? first_name_kanji : nil,
-      first_name_kana: first_name_kana.present? ? first_name_kana : nil,
-      gender: gender.present? ? gender : nil,
-      dob: birthdate.present? ? { year: birthdate.year.to_s, month: birthdate.month.to_s, day: birthdate.day.to_s } : nil,
-      address_kanji: {
-        postal_code: postal_code.present? ? postal_code : nil,
-        state: state.present? && postal_code.present? ? state : nil,
-        city: city.present? && postal_code.present? ? city : nil,
-        town: town.present? && postal_code.present? ? town : nil,
-        line1: kanji_line1.present? && postal_code.present? ? kanji_line1 : nil,
-        line2: kanji_line2.present? && postal_code.present? ? kanji_line2 : nil
-      },
-      address_kana: {
-        line1: kana_line1.present? && postal_code.present? ? hankaku(kana_line1) : nil,
-        line2: kana_line2.present? && postal_code.present? ? hankaku(kana_line2) : nil
-      },
-      phone: phone.present? ? international_phone_number : nil,
-      email: email.present? ? email : nil
-    }
-    indiv
-  end
-
-  def international_phone_number
-    phone_object = TelephoneNumber.parse(phone, :jp)
-    phone_object.e164_number
-  end
-
-  def national_phone_number
-    phone_object = TelephoneNumber.parse(phone, :jp)
-    phone_object.national_number
   end
 
   def check_stripe_inputs(account_params, action)
@@ -283,7 +228,7 @@ class Account < ApplicationRecord
     check_results = Account.check_stripe_results(stripe_account_obj)
     return [false, check_results[1]] if check_results[0] == false
 
-    personal_info = Account.parse_personal_info(stripe_account_obj['individual'])
+    personal_info = StripeAccountForm.parse_personal_info(stripe_account_obj['individual'])
     return [false, personal_info[1]] if personal_info[0] == false
 
     id = stripe_account_obj['id']
@@ -313,70 +258,6 @@ class Account < ApplicationRecord
     }
 
     [true, account_info]
-  end
-
-  def self.parse_personal_info(individual)
-    last_name_kanji = (individual['last_name_kanji'] if individual.key?('last_name_kanji'))
-
-    last_name_kana = (individual['last_name_kana'] if individual.key?('last_name_kana'))
-
-    first_name_kanji = (individual['first_name_kanji'] if individual.key?('first_name_kanji'))
-
-    first_name_kana = (individual['first_name_kana'] if individual.key?('first_name_kana'))
-
-    gender = if individual.key?('gender')
-               case individual['gender']
-               when 'male'
-                 '男性'
-               when 'female'
-                 '女性'
-               end
-             end
-
-    email = (individual['email'] if individual.key?('email'))
-
-    if individual.key?('dob')
-      year = (individual['dob']['year'] if individual['dob']['year'].present?)
-      month = (individual['dob']['month'] if individual['dob']['month'].present?)
-      day = (individual['dob']['day'] if individual['dob']['day'].present?)
-    else
-      year = nil
-      month = nil
-      day = nil
-    end
-
-    personal_info = {}
-    personal_info.merge!({ 'last_name_kanji' => last_name_kanji })
-    personal_info.merge!({ 'last_name_kana' => last_name_kana })
-    personal_info.merge!({ 'first_name_kanji' => first_name_kanji })
-    personal_info.merge!({ 'first_name_kana' => first_name_kana })
-    personal_info.merge!({ 'gender' => gender })
-    personal_info.merge!({ 'email' => email })
-    personal_info.merge!({ 'dob' => { 'year' => year, 'month' => month, 'day' => day } })
-    if individual.key?('address_kanji')
-      personal_info.merge!({ 'postal_code' => hankaku(individual['address_kanji']['postal_code']) })
-      personal_info.merge!({ 'kanji_state' => individual['address_kanji']['state'] })
-      personal_info.merge!({ 'kanji_city'  => individual['address_kanji']['city'] })
-      personal_info.merge!({ 'kanji_town'  => individual['address_kanji']['town'] })
-      personal_info.merge!({ 'kanji_line1' => individual['address_kanji']['line1'] })
-      personal_info.merge!({ 'kanji_line2' => individual['address_kanji']['line2'] })
-    end
-    if individual.key?('address_kana')
-      personal_info.merge!({ 'kana_state' => individual['address_kana']['state'] })
-      personal_info.merge!({ 'kana_city' => individual['address_kana']['city'] })
-      personal_info.merge!({ 'kana_town' => individual['address_kana']['town'] })
-      personal_info.merge!({ 'kana_line1' => Account.hankaku(individual['address_kana']['line1']) })
-      personal_info.merge!({ 'kana_line2' => Account.hankaku(individual['address_kana']['line2']) })
-    end
-    if individual.key?('phone')
-      if individual['phone'].present?
-        phone_object = TelephoneNumber.parse(individual['phone'])
-        personal_info.merge!({ 'phone' => phone_object.national_number }) if phone_object.valid?
-      end
-    end
-    personal_info.merge!({ 'verification' => individual['verification'] }) if individual.key?('verification')
-
-    [true, personal_info]
   end
 
   def self.check_stripe_results(stripe_obj)

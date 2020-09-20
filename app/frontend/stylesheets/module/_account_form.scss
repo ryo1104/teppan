@@ -3,8 +3,12 @@
     
   }
   
+  &__gender {
+    width: 11rem;
+  }
+  
   &__birthdate {
-    width: 15rem;
+    width: 14rem;
   }
   
   &__address {
@@ -13,6 +17,11 @@
   
   &__postal-code {
     margin: 1rem 0 0 0;
+    width: 11rem;
+  }
+  
+  &__phone {
+    width: 15rem;
   }
   
   &__user-agreement {

@@ -8,8 +8,8 @@
       </div> 
       <div class="row account-edit">
         <h1>お客様情報</h1>
-        <%= form_with model: @account, local: true, method: :patch, url: {action: 'confirm'}, :class => "account-edit__form" do |form| %>
-          <% if @account.errors.any? %>
+        <%= form_with model: @account_form, method: :patch, url: confirm_account_path, local: true, :class => "account-edit__form" do |form| %>
+          <% if @account_form.errors.any? %>
             <%= render :partial => "accounts/errorform" %>
           <% end %>
           <input type="hidden", name="mode", value="edit" >

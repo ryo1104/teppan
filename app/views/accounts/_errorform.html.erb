@@ -1,7 +1,7 @@
 <div class="error-message">
-  入力した内容にエラーが<%= @account.errors.count %>件あります：
+  入力した内容にエラーが<%= @account_form.errors.count %>件あります：
   <ul>
-    <% @account.errors.full_messages.each do |message| %>
+    <% @account_form.errors.full_messages.each do |message| %>
       <li><%= message %></li>
     <% end %>
   </ul>

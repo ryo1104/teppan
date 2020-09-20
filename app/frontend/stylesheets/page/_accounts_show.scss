@@ -1,0 +1,8 @@
+.account-show {
+
+  &__btn {
+    &.btn.waves-effect {
+      @include button-normal      
+    }
+  }
+}
