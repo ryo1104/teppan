@@ -111,8 +111,8 @@ class StripeAccountForm
         line2: kanji_line2.present? && postal_code.present? ? kanji_line2 : nil
       },
       address_kana: {
-        line1: kana_line1.present? && postal_code.present? ? Account.hankaku(kana_line1) : nil,
-        line2: kana_line2.present? && postal_code.present? ? Account.hankaku(kana_line2) : nil
+        line1: kana_line1.present? && postal_code.present? ? StripeAccount.hankaku(kana_line1) : nil,
+        line2: kana_line2.present? && postal_code.present? ? StripeAccount.hankaku(kana_line2) : nil
       },
       phone: phone.present? ? international_phone_number : nil,
       email: email.present? ? email : nil
@@ -161,8 +161,8 @@ class StripeAccountForm
       personal_info.merge!({ 'kana_state' => individual['address_kana']['state'] })
       personal_info.merge!({ 'kana_city' => individual['address_kana']['city'] })
       personal_info.merge!({ 'kana_town' => individual['address_kana']['town'] })
-      personal_info.merge!({ 'kana_line1' => Account.hankaku(individual['address_kana']['line1']) })
-      personal_info.merge!({ 'kana_line2' => Account.hankaku(individual['address_kana']['line2']) })
+      personal_info.merge!({ 'kana_line1' => StripeAccount.hankaku(individual['address_kana']['line1']) })
+      personal_info.merge!({ 'kana_line2' => StripeAccount.hankaku(individual['address_kana']['line2']) })
     end
     if individual.key?('phone')
       if individual['phone'].present?
@@ -184,8 +184,8 @@ class StripeAccountForm
       '女性'
     when '男性'
       'male'
-    when 'female'
-      '女性'
+    when '女性'
+      'female'
     else
       ''
     end

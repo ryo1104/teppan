@@ -102,19 +102,19 @@ crumb :new_subscription do |user|
   parent :show_user, user
 end
 
-# account#new
+# biz_accounts#new
 crumb :new_account do |user|
   link 'ビジネスアカウント', new_user_account_path(user.id)
   parent :show_user, user
 end
 
-# account#show
+# biz_accounts#show
 crumb :show_account do |account|
   link 'ビジネスアカウント', account_path(account.id)
   parent :show_user, account.user
 end
 
-# account#edit
+# biz_accounts#edit
 crumb :edit_account do |account|
   link 'ビジネスアカウント', edit_account_path(account.id)
   parent :show_user, account.user
@@ -126,16 +126,16 @@ crumb :new_idcard do |account|
   parent :show_account, account
 end
 
-# externalaccount#new
-crumb :new_externalaccount do |account|
-  link '銀行口座', new_account_externalaccount_path(account.id)
+# bankacct#new
+crumb :new_bankacct do |account|
+  link '銀行口座', new_account_bank_path(account.id)
   parent :show_account, account
 end
 
-# externalaccount#edit
-crumb :edit_externalaccount do |ext_account|
-  link '銀行口座', edit_externalaccount_path(ext_account.id)
-  parent :show_account, ext_account.account
+# bankacct#edit
+crumb :edit_bankacct do |account|
+  link '銀行口座', edit_account_bank_path(account.id)
+  parent :show_account, account
 end
 
 # trade#new

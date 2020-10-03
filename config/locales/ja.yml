@@ -11,6 +11,10 @@ ja:
     title: タイトル
     text: 本文
     birthdate: 生年月日
+    bank_name: 銀行名
+    branch_name: 支店名
+    account_number: 口座番号
+    account_holder_name: 口座名義人
   date:
     abbr_day_names:
     - 日

@@ -2,7 +2,7 @@ import $ from 'jquery';
 require("jquery-ui")
 
 $(function () {
-    $("#bank_name_input").autocomplete({
+    $("#js-bank_name_input").autocomplete({
         source: ( req, res ) => {
             $.ajax({
               url: bank_search_url( req.term ),
@@ -17,7 +17,7 @@ $(function () {
             });
         },
         select: function(event, ui) {
-            $('#bank_name_input').val(ui.item.value);
+            $('#js-bank_name_input').val(ui.item.value);
         },
         autoFocus: false,
         delay: 500,
@@ -26,11 +26,11 @@ $(function () {
 });
 
 $(function () {
-    if ( $("#bank_name_input").val() != null ) {
-        $("#branch_name_input").autocomplete({
+    if ( $("#js-bank_name_input").val() != null ) {
+        $("#js-branch_name_input").autocomplete({
             source: ( req, res ) => {
                 $.ajax({
-                    url: branch_search_url( $("#bank_name_input").val(), req.term ),
+                    url: branch_search_url( $("#js-bank_name_input").val(), req.term ),
                     type: 'GET',
                     dataType: "json",
                     success: ( data ) => {
@@ -42,7 +42,7 @@ $(function () {
                 });
             },
             select: function(event, ui) {
-                $('#branch_name_input').val(ui.item.value);
+                $('#js-branch_name_input').val(ui.item.value);
             },
             autoFocus: false,
             delay: 500,

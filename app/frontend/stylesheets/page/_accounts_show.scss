@@ -1,8 +1,29 @@
 .account-show {
 
-  &__btn {
+  &__balance {
+    margin-bottom: 2rem;
     &.btn.waves-effect {
       @include button-normal      
+    }
+  }
+  
+  &__bank-account {
+    margin-bottom: 2rem;
+    &.btn.waves-effect {
+      @include button-normal      
+    }
+  }
+  
+  &__individual {
+    margin-bottom: 2rem;
+    &.btn.waves-effect {
+      @include button-normal      
+    }
+  }
+  
+  &__terminate {
+    &.btn.waves-effect {
+      @include button-delete      
     }
   }
 }

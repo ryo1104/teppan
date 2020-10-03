@@ -1,5 +1,5 @@
-class Payout < ApplicationRecord
-  belongs_to :account
+class StripePayout < ApplicationRecord
+  belongs_to :stripe_account
   include StripeUtils
 
   def self.create_stripe_payout(amt, stripe_account_id)

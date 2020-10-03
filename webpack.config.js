@@ -12,7 +12,7 @@ const frontend_path = path.join(__dirname, 'app', 'frontend')
 const js_entry  = { 
   "account"               : path.join(frontend_path, 'src', 'account.js'),
   "application"           : path.join(frontend_path, 'src', 'application.js'),
-  "externalaccount"       : path.join(frontend_path, 'src', 'externalaccount.js'),
+  "bankaccount"           : path.join(frontend_path, 'src', 'bankaccount.js'),
   "hashtag-entry"         : path.join(frontend_path, 'src', 'hashtag-entry.js'),
   "hashtag-autocomplete"  : path.join(frontend_path, 'src', 'hashtag-autocomplete.js'),
   "topic"                 : path.join(frontend_path, 'src', 'topic.js'),

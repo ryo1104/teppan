@@ -1,4 +1,4 @@
-class PayoutsController < ApplicationController
+class Business::PayoutsController < ApplicationController
   def new
     @account = Account.find(params[:account_id])
     @stripe_account_hash = @account.get_stripe_account

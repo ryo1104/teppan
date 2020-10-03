@@ -1,4 +1,4 @@
-class Subscription < ApplicationRecord
+class StripeSubscription < ApplicationRecord
   belongs_to :user
   include StripeUtils
 

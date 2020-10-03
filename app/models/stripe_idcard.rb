@@ -1,8 +1,8 @@
-class Idcard < ApplicationRecord
+class StripeIdcard < ApplicationRecord
   include StripeUtils
-  belongs_to        :account
+  belongs_to        :stripe_account
   has_one_attached  :image
-  validates :account_id, presence: true, uniqueness: { scope: :frontback, message: 'IDスキャン登録は表・裏につき1枚ずつです。' }
+  validates :stripe_account_id, presence: true, uniqueness: { scope: :frontback, message: 'IDスキャン登録は表・裏につき1枚ずつです。' }
   validate  :check_image
 
   def verification_docs

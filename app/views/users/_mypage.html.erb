@@ -115,7 +115,7 @@
       <div class="user-show-contents__links--inactive btn">登録</div>
     <% end %>
   <% else %>
-    <%= link_to '詳細', account_path(@user.account.id), :class => "user-show-contents__links btn waves-effect" %>
+    <%= link_to '詳細', account_path(@user.stripe_account.id), :class => "user-show-contents__links btn waves-effect" %>
   <% end %>
   <hr>
 

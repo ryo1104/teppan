@@ -15,10 +15,10 @@ class User < ApplicationRecord
   has_many  :follows
   has_many  :reviews
   has_many  :violations
-  has_one   :subscription
-  has_one   :account
-  has_one   :externalaccount, through: :account
-  has_one   :idcard, through: :account
+  has_one   :stripesubscription
+  has_one   :stripe_account
+  has_one   :stripeexternalaccount, through: :stripe_account
+  has_one   :stripeidcard, through: :stripe_account
   has_one_attached :image
   has_rich_text :introduction
   validates :email, presence: true, uniqueness: { case_sensitive: false }
@@ -148,8 +148,8 @@ class User < ApplicationRecord
   end
 
   def premium_qualified
-    if premium_user[0] && account.present?
-      account.stripe_status == 'verified'
+    if premium_user[0] && stripe_account.present?
+      stripe_account.status == 'verified'
     else
       false
     end
@@ -310,8 +310,8 @@ class User < ApplicationRecord
   end
 
   def get_balance
-    if account.present?
-      res = account.get_stripe_balance
+    if stripe_account.present?
+      res = stripe_account.get_stripe_balance
       if res[0]
         if res[1]['available'][0]['amount'].present?
           [true, res[1]['available'][0]['amount']]
@@ -357,12 +357,12 @@ class User < ApplicationRecord
       end
 
     elsif charge_params[:user_points].present? # ポイントを使用
-      if account.present?
+      if stripe_account.present?
         if charge_params[:charge_amount].present?
           user_points = charge_params[:user_points].to_i
           charge_amount = charge_params[:charge_amount].to_i
           if user_points >= charge_amount
-            account_res = account.get_stripe_account
+            account_res = stripe_account.get_stripe_account
             if account_res[0]
               [true, account_res[1]] # Account infoを返す
             else

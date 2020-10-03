@@ -1,0 +1,17 @@
+<%= javascript_bundle_tag 'bankaccount' %>
+<div class="bankacct-form__bank-name">
+  <%= f.label :bank_name, '銀行名', :class => "bankacct-form__bank-name-label" %>
+  <%= f.text_field :bank_name, :placeholder => '例）みずほ', :class => "bankacct-form__bank-name-input", :id => 'js-bank_name_input' %>
+</div>
+<div class="bankacct-form__branch-name">
+  <%= f.label :branch_name, '支店名', :class => "bankacct-form__branch-name-label" %>
+  <%= f.text_field :branch_name, :placeholder => '例）丸の内中央', :class => "bankacct-form__branch-name-input", :id => 'js-branch_name_input' %>
+</div>
+<div class="bankacct-form__account-number">
+  <%= f.label :account_number, '口座番号', :class => "bankacct-form__account-number-label" %>
+  <%= f.text_field :account_number, :placeholder => '例）0123456', :class => "bankacct-form__account-number-input" %>
+</div>
+<div class="bankacct-form__account-holder-name">
+  <%= f.label :account_holder_name, '口座名義人', :class => "bankacct-form__account-holder-name-label" %>
+  <%= f.text_field :account_holder_name, :placeholder => '例）ヤマダタロウ', :class => "bankacct-form__account-holder-name-input" %>
+</div>

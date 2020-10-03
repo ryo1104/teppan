@@ -2,52 +2,56 @@
 <div class="page-body">
   <div class="row">
     <div class="col s12 m6 content">
-      <div class="row content-header">
-        <div class="account-confirm__dm-header"></div>
-      </div> 
       <div class="row account-confirm">
         <h1>お客様情報の確認</h1>
         <div class="account-confirm__message">下記内容にお間違いがないかご確認ください。</div>
-        <div class="account-confirm__show-info collection">
-          <div class="row account-confirm__name">
-            <div class="col s4 m4">お名前（漢字）</div><div class="col s8 m8">：<%= @account_form.last_name_kanji %>&nbsp;<%= @account_form.first_name_kanji %></div>
-          </div>
-          <div class="row account-confirm__name">
-            <div class="col s4 m4">お名前（カナ）</div><div class="col s8 m8">：<%= @account_form.last_name_kana %>&nbsp;<%= @account_form.first_name_kana %></div>
-          </div>
-          <div class="row account-confirm__email">
-            <div class="col s4 m4">メールアドレス</div><div class="col s8 m8">：<%= @account_form.email %></div>
-          </div>
-          <div class="row account-confirm__phone">
-            <div class="col s4 m4">お電話番号</div><div class="col s8 m8">：<%= @account_form.national_phone_number %></div>
-          </div>
-          <div class="row account-confirm__gender">
-            <div class="col s4 m4">性別</div>
-            <div class="col s8 m8">：
-              <%= "男性" if @account_form.gender == "male" %>
-              <%= "女性" if @account_form.gender == "female" %>
-            </div>
-          </div>
-          <div class="row account-confirm__birthdate">
-            <div class="col s4 m4">生年月日</div><div class="col s8 m8">：<%= @account_form.birthdate %></div>
-          </div>
-          <div class="row account-confirm__address">
-            <div class="col s4 m4">ご住所</div>
-            <div class="col s8 m8 account-confirm__address-info">
-              <%= @account_form.postal_code %><br>
-              <%= @account_form.state %>
-              <%= @account_form.city %><br>
-              <%= @account_form.town %>
-              <%= @account_form.kanji_line1 %>
-              <%= @account_form.kanji_line2 %><br>
-            </div>
-          </div>
-          <div class="row account-confirm__user-agreement">
-            <div class="col s4 m4">利用規約</div>
-            <div class="col s8 m8">：<%= @account_form.user_agreement ? "同意する" : "同意しない" %></div>
-          </div>
-        </div>
-
+        <table class="striped">
+          <tbody>
+            <tr>
+              <td class="table-half-split">お名前（漢字）</td>
+              <td class="table-half-split"><%= @account_form.last_name_kanji %>&nbsp;<%= @account_form.first_name_kanji %></td>
+            </tr>
+            <tr>
+              <td class="table-half-split">お名前（カナ）</td>
+              <td class="table-half-split"><%= @account_form.last_name_kana %>&nbsp;<%= @account_form.first_name_kana %></td>
+            </tr>
+            <tr>
+              <td class="table-half-split">メールアドレス</td>
+              <td class="table-half-split"><%= @account_form.email %></td>
+            </tr>
+            <tr>
+              <td class="table-half-split">お電話番号</td>
+              <td class="table-half-split"><%= @account_form.national_phone_number %></td>
+            </tr>
+            <tr>
+              <td class="table-half-split">性別</td>
+              <td class="table-half-split">
+                <%= "男性" if @account_form.gender == "male" %>
+                <%= "女性" if @account_form.gender == "female" %>
+              </td>
+            </tr>
+            <tr>
+              <td class="table-half-split">生年月日</td>
+              <td class="table-half-split"><%= @account_form.birthdate.strftime("%Y年 %m月 %d日") %></td>
+            </tr>
+            <tr>
+              <td class="table-half-split">ご住所</td>
+              <td class="table-half-split">
+                <%= @account_form.postal_code %><br>
+                <%= @account_form.state %>
+                <%= @account_form.city %><br>
+                <%= @account_form.town %>
+                <%= @account_form.kanji_line1 %>
+                <%= @account_form.kanji_line2 %><br>
+              </td>
+            </tr>
+            <tr>
+              <td class="table-half-split">利用規約</td>
+              <td class="table-half-split"><%= @account_form.user_agreement ? "同意する" : "同意しない" %></td>
+            </tr>
+          </body>
+        </table>
+        
         <% if @mode == "new" %>
           <%= form_with model: [@user, @account_form], url: user_accounts_path, local: true, method: :post do |f| %>
             <%= f.hidden_field :last_name_kanji, :value => @account_form.last_name_kanji %>
@@ -95,8 +99,6 @@
             <%= f.submit '保存する', data: {disable_with: '保存中...'}, :class => "account-confirm__submit btn waves-effect" %>
           <% end %>
         <% end %>
-        
-      </div>
     </div>
   </div>
 </div>

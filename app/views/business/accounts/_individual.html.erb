@@ -1,0 +1,51 @@
+<table class="striped">
+  <tbody>
+    <tr>
+      <td class="table-half-split">お名前（漢字）</td>
+      <td class="table-half-split"><%= account_info["personal_info"]["last_name_kanji"] %>&nbsp;<%= account_info["personal_info"]["first_name_kanji"] %></td>
+    </tr>
+    <tr>
+      <td class="table-half-split">お名前（カナ）</td>
+      <td class="table-half-split"><%= account_info["personal_info"]["last_name_kana"] %>&nbsp;<%= account_info["personal_info"]["first_name_kana"] %></td>
+    </tr>
+    <tr>
+      <td class="table-half-split">性別</td>
+      <td class="table-half-split"><%= account_info["personal_info"]["gender"] %></td>
+    </tr>
+    <tr>
+      <td class="table-half-split">生年月日</td>
+      <td class="table-half-split">
+        <%= account_info["personal_info"]["dob"]["year"] %>年
+        <%= account_info["personal_info"]["dob"]["month"] %>月
+        <%= account_info["personal_info"]["dob"]["day"] %>日
+      </td>
+    </tr>
+    <tr>
+      <td class="table-half-split">郵便番号</td>
+      <td class="table-half-split"><%= account_info["personal_info"]["postal_code"] %></td>
+    </tr>
+    <tr>
+      <td class="table-half-split">ご住所</td>
+      <td class="table-half-split">
+        <%= account_info["personal_info"]["kanji_state"] %>
+        <%= account_info["personal_info"]["kanji_city"] %>
+        <%= account_info["personal_info"]["kanji_town"] %><br>
+        <%= account_info["personal_info"]["kanji_line1"] %><br>
+        <%= account_info["personal_info"]["kanji_line2"] %><br>
+        <%= account_info["personal_info"]["kana_state"] %>
+        <%= account_info["personal_info"]["kana_city"] %>
+        <%= account_info["personal_info"]["kana_town"] %><br>
+        <%= account_info["personal_info"]["kana_line1"] %><br>
+        <%= account_info["personal_info"]["kana_line2"] %>
+      </td>
+    </tr>
+    <tr>
+      <td class="table-half-split">お電話番号</td>
+      <td class="table-half-split"><%= account_info["personal_info"]["phone"] %></td>
+    </tr>
+    <tr>
+      <td class="table-half-split">メールアドレス</td>
+      <td class="table-half-split"><%= account_info["personal_info"]["email"] %></td>
+    </tr>
+  </tbody>
+</table>

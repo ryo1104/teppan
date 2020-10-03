@@ -1,0 +1,12 @@
+<table class="striped">
+  <tbody>
+    <tr>
+      <td class="table-half-split">出金可能</td>
+      <td class="table-half-split"><b><%= number_to_currency(balance_info["available"][0]["amount"], locale: 'ja') %></b></td>
+    </tr>
+    <tr>
+      <td class="table-half-split">まもなく出金可能</td>
+      <td class="table-half-split"><%= number_to_currency(balance_info["pending"][0]["amount"], locale: 'ja') %></td>
+    </tr>
+  </tbody>
+</table>

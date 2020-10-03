@@ -1,0 +1,25 @@
+.bankacct-form {
+
+  &__bank-name {
+    width: 20rem;
+  }
+  
+  &__branch-name {
+    width: 20rem;
+  }
+
+  &__account-number {
+    width: 20rem;
+  }
+
+  &__account-holder-name {
+    width: 20rem;
+    margin-bottom: 1rem;
+  }
+
+  &__submit{
+    &.btn.waves-effect {
+      @include button-normal;
+    }
+  }
+}

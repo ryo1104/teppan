@@ -74,8 +74,8 @@ class Neta < ApplicationRecord
   def for_sale
     if price != 0
       if user.premium_user[0]
-        if user.account.present?
-          user.account.stripe_status == 'verified'
+        if user.stripe_account.present?
+          user.stripe_account.status == 'verified'
         else
           false
         end

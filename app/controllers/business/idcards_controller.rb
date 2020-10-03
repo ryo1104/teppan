@@ -1,18 +1,18 @@
-class IdcardsController < ApplicationController
+class Business::IdcardsController < ApplicationController
   include StripeUtils
 
   def new
-    @account = Account.find(params[:account_id])
-    @idcard = Idcard.new
+    @account = StripeAccount.find(params[:stripe_account_id])
+    @idcard = StripeIdcard.new
   end
 
   def create
-    @account = Account.find(params[:account_id])
-    @idcard = @account.idcards.new(save_params)
+    @account = StripeAccount.find(params[:stripe_account_id])
+    @idcard = @account.stripe_idcards.new(save_params)
     if @idcard.valid?
       @file = params[:idcard][:image]
       @name = @file.original_filename
-      # @file_upload = Stripe::FileUpload.create( { purpose: 'identity_document', file: File.open("tmp/#{@name}", "r"),}, { stripe_account: @account.stripe_acct_id } )
+      # @file_upload = Stripe::FileUpload.create( { purpose: 'identity_document', file: File.open("tmp/#{@name}", "r"),}, { stripe_account: @account.acct_id } )
       @idcard.transaction do
         File.open("tmp/#{@name}", 'wb') { |f| f.write(@file.read) }
         @file_upload = Stripe::File.create({ purpose: 'identity_document', file: File.open("tmp/#{@name}", 'r') })
@@ -25,7 +25,7 @@ class IdcardsController < ApplicationController
           redirect_to account_path(@account.id), alert: 'ご本人様確認書類の保存に失敗しました。' and return
         end
       end
-      @stripe_acct = Stripe::Account.update(@account.stripe_acct_id, @idcard.verification_docs)
+      @stripe_acct = Stripe::Account.update(@account.acct_id, @idcard.verification_docs)
       @stripe_acct_hash = JSON.parse(@stripe_acct.to_s)
       if @stripe_acct_hash['id'].present?
         redirect_to account_path(@account.id), notice: 'ご本人様確認書類を受領しました。' and return
@@ -38,13 +38,13 @@ class IdcardsController < ApplicationController
   end
 
   def index
-    @account = Account.find(params[:account_id])
-    @idcards = @account.idcards
+    @account = StripeAccount.find(params[:account_id])
+    @idcards = @account.stripe_idcards
   end
 
   def destroy
-    idcard = Idcard.find(params[:id])
-    account_id = idcard.account_id
+    idcard = StripeIdcard.find(params[:id])
+    account_id = idcard.stripe_account_id
     idcard.image.purge
     idcard.destroy!
     redirect_to account_path(account_id), notice: 'ファイルを削除しました。' and return

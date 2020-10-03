@@ -8,9 +8,6 @@ class SubscriptionsController < ApplicationController
     if @customer[0]
       @cards = @customer[1]['sources']['data'] if @customer[1]['id'].present?
     end
-  rescue StandardError => e
-    ErrorUtility.log_and_notify e
-    redirect_to user_path(@user.id), alert: e.message and return
   end
 
   def create
@@ -19,9 +16,9 @@ class SubscriptionsController < ApplicationController
     if res[0]
       @customer_hash = res[1]
       if @customer_hash['id'].present?
-        @subscription_hash = Subscription.create_stripe_sub(@customer_hash['id'], @customer_hash['sources']['data'][0]['id'])
+        @subscription_hash = Stripesubscription.create_stripe_sub(@customer_hash['id'], @customer_hash['sources']['data'][0]['id'])
         if @subscription_hash['id'].present?
-          Subscription.create!(user_id: user.id, stripe_sub_id: @subscription_hash['id'])
+          Stripesubscription.create!(user_id: user.id, stripe_sub_id: @subscription_hash['id'])
           @card_hash = user.get_card_details(@subscription_hash['default_source'])
         else
           redirect_to new_user_subscription_path(user.id), alert: '定期支払いを登録できませんでした。' and return
@@ -32,23 +29,17 @@ class SubscriptionsController < ApplicationController
     else
       redirect_to new_user_subscription_path(user.id), alert: '顧客情報を取得できませんでした。' and return
     end
-  rescue StandardError => e
-    ErrorUtility.log_and_notify e
-    redirect_to new_user_subscription_path(user.id), alert: e.message and return
   end
 
   def show
     @user = User.includes(:subscription).find(params[:user_id])
-    @subscription_hash = @user.subscription.get_details
+    @subscription_hash = @user.stripesubscription.get_details
     @card_hash = @user.get_card_details(@subscription_hash['default_source'])
     if @subscription_hash['trial_end'].present?
       if Time.zone.now < Time.zone.at(@subscription_hash['trial_end'].to_i)
         @trial_end_date = Time.zone.at(@subscription_hash['trial_end'].to_i)
       end
     end
-  rescue StandardError => e
-    ErrorUtility.log_and_notify e
-    redirect_to user_path(user.id), alert: e.message and return
   end
 
   private

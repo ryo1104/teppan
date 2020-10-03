@@ -1,11 +1,11 @@
-class AccountsController < ApplicationController
+class Business::AccountsController < ApplicationController
   include StripeUtils
 
   def new
     @user = User.find(params[:user_id])
     if qualified(@user)
-      if @user.account.present?
-        redirect_to edit_account_path(@user.account.id), alert: 'すでにビジネスアカウントが存在します。' and return
+      if @user.stripe_account.present?
+        redirect_to edit_account_path(@user.stripe_account.id), alert: 'すでにビジネスアカウントが存在します。' and return
       else
         @account_form = StripeAccountForm.new
       end
@@ -20,7 +20,7 @@ class AccountsController < ApplicationController
       @user = User.find(params[:user_id])
       @account_form = StripeAccountForm.new(form_params)
     elsif @mode == 'edit'
-      @account = Account.find(params[:id])
+      @account = StripeAccount.find(params[:id])
       @account_form = StripeAccountForm.new(form_params)
       @user = @account.user
     end
@@ -34,14 +34,14 @@ class AccountsController < ApplicationController
         render :new and return
       else
         if @account_form.valid?
-          @account = Account.new
+          @account = StripeAccount.new
           @stripe_result = @account.create_stripe_account(@account_form, request.remote_ip)
           if @stripe_result[0]
-            @account.assign_attributes(user_id: @user.id, stripe_acct_id: @stripe_result[1]['id'], stripe_status: @stripe_result[1]['personal_info']['verification']['status'])
+            @account.assign_attributes(user_id: @user.id, acct_id: @stripe_result[1]['id'], status: @stripe_result[1]['personal_info']['verification']['status'])
             if @account.save
               redirect_to account_path(@account.id), notice: 'ビジネスアカウントが作成されました。' and return
             else
-              Rails.logger.error "Failed to save StripeAccount record : user_id : #{@user.id}, stripe_acct_id : #{@stripe_result[1]['id']}"
+              Rails.logger.error "Failed to save StripeAccount record : user_id : #{@user.id}, acct_id : #{@stripe_result[1]['id']}"
               redirect_to user_path(@user.id), alert: "ビジネスアカウントを作成できませんでした。" and return
             end
           else
@@ -59,7 +59,7 @@ class AccountsController < ApplicationController
   end
 
   def edit
-    @account = Account.find(params[:id])
+    @account = StripeAccount.find(params[:id])
     if my_info(@account.user_id)
       @stripe_account_info = @account.get_stripe_account
       if @stripe_account_info[0]
@@ -77,13 +77,10 @@ class AccountsController < ApplicationController
     else
       redirect_to user_path(current_user.id), alert: 'アクセス権限がありません。' and return
     end
-  rescue Stripe::PermissionError => e
-    ErrorUtility.log_and_notify e
-    redirect_to user_path(current_user.id), alert: '口座情報にアクセス権限がありません。' and return
   end
 
   def update
-    @account = Account.find(params[:id])
+    @account = StripeAccount.find(params[:id])
     if my_info(@account.user_id)
       @account_form = StripeAccountForm.new(form_params)
       if params[:back]
@@ -92,7 +89,7 @@ class AccountsController < ApplicationController
         @stripe_result = @account.update_stripe_account(@account_form, request.remote_ip)
         if @stripe_result[0]
           @account_info = @stripe_result[1]
-          @account.update!(stripe_status: @account_info['personal_info']['verification']['status'])
+          @account.update!(status: @account_info['personal_info']['verification']['status'])
           redirect_to account_path(@account.id), notice: 'ビジネスアカウント情報が更新されました。' and return
         else
           Rails.logger.error "update_stripe_account returned false : #{@stripe_result[1]}"
@@ -100,13 +97,10 @@ class AccountsController < ApplicationController
         end
       end
     end
-  rescue Stripe::PermissionError => e
-    ErrorUtility.log_and_notify e
-    redirect_to user_path(current_user.id), alert: '口座情報にアクセス権限がありません。' and return
   end
 
   def show
-    @account = Account.includes(:externalaccount).find(params[:id])
+    @account = StripeAccount.find(params[:id])
     my_info(@account.user_id)
 
     stripe_result_acct = @account.get_stripe_account
@@ -119,8 +113,8 @@ class AccountsController < ApplicationController
 
     if @account_info['personal_info']['verification']['status'].present?
       latest_stripe_status = @account_info['personal_info']['verification']['status']
-      if latest_stripe_status != @account.stripe_status
-        @account.reload if @account.update!(stripe_status: latest_stripe_status)
+      if latest_stripe_status != @account.status
+        @account.reload if @account.update!(status: latest_stripe_status)
       end
     end
 
@@ -131,13 +125,10 @@ class AccountsController < ApplicationController
       Rails.logger.error "get_stripe_balance returned false : #{stripe_result_balance[1]}"
       redirect_to user_path(current_user.id), alert: '残高情報を取得できませんでした。' and return
     end
-  rescue Stripe::PermissionError => e
-    ErrorUtility.log_and_notify e
-    redirect_to user_path(current_user.id), alert: 'ビジネスアカウント情報の取得に失敗しました。' and return
   end
 
   def destroy
-    @account = Account.find(params[:id])
+    @account = StripeAccount.find(params[:id])
     if my_info(@account.user_id)
       if @account.zero_balance
         stripe_result_acct = @account.delete_stripe_account
@@ -158,9 +149,6 @@ class AccountsController < ApplicationController
         redirect_to account_path(@account.id), alert: 'アカウントに残高が残っています。' and return
       end
     end
-  rescue Stripe::PermissionError => e
-    ErrorUtility.log_and_notify e
-    redirect_to user_path(current_user.id), alert: '口座情報にアクセス権限がありません。' and return
   end
 
   private

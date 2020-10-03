@@ -124,7 +124,7 @@ class TradesController < ApplicationController
     end
 
     if seller.premium_user
-      return [false, '売り手の販売アカウント情報が取得できませんでした。'] unless seller.account.stripe_acct_id.present?
+      return [false, '売り手の販売アカウント情報が取得できませんでした。'] unless seller.account.acct_id.present?
     else
       return [false, '認定ユーザーではありません。']
     end

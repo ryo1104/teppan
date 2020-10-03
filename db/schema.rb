@@ -10,15 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_13_171257) do
-
-  create_table "accounts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
-    t.integer "user_id"
-    t.string "stripe_acct_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "stripe_status"
-  end
+ActiveRecord::Schema.define(version: 2020_10_01_162650) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -126,13 +118,6 @@ ActiveRecord::Schema.define(version: 2020_09_13_171257) do
     t.text "text", size: :medium
   end
 
-  create_table "externalaccounts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
-    t.integer "account_id"
-    t.string "stripe_bank_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "follows", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "user_id"
     t.integer "follower_id"
@@ -162,14 +147,6 @@ ActiveRecord::Schema.define(version: 2020_09_13_171257) do
     t.integer "neta_count", default: 0, null: false
     t.string "hiragana"
     t.index ["hashname"], name: "index_hashtags_on_hashname", unique: true
-  end
-
-  create_table "idcards", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
-    t.integer "account_id"
-    t.string "frontback"
-    t.string "stripe_file_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "inquiries", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
@@ -209,13 +186,6 @@ ActiveRecord::Schema.define(version: 2020_09_13_171257) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "payouts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
-    t.integer "account_id"
-    t.string "stripe_payout_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "rankings", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "rankable_type"
     t.integer "rank"
@@ -235,7 +205,31 @@ ActiveRecord::Schema.define(version: 2020_09_13_171257) do
     t.integer "likes_count", default: 0, null: false
   end
 
-  create_table "subscriptions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+  create_table "stripe_accounts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "acct_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "status"
+    t.string "ext_acct_id"
+  end
+
+  create_table "stripe_idcards", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+    t.integer "stripe_account_id"
+    t.string "frontback"
+    t.string "stripe_file_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "stripe_payouts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+    t.integer "stripe_account_id"
+    t.string "stripe_payout_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "stripe_subscriptions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "user_id"
     t.string "stripe_sub_id"
     t.datetime "created_at", null: false

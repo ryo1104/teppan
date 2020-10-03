@@ -34,30 +34,29 @@ Rails.application.routes.draw do
     confirmations: 'users/confirmations',
     omniauth_callbacks: 'users/omniauth_callbacks'
   }
-  # match '/auth/:provider/callback', to: 'sessions#create', via: %i[get post]
 
   resources :users, only: %i[show edit update] do
     resources :followers, only: %i[create destroy index]
     resources :followings, only: [:index]
     resources :violations, only: %i[new create]
-    resources :payments, only: %i[new create index]
-    resources :subscriptions, only: %i[new create show destroy]
-    resources :accounts, only: %i[new create] do
+    resources :accounts, module: 'business', only: %i[new create] do
       post :confirm, on: :collection
     end
+    resources :subscriptions, only: %i[new create show destroy]
     resource :avatar, only: [:destroy], module: 'users'
   end
 
-  resources :accounts, only: %i[show edit update destroy] do
-    patch :confirm, on: :member
-    resources :externalaccounts, only: %i[new create]
-    resources :payouts, only: %i[new create]
-    resources :idcards, only: %i[new create index]
+  scope module: :business do
+    resources :accounts, only: %i[show edit update destroy] do
+      patch :confirm, on: :member
+      resources :payouts, only: %i[new create]
+      resources :idcards, only: %i[new create index]
+      resource  :bank, only: %i[new create edit update]
+    end
+    resources :idcards, only: %i[edit update destroy]
+    resources :bank_autocomplete, only: [:index]
+    resources :branch_autocomplete, only: [:index]
   end
-  resources :externalaccounts, only: %i[edit update]
-  resources :idcards, only: %i[edit update destroy]
-  resources :bank_autocomplete, only: [:index]
-  resources :branch_autocomplete, only: [:index]
 
   post '/trades/webhook', to: 'trades#webhook', as: 'trade_webhook'
 end

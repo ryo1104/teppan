@@ -11,7 +11,7 @@ class UsersController < ApplicationController
       @bought_netas = User.bought_netas(@bought_trades)
       @bookmarked_netas = @user.bookmarked_netas
       @bookmarked_topics = @user.bookmarked_topics
-      @account_exists = true if @user.account.present?
+      @account_exists = true if @user.stripe_account.present?
       @sold_netas_info = @user.get_sold_netas_info if @account_exists
     end
 

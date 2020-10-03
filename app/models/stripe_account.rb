@@ -1,38 +1,43 @@
-class Account < ApplicationRecord
+class StripeAccount < ApplicationRecord
   include StripeUtils
 
   belongs_to  :user
-  has_one     :externalaccount, dependent: :destroy
-  has_many    :idcards, dependent: :destroy
-  has_many    :payouts, dependent: :destroy
+  has_many    :stripe_idcards, dependent: :destroy
+  has_many    :stripe_payouts, dependent: :destroy
   validates   :user_id, presence: true, uniqueness: true
-  validates   :stripe_acct_id, uniqueness: { case_sensitive: true }, allow_nil: true
-  validate    :stripe_acct_id_check
-
+  validates   :acct_id, uniqueness: { case_sensitive: true }, allow_nil: true
+  validate    :acct_id_check
+  validate    :ext_acct_id_check
 
   # custom validation
-  def stripe_acct_id_check
-    if stripe_acct_id.present?
-      errors.add(:stripe_acct_id, 'stripe_acct_id does not start with acct_') unless stripe_acct_id.starts_with? 'acct_'
+  def acct_id_check
+    if acct_id.present?
+      errors.add(:acct_id, 'acct_id does not start with acct_') unless acct_id.starts_with? 'acct_'
+    end
+  end
+
+  def ext_acct_id_check
+    if ext_acct_id.present?
+      errors.add(:ext_acct_id, 'ext_acct_id does not start with ba_') unless ext_acct_id.starts_with? 'ba_'
     end
   end
 
   def get_stripe_account
-    if stripe_acct_id
+    if acct_id
       begin
-        stripe_account_obj = JSON.parse(Stripe::Account.retrieve(stripe_acct_id).to_s)
+        stripe_account_obj = JSON.parse(Stripe::Account.retrieve(acct_id).to_s)
       rescue StandardError => e
         ErrorUtility.log_and_notify e
         return [false, "Stripe error - #{e.message}"]
       end
-      account_info = Account.parse_account_info(stripe_account_obj)
+      account_info = StripeAccount.parse_account_info(stripe_account_obj)
       if account_info[0]
         [true, account_info[1]]
       else
         [false, "error in parse_account_info : #{account_info[1]}"]
       end
     else
-      [false, 'stripe_acct_id is blank']
+      [false, 'acct_id is blank']
     end
   end
 
@@ -46,7 +51,7 @@ class Account < ApplicationRecord
         ErrorUtility.log_and_notify e
         return [false, "Stripe error - #{e.message}"]
       end
-      account_info = Account.parse_account_info(stripe_account_obj)
+      account_info = StripeAccount.parse_account_info(stripe_account_obj)
       if account_info[0] == true
         [true, account_info[1]]
       else
@@ -58,17 +63,17 @@ class Account < ApplicationRecord
   end
 
   def update_stripe_account(account_form, remote_ip)
-    if stripe_acct_id
-      stripe_inputs = stripe_inputs_create(account_form, remote_ip)
+    if acct_id
+      stripe_inputs = stripe_inputs_update(account_form, remote_ip)
       inputs_check = check_stripe_inputs(stripe_inputs, 'update')
       if inputs_check[0]
         begin
-          stripe_account_obj = JSON.parse(Stripe::Account.update(stripe_acct_id, stripe_inputs).to_s)
+          stripe_account_obj = JSON.parse(Stripe::Account.update(acct_id, stripe_inputs).to_s)
         rescue => e
           ErrorUtility.log_and_notify e
           return [false, "Stripe error - #{e.message}"]
         end
-        account_info = Account.parse_account_info(stripe_account_obj)
+        account_info = StripeAccount.parse_account_info(stripe_account_obj)
         if account_info[0]
           [true, account_info[1]]
         else
@@ -78,15 +83,15 @@ class Account < ApplicationRecord
         [false, inputs_check[1]]
       end
     else
-      [false, 'stripe_acct_id is blank']
+      [false, 'acct_id is blank']
     end
   end
 
   def delete_stripe_account
-    if stripe_acct_id
+    if acct_id
       if zero_balance
         begin
-          deleted_stripe_account = JSON.parse(Stripe::Account.delete(stripe_acct_id).to_s)
+          deleted_stripe_account = JSON.parse(Stripe::Account.delete(acct_id).to_s)
         rescue StandardError => e
           ErrorUtility.log_and_notify e
           return [false, "Stripe error - #{e.message}"]
@@ -100,26 +105,26 @@ class Account < ApplicationRecord
         [false, 'balance still remains on the account']
       end
     else
-      [false, 'stripe_acct_id is blank']
+      [false, 'acct_id is blank']
     end
   end
 
   def get_stripe_balance
-    if stripe_acct_id
+    if acct_id
       begin
-        stripe_balance_obj = JSON.parse(Stripe::Balance.retrieve({ stripe_account: stripe_acct_id }).to_s)
+        stripe_balance_obj = JSON.parse(Stripe::Balance.retrieve({ stripe_account: acct_id }).to_s)
       rescue StandardError => e
         ErrorUtility.log_and_notify e
         return [false, "Stripe error - #{e.message}"]
       end
-      check_results = Account.check_stripe_results(stripe_balance_obj)
+      check_results = StripeAccount.check_stripe_results(stripe_balance_obj)
       if check_results[0]
         [true, stripe_balance_obj]
       else
         [false, check_results[1]]
       end
     else
-      [false, 'stripe_acct_id is blank']
+      [false, 'acct_id is blank']
     end
   end
 
@@ -150,6 +155,121 @@ class Account < ApplicationRecord
       false
     end
   end
+  
+  def get_stripe_ext_account
+    if acct_id.present?
+      begin
+        stripe_account_obj = JSON.parse(Stripe::Account.retrieve(acct_id).to_s)
+      rescue StandardError => e
+        return [false, "Stripe error - #{e.message}"]
+      end
+      bank_info = StripeAccount.parse_bank_info(stripe_account_obj)
+      if bank_info[0]
+        [true, bank_info[1]]
+      else
+        [false, "error in parse_bank_info : #{bank_info[1]}"]
+      end
+    else
+      [false, 'acct_id is blank']
+    end
+  end
+  
+  def create_stripe_ext_account(stripe_bank_inputs)
+    if stripe_bank_inputs.present?
+      if acct_id.present?
+        begin
+          res = JSON.parse(Stripe::Account.create_external_account(acct_id, stripe_bank_inputs).to_s)
+          if res.key?('id')
+            [true, res]
+          else
+            [false, 'Failed to create external account']
+          end
+        rescue StandardError => e
+          [false, "Stripe create_external_account error - #{e.message}"]
+        end
+      else
+        [false, 'acct_id is blank']
+      end
+    else
+      [false, 'stripe_bank_inputs is blank']
+    end
+  end
+
+  def delete_stripe_ext_account(old_stripe_bank_id)
+    if acct_id.present?
+      if ext_acct_id.present?
+        begin
+          res = JSON.parse(Stripe::Account.delete_external_account(acct_id, old_stripe_bank_id).to_s)
+          if res.key?('deleted') && res['deleted'] == true
+            [true, res]
+          else
+            [false, 'Failed to delete external account']
+          end
+        rescue StandardError => e
+          [false, "Stripe error - #{e.message}"]
+        end
+      else
+        [false, 'ext_acct_id is blank']
+      end
+    else
+      [false, 'acct_id is blank']
+    end
+  end
+
+  def self.parse_bank_info(stripe_account_obj)
+    if stripe_account_obj.present?
+      if stripe_account_obj.key?('external_accounts')
+        if stripe_account_obj['external_accounts']['data'].empty?
+          [false, 'external account data is blank']
+        else
+          stripe_account_obj['external_accounts']['data'].map do |ext_acct|
+            if ext_acct.key?('routing_number')
+              if ext_acct['routing_number'].present?
+                if ext_acct['routing_number'].length == 7
+                  bank_code = ext_acct['routing_number'][0, 4]
+                  branch_code = ext_acct['routing_number'][4, 3]
+                  bank = Bank.find_by(code: bank_code)
+                  if bank.present?
+                    branch = bank.branches.find_by(code: branch_code)
+                    if branch.present?
+                      if ext_acct.key?('last4')
+                        if ext_acct.key?('account_holder_name')
+                          info = {}
+                          info.merge!('bank_name' => bank.name)
+                          info.merge!('branch_name' => branch.name)
+                          info.merge!('account_number' => '***' + ext_acct['last4'])
+                          info.merge!('account_holder_name' => ext_acct['account_holder_name'])
+                          return [true, info]
+                        else
+                          return [false, 'account_holder_name does not exist']
+                        end
+                      else
+                        return [false, 'last4 does not exist']
+                      end
+                    else
+                      return [false, 'unable to retrieve branch from database']
+                    end
+                  else
+                    return [false, 'unable to retrieve bank from database']
+                  end
+                else
+                  return [false, 'routing number is not 7 digits']
+                end
+              else
+                return [false, 'routing number does not exist']
+              end
+            else
+              return [false, 'routing number hash does not exist']
+            end
+          end
+        end
+      else
+        [false, 'external account information does not exist in stripe account obj']
+      end
+    else
+      [false, 'stripe_account_obj does not exist']
+    end
+  end 
 
   def stripe_inputs_create(account_form, remote_ip)
     ac_params = {
@@ -225,7 +345,7 @@ class Account < ApplicationRecord
   end
 
   def self.parse_account_info(stripe_account_obj)
-    check_results = Account.check_stripe_results(stripe_account_obj)
+    check_results = StripeAccount.check_stripe_results(stripe_account_obj)
     return [false, check_results[1]] if check_results[0] == false
 
     personal_info = StripeAccountForm.parse_personal_info(stripe_account_obj['individual'])
@@ -233,17 +353,16 @@ class Account < ApplicationRecord
 
     id = stripe_account_obj['id']
 
-    tos_acceptance = if stripe_account_obj.key?('tos_acceptance')
-                       stripe_account_obj['tos_acceptance']
-                     else
-                       { 'date' => nil, 'ip' => nil }
-                     end
+    if stripe_account_obj.key?('tos_acceptance')
+       tos_acceptance = stripe_account_obj['tos_acceptance']
+    else
+       tos_acceptance = { 'date' => nil, 'ip' => nil }
+    end
 
     payouts_enabled = (stripe_account_obj['payouts_enabled'] if stripe_account_obj.key?('payouts_enabled'))
-
     requirements = (stripe_account_obj['requirements'] if stripe_account_obj.key?('requirements'))
 
-    bank_info = Externalaccount.parse_bank_info(stripe_account_obj)
+    bank_info = StripeAccount.parse_bank_info(stripe_account_obj)
     if bank_info[0] == false
       bank_info[1] = { 'bank_name' => nil, 'branch_name' => nil, 'account_number' => nil, 'account_holder_name' => nil }
     end
