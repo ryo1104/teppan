@@ -1,0 +1,18 @@
+.idcard-new {
+  &__form {
+    &-submit{
+      &.btn.waves-effect {
+        @include button-normal      
+      }
+    }
+  }
+  
+  &__file {
+    margin-bottom: 2rem;
+  }
+  
+  &__frontback {
+    width: 10rem;
+    margin-bottom: 2rem;
+  }
+}

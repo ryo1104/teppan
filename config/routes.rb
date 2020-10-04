@@ -50,10 +50,10 @@ Rails.application.routes.draw do
     resources :accounts, only: %i[show edit update destroy] do
       patch :confirm, on: :member
       resources :payouts, only: %i[new create]
-      resources :idcards, only: %i[new create index]
+      resources :idcards, only: %i[new create]
       resource  :bank, only: %i[new create edit update]
     end
-    resources :idcards, only: %i[edit update destroy]
+    resources :idcards, only: %i[destroy]
     resources :bank_autocomplete, only: [:index]
     resources :branch_autocomplete, only: [:index]
   end

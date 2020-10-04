@@ -1,21 +1,26 @@
+<% @page_title = "ご本人様確認" %>
 <% breadcrumb :new_idcard, @account %>
 <div class="page-body">
-  <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs-tp" %>
   <div class="row">
-    <div class="col s12 m9 user-page">
-      <h1>ご本人様確認</h1>
-      <div class="collection z-depth-0 user-page">
-        <%= form_with model: [@account, @idcard], local: true, class: "idcard-form" do |f| %>
+    <div class="col s12 m6 content">
+      <div class="row content-header">
+        <%= render partial: "layouts/breadcrumbs" %>
+      </div>
+      <div class="row idcard-new">
+        <h1>ご本人様確認</h1>
+        <%= form_with model: [@account, @idcard], method: :post, url: account_idcards_path(@account.id), local: true, class: "idcard-new__form" do |f| %>
           <% if @idcard.errors.any? %>
             <%= render :partial => "errorform" %>
           <% end %>
-          <%= label_tag '身分証明証の画像（JPG又はPNG形式）' %><br>
-          <%= f.file_field :image, :class => 'file-field custom' %>
-          <br><br>
-          <%= label_tag '表面／裏面' %><br>
-          <%= f.select :frontback, [["表面","front"], ["裏面","back"]], {}, {:class => "browser-default"} %>
-          <br>
-          <%= f.submit "保存", data: {disable_with: '送信中...'}, class: "btn btn-primary withripple custom" %>
+          <div class="idcard-new__file">
+            <%= f.label :image, '身分証明証の画像（JPG又はPNG）' %><br>
+            <%= f.file_field :image, :class => 'idcard-new__file-field' %>
+          </div>
+          <div class="idcard-new__frontback">
+            <%= f.label :frontback, '表面／裏面' %><br>
+            <%= f.select :frontback, [["表面","front"], ["裏面","back"]], {}, {:class => "browser-default"} %>
+          </div>
+          <%= f.submit "保存", data: {disable_with: '送信中...'}, class: "idcard-new__form-submit btn waves-effect" %>
         <% end %>
       </div>
     </div>

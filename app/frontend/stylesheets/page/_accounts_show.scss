@@ -1,23 +1,29 @@
 .account-show {
 
   &__balance {
-    margin-bottom: 2rem;
-    &.btn.waves-effect {
-      @include button-normal      
-    }
+    margin-bottom: 3rem;
   }
   
   &__bank-account {
-    margin-bottom: 2rem;
-    &.btn.waves-effect {
-      @include button-normal      
-    }
+    margin-bottom: 3rem;
   }
   
   &__individual {
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  &__identification {
+    margin-bottom: 3rem;
+  }
+
+  &__missing-info {
+    color: $tp-errormessage;
+    margin-bottom: 3rem;
+  }
+  
+  &__btn {
     &.btn.waves-effect {
-      @include button-normal      
+      @include button-normal    
     }
   }
   

@@ -116,6 +116,9 @@ class Business::AccountsController < ApplicationController
       if latest_stripe_status != @account.status
         @account.reload if @account.update!(status: latest_stripe_status)
       end
+      unless @account_info["personal_info"]["verification"]["status"] == "verified"
+        find_idcards
+      end
     end
 
     stripe_result_balance = @account.get_stripe_balance
@@ -125,6 +128,10 @@ class Business::AccountsController < ApplicationController
       Rails.logger.error "get_stripe_balance returned false : #{stripe_result_balance[1]}"
       redirect_to user_path(current_user.id), alert: '残高情報を取得できませんでした。' and return
     end
+    
+    puts "ACCOUNT_INFO : "
+    puts @account_info
+    
   end
 
   def destroy
@@ -187,5 +194,11 @@ class Business::AccountsController < ApplicationController
     else
       NKF.nkf('-w -Z4', str)
     end
+  end
+  
+  def find_idcards
+    cards = @account.stripe_idcards
+    @frontcard = cards.find_by(frontback: "front")
+    @backcard = cards.find_by(frontback: "back")
   end
 end

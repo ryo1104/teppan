@@ -16,6 +16,13 @@ class StripeIdcard < ApplicationRecord
       }
     }
   end
+  
+  def create_stripe_file(file, name)
+    File.open("tmp/#{name}", 'wb') { |f| f.write(file.read) }
+    file_upload_hash = JSON.parse(Stripe::File.create({ purpose: 'identity_document', file: File.open("tmp/#{name}", 'r') }).to_s)
+    File.delete("tmp/#{name}")
+    file_upload_hash
+  end
 
   private
 

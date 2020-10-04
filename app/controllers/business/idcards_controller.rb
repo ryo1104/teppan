@@ -2,31 +2,24 @@ class Business::IdcardsController < ApplicationController
   include StripeUtils
 
   def new
-    @account = StripeAccount.find(params[:stripe_account_id])
+    @account = StripeAccount.find(params[:account_id])
     @idcard = StripeIdcard.new
   end
 
   def create
-    @account = StripeAccount.find(params[:stripe_account_id])
+    @account = StripeAccount.find(params[:account_id])
     @idcard = @account.stripe_idcards.new(save_params)
     if @idcard.valid?
-      @file = params[:idcard][:image]
+      @file = file_to_upload
       @name = @file.original_filename
-      # @file_upload = Stripe::FileUpload.create( { purpose: 'identity_document', file: File.open("tmp/#{@name}", "r"),}, { stripe_account: @account.acct_id } )
-      @idcard.transaction do
-        File.open("tmp/#{@name}", 'wb') { |f| f.write(@file.read) }
-        @file_upload = Stripe::File.create({ purpose: 'identity_document', file: File.open("tmp/#{@name}", 'r') })
-        @file_upload_hash = JSON.parse(@file_upload.to_s)
-        File.delete("tmp/#{@name}")
-        if @file_upload_hash['id'].present?
-          @idcard.save!
-          @idcard.update!(stripe_file_id: @file_upload_hash['id'])
-        else
-          redirect_to account_path(@account.id), alert: 'ご本人様確認書類の保存に失敗しました。' and return
-        end
+      @file_upload_hash = @idcard.create_stripe_file(@file, @name)
+      if @file_upload_hash['id'].present?
+        @idcard.save!
+        @idcard.update!(stripe_file_id: @file_upload_hash['id'])
+      else
+        redirect_to account_path(@account.id), alert: 'ご本人様確認書類の保存に失敗しました。' and return
       end
-      @stripe_acct = Stripe::Account.update(@account.acct_id, @idcard.verification_docs)
-      @stripe_acct_hash = JSON.parse(@stripe_acct.to_s)
+      @stripe_acct_hash = JSON.parse(Stripe::Account.update(@account.acct_id, @idcard.verification_docs).to_s)
       if @stripe_acct_hash['id'].present?
         redirect_to account_path(@account.id), notice: 'ご本人様確認書類を受領しました。' and return
       else
@@ -35,11 +28,6 @@ class Business::IdcardsController < ApplicationController
     else
       render :new
     end
-  end
-
-  def index
-    @account = StripeAccount.find(params[:account_id])
-    @idcards = @account.stripe_idcards
   end
 
   def destroy
@@ -53,10 +41,10 @@ class Business::IdcardsController < ApplicationController
   private
 
   def save_params
-    params.require(:idcard).permit(:frontback, :image)
+    params.require(:stripe_idcard).permit(:frontback, :image)
   end
 
   def file_to_upload
-    params[:idcard][:image]
+    params[:stripe_idcard][:image]
   end
 end
