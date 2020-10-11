@@ -2,7 +2,7 @@ import $ from 'jquery';
 import { loadStripe } from '@stripe/stripe-js';
 
 $(function() {
-  $('.stripe-checkout-button').on('click', function (){
+  $('.js-trade-new__stripe-checkout.btn.waves-effect').on('click', function (){
     let sId = $(this).attr("id");
     ToCheckout( sId );
   });

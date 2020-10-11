@@ -46,7 +46,7 @@
   <h2>購入ネタ(<%= @bought_netas.count %>件)</h2>
   <% if @bought_netas.count != 0 %>
     <ul class="user-show-contents__netas collection">
-      <%= render partial: "users/bought_neta", collection: @bought_netas %>
+      <%= render partial: "netas/neta", collection: @bought_netas %>
     </ul>
   <% else %>
     <p>（ネタはありません）</p>

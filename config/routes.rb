@@ -58,5 +58,7 @@ Rails.application.routes.draw do
     resources :branch_autocomplete, only: [:index]
   end
 
-  post '/trades/webhook', to: 'trades#webhook', as: 'trade_webhook'
+  # post '/trades/webhook', to: 'trades#webhook', as: 'trade_webhook'
+  match '/trades/webhook' => 'trades#webhook', :via => [:get,:post]
+  match '/trades/done' => 'trades#done', :via => :get
 end

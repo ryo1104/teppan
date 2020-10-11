@@ -1,0 +1,17 @@
+.trade-new {
+  &__items {
+    margin-bottom: 2rem;
+  }
+  
+  &__button {
+    
+  }
+}
+
+.js-trade-new {
+  &__stripe-checkout {
+    &.btn.waves-effect {
+      @include button-normal;
+    }
+  }
+}

@@ -262,7 +262,7 @@ Devise.setup do |config|
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
   config.omniauth :google_oauth2, ENV['GOOGLE_OAUTH_ID'], ENV['GOOGLE_OAUTH_SECRET']
   config.omniauth :twitter, ENV['TWITTER_OAUTH_ID'], ENV['TWITTER_OAUTH_SECRET']
-  config.omniauth :yahoojp, ENV['YAHOOJP_OAUTH_ID'], ENV['YAHOOJP_OAUTH_SECRET'], scope: 'openid profile email address'
+  config.omniauth :yahoojp, ENV['YAHOOJP_ID'], ENV['YAHOOJP_SECRET'], scope: 'openid profile email address'
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

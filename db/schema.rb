@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_01_162650) do
+ActiveRecord::Schema.define(version: 2020_10_10_081355) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -253,16 +253,17 @@ ActiveRecord::Schema.define(version: 2020_10_01_162650) do
   end
 
   create_table "trades", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
-    t.integer "buyer_id"
-    t.integer "price"
+    t.integer "buyer_id", default: 0, null: false
+    t.integer "price", default: 0, null: false
     t.string "tradetype"
     t.string "tradestatus"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "tradeable_id"
-    t.string "tradeable_type"
-    t.integer "seller_id"
-    t.string "stripe_charge_id"
+    t.integer "tradeable_id", default: 0, null: false
+    t.string "tradeable_type", default: "0", null: false
+    t.integer "seller_id", default: 0, null: false
+    t.string "stripe_ch_id"
+    t.string "stripe_pi_id"
   end
 
   create_table "users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|

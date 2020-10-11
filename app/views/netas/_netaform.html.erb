@@ -10,14 +10,14 @@
 <% if @qualified %>
 <div class="neta-form__valuecontent">
   <%= form.label :value_content, "有料部分", :class => "neta-form__valuecontent-label" %>
-  <%= form.rich_text_area :valuecontent, :value => @neta.valuetext, :class => "neta-form__valuecontent-textarea", :placeholder => '有料部分（８００字以内）' %>
+  <%= form.rich_text_area :valuecontent, :value => @neta.valuecontent, :class => "neta-form__valuecontent-textarea", :placeholder => '有料部分（８００字以内）' %>
 </div>
 <% end %>
 <div class="neta-form__hashtags">
   <%= form.text_field :tags, :value => @current_tags, :autocomplete => 'off', :id => 'js-tag_post_field' %>
 </div>
 <div class="neta-form__price">
-  <%= form.label :price, "価格", :class => 'neta-form__price-label' %>
+  <%= form.label :price, "価格", :class => 'neta-form__price-label' %><br>
   <% if @qualified %>
     <%= form.number_field :price, :value => @neta.price, :class => 'neta-form__price-field--active', min: 0, step: 10 %>&nbsp;&nbsp;円
   <% else %>
