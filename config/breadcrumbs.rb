@@ -143,3 +143,15 @@ crumb :new_trade do |neta|
   link '購入', new_neta_trade_path(neta.id)
   parent :show_neta, neta
 end
+
+# payout#new
+crumb :new_payout do |account|
+  link '出金', new_account_payout_path(account.id)
+  parent :show_account, account
+end
+
+# payout#create
+crumb :create_payout do |account|
+  link '出金完了', account_payouts_path(account.id)
+  parent :show_account, account
+end

@@ -1,12 +1,12 @@
 <table class="striped">
   <tbody>
     <tr>
-      <td class="table-40">出金可能</td>
-      <td class="table-60"><b><%= number_to_currency(@balance_info["available"][0]["amount"], locale: 'ja') %></b></td>
+      <td class="table-40"><b>出金可能</b></td>
+      <td class="table-60"><b><%= number_to_currency(balance_info["available"][0]["amount"], locale: 'ja') %></b></td>
     </tr>
     <tr>
       <td class="table-40">まもなく出金可能</td>
-      <td class="table-60"><%= number_to_currency(@balance_info["pending"][0]["amount"], locale: 'ja') %></td>
+      <td class="table-60"><%= number_to_currency(balance_info["pending"][0]["amount"], locale: 'ja') %></td>
     </tr>
   </tbody>
 </table>

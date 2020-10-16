@@ -1,24 +1,32 @@
+<% @page_title = "出金完了" %>
+<% breadcrumb :create_payout, @account %>
 <div class="page-body">
   <div class="row">
-    <div class="col s12 m9 neta-new">
-      <h1 class="h1_class"></h1>
-      <ul class="collection z-depth-1">
-        <%= @message %><br><br>
-        振込金額：<b><%= @stripe_payout_hash["amount"] %>&nbsp;円</b><br>
-        振込実行日：<b><%= Time.zone.at(@stripe_payout_hash["arrival_date"].to_i).strftime("%Y/%m/%d") %></b><br><br>
-        <% if @bank_info["account_number"].present? %>
-          <b>振込先</b><br>
-            金融機関名：<%= @bank_info["bank_name"] %><br>
-            支店名　　：<%= @bank_info["branch_name"] %><br>
-            口座番号　：<%= @bank_info["account_number"] %><br>
-            口座名義　：<%= @bank_info["account_holder_name"] %><br>
-        <% end %>
-        <% if false %>
-          <br>
-          stripe_payout_hash = <%= @stripe_payout_hash %><br><br>
-          bank_info = <%= @bank_info %>
-        <% end %>
-      </ul>
+    <div class="col s12 m6 content">
+      <div class="row content-header">
+        <%= render partial: "layouts/breadcrumbs" %>
+      </div>
+      <div class="row payout-create">
+      <h1>出金完了</h1>
+      <div class="payout-create__message"><%= @message %></div>
+      <table class="striped">
+        <tbody>
+          <tr>
+            <td class="table-40"><b>お振込金額</b></td>
+            <td class="table-60"><b><%= @stripe_payout_hash[1]["amount"] %>&nbsp;&nbsp;円</b></td>
+          </tr>
+          <tr>
+            <td class="table-40"><b>お振込日</b></td>
+            <td class="table-60"><b><%= Time.zone.at(@stripe_payout_hash[1]["arrival_date"].to_i).strftime("%Y/%m/%d") %></b></td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+      <% if @bank_info[1]["account_number"].present? %>
+        <%= render :partial => "bankaccount", locals: { bank_info: @bank_info[1] } %>
+      <% end %>
+      <br><br>
+      <%= link_to 'ビジネスアカウントへ戻る', account_path(@account.id), :class => "payout-create__btn btn waves-effect" %>
     </div>
   </div>
 </div>

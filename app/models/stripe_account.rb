@@ -335,6 +335,13 @@ class StripeAccount < ApplicationRecord
     end
     [true, nil]
   end
+  
+  def find_idcards
+    cards = stripe_idcards
+    frontcard = cards.find_by(frontback: "front")
+    backcard = cards.find_by(frontback: "back")
+    [frontcard, backcard]
+  end
 
   def hankaku(str)
     if str.nil?

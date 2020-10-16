@@ -11,13 +11,17 @@
         <h1>ビジネスアカウント</h1>
         <div class="account-show__balance">
           <h2>残高</h2>
-          <%= render :partial => "balance" %>
-          <%= link_to '出金', new_account_payout_path(@account.id), :class => "account-show__btn btn waves-effect" %>
+          <%= render :partial => "balance", locals: { balance_info: @balance_info } %>
+          <% if @balance_info["available"][0]["amount"].to_i > 1000 %>
+            <%= link_to '出金', new_account_payout_path(@account.id), :class => "account-show__btn btn waves-effect" %>
+          <% else %>
+            <div class="account-show__btn btn inactive">出金</div>
+          <% end %>
         </div>
         <div class="account-show__bank-account">
           <h2>銀行口座</h2>
           <% if @account_info["bank_info"]["account_number"].present? %>
-            <%= render :partial => "bankaccount" %>
+            <%= render :partial => "bankaccount", locals: { bank_info: @account_info["bank_info"] } %>
             <%= link_to '口座変更', edit_account_bank_path(@account.id), :class => "account-show__btn btn waves-effect" %><br>
           <% else %>
             <%= link_to '登録', new_account_bank_path(@account.id), :class => "account-show__btn btn waves-effect" %><br>
@@ -41,7 +45,7 @@
         <div class="account-show__bank-account">
           <h2>銀行口座</h2>
           <% if @account_info["bank_info"]["bank_name"].present? %>
-            <%= render :partial => "bankaccount" %>
+            <%= render :partial => "bankaccount", locals: { bank_info: @account_info["bank_info"] } %>
             <%= link_to '口座変更', edit_account_bank_path(@account.id), :class => "account-show__btn btn waves-effect" %><br>
           <% else %>
             <%= link_to '登録', new_account_bank_path(@account.id), :class => "account-show__btn btn waves-effect" %><br>

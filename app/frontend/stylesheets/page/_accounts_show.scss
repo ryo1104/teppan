@@ -25,6 +25,10 @@
     &.btn.waves-effect {
       @include button-normal    
     }
+    
+    &.btn.inactive {
+      @include button-inactive
+    }
   }
   
   &__terminate {

@@ -1,0 +1,13 @@
+.payout-create {
+  
+  &__message {
+    font-weight: bold;
+  }
+  
+  &__btn {
+    &.btn.waves-effect {
+      @include button-normal
+    }
+  }
+
+}

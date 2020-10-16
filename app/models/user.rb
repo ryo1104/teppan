@@ -407,7 +407,7 @@ class User < ApplicationRecord
       end
       neta_hash = {}
       netas.each do |neta|
-        neta_hash.merge!({ neta.id => { 'text' => neta.text.truncate(10) } })
+        neta_hash.merge!({ neta.id => { 'text' => neta.title } })
       end
       review_hash = {}
       reviews.each do |review|

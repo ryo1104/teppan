@@ -1,0 +1,32 @@
+.payout-new {
+  
+  &__form {
+    
+  }
+  
+  &__amount {
+    &-available {
+      
+    }
+    
+    &-payout {
+      width: 12rem !important;
+      &-label {
+
+      }
+    }
+  }
+  
+  &__submit {
+    &.btn.waves-effect {
+      @include button-normal
+    }
+  }
+  
+  &__btn {
+    &.btn.inactive {
+      @include button-inactive
+    }
+  }
+
+}

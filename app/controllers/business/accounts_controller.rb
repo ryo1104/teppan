@@ -114,10 +114,12 @@ class Business::AccountsController < ApplicationController
     if @account_info['personal_info']['verification']['status'].present?
       latest_stripe_status = @account_info['personal_info']['verification']['status']
       if latest_stripe_status != @account.status
-        @account.reload if @account.update!(status: latest_stripe_status)
+        @account.reload if @account.update(status: latest_stripe_status)
       end
       unless @account_info["personal_info"]["verification"]["status"] == "verified"
-        find_idcards
+        cards = @account.find_idcards
+        @frontcard = cards[0]
+        @backcard = cards[1]
       end
     end
 
@@ -129,8 +131,8 @@ class Business::AccountsController < ApplicationController
       redirect_to user_path(current_user.id), alert: '残高情報を取得できませんでした。' and return
     end
     
-    puts "ACCOUNT_INFO : "
-    puts @account_info
+    # puts "ACCOUNT_INFO : "
+    # puts @account_info
     
   end
 
@@ -196,9 +198,4 @@ class Business::AccountsController < ApplicationController
     end
   end
   
-  def find_idcards
-    cards = @account.stripe_idcards
-    @frontcard = cards.find_by(frontback: "front")
-    @backcard = cards.find_by(frontback: "back")
-  end
 end

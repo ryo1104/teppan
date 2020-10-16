@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_10_081355) do
+ActiveRecord::Schema.define(version: 2020_10_16_064948) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -224,7 +224,7 @@ ActiveRecord::Schema.define(version: 2020_10_10_081355) do
 
   create_table "stripe_payouts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "stripe_account_id"
-    t.string "stripe_payout_id"
+    t.string "payout_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
