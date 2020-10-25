@@ -42,55 +42,55 @@ class Trade < ApplicationRecord
   end
 
   def self.get_checkout_session(tradeable, buyer, seller, success_path, cancel_path, seller_revenue)
-    if buyer.stripe_cus_id.present?
-      checkout_params = { 
-        customer: buyer.stripe_cus_id,
-        success_url: success_path,
-        cancel_url: cancel_path,
-        payment_method_types: ['card'],
-        line_items: [
-          {
-            name: tradeable.title,
-            amount: tradeable.price,
-            currency: 'jpy',
-            quantity: 1
-          }
-        ],
-        metadata: { neta_id: tradeable.id },
-        payment_intent_data: {
-          transfer_data: {
-            amount: seller_revenue,
-            destination: seller.stripe_account.acct_id
-          },
-          # receipt_email: buyer.email
-          receipt_email: ENV['ADMIN_EMAIL_ADDRESS']
-        } 
-      }
-    else
-      checkout_params = { 
-        customer_email: buyer.email,
-        success_url: success_path,
-        cancel_url: cancel_path,
-        payment_method_types: ['card'],
-        line_items: [
-          {
-            name: tradeable.title,
-            amount: tradeable.price,
-            currency: 'jpy',
-            quantity: 1
-          }
-        ],
-        metadata: { neta_id: tradeable.id },
-        payment_intent_data: {
-          transfer_data: {
-            amount: seller_revenue,
-            destination: seller.stripe_account.acct_id
-          },
-          # receipt_email: buyer.email
-          receipt_email: ENV['ADMIN_EMAIL_ADDRESS'],
-        } 
-      }
-    end
+    checkout_params = if buyer.stripe_cus_id.present?
+                        {
+                          customer: buyer.stripe_cus_id,
+                          success_url: success_path,
+                          cancel_url: cancel_path,
+                          payment_method_types: ['card'],
+                          line_items: [
+                            {
+                              name: tradeable.title,
+                              amount: tradeable.price,
+                              currency: 'jpy',
+                              quantity: 1
+                            }
+                          ],
+                          metadata: { neta_id: tradeable.id },
+                          payment_intent_data: {
+                            transfer_data: {
+                              amount: seller_revenue,
+                              destination: seller.stripe_account.acct_id
+                            },
+                            # receipt_email: buyer.email
+                            receipt_email: ENV['ADMIN_EMAIL_ADDRESS']
+                          }
+                        }
+                      else
+                        {
+                          customer_email: buyer.email,
+                          success_url: success_path,
+                          cancel_url: cancel_path,
+                          payment_method_types: ['card'],
+                          line_items: [
+                            {
+                              name: tradeable.title,
+                              amount: tradeable.price,
+                              currency: 'jpy',
+                              quantity: 1
+                            }
+                          ],
+                          metadata: { neta_id: tradeable.id },
+                          payment_intent_data: {
+                            transfer_data: {
+                              amount: seller_revenue,
+                              destination: seller.stripe_account.acct_id
+                            },
+                            # receipt_email: buyer.email
+                            receipt_email: ENV['ADMIN_EMAIL_ADDRESS']
+                          }
+                        }
+                      end
     JSON.parse(Stripe::Checkout::Session.create(checkout_params).to_s)
   end
 

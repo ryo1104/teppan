@@ -4,8 +4,8 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :confirmable,
-         :trackable, :omniauthable, omniauth_providers: [:google_oauth2, :twitter, :yahoojp]
-         
+         :trackable, :omniauthable, omniauth_providers: %i[google_oauth2 twitter yahoojp]
+
   has_many  :topics, -> { order('netas_count DESC') }
   has_many  :netas, -> { order('average_rate DESC') }
   has_many  :pageviews,  -> { order('created_at DESC') }
@@ -64,14 +64,13 @@ class User < ApplicationRecord
   def temp_nickname
     email.split('@')[0] if email.present?
   end
-  
-  def self.find_or_create_for_oauth(auth)
 
-    if auth.provider == 'twitter'
-      email = auth.info.name + '@twitter-hoge.com' # twitter APIでPrivacyPolicy等の設定をすればauth.info.emailから取得可能になる
-    else
-      email = auth.info.email
-    end
+  def self.find_or_create_for_oauth(auth)
+    email = if auth.provider == 'twitter'
+              auth.info.name + '@twitter-hoge.com' # twitter APIでPrivacyPolicy等の設定をすればauth.info.emailから取得可能になる
+            else
+              auth.info.email
+            end
 
     user = User.find_by(email: email)
     unless user
@@ -79,7 +78,7 @@ class User < ApplicationRecord
                       provider: auth.provider,
                       uid: auth.uid,
                       nickname: auth.info.name,
-                      password: Devise.friendly_token[0, 20] )
+                      password: Devise.friendly_token[0, 20])
       user.skip_confirmation!
       user.save
     end
@@ -136,8 +135,12 @@ class User < ApplicationRecord
     netas.includes(:reviews).where(price: 0)
   end
 
+  def free_reviewed_netas
+    netas.includes(:reviews).where(price: 0).where.not(average_rate: 0)
+  end
+
   def premium_user
-    netas = free_netas
+    netas = free_reviewed_netas
     free_neta_count = netas.count
     avg = Neta.average_rate(netas)
     if free_neta_count >= 3 && avg >= 3
@@ -311,7 +314,7 @@ class User < ApplicationRecord
 
   def get_balance
     if stripe_account.present?
-      res = stripe_account.get_stripe_balance
+      res = stripe_account.get_balance
       if res[0]
         if res[1]['available'][0]['amount'].present?
           [true, res[1]['available'][0]['amount']]
@@ -362,7 +365,7 @@ class User < ApplicationRecord
           user_points = charge_params[:user_points].to_i
           charge_amount = charge_params[:charge_amount].to_i
           if user_points >= charge_amount
-            account_res = stripe_account.get_stripe_account
+            account_res = stripe_account.get_connect_account
             if account_res[0]
               [true, account_res[1]] # Account infoを返す
             else

@@ -1,15 +1,14 @@
 # frozen_string_literal: true
 
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
-
   def google_oauth2
     callback_from(:google_oauth2)
   end
-  
+
   def twitter
     callback_from(:twitter)
   end
-  
+
   def yahoojp
     callback_from(:yahoojp)
   end
@@ -34,7 +33,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   # GET|POST /users/auth/twitter/callback
   def failure
     super
-  end  
+  end
 
   protected
 
@@ -42,5 +41,4 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def after_omniauth_failure_path_for(scope)
     super(scope)
   end
-
 end

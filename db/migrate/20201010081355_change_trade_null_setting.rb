@@ -11,7 +11,7 @@ class ChangeTradeNullSetting < ActiveRecord::Migration[6.0]
     change_column_null :trades, :tradeable_type, false, 0
     change_column :trades, :tradeable_type, :string, default: 0
   end
-  
+
   def down
     change_column_null :trades, :buyer_id, true, nil
     change_column :trades, :buyer_id, :integer, default: nil

@@ -69,7 +69,7 @@ end
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 gem 'devise'
-gem 'jp_prefecture'
+# gem 'jp_prefecture'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'kaminari'

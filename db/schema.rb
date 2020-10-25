@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_16_064948) do
+ActiveRecord::Schema.define(version: 2020_10_24_142737) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -212,6 +212,9 @@ ActiveRecord::Schema.define(version: 2020_10_16_064948) do
     t.datetime "updated_at", null: false
     t.string "status"
     t.string "ext_acct_id"
+    t.index ["acct_id"], name: "index_stripe_accounts_on_acct_id", unique: true
+    t.index ["ext_acct_id"], name: "index_stripe_accounts_on_ext_acct_id", unique: true
+    t.index ["user_id"], name: "index_stripe_accounts_on_user_id", unique: true
   end
 
   create_table "stripe_idcards", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|

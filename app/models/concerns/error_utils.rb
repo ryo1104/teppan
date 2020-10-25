@@ -7,8 +7,7 @@ module ErrorUtils
       Rails.logger.error e.backtrace.join("\n")
     end
   end
-  
+
   # this will be rescued by Rambulance
   class AccessDeniedError < StandardError; end
-  
 end

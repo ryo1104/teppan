@@ -2,7 +2,7 @@ class StripeIdcard < ApplicationRecord
   include StripeUtils
   belongs_to        :stripe_account
   has_one_attached  :image
-  validates :stripe_account_id, presence: true, uniqueness: { scope: :frontback, message: 'IDスキャン登録は表・裏につき1枚ずつです。' }
+  validates :stripe_account_id, presence: true, uniqueness: { scope: :frontback, message: 'につき表面・裏面のスキャンを1つずつご登録下さい。' }
   validate  :check_image
 
   def verification_docs
@@ -16,7 +16,7 @@ class StripeIdcard < ApplicationRecord
       }
     }
   end
-  
+
   def create_stripe_file(file, name)
     File.open("tmp/#{name}", 'wb') { |f| f.write(file.read) }
     file_upload_hash = JSON.parse(Stripe::File.create({ purpose: 'identity_document', file: File.open("tmp/#{name}", 'r') }).to_s)

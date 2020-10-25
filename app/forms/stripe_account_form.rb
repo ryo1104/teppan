@@ -33,22 +33,20 @@ class StripeAccountForm
   validates   :city, presence: true
   validates   :town, presence: true
   validates   :kanji_line1, presence: true
-  validates   :kanji_line2, presence: true
+  # validates   :kanji_line2, presence: true
   validates   :kana_line1, presence: true
-  validates   :kana_line2, presence: true
+  # validates   :kana_line2, presence: true
   validates   :phone, telephone_number: { country: :jp, types: %i[fixed_line mobile] } # uses gem 'telephone_number'
   validates   :user_agreement, presence: true
 
   def birthdate_check
     if birthdate.present?
-      if birthdate > Time.zone.today.prev_year(13)
-        errors.add(:birthdate, '：１３歳未満はご利用できません。') 
-      end
+      errors.add(:birthdate, '：１３歳未満はご利用できません。') if birthdate > Time.zone.today.prev_year(13)
     else
       errors.add(:birthdate, :blank)
     end
   end
-  
+
   def international_phone_number
     phone_object = TelephoneNumber.parse(phone, :jp)
     phone_object.e164_number
@@ -58,21 +56,21 @@ class StripeAccountForm
     phone_object = TelephoneNumber.parse(phone, :jp)
     phone_object.national_number
   end
-  
+
   def self.set_date(stripe_date)
     if stripe_date['year'].present?
       year = stripe_date['year']
       if stripe_date['month'].present?
-        month = stripe_date['month'] 
+        month = stripe_date['month']
         if stripe_date['day'].present?
           day = stripe_date['day']
           return DateTime.new(year, month, day, 0, 0, 0)
         end
       end
     end
-    return nil
+    nil
   end
-  
+
   def set_info(account_info)
     self.last_name_kanji = account_info['personal_info']['last_name_kanji']
     self.last_name_kana = account_info['personal_info']['last_name_kana']
@@ -91,7 +89,19 @@ class StripeAccountForm
     self.phone = account_info['personal_info']['phone']
     self.user_agreement = account_info['personal_info']['verification']
   end
-  
+
+  def self.create_inputs(account_form, remote_ip, mode)
+    ac_params = {
+      business_type: 'individual',
+      individual: account_form.stripe_inputs_individual
+    }
+    ac_params.merge!(type: 'custom', country: 'JP') if mode == 'create'
+    if account_form.user_agreement
+      ac_params.merge!( tos_acceptance: { date: Time.parse(Time.zone.now.to_s).to_i, ip: remote_ip.to_s })
+    end
+    ac_params
+  end
+
   def stripe_inputs_individual
     indiv = {
       last_name: last_name_kanji.present? ? last_name_kanji : nil,
@@ -111,13 +121,13 @@ class StripeAccountForm
         line2: kanji_line2.present? && postal_code.present? ? kanji_line2 : nil
       },
       address_kana: {
-        line1: kana_line1.present? && postal_code.present? ? StripeAccount.hankaku(kana_line1) : nil,
-        line2: kana_line2.present? && postal_code.present? ? StripeAccount.hankaku(kana_line2) : nil
+        line1: kana_line1.present? && postal_code.present? ? JpKana.hankaku(kana_line1) : nil,
+        line2: kana_line2.present? && postal_code.present? ? JpKana.hankaku(kana_line2) : nil
       },
       phone: phone.present? ? international_phone_number : nil,
       email: email.present? ? email : nil
     }
-    
+
     indiv
   end
 
@@ -150,7 +160,7 @@ class StripeAccountForm
     personal_info.merge!({ 'email' => email })
     personal_info.merge!({ 'dob' => { 'year' => year, 'month' => month, 'day' => day } })
     if individual.key?('address_kanji')
-      personal_info.merge!({ 'postal_code' => hankaku(individual['address_kanji']['postal_code']) })
+      personal_info.merge!({ 'postal_code' => JpKana.hankaku(individual['address_kanji']['postal_code']) })
       personal_info.merge!({ 'kanji_state' => individual['address_kanji']['state'] })
       personal_info.merge!({ 'kanji_city'  => individual['address_kanji']['city'] })
       personal_info.merge!({ 'kanji_town'  => individual['address_kanji']['town'] })
@@ -161,8 +171,8 @@ class StripeAccountForm
       personal_info.merge!({ 'kana_state' => individual['address_kana']['state'] })
       personal_info.merge!({ 'kana_city' => individual['address_kana']['city'] })
       personal_info.merge!({ 'kana_town' => individual['address_kana']['town'] })
-      personal_info.merge!({ 'kana_line1' => StripeAccount.hankaku(individual['address_kana']['line1']) })
-      personal_info.merge!({ 'kana_line2' => StripeAccount.hankaku(individual['address_kana']['line2']) })
+      personal_info.merge!({ 'kana_line1' => JpKana.hankaku(individual['address_kana']['line1']) })
+      personal_info.merge!({ 'kana_line2' => JpKana.hankaku(individual['address_kana']['line2']) })
     end
     if individual.key?('phone')
       if individual['phone'].present?
@@ -174,7 +184,6 @@ class StripeAccountForm
 
     [true, personal_info]
   end
-
 
   def self.translate_gender(word)
     case word
@@ -191,3 +200,27 @@ class StripeAccountForm
     end
   end
 end
+
+# def check_inputs(account_params, action)
+#   return [false, "invalid action : #{action}"] unless action == 'update' || action == 'create'
+#   return [false, 'params for :business_type does not exist'] unless account_params.key?(:business_type)
+#   return [false, "invalid business type : #{account_params[:business_type]}"] unless account_params[:business_type] == 'individual'
+#   return [false, 'params for :individual does not exist'] unless account_params.key?(:individual)
+
+#   if action == 'create'
+#     ret = check_create_inputs(account_params)
+#     return [false, ret[1]] unless ret[0]
+#   end
+#   [true, nil]
+# end
+
+# def check_create_inputs(account_params)
+#   return [false, 'params for :type does not exist'] unless account_params.key?(:type)
+#   return [false, "invalid connected account type : #{account_params[:type]}"] unless account_params[:type] == 'custom'
+#   return [false, 'params for :country does not exist'] unless account_params.key?(:country)
+#   return [false, "invalid country : #{account_params[:country]}"] unless account_params[:country] == 'JP'
+#   return [false, 'params for :email does not exist'] unless account_params[:individual].key?(:email)
+#   return [false, 'params for :email is blank'] if account_params[:individual][:email].nil?
+
+#   [true, nil]
+# end

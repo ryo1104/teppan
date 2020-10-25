@@ -79,5 +79,4 @@ class TopicsController < ApplicationController
       false
     end
   end
-  
 end

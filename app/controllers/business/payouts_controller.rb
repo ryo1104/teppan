@@ -5,9 +5,9 @@ class Business::PayoutsController < ApplicationController
     @account = StripeAccount.find(params[:account_id])
     if @account.present?
       if my_info(@account.user.id)
-        @bank_info = @account.get_stripe_ext_account
+        @bank_info = @account.get_ext_account
         if @bank_info[0]
-          @balance = @account.get_stripe_balance
+          @balance = @account.get_balance
           redirect_to user_path(current_user.id), alert: '出金可能残高を取得できませんでした。' and return unless @balance[0]
         else
           Rails.logger.error "Failed to parse bank info from Stripe Account object : #{@bank_info[1]}"
@@ -25,7 +25,7 @@ class Business::PayoutsController < ApplicationController
     @account = StripeAccount.find(params[:account_id])
     if @account.present?
       if my_info(@account.user.id)
-        @bank_info = @account.get_stripe_ext_account
+        @bank_info = @account.get_ext_account
         if @bank_info[0]
           if payout_amount[:amount]
             @stripe_payout_hash = StripePayout.create_stripe_payout(payout_amount[:amount], @account.acct_id)
@@ -35,7 +35,7 @@ class Business::PayoutsController < ApplicationController
                 @message = '銀行振込を受付けました。'
               else
                 Rails.logger.error "Failed to save StripePayout record : acct_id : #{@account.id}, payout_id : #{@stripe_payout_hash[1]['id']}"
-                redirect_to user_path(@user.id), alert: "銀行振込を受付けましたが、一部エラーが発生しています。管理者にお問い合わせ下さい。" and return
+                redirect_to user_path(@user.id), alert: '銀行振込を受付けましたが、一部エラーが発生しています。管理者にお問い合わせ下さい。' and return
               end
             else
               Rails.logger.error "Stripe Payout returned error : #{@stripe_payout_hash[1]}"
@@ -51,7 +51,7 @@ class Business::PayoutsController < ApplicationController
         redirect_to user_path(current_user.id), alert: 'アクセス権がありません。' and return
       end
     else
-        redirect_to user_path(current_user.id), alert: 'ビジネスアカウントを取得できませんでした。' and return
+      redirect_to user_path(current_user.id), alert: 'ビジネスアカウントを取得できませんでした。' and return
     end
   end
 
@@ -60,7 +60,7 @@ class Business::PayoutsController < ApplicationController
   def payout_amount
     params.permit(:account_id, :amount)
   end
-  
+
   def my_info(user_id)
     if current_user.id == user_id
       true

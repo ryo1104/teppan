@@ -51,5 +51,4 @@ class Users::SessionsController < Devise::SessionsController
       true
     end
   end
-  
 end

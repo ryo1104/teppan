@@ -16,7 +16,7 @@ class TradesController < ApplicationController
     @seller = @tradeable.user
     @seller_revenue = Trade.get_seller_revenue(@price)
 
-    @success_path = "http://ec2-52-221-192-110.ap-southeast-1.compute.amazonaws.com:8080/trades/done"
+    @success_path = 'http://ec2-13-250-3-104.ap-southeast-1.compute.amazonaws.com:8080/trades/done'
     @cancel_path = request.url
     @stripe_session = Trade.get_checkout_session(@tradeable, @buyer, @seller, @success_path, @cancel_path, @seller_revenue)
 
@@ -28,9 +28,9 @@ class TradesController < ApplicationController
   #   redirect_to "/#{@resource}/#{@id}", alert: "すでに決済されています。" and return
   # else
   #   # 取引情報を取得
-    # buyer = current_user
-    # seller = User.find(@tradeable.user_id)
-    # @trade_inputs = get_trade_inputs(buyer, seller, charge_params)
+  # buyer = current_user
+  # seller = User.find(@tradeable.user_id)
+  # @trade_inputs = get_trade_inputs(buyer, seller, charge_params)
   #   unless @trade_inputs[0]
   #     redirect_to "/#{@resource}/#{@id}/trades/new", alert: @trade_inputs[1] and return
   #   end
@@ -85,9 +85,8 @@ class TradesController < ApplicationController
       render status: 400
     end
   end
-  
-  def done
-  end
+
+  def done; end
 
   private
 
@@ -103,41 +102,43 @@ class TradesController < ApplicationController
   def session_params
     params.permit(:timestamp)
   end
-  
+
   def fulfill_order(checkout_session)
-    pi_obj =  JSON.parse(Stripe::PaymentIntent.retrieve(checkout_session["payment_intent"]).to_s)
-    return [false, "unable to retrieve payment intent"] unless pi_obj["id"].present?
-    return [false, "unable to retrieve charges"] unless pi_obj["charges"]["data"][0].present?
+    pi_obj = JSON.parse(Stripe::PaymentIntent.retrieve(checkout_session['payment_intent']).to_s)
+    return [false, 'unable to retrieve payment intent'] unless pi_obj['id'].present?
+    return [false, 'unable to retrieve charges'] unless pi_obj['charges']['data'][0].present?
 
-    charge = pi_obj["charges"]["data"][0]
-    seller_acct = StripeAccount.find_by(acct_id: charge["destination"])
-    return [false, "Stripe account not found for #{charge["destination"]}"] unless seller_acct.present?
+    charge = pi_obj['charges']['data'][0]
+    seller_acct = StripeAccount.find_by(acct_id: charge['destination'])
+    return [false, "Stripe account not found for #{charge['destination']}"] unless seller_acct.present?
+
     seller = seller_acct.user
-    
-    if checkout_session["customer_email"].present?
-      buyer = User.find_by(email: checkout_session["customer_email"])
-      return [false, "User not found for email #{checkout_session["customer_email"]}"] unless buyer.present?
-    elsif checkout_session["customer"].present?
-      buyer = User.find_by(stripe_cus_id: checkout_session["customer"])
-      return [false, "User not found for stripe_cus_id #{checkout_session["customer"]}"] unless buyer.present?
-      buyer.update(stripe_cus_id: checkout_session["customer"])
+
+    if checkout_session['customer_email'].present?
+      buyer = User.find_by(email: checkout_session['customer_email'])
+      return [false, "User not found for email #{checkout_session['customer_email']}"] unless buyer.present?
+    elsif checkout_session['customer'].present?
+      buyer = User.find_by(stripe_cus_id: checkout_session['customer'])
+      return [false, "User not found for stripe_cus_id #{checkout_session['customer']}"] unless buyer.present?
+
+      buyer.update(stripe_cus_id: checkout_session['customer'])
     else
-      return [false, "customer info is blank in checkout session"]
-    end
-    
-    if checkout_session["metadata"]["neta_id"].present?
-      neta_id = checkout_session["metadata"]["neta_id"]
-    else
-      return [false, "neta_id is blank in checkout session"]
+      return [false, 'customer info is blank in checkout session']
     end
 
-    trade = Trade.new(buyer_id: buyer.id, seller_id: seller.id, price: charge["amount"].to_i, 
-                      stripe_ch_id: charge["id"], stripe_pi_id: pi_obj["id"],
-                      tradeable_type: "Neta", tradeable_id: neta_id)
-    if trade.save
-      return [true, trade]
+    if checkout_session['metadata']['neta_id'].present?
+      neta_id = checkout_session['metadata']['neta_id']
     else
-      return [false, "Failed to save Trade. buyer_id : #{buyer.id}, seller_id : #{seller.id}, price : #{charge["amount"]}, stripe_ch_id : #{charge["id"]}, stripe_pi_id : #{pi_obj["id"]}, tradeable_type : Neta, tradeable_id : #{neta_id} "]
+      return [false, 'neta_id is blank in checkout session']
+    end
+
+    trade = Trade.new(buyer_id: buyer.id, seller_id: seller.id, price: charge['amount'].to_i,
+                      stripe_ch_id: charge['id'], stripe_pi_id: pi_obj['id'],
+                      tradeable_type: 'Neta', tradeable_id: neta_id)
+    if trade.save
+      [true, trade]
+    else
+      [false, "Failed to save Trade. buyer_id : #{buyer.id}, seller_id : #{seller.id}, price : #{charge['amount']}, stripe_ch_id : #{charge['id']}, stripe_pi_id : #{pi_obj['id']}, tradeable_type : Neta, tradeable_id : #{neta_id} "]
     end
   end
 

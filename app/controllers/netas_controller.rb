@@ -1,5 +1,4 @@
 class NetasController < ApplicationController
-
   def new
     @topic = Topic.find(params[:topic_id])
     @neta = @topic.netas.new
@@ -121,5 +120,4 @@ class NetasController < ApplicationController
   def session_params
     params.require(:neta).permit(:timestamp)
   end
-
 end

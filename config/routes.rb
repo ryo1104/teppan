@@ -15,6 +15,9 @@ Rails.application.routes.draw do
     resources :bookmarks, only: %i[create destroy]
   end
 
+  match '/trades/webhook' => 'trades#webhook', :via => %i[get post]
+  match '/trades/done' => 'trades#done', :via => :get
+
   namespace :hashtags do
     resources :netas, only: [:index]
     resources :autocomplete, only: [:index]
@@ -53,12 +56,9 @@ Rails.application.routes.draw do
       resources :idcards, only: %i[new create]
       resource  :bank, only: %i[new create edit update]
     end
-    resources :idcards, only: %i[destroy]
+    resources :idcards, only: [:destroy]
     resources :bank_autocomplete, only: [:index]
     resources :branch_autocomplete, only: [:index]
   end
 
-  # post '/trades/webhook', to: 'trades#webhook', as: 'trade_webhook'
-  match '/trades/webhook' => 'trades#webhook', :via => [:get,:post]
-  match '/trades/done' => 'trades#done', :via => :get
 end

@@ -62,13 +62,9 @@ class Neta < ApplicationRecord
   def editable
     trades.count == 0
   end
-  
+
   def is_free
-    if price == 0
-      true
-    else
-      false
-    end
+    price == 0
   end
 
   def for_sale

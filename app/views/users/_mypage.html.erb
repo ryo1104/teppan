@@ -8,8 +8,8 @@
 </ul>
 <div class="user-show-contents__tab-panel">
 
-  <h2>投稿ネタ(<%= @posted_netas.count %>件)</h2>
-  <% if @posted_netas.count != 0 %>
+  <h2>投稿ネタ(<%= @posted_netas_count %>件)</h2>
+  <% if @posted_netas_count != 0 %>
     <ul class="user-show-contents__netas collection">
       <%= render partial: "netas/neta", collection: @posted_netas %>
     </ul>
@@ -17,17 +17,17 @@
     <p>（投稿はありません）</p>
   <% end %>
 
-  <% if @draft_netas.count != 0 %>
+  <% if @draft_netas_count != 0 %>
     <hr>
-    <h2>下書きネタ(<%= @draft_netas.count %>件)</h2>
+    <h2>下書きネタ(<%= @draft_netas_count %>件)</h2>
     <ul class="user-show-contents__netas collection">
       <%= render partial: "netas/neta", collection: @draft_netas %>
     </ul>
   <% end %>
 
   <hr>
-  <h2>投稿トピック(<%= @posted_topics.count %>件)</h2>
-  <% if @posted_topics.count != 0 %>
+  <h2>投稿トピック(<%= @posted_topics_count %>件)</h2>
+  <% if @posted_topics_count != 0 %>
     <div class="user-show-contents__topics clearfix">
       <%= render partial: "topics/topic_card", collection: @posted_topics %>
     </div>
@@ -35,7 +35,7 @@
   
   <% if @draft_topics.count != 0 %>
     <hr>
-    <h2>下書きトピック(<%= @draft_topics.count %>件)</h2>
+    <h2>下書きトピック(<%= @draft_topics_count %>件)</h2>
     <div class="user-show-contents__topics">
       <%= render partial: "topics/topic_card", collection: @draft_topics %>
     </div>
@@ -43,8 +43,8 @@
 </div>
 <div class="user-show-contents__tab-panel">
 
-  <h2>購入ネタ(<%= @bought_netas.count %>件)</h2>
-  <% if @bought_netas.count != 0 %>
+  <h2>購入ネタ(<%= @bought_netas_count %>件)</h2>
+  <% if @bought_netas_count != 0 %>
     <ul class="user-show-contents__netas collection">
       <%= render partial: "netas/neta", collection: @bought_netas %>
     </ul>
@@ -54,8 +54,8 @@
 
   <hr>
 
-  <h2>ブックマークしたネタ(<%= @bookmarked_netas.count %>件)</h2>
-  <% if @bookmarked_netas.count != 0 %>
+  <h2>ブックマークしたネタ(<%= @bookmarked_netas_count %>件)</h2>
+  <% if @bookmarked_netas_count != 0 %>
     <ul class="user-show-contents__netas collection">
       <%= render partial: "netas/neta", collection: @bookmarked_netas %>
     </ul>
@@ -65,8 +65,8 @@
 
   <hr>
   
-  <h2>ブックマークしたトピック(<%= @bookmarked_topics.count %>件)</h2>
-  <% if @bookmarked_topics.count != 0 %>
+  <h2>ブックマークしたトピック(<%= @bookmarked_topics_count %>件)</h2>
+  <% if @bookmarked_topics_count != 0 %>
     <div class="user-show-contents__topics">
       <%= render partial: "topics/topic_card", collection: @bookmarked_topics %>
     </div>
@@ -79,9 +79,8 @@
   <h2>ビジネスアカウント</h2>
   <% unless @premium_user[0] %>
   <div class="user-show-contents__n-advance">
-    有料ネタの販売を開始するためには、下記の条件を<strong>両方</strong>満たす必要があります。<br>
-    ・無料ネタ&nbsp;<b>3つ以上</b>投稿<br>
-    ・レビュー平均&nbsp;<b>3.0以上</b><br>
+    有料ネタの販売を開始するためには、下記の条件を満たす必要があります。<br>
+    レビュー平均<b>3.0以上</b>の無料ネタを<b>3つ以上</b>投稿<br>
     <br>
     <table class="striped">
       <tbody>
@@ -128,7 +127,7 @@
 
   <h2>販売実績</h2>
   <% if @account_exists && @sold_netas_info[0] %>
-    <table>
+    <table class="user-show-contents__trades striped">
       <thead>
         <tr>
           <th class="table_header_item">日時</th>

@@ -43,6 +43,11 @@ module WebpackBundleHelper
     path = asset_bundle_path("images/#{entry}")
     favicon_link_tag(path, options)
   end
+  
+  def apple_touch_icon_tag(entry, **options)
+    path = asset_bundle_path("images/#{entry}")
+    favicon_link_tag(path, options)
+  end
 
   private
 

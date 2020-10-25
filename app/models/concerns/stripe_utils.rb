@@ -8,8 +8,8 @@ module StripeUtils
     Stripe.api_key = ENV['STRIPE_SECRET_KEY']
   end
 
-  module ClassMethods
-    def hankaku(str)
+  class JpKana
+    def self.hankaku(str)
       if str.nil?
         nil
       else

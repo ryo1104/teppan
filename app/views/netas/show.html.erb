@@ -34,11 +34,13 @@
                   <div class="btn btn-primary withripple custom inactive">購入</div>
                 <% end %>
               <% else %>
+                <p class="neta-show__text-divider">---------  以下、有料部分   ---------</p>
                 <% if @neta.valuecontent.present? %>
-                  <p class="neta-show__text-divider">---------  以下、有料部分   ---------</p>
                   <div class="neta-show__text--value"><%= @neta.valuecontent %></div>
                 <% end %>
-                <% unless @owner %>
+                <% if @owner %>
+                  <span class="neta-show__price--active">価格：<%= number_to_currency(@neta.price, locale: 'ja') %></span>
+                <% else %>
                   <span class="neta-show__price--inactive"><%= number_to_currency(@purchased.price, locale: 'ja') %>で購入済み</span>
                 <% end %>
               <% end %>

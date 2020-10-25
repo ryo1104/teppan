@@ -1,5 +1,4 @@
 class FollowersController < ApplicationController
-
   def index
     @user = User.find(params[:user_id])
     @followers = @user.followed_users
@@ -12,6 +11,7 @@ class FollowersController < ApplicationController
     else
       Follow.create!(create_params)
     end
+
     @user.reload
     @followed_users = @user.followed_users
   end
