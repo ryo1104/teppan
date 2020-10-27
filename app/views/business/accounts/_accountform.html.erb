@@ -18,8 +18,8 @@
   <%= f.select :gender, [["",""], ["男性","male"], ["女性","female"]], {}, {:class => "browser-default"} %>
 </div>
 <div class="account-form__birthdate">
-  <%= f.label :birthdate, '生年月日', :class => "account-form__birthdate-label" %>
-  <%= f.date_field :birthdate, :value => user.birthdate, :required => true, :class => "account-form__birthdate-field" %>
+  <%= f.label :dob, '生年月日', :class => "account-form__birthdate-label" %>
+  <%= f.date_field :dob, :value => user.birthdate, :required => true, :class => "account-form__birthdate-field" %>
 </div>
 <div class="account-form__postal-code">
   <%= f.label :postal_code, '郵便番号', :class => "account-form__postal-code-label" %>
@@ -27,16 +27,16 @@
 </div>
 <div class="row account-form__address">
   <div class="col s12 m2 account-form__address-head">
-    <%= f.label :state, '都道府県・市区郡', :class => "account-form__address-label" %>
+    <%= f.label :kanji_state, '都道府県・市区郡', :class => "account-form__address-label" %>
   </div>
   <div class="col s4 m2 account-form__address-prefecture">
-    <%= f.text_field :state, :id => "js-prefecture", :placeholder => "例) 東京都", :required => true %>
+    <%= f.text_field :kanji_state, :id => "js-prefecture", :placeholder => "例) 東京都", :required => true %>
   </div>
   <div class="col s8 m3 account-form__address-city">
-    <%= f.text_field :city,  :id => "js-address_city", :placeholder => "例) 千代田区", :required => true %>
+    <%= f.text_field :kanji_city,  :id => "js-address_city", :placeholder => "例) 千代田区", :required => true %>
   </div>
   <div class="col s12 m5 account-form__address-town">
-    <%= f.text_field :town,  :id => "js-address_town", :placeholder => "例) 千代田", :required => true %>
+    <%= f.text_field :kanji_town,  :id => "js-address_town", :placeholder => "例) 千代田", :required => true %>
   </div>
   <div class="col s12 m10 account-form__address-line-kanji">
     <%= f.label :kanji_line1, '番地・号（漢字）', :class => "account-form__address-line-kanji-label" %>
@@ -58,8 +58,8 @@
   <%= f.telephone_field :phone, :size => 15, :maxlength => 14, :required => true, :placeholder => "例) 090-1234-5678" %>
 </div>
 <div class="account-form__user-agreement">
-  <%= f.label :user_agreement do %>
-    <%= f.check_box :user_agreement, :class => 'reset-checkbox', :as => :boolean, :required => true %>
+  <%= f.label :verification do %>
+    <%= f.check_box :verification, :class => 'reset-checkbox', :as => :boolean, :required => true %>
     <span class="account-form__user-agreement-tag">利用規約に同意</span>
   <% end %>
 </div>

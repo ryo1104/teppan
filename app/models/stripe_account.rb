@@ -31,7 +31,7 @@ class StripeAccount < ApplicationRecord
       ErrorUtility.log_and_notify e
       return [false, "Stripe error - #{e.message}"]
     end
-    account_info = StripeAccount.parse_account_info(stripe_account_obj)
+    account_info = StripeAccountForm.parse_account_info(stripe_account_obj)
     if account_info[0]
       [true, account_info[1]]
     else
@@ -47,7 +47,7 @@ class StripeAccount < ApplicationRecord
       ErrorUtility.log_and_notify e
       return [false, "Stripe error - #{e.message}"]
     end
-    account_info = StripeAccount.parse_account_info(stripe_account_obj)
+    account_info = StripeAccountForm.parse_account_info(stripe_account_obj)
     if account_info[0]
       [true, account_info[1]]
     else
@@ -65,7 +65,7 @@ class StripeAccount < ApplicationRecord
       ErrorUtility.log_and_notify e
       return [false, "Stripe error - #{e.message}"]
     end
-    account_info = StripeAccount.parse_account_info(stripe_account_obj)
+    account_info = StripeAccountForm.parse_account_info(stripe_account_obj)
     if account_info[0]
       [true, account_info[1]]
     else
@@ -99,7 +99,7 @@ class StripeAccount < ApplicationRecord
       ErrorUtility.log_and_notify e
       return [false, "Stripe error - #{e.message}"]
     end
-    check_results = StripeAccount.check_results(stripe_balance_obj)
+    check_results = StripeAccountForm.check_results(stripe_balance_obj)
     if check_results[0]
       [true, stripe_balance_obj]
     else
@@ -174,54 +174,5 @@ class StripeAccount < ApplicationRecord
     frontcard = cards.find_by(frontback: 'front')
     backcard = cards.find_by(frontback: 'back')
     [frontcard, backcard]
-  end
-
-  def self.parse_account_info(stripe_account_obj)
-    check_results = StripeAccount.check_results(stripe_account_obj)
-    return [false, check_results[1]] if check_results[0] == false
-
-    personal_info = StripeAccountForm.parse_personal_info(stripe_account_obj['individual'])
-    return [false, personal_info[1]] if personal_info[0] == false
-
-    id = stripe_account_obj['id']
-    tos_acceptance = if stripe_account_obj.key?('tos_acceptance')
-                       stripe_account_obj['tos_acceptance']
-                     else
-                       { 'date' => nil, 'ip' => nil }
-                     end
-
-    payouts_enabled = (stripe_account_obj['payouts_enabled'] if stripe_account_obj.key?('payouts_enabled'))
-    requirements = (stripe_account_obj['requirements'] if stripe_account_obj.key?('requirements'))
-    bank_info = Bank.parse_bank_info(stripe_account_obj)
-    bank_info[1] = { 'bank_name' => nil, 'branch_name' => nil, 'account_number' => nil, 'account_holder_name' => nil } unless bank_info[0]
-    account_info = { 'id' => id, 'personal_info' => personal_info[1], 'tos_acceptance' => tos_acceptance,
-                     'bank_info' => bank_info[1], 'payouts_enabled' => payouts_enabled, 'requirements' => requirements, }
-
-    [true, account_info]
-  end
-
-  def self.check_results(stripe_obj)
-    return [false, 'params for :object does not exist'] if stripe_obj.key?('object') == false
-
-    case stripe_obj['object']
-    when 'account'
-      if stripe_obj.key?('id') == false
-        [false, 'stripe id does not exist']
-      elsif stripe_obj.key?('individual') == false
-        [false, 'params for :individual does not exist']
-      else
-        [true, nil]
-      end
-    when 'balance' then
-      return [false, 'params for :available does not exist'] if stripe_obj.key?('available') == false
-      return [false, 'params for :pending does not exist'] if stripe_obj.key?('pending') == false
-
-      if ENV['RAILS_ENV'] == 'production'
-        return [false, 'livemode is set to false'] unless stripe_obj['livemode']
-      end
-      [true, nil]
-    else
-      [false, 'unknown stripe object type']
-    end
   end
 end

@@ -66,9 +66,12 @@
           <% end %>
           <br>
         </div>
-        <%= link_to '申請を取消', account_path(@account.id), {:method => :delete, :class => "account-show__terminate btn waves-effect", data: { confirm: "本当に申請を取消しますか？" }} %><br>
+        <% unless @account_info["personal_info"]["verification"]["status"] == "verified" %>
+          <%= link_to '申請を取消', account_path(@account.id), {:method => :delete, :class => "account-show__terminate btn waves-effect", data: { confirm: "本当に申請を取消しますか？" }} %><br>
+        <% end %>
       <% end %>
       </div>
     </div>
+    <%= t("accounts.show.test") %>
   </div>
 </div>

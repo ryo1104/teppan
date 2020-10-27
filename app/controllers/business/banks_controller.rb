@@ -16,7 +16,7 @@ class Business::BanksController < ApplicationController
     @account = StripeAccount.find(params[:account_id])
     @ext_acct_form = StripeExtAccountForm.new(create_params)
     if @ext_acct_form.valid?
-      @stripe_bank_inputs = @ext_acct_form.create_stripe_bank_inputs
+      @stripe_bank_inputs = @ext_acct_form.create_bank_inputs
       if @stripe_bank_inputs[0]
         @new_stripe_ba_hash = @account.create_ext_account(@stripe_bank_inputs[1])
         if @new_stripe_ba_hash[0]
@@ -31,7 +31,7 @@ class Business::BanksController < ApplicationController
           redirect_to user_path(@account.user_id), alert: '銀行口座の登録に失敗しました。' and return
         end
       else
-        Rails.logger.error "create_stripe_bank_inputs returned false : #{@stripe_bank_inputs[1]}"
+        Rails.logger.error "create_bank_inputs returned false : #{@stripe_bank_inputs[1]}"
         redirect_to account_path(@account.id), alert: "入力情報に誤りがあります。#{@stripe_bank_inputs[1]}" and return
       end
     else
@@ -53,7 +53,7 @@ class Business::BanksController < ApplicationController
     @old_stripe_bank_id = @account.ext_acct_id
     @ext_acct_form = StripeExtAccountForm.new(create_params)
     if @ext_acct_form.valid?
-      @stripe_bank_inputs = @ext_acct_form.create_stripe_bank_inputs
+      @stripe_bank_inputs = @ext_acct_form.create_bank_inputs
       if @stripe_bank_inputs[0]
         # 新しい口座情報をStripeに登録しdefault accountに指定
         @new_stripe_ba_hash = @account.create_ext_account(@stripe_bank_inputs[1])
@@ -72,11 +72,11 @@ class Business::BanksController < ApplicationController
           redirect_to edit_externalaccount_path(params[:id]), alert: '銀行口座の更新に失敗しました。' and return
         end
       else
-        Rails.logger.error "create_stripe_bank_inputs returned false : #{@stripe_bank_inputs[1]}"
+        Rails.logger.error "create_bank_inputs returned false : #{@stripe_bank_inputs[1]}"
         redirect_to account_path(@account.id), alert: "入力情報に誤りがあります。#{@stripe_bank_inputs[1]}" and return
       end
     else
-      Rails.logger.error "create_stripe_bank_inputs returned false : #{@stripe_bank_inputs[1]}"
+      Rails.logger.error "create_bank_inputs returned false : #{@stripe_bank_inputs[1]}"
       redirect_to edit_externalaccount_path(params[:id]), alert: "銀行口座の更新に失敗しました。#{@stripe_bank_inputs[1]}" and return
     end
   end

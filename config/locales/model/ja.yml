@@ -1,0 +1,95 @@
+ja:
+  activerecord:
+    models:
+      user: ユーザー
+      neta: ネタ
+      topic: トピック
+      stripe_account: ビジネスアカウント
+      stripe_idcard: ご本人様確認書類
+      stripe_payout: 出金
+      bank: 銀行
+      branch: 支店
+      review: レビュー
+      follow: フォロー
+      hashtag: ハッシュタグ
+      bookmark: お気に入り
+      like: イイネ
+      trade: 売買情報
+      violation: 違反報告
+      comment: コメント
+    attributes:
+      banks:    
+        name: 銀行名
+        namekana: 銀行名（カタカナ）
+        namehira: 銀行名（ひらがな）
+        roma: 銀行名（ローマ字）
+      branches:
+        name: 支店名
+        namekana: 支店名（カタカナ）
+        namehira: 支店名（ひらがな）
+        roma: 支店名（ローマ字）
+      comments:
+        text: コメント文
+      hashtags:
+        hashname: 名称
+        hiragana: 読みがな
+      inquiries:
+        email: メールアドレス
+        message: 文章
+      netas:
+        title: タイトル
+        price: 価格
+        average_rate: 評価平均
+        private_flag: 非公開設定
+      reviews:
+        text: レビュー文
+        rate: 点数
+      stripe_accounts:
+        status: 承認ステータス
+      stripe_account_forms:
+        last_name_kanji: 姓（漢字）
+        last_name_kana: 姓（カナ）
+        first_name_kanji: 名（漢字）
+        first_name_kana: 名（カナ）
+        gender: 性別
+        email: メールアドレス
+        dob: 生年月日
+        postal_code: 郵便番号
+        kanji_state: 都道府県
+        kanji_city: 市・区
+        kanji_town: 町
+        kanji_line1: 番地
+        kanji_line2: 建物名
+        kana_line1: 番地（カナ）
+        kana_line2: 建物名（カナ）
+        phone: 電話番号
+        verification: 利用規約
+      stripe_ext_account_forms:
+        bank_name: 銀行名
+        branch_name: 支店名
+        account_number: 口座番号
+        account_holder_name: 口座名義人
+      stripe_idcards:
+        frontback: 表・裏
+      topics:
+        title: タイトル
+        pageviews_count: PV数
+        likes_count: いいね数
+        bookmarks_count: お気に入り数
+        netas_count: ネタ数
+        comments_count: コメント数
+        private_flag: 非公開設定
+      trades:
+        price: 価格
+      user:
+        email: メールアドレス
+        nickname: アカウント名
+        birthdate: 生年月日
+        gender: 性別
+        password: パスワード
+        password_confirmation: パスワード（確認）
+        current_password: 現在のパスワード
+        new_password: 新しいパスワード
+        remember_me: ログイン状態を保持する
+      violations:
+        text: 報告内容

@@ -5,3 +5,4 @@ ja:
       individual:
         verification:
           document: 'ご本人様確認書類'
+      test: 'ロケールテスト'

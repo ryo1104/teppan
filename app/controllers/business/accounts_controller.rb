@@ -3,9 +3,9 @@ class Business::AccountsController < ApplicationController
 
   def new
     @user = User.find(params[:user_id])
-    redirect_to user_path(current_user.id), alert: 'ビジネスアカウントを作成するユーザー条件を満たしていません。' and return unless qualified(@user)
+    redirect_to user_path(current_user.id), alert: I18n.t('controller.account.ineligible') and return unless qualified(@user)
     if @user.stripe_account.present?
-      redirect_to edit_account_path(@user.stripe_account.id), alert: 'すでにビジネスアカウントが存在します。' and return
+      redirect_to edit_account_path(@user.stripe_account.id), alert: I18n.t('controller.account.exists') and return
     else
       @account_form = StripeAccountForm.new
     end
@@ -26,7 +26,7 @@ class Business::AccountsController < ApplicationController
   def create
     @user = User.find(params[:user_id])
     render :new and return if params[:back]
-    redirect_to user_path(current_user.id), alert: 'ビジネスアカウントを作成するユーザー条件を満たしていません。' and return unless qualified(@user)
+    redirect_to user_path(current_user.id), alert: I18n.t('controller.account.ineligible') and return unless qualified(@user)
 
     @account_form = StripeAccountForm.new(form_params)
     render :new and return unless @account_form.valid?
@@ -40,7 +40,8 @@ class Business::AccountsController < ApplicationController
     @stripe_account_info = @account.get_connect_account
     if @stripe_account_info[0]
       @account_form = StripeAccountForm.new
-      @account_form.set_info(@stripe_account_info[1])
+      inputs = @account_form.convert_attributes(@stripe_account_info[1]['personal_info'])
+      @account_form.attributes = inputs
     end
   end
 
@@ -58,14 +59,14 @@ class Business::AccountsController < ApplicationController
     my_info(@account.user_id)
     get_account_info
     update_account_status
-    get_idcards unless @account_info['personal_info']['verification']['status'] == 'verified'
+    get_idcards
     get_balance
   end
 
   def destroy
     @account = StripeAccount.find(params[:id])
     my_info(@account.user_id)
-    redirect_to account_path(@account.id), alert: 'アカウントに残高が残っています。' and return unless @account.zero_balance
+    redirect_to account_path(@account.id), alert: I18n.t('controller.account.residual') and return unless @account.zero_balance
 
     delete_account
   end
@@ -100,7 +101,7 @@ class Business::AccountsController < ApplicationController
       @account_info = stripe_result_acct[1]
     else
       Rails.logger.error "get_connect_account returned false : #{stripe_result_acct[1]}"
-      redirect_to user_path(current_user.id), alert: 'ビジネスアカウント情報を取得できませんでした。' and return
+      redirect_to user_path(current_user.id), alert: I18n.t('controller.account.no_info') and return
     end
   end
 
@@ -110,7 +111,7 @@ class Business::AccountsController < ApplicationController
         if @account.update(status: @account_info['personal_info']['verification']['status'])
           @account.reload
         else
-          raise ActiveRecord::RecordNotSaved, "update_account_status returned false. @account_info['personal_info'] = #{@account_info['personal_info']}"
+          raise ActiveRecord::RecordNotSaved, "update_account_status failed. ['personal_info'] = #{@account_info['personal_info']}"
         end
       end
     end
@@ -121,17 +122,19 @@ class Business::AccountsController < ApplicationController
     if stripe_result[0]
       @account_info = stripe_result[1]
       @account.update!(status: @account_info['personal_info']['verification']['status'])
-      redirect_to account_path(@account.id), notice: 'ビジネスアカウント情報が更新されました。' and return
+      redirect_to account_path(@account.id), notice: I18n.t('controller.account.updated') and return
     else
       Rails.logger.error "update_connect_account returned false : #{stripe_result[1]}"
-      redirect_to edit_account_path(@account.id), alert: 'ビジネスアカウントを更新できませんでした。' and return
+      redirect_to edit_account_path(@account.id), alert: I18n.t('controller.account.not_updated') and return
     end
   end
 
   def get_idcards
-    cards = @account.find_idcards
-    @frontcard = cards[0]
-    @backcard = cards[1]
+    unless @account_info['personal_info']['verification']['status'] == 'verified'
+      cards = @account.find_idcards
+      @frontcard = cards[0]
+      @backcard = cards[1]
+    end
   end
 
   def get_balance
@@ -140,7 +143,7 @@ class Business::AccountsController < ApplicationController
       @balance_info = stripe_result_balance[1]
     else
       Rails.logger.error "get_balance returned false : #{stripe_result_balance[1]}"
-      redirect_to user_path(current_user.id), alert: '残高情報を取得できませんでした。' and return
+      redirect_to user_path(current_user.id), alert: I18n.t('controller.account.nil_balance') and return
     end
   end
 
@@ -150,7 +153,7 @@ class Business::AccountsController < ApplicationController
       add_record
     else
       Rails.logger.error "create_connect_account returned false : #{@stripe_result[1]}.  User ID : #{@user.id}, email : #{@user.email}"
-      redirect_to user_path(@user.id), alert: "ビジネスアカウントを作成できませんでした。#{@stripe_result[1]}" and return
+      redirect_to user_path(@user.id), alert: I18n.t('controller.account.not_created') + @stripe_result[1].to_s and return
     end
   end
 
@@ -158,7 +161,7 @@ class Business::AccountsController < ApplicationController
     @account = StripeAccount.create(user_id: @user.id, acct_id: @stripe_result[1]['id'],
                                     status: @stripe_result[1]['personal_info']['verification']['status'])
     if @account.persisted?
-      redirect_to account_path(@account.id), notice: 'ビジネスアカウントが作成されました。' and return
+      redirect_to account_path(@account.id), notice: I18n.t('controller.account.created') and return
     else
       raise ActiveRecord::RecordNotSaved, "create account failed. user_id: #{@user.id}, acct_id: #{@stripe_result[1]['id']},
                                            status: #{@stripe_result[1]['personal_info']['verification']['status']}"
@@ -170,14 +173,14 @@ class Business::AccountsController < ApplicationController
     if stripe_del_acct_res[0]
       if @account.destroy
         Rails.logger.error "account.destroy succeeded. Account id : #{@account.id}, delete_result = #{stripe_del_acct_res[1]}"
-        redirect_to user_path(current_user.id), alert: '出金用アカウントを削除しました。' and return
+        redirect_to user_path(current_user.id), alert: I18n.t('controller.account.deleted') and return
       else
         Rails.logger.error "account.destroy failed. Account id : #{@account.id}"
-        redirect_to account_path(@account.id), alert: '出金用アカウントを削除できませんでした。' and return
+        redirect_to account_path(@account.id), alert: I18n.t('controller.account.not_deleted') and return
       end
     else
       Rails.logger.error "delete_connect_account failed : #{stripe_del_acct_res[1]}"
-      redirect_to account_path(@account.id), alert: '出金用アカウントを削除できませんでした。' and return
+      redirect_to account_path(@account.id), alert: I18n.t('controller.account.not_deleted') and return
     end
   end
 end

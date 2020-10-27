@@ -15,10 +15,10 @@ class StripeExtAccountForm
   def bank_and_branch_name_check
     if bank_name.present?
       bank = Bank.find_by(name: bank_name)
-      errors.add(:bank_name, :invalid) unless bank.present?
+      errors.add(:bank_name, :not_found) if bank.blank?
       if branch_name.present?
         branch = bank.branches.find_by(name: branch_name)
-        errors.add(:branch_name, :invalid) unless branch.present?
+        errors.add(:branch_name, :not_found) if branch.blank?
       else
         errors.add(:branch_name, :blank)
       end
@@ -34,7 +34,7 @@ class StripeExtAccountForm
     self.account_holder_name = bank_info['account_holder_name']
   end
 
-  def create_stripe_bank_inputs
+  def create_bank_inputs
     bank = Bank.find_by(name: bank_name)
     branch = bank.branches.find_by(name: branch_name)
     if bank.present? && branch.present?

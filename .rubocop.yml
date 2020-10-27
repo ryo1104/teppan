@@ -47,7 +47,7 @@ Style/Documentation:
   Enabled: false
 
 Layout/LineLength:
-  Max: 130
+  Max: 140
   Exclude:
     - '**/spec/**/*'
 
@@ -65,7 +65,7 @@ Metrics/BlockLength:
     - '**/config/routes.rb'
 
 Metrics/AbcSize:
- Max: 35
+ Max: 30
 
 Style/StringLiterals:
   EnforcedStyle: single_quotes
