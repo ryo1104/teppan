@@ -32,7 +32,8 @@ Rambulance.setup do |config|
     # "CanCan::AccessDenied"          => :forbidden,
     # "Pundit::NotAuthorizedError"    => :forbidden,
     # "YourCustomException"           => :not_found
-    'ErrorUtils::AccessDeniedError' => :forbidden
+    'ErrorUtils::AccessDeniedError'   => :forbidden,
+    'StripeUtils::StripeWebhookError' => :bad_request,
   }
 
   # The template name for the layout of the error pages. The default value is

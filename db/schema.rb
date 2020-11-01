@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_24_142737) do
+ActiveRecord::Schema.define(version: 2020_10_31_152442) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -267,6 +267,10 @@ ActiveRecord::Schema.define(version: 2020_10_24_142737) do
     t.integer "seller_id", default: 0, null: false
     t.string "stripe_ch_id"
     t.string "stripe_pi_id"
+    t.integer "seller_revenue"
+    t.integer "fee"
+    t.integer "c_tax"
+    t.index ["buyer_id", "seller_id", "tradeable_type", "tradeable_id"], name: "unique_trade", unique: true
   end
 
   create_table "users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|

@@ -12,7 +12,7 @@
         <div class="account-show__balance">
           <h2>残高</h2>
           <%= render :partial => "balance", locals: { balance_info: @balance_info } %>
-          <% if @balance_info["available"][0]["amount"].to_i > 1000 %>
+          <% if @balance_info["available"][0]["amount"].to_i > @payout_threshold %>
             <%= link_to '出金', new_account_payout_path(@account.id), :class => "account-show__btn btn waves-effect" %>
           <% else %>
             <div class="account-show__btn btn inactive">出金</div>

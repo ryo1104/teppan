@@ -141,6 +141,7 @@ class Business::AccountsController < ApplicationController
     stripe_result_balance = @account.get_balance
     if stripe_result_balance[0]
       @balance_info = stripe_result_balance[1]
+      @payout_threshold = 1000
     else
       Rails.logger.error "get_balance returned false : #{stripe_result_balance[1]}"
       redirect_to user_path(current_user.id), alert: I18n.t('controller.account.nil_balance') and return

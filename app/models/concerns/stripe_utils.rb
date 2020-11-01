@@ -17,4 +17,7 @@ module StripeUtils
       end
     end
   end
+
+  # this will be rescued by Rambulance
+  class StripeWebhookError < StandardError; end
 end
