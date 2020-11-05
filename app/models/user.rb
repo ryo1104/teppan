@@ -15,10 +15,7 @@ class User < ApplicationRecord
   has_many  :follows
   has_many  :reviews
   has_many  :violations
-  has_one   :stripesubscription
   has_one   :stripe_account
-  has_one   :stripeexternalaccount, through: :stripe_account
-  has_one   :stripeidcard, through: :stripe_account
   has_one_attached :image
   has_rich_text :introduction
   validates :email, presence: true, uniqueness: { case_sensitive: false }
@@ -26,7 +23,7 @@ class User < ApplicationRecord
   validate  :image_content_type, if: :was_attached?
   validate  :gender_code_check
   validate  :age_check
-  validates :introduction, length: { maximum: 800 }
+  # validates :introduction, length: { maximum: 800 }
   validate  :stripe_cus_id_check
   validates :follows_count, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :unregistered, inclusion: { in: [true, false] }

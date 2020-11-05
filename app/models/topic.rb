@@ -8,13 +8,8 @@ class Topic < ApplicationRecord
   has_many      :comments,  as: :commentable, dependent: :destroy
   has_many      :likes,     as: :likeable, dependent: :destroy
   validates     :title,     presence: true, uniqueness: { case_sensitive: true }, length: { maximum: 35 }
-  validate      :content_check
-  validate      :header_image_type, if: :was_attached?
-
-  def header_image_type
-    extension = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif']
-    errors.add(:header_image, 'の拡張子はサポートされていません。') unless header_image.content_type.in?(extension)
-  end
+  validate      :check_header_image, if: :was_attached?
+  validate      :content_exists
 
   def was_attached?
     header_image.attached?
@@ -62,12 +57,18 @@ class Topic < ApplicationRecord
 
   private
 
-  def content_check
-    errors.add(:content, ' cannot be blank') unless content.body.present?
-    # Need attachment checks. Below does not work because at this point blob is not attached..
+  def check_header_image
+    errors.add(:header_image, I18n.t('errors.messages.file_size_limit', filesize: '5MB')) if header_image.blob.byte_size > 5.megabyte
+    extension = %w[image/png image/jpg image/jpeg image/gif]
+    errors.add(:header_image, I18n.t('errors.messages.unsupported_file_type')) unless header_image.content_type.in?(extension)
+  end
+
+  def content_exists
+    errors.add(:content, I18n.t('errors.messages.blank')) unless content.body.present?
+    # Need attachment checks. Below does not work because at this point blob is not attached.
     # self.content.embeds.blobs.each do |blob|
-    #   if blob.byte_size.to_i > 10.megabytes
-    #     errors.add(:content, " size must be smaller than 10MB")
+    #   if blob.byte_size.to_i > 5.megabytes
+    #     errors.add(:content, " size must be smaller than 5MB")
     #   end
     # end
   end

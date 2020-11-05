@@ -28,23 +28,39 @@ RSpec.describe Topic, type: :model do
       expect(another_topic.errors[:title]).to include('はすでに存在します。')
     end
 
-    it 'is invalid if title is longer than 30 characters' do
-      topic = build(:topic, :with_user, title: Faker::Lorem.characters(number: 31))
+    it 'is invalid if title is longer than 35 characters' do
+      topic = build(:topic, :with_user, title: Faker::Lorem.characters(number: 36))
       topic.valid?
-      expect(topic.errors[:title]).to include('は30文字以内で入力してください。')
+      expect(topic.errors[:title]).to include('は35文字以内で入力してください。')
     end
 
     it 'is invalid without a content' do
       topic = build(:topic, :with_user, content: nil)
       topic.valid?
-      expect(topic.errors[:content]).to include(' cannot be blank')
+      expect(topic.errors[:content]).to include('を入力してください。')
     end
 
-    it 'is invalid if content text is longer than 200 characters'
-    it 'is valid with attachment image'
-    it 'is invalid if attachment is not image file'
-    it 'is invalid if any single attachment is larger than 5MB'
-    it 'is invalid if total attachment size is larger than 20MB'
+    it 'is invalid if header attachment is not in supported image format' do
+      topic = FactoryBot.create(:topic, :with_user)
+      file = fixture_file_upload('/files/erd.pdf', 'application/pdf')
+      topic.header_image.attach(file)
+      expect(topic.errors[:header_image]).to include('のファイル形式が正しくありません。')
+    end
+    
+    it 'is invalid if attachment size is over 5MB' do
+      topic = FactoryBot.create(:topic, :with_user)
+      file = fixture_file_upload('/files/IMG_6MB.jpeg', 'image/jpeg')
+      topic.header_image.attach(file)
+      expect(topic.errors[:header_image]).to include('のサイズは5MB以下にしてください。')
+    end
+
+    it 'is valid if attachment size is within 5MB' do
+      topic = FactoryBot.create(:topic, :with_user)
+      file = fixture_file_upload('/files/IMG_3MB.jpeg', 'image/jpeg')
+      topic.header_image.attach(file)
+      expect(topic).to be_valid
+    end
+
   end
 
   describe 'method::max_rate' do
@@ -100,19 +116,19 @@ RSpec.describe Topic, type: :model do
     end
   end
 
-  describe 'method::potential_interest(user_id)' do
-    it 'returns true when no bookmark exists on the topic by the user' do
+  describe 'method::bookmarked(user_id)' do
+    it 'returns false when no bookmark exists on the topic by the user' do
       some_user = create(:user)
       some_topic = create(:topic, user: some_user)
       another_user = create(:user)
-      expect(some_topic.potential_interest(another_user.id)).to eq true
+      expect(some_topic.bookmarked(another_user.id)).to eq false
     end
-    it 'returns false when bookmark already exists on the topic by the user' do
+    it 'returns true when bookmark already exists on the topic by the user' do
       some_user = create(:user)
       some_topic = create(:topic, user: some_user)
       another_user = create(:user)
-      create(:interest, interestable: some_topic, user: another_user)
-      expect(some_topic.potential_interest(another_user.id)).to eq false
+      create(:bookmark, bookmarkable: some_topic, user: another_user)
+      expect(some_topic.bookmarked(another_user.id)).to eq true
     end
   end
 
@@ -133,18 +149,4 @@ RSpec.describe Topic, type: :model do
     end
   end
 
-  describe 'method::is_deleteable' do
-    before do
-      @some_user = create(:user)
-      @topic = create(:topic, user: @some_user)
-      @another_user = create(:user)
-    end
-    it 'returns false if neta exists' do
-      create(:neta, topic: @topic, user: @another_user)
-      expect(@topic.is_deleteable).to eq false
-    end
-    it 'returns true if no dependent data exists' do
-      expect(@topic.is_deleteable).to eq true
-    end
-  end
 end
