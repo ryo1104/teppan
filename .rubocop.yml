@@ -10,7 +10,6 @@ AllCops:
     - 'tmp/**/*'
     - 'vendor/**/*'
     - '.git/**/*'
-    - 'spec/**/*'
     - 'db/**/*'
     - 'config/**/*'
     - 'test/**/*'

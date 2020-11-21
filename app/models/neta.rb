@@ -11,7 +11,6 @@ class Neta < ApplicationRecord
   has_many        :rankings, as: :rankable
   has_many        :hashtag_netas
   has_many        :hashtags, through: :hashtag_netas
-  accepts_nested_attributes_for :hashtags
   validates       :title,     presence: true, length: { in: 5..35 }
   validates       :price,     presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 10_000 }
   validates       :private_flag, inclusion: { in: [true, false] }
@@ -140,20 +139,14 @@ class Neta < ApplicationRecord
       hashtags.clear if hashtags.present?
       tag_array.uniq.map do |tag_name|
         hashtag = Hashtag.find_or_create_by(hashname: tag_name)
-        hashtag.update_hiragana
-        hashtag.add_netacount
+        hashtag.update_netacount
         hashtags << hashtag
       end
     end
   end
 
   def delete_hashtags
-    if hashtags.present?
-      hashtags.each do |tag|
-        tag.reduce_netacount
-      end
-      hashtags.clear
-    end
+    hashtags.clear if hashtags.present?
   end
 
   def get_hashtags_str

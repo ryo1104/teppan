@@ -28,16 +28,10 @@ RSpec.describe Comment, type: :model do
       expect(comment.errors[:commentable]).to include('を入力してください')
     end
 
-    it 'is invalid if text is shorter than 2 characters' do
-      comment = Comment.new(commentable: topic, user: user, text: Faker::Lorem.characters(number: 1))
+    it 'is invalid if text is longer than 200 characters' do
+      comment = Comment.new(commentable: topic, user: user, text: Faker::Lorem.characters(number: 201))
       comment.valid?
-      expect(comment.errors[:text]).to include('は2文字以上で入力してください。')
-    end
-
-    it 'is invalid if text is longer than 100 characters' do
-      comment = Comment.new(commentable: topic, user: user, text: Faker::Lorem.characters(number: 101))
-      comment.valid?
-      expect(comment.errors[:text]).to include('は100文字以内で入力してください。')
+      expect(comment.errors[:text]).to include('は200文字以内で入力してください。')
     end
 
     it 'is invalid if likes count is not a number' do
@@ -59,6 +53,12 @@ RSpec.describe Comment, type: :model do
       comment.update(likes_count: -1)
       comment.valid?
       expect(comment.errors[:likes_count]).to include('は0以上の値にしてください。')
+    end
+
+    it 'is invalid if is_deleted flag is nil' do
+      comment = Comment.new(commentable: topic, user: user, text: Faker::Lorem.characters(number: 200), is_deleted: nil)
+      comment.valid?
+      expect(comment.errors[:is_deleted]).to include('が入力にありません。')
     end
   end
 end

@@ -3,10 +3,6 @@ class Bank < ApplicationRecord
   validates :code, presence: true, uniqueness: { case_sensitive: true }
   has_many :branches, dependent: :destroy
 
-  def get_all
-    ZenginCode::Bank.all
-  end
-
   def self.parse_bank_info(stripe_account_obj)
     return [false, 'stripe_account_obj does not exist'] if stripe_account_obj.blank?
     return [false, 'external account info is empty'] unless stripe_account_obj.key?('external_accounts')
@@ -39,4 +35,9 @@ class Bank < ApplicationRecord
 
     [bank.name, branch.name]
   end
+
+  def self.get_zengin_all
+    ZenginCode::Bank.all
+  end
+
 end

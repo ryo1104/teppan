@@ -2,6 +2,7 @@ class StripeAccountForm
   include ActiveModel::Model
   include ActiveModel::Attributes
   include StripeUtils
+  include JpUtils
 
   attribute   :last_name_kanji, :string
   attribute   :last_name_kana, :string

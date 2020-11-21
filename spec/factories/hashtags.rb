@@ -1,8 +1,9 @@
 FactoryBot.define do
   factory :hashtag do
-    sequence(:hashname) { |n| "Hashtag #{n}" }
+    hashname { "Hashtag_#{Faker::Lorem.characters(number: 8)}" }
+    hiragana { 'てすと' }
     hit_count { '0' }
-    neta_count { '1' }
+    neta_count { '0' }
     trait :with_random_hit_count do
       hit_count { Faker::Number.within(range: 0..1000) }
     end

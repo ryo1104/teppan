@@ -5,7 +5,7 @@ RSpec.describe Violation, type: :model do
 
   describe 'Validations' do
     it 'is valid with a user_id, reporter_id, and block flag' do
-      violation = build(:violation, :with_user)
+      violation = build(:violation, :with_user, block: true)
       expect(violation).to be_valid
     end
 
@@ -31,19 +31,13 @@ RSpec.describe Violation, type: :model do
       create(:violation, user: user, reporter_id: 100)
       violation = build(:violation, user: user, reporter_id: 100)
       violation.valid?
-      expect(violation.errors[:user_id]).to include('この通報はすでに存在します。')
+      expect(violation.errors[:user_id]).to include('この違反報告はすでに存在します。')
     end
 
     it 'is invalid if block is blank' do
       violation = build(:violation, :with_user, block: nil)
       violation.valid?
-      expect(violation.errors[:block]).to include('は一覧にありません。')
-    end
-
-    it 'is invalid if block is non boolean' do
-      violation = build(:violation, :with_user, block: 2)
-      violation.valid?
-      expect(violation.errors[:block]).to include('は一覧にありません。')
+      expect(violation.errors[:block]).to include('が入力にありません。')
     end
 
     it 'is valid if block is false boolean' do

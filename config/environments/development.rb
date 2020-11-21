@@ -88,4 +88,8 @@ Rails.application.configure do
   #   Bullet.console = true
   #   Bullet.rails_logger = true
   # end
+  
+  config.log_formatter = proc do |severity, datetime, progname, msg|
+    "[#{severity}] #{datetime}: #{progname} : #{msg}\n"
+  end
 end

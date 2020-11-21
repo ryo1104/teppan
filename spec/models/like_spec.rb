@@ -5,7 +5,7 @@ RSpec.describe Like, type: :model do
   let(:topic)     { FactoryBot.create(:topic, :with_user) }
   let(:neta)      { FactoryBot.create(:neta, :with_user, topic: topic) }
   let(:review)    { Review.new(neta: neta, user: user, rate: 5) }
-  let(:comment)   { FactoryBot.create(:comment, :with_user, commentable: review) }
+  let(:comment)   { FactoryBot.create(:comment, :with_user, commentable: topic) }
 
   describe 'Validations' do
     it 'is valid with a user_id, topic' do
@@ -45,7 +45,7 @@ RSpec.describe Like, type: :model do
       Like.create(likeable: topic, user: user)
       like = Like.new(likeable: topic, user: user)
       like.valid?
-      expect(like.errors[:user_id]).to include('このいいねはすでに存在します。')
+      expect(like.errors[:user_id]).to include('はすでに存在します。')
     end
   end
 end

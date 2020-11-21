@@ -14,5 +14,10 @@ FactoryBot.define do
     trait :with_valuetext do
       sequence(:valuetext) { |n| "Neta valuetext with over 20 characters #{n}" }
     end
+    trait :with_hashtags do
+      after(:create) do |neta|
+        create_list(:hashtag, 3, netas: [neta])
+      end
+    end
   end
 end

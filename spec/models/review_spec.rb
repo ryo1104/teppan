@@ -8,16 +8,11 @@ RSpec.describe Review, type: :model do
   describe 'Validations' do
     it 'is valid with a user_id, neta_id, and rate' do
       review = build(:review, user: user, neta: neta)
-      # puts "--- Inspecting user : #{user.inspect}"
-      # puts "--- Inspecting topic : #{topic.inspect}"
-      # puts "--- Inspecting neta : #{neta.inspect}"
-      # puts "--- Inspecting review : #{review.inspect}"
       expect(review).to be_valid
     end
 
     it 'is invalid without a user' do
       review = build(:review, neta: neta, user: nil)
-      # REVIEW: = Review.new( neta: neta, user: nil, rate: 5 )
       review.valid?
       expect(review.errors[:user]).to include('を入力してください')
     end
@@ -34,10 +29,10 @@ RSpec.describe Review, type: :model do
       expect(review.errors[:rate]).to include('を入力してください。')
     end
 
-    it 'is invalid if rate is negative' do
-      review = build(:review, neta: neta, user: user, rate: -1)
+    it 'is invalid if rate is below 1' do
+      review = build(:review, neta: neta, user: user, rate: 0)
       review.valid?
-      expect(review.errors[:rate]).to include('は0以上の値にしてください。')
+      expect(review.errors[:rate]).to include('は1以上の値にしてください。')
     end
 
     it 'is invalid if rate is greater than 5' do
@@ -63,27 +58,6 @@ RSpec.describe Review, type: :model do
       review = build(:review, neta: neta, user: user)
       review.valid?
       expect(review.errors[:user_id]).to include('このネタへのレビューは存在します。')
-    end
-
-    it 'is invalid if likes count is not a number' do
-      review = create(:review, neta: neta, user: user, likes_count: 0)
-      review.update(likes_count: 'a')
-      review.valid?
-      expect(review.errors[:likes_count]).to include('は数値で入力してください。')
-    end
-
-    it 'is invalid if likes count is not a integer' do
-      review = create(:review, neta: neta, user: user, likes_count: 0)
-      review.update(likes_count: 1.5)
-      review.valid?
-      expect(review.errors[:likes_count]).to include('は整数で入力してください。')
-    end
-
-    it 'is invalid if likes count is negative' do
-      review = create(:review, neta: neta, user: user, likes_count: 0)
-      review.update(likes_count: -1)
-      review.valid?
-      expect(review.errors[:likes_count]).to include('は0以上の値にしてください。')
     end
   end
 end

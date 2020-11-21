@@ -3,28 +3,25 @@ class Hashtag < ApplicationRecord
   has_many  :netas, through: :hashtag_netas
   has_many  :hashtag_hits, dependent: :delete_all
   validates :hashname, presence: true, uniqueness: { case_sensitive: true }, length: { maximum: 30 }
+  validates :hiragana, format: { with: /\A[ぁ-んー－]+\z/, message: I18n.t('errors.messages.hiragana_only') }
   validates :hit_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :neta_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  before_validation :update_hiragana
+  include JpUtils
 
+  # record only 1 hit per day per user
   def add_hit(user)
     from = Time.zone.now - 1.day
     to = Time.zone.now
-    my_count = hashtag_hits.where(user_id: user.id, created_at: from..to).count
-    if my_count == 0
-      hit_count = self.hit_count + 1
+    if hashtag_hits.where(user_id: user.id, created_at: from..to).count == 0
       hashtag_hits.create!(user_id: user.id)
-      update!(hit_count: hit_count)
+      increment(:hit_count, 1)
     end
   end
 
-  def add_netacount
-    neta_count = netas.count
-    update!(neta_count: neta_count + 1)
-  end
-
-  def reduce_netacount
-    neta_count = netas.count
-    update!(neta_count: neta_count - 1) unless neta_count == 0
+  def update_netacount
+    count = netas.count
+    update!(neta_count: count)
   end
 
   def self.fix_netacount
@@ -45,7 +42,15 @@ class Hashtag < ApplicationRecord
   end
 
   def update_hiragana
-    rubyfuri = Rubyfuri::Client.new(ENV['YAHOOJP_ID'])
-    update(hiragana: rubyfuri.furu(hashname))
+    if hashname.present?
+      rubyfuri = Rubyfuri::Client.new(ENV['YAHOOJP_ID'])
+      yomigana = rubyfuri.furu(hashname)
+      if JpKana.is_hiragana(yomigana)
+        self.hiragana = yomigana
+      else
+        Rails.logger.warn("Rubyfuri returned a non hiragana : #{yomigana}")
+        false
+      end
+    end
   end
 end

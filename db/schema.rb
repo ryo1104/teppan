@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_01_160201) do
+ActiveRecord::Schema.define(version: 2020_11_10_160243) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -135,8 +135,7 @@ ActiveRecord::Schema.define(version: 2020_11_01_160201) do
   create_table "hashtag_netas", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "neta_id"
     t.integer "hashtag_id"
-    t.index ["hashtag_id"], name: "index_hashtag_netas_on_hashtag_id"
-    t.index ["neta_id"], name: "index_hashtag_netas_on_neta_id"
+    t.index ["neta_id", "hashtag_id"], name: "index_hashtag_netas_on_neta_id_and_hashtag_id", unique: true
   end
 
   create_table "hashtags", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -202,7 +201,6 @@ ActiveRecord::Schema.define(version: 2020_11_01_160201) do
     t.integer "rate"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "likes_count", default: 0, null: false
   end
 
   create_table "stripe_accounts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -298,9 +296,9 @@ ActiveRecord::Schema.define(version: 2020_11_01_160201) do
 
   create_table "violations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "user_id"
-    t.integer "reporter_id"
+    t.integer "reporter_id", default: 0, null: false
     t.text "text", size: :medium
-    t.integer "block"
+    t.boolean "block", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
