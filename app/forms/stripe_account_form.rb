@@ -73,13 +73,13 @@ class StripeAccountForm
     personal_info
   end
 
-  def self.create_inputs(account_form, remote_ip, mode)
+  def create_inputs(remote_ip, mode)
     ac_params = {
       business_type: 'individual',
-      individual: account_form.create_stripe_individual
+      individual: self.create_stripe_individual
     }
     ac_params.merge!(type: 'custom', country: 'JP') if mode == 'create'
-    if account_form.user_agreement
+    if self.user_agreement
       ac_params.merge!(tos_acceptance: { date: Time.parse(Time.zone.now.to_s).to_i, ip: remote_ip.to_s })
     end
     ac_params.merge!(settings: { payouts: { schedule: { interval: 'manual' } } })

@@ -131,9 +131,9 @@ class Business::AccountsController < ApplicationController
 
   def get_idcards
     unless @account_info['personal_info']['verification']['status'] == 'verified'
-      cards = @account.find_idcards
-      @frontcard = cards[0]
-      @backcard = cards[1]
+      cards = @account.stripe_idcards
+      @frontcard = cards.find_by(frontback: 'front')
+      @backcard = cards.find_by(frontback: 'back')
     end
   end
 

@@ -40,7 +40,7 @@ class StripeAccount < ApplicationRecord
   end
 
   def self.create_connect_account(account_form, remote_ip)
-    stripe_inputs = StripeAccountForm.create_inputs(account_form, remote_ip, 'create')
+    stripe_inputs = account_form.create_inputs(remote_ip, 'create')
     begin
       stripe_account_obj = JSON.parse(Stripe::Account.create(stripe_inputs).to_s)
     rescue StandardError => e
@@ -51,14 +51,14 @@ class StripeAccount < ApplicationRecord
     if account_info[0]
       [true, account_info[1]]
     else
-      [false, account_info[1]]
+      [false, "error in parse_account_info : #{account_info[1]}"]
     end
   end
 
   def update_connect_account(account_form, remote_ip)
     return [false, 'acct_id is blank'] if acct_id.blank?
 
-    stripe_inputs = StripeAccountForm.create_inputs(account_form, remote_ip, 'update')
+    stripe_inputs = account_form.create_inputs(remote_ip, 'update')
     begin
       stripe_account_obj = JSON.parse(Stripe::Account.update(acct_id, stripe_inputs).to_s)
     rescue StandardError => e
@@ -69,7 +69,7 @@ class StripeAccount < ApplicationRecord
     if account_info[0]
       [true, account_info[1]]
     else
-      [false, account_info[1]]
+      [false, "error in parse_account_info : #{account_info[1]}"]
     end
   end
 
@@ -84,7 +84,11 @@ class StripeAccount < ApplicationRecord
       return [false, "Stripe error - #{e.message}"]
     end
     if deleted_stripe_account['deleted']
-      [true, { 'account' => deleted_stripe_account }]
+      if update(status: 'deleted')
+        [true, { 'account' => deleted_stripe_account }]
+      else
+        [false, 'account status was not updated']
+      end
     else
       [false, 'account was not deleted for some reason']
     end
@@ -143,36 +147,67 @@ class StripeAccount < ApplicationRecord
 
     begin
       res = JSON.parse(Stripe::Account.create_external_account(acct_id, stripe_bank_inputs).to_s)
+    rescue StandardError => e
+      [false, "Stripe error - #{e.message}"]
+    end
+
+    if res.present?
       if res.key?('id')
         [true, res]
       else
         [false, 'Failed to create external account']
       end
-    rescue StandardError => e
-      [false, "Stripe create_external_account error - #{e.message}"]
+    else
+      [false, 'Stripe returned nil']
     end
   end
 
-  def delete_ext_account(old_stripe_bank_id)
+  def delete_ext_account(target_stripe_bank_id)
     return [false, 'acct_id is blank'] if acct_id.blank?
     return [false, 'ext_acct_id is blank'] if ext_acct_id.blank?
 
+    check_default_acct = not_default_ext_acct(target_stripe_bank_id)
+    return [false, check_default_acct[1]] unless check_default_acct[0]
+
     begin
-      res = JSON.parse(Stripe::Account.delete_external_account(acct_id, old_stripe_bank_id).to_s)
-      if res.key?('deleted') && res['deleted'] == true
-        [true, res]
-      else
-        [false, 'Failed to delete external account']
-      end
+      res = JSON.parse(Stripe::Account.delete_external_account(acct_id, target_stripe_bank_id).to_s)
     rescue StandardError => e
       [false, "Stripe error - #{e.message}"]
     end
+
+    return [false, 'Stripe returned nil'] if res.blank?
+
+    if res.key?('deleted') && res['deleted'] == true
+      [true, res]
+    else
+      [false, 'Failed to delete external account']
+    end
   end
 
-  def find_idcards
-    cards = stripe_idcards
-    frontcard = cards.find_by(frontback: 'front')
-    backcard = cards.find_by(frontback: 'back')
-    [frontcard, backcard]
+  # def find_idcards
+  #   cards = stripe_idcards
+  #   frontcard = cards.find_by(frontback: 'front')
+  #   backcard = cards.find_by(frontback: 'back')
+  #   [frontcard, backcard]
+  # end
+
+  private
+
+  def not_default_ext_acct(old_stripe_bank_id)
+    bank_accounts = JSON.parse(Stripe::Account.list_external_accounts(acct_id, { limit: 10, object: 'bank_account' }).to_s)
+    if bank_accounts.key?('object') && bank_accounts['object'] == 'list'
+      bank_accounts['data'].each do |bank_acct|
+        if bank_acct['id'] == old_stripe_bank_id
+          if bank_acct['default_for_currency']
+            return [false, "this ext_acct #{old_stripe_bank_id} is the default account so it cannot be deleted."]
+          else
+            return [true, bank_acct['id']]
+          end
+        end
+      end
+      [false, "ext_acct #{old_stripe_bank_id} is not registered with this connect account"]
+    else
+      [false, 'empty list from stripe']
+    end
   end
 end
