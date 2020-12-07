@@ -127,6 +127,7 @@ ja:
       unsupported_file_type: のファイル形式が正しくありません。
       file_size_limit: のサイズは%{filesize}以下にしてください。
       hiragana_only: はひらがなのみ入力可能です。
+      underage: ：%{age_limit}歳未満はご利用できません。
     template:
       body: 次の項目を確認してください。
       header:

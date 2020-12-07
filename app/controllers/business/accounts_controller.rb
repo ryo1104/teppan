@@ -39,9 +39,15 @@ class Business::AccountsController < ApplicationController
     my_info(@account.user_id)
     @stripe_account_info = @account.get_connect_account
     if @stripe_account_info[0]
-      @account_form = StripeAccountForm.new
-      inputs = @account_form.convert_attributes(@stripe_account_info[1]['personal_info'])
-      @account_form.attributes = inputs
+      converted_res = StripeAccountForm.convert_attributes(@stripe_account_info[1]['personal_info'])
+      unless converted_res
+        @account_form = StripeAccountForm.new
+        @account_form.attributes = converted_res
+      else
+        redirect_to account_path(@account.id), alert: I18n.t('controller.account.not_retrieved') and return
+      end
+    else
+      redirect_to account_path(@account.id), alert: I18n.t('controller.account.not_retrieved') and return
     end
   end
 

@@ -43,117 +43,41 @@ class StripeAccountForm
 
   def dob_check
     if dob.present?
-      errors.add(:dob, '：１３歳未満はご利用できません。') if dob > Time.zone.today.prev_year(13)
+      errors.add(:dob, I18n.t('errors.messages.underage', age_limit: '13')) if dob > Time.zone.today.prev_year(13)
     else
       errors.add(:dob, :blank)
     end
   end
 
-  def international_phone_number
-    phone_object = TelephoneNumber.parse(phone, :jp)
-    phone_object.e164_number
-  end
-
-  def national_phone_number
-    phone_object = TelephoneNumber.parse(phone, :jp)
-    phone_object.national_number
-  end
-
-  def self.convert_to_date(stripe_date)
-    return [false, 'year is blank'] if stripe_date['year'].blank?
-    return [false, 'month is blank'] if stripe_date['month'].blank?
-    return [false, 'day is blank'] if stripe_date['day'].blank?
-
-    DateTime.new(stripe_date['year'], stripe_date['month'], stripe_date['day'], 0, 0, 0)
-  end
-
-  def convert_attributes(personal_info)
-    personal_info['gender'] = StripeAccountForm.translate_gender(personal_info['gender'])
-    personal_info['dob'] = StripeAccountForm.convert_to_date(personal_info['dob'])
-    personal_info
-  end
-
   def create_inputs(remote_ip, mode)
     ac_params = {
       business_type: 'individual',
-      individual: self.create_stripe_individual
+      individual: create_stripe_individual
     }
     ac_params.merge!(type: 'custom', country: 'JP') if mode == 'create'
-    if self.user_agreement
+    if self.verification
       ac_params.merge!(tos_acceptance: { date: Time.parse(Time.zone.now.to_s).to_i, ip: remote_ip.to_s })
     end
     ac_params.merge!(settings: { payouts: { schedule: { interval: 'manual' } } })
     ac_params
   end
 
-  def create_stripe_individual
-    indiv = {
-      last_name: last_name_kanji.presence,
-      last_name_kanji: last_name_kanji.presence,
-      last_name_kana: last_name_kana.presence,
-      first_name: first_name_kanji.presence,
-      first_name_kanji: first_name_kanji.presence,
-      first_name_kana: first_name_kana.presence,
-      email: email.presence,
-      gender: gender.presence,
-      dob: create_stripe_dob,
-      phone: phone.present? ? international_phone_number : nil,
-    }
-    indiv.merge!(create_stripe_address)
-    indiv
-  end
-
-  def create_stripe_dob
-    if dob.present?
-      { year: dob.year.to_s, month: dob.month.to_s, day: dob.day.to_s }
+  def international_phone_number
+    phone_object = TelephoneNumber.parse(phone, :jp)
+    if phone_object.valid?
+      phone_object.e164_number
     else
-      {}
+      false
     end
   end
 
-  def create_stripe_address
-    if postal_code.present?
-      {
-        address_kanji: {
-          postal_code: postal_code,
-          state: kanji_state.presence,
-          city: kanji_city.presence,
-          town: kanji_town.presence,
-          line1: kanji_line1.presence,
-          line2: kanji_line2.presence,
-        },
-        address_kana: {
-          line1: kana_line1.present? ? JpKana.hankaku(kana_line1) : nil,
-          line2: kana_line2.present? ? JpKana.hankaku(kana_line2) : nil,
-        },
-      }
+  def national_phone_number
+    phone_object = TelephoneNumber.parse(phone, :jp)
+    if phone_object.valid?
+      phone_object.national_number
     else
-      {}
+      false
     end
-  end
-
-  def self.parse_account_info(stripe_account_obj)
-    check_results = StripeAccountForm.check_results(stripe_account_obj)
-    return [false, check_results[1]] if check_results[0] == false
-
-    personal_info = StripeAccountForm.parse_personal_info(stripe_account_obj['individual'])
-    return [false, personal_info[1]] if personal_info[0] == false
-
-    id = stripe_account_obj['id']
-    tos_acceptance = if stripe_account_obj.key?('tos_acceptance')
-                       stripe_account_obj['tos_acceptance']
-                     else
-                       { 'date' => nil, 'ip' => nil }
-                     end
-
-    payouts_enabled = (stripe_account_obj['payouts_enabled'] if stripe_account_obj.key?('payouts_enabled'))
-    requirements = (stripe_account_obj['requirements'] if stripe_account_obj.key?('requirements'))
-    bank_info = Bank.parse_bank_info(stripe_account_obj)
-    bank_info[1] = { 'bank_name' => nil, 'branch_name' => nil, 'account_number' => nil, 'account_holder_name' => nil } unless bank_info[0]
-    account_info = { 'id' => id, 'personal_info' => personal_info[1], 'tos_acceptance' => tos_acceptance,
-                     'bank_info' => bank_info[1], 'payouts_enabled' => payouts_enabled, 'requirements' => requirements, }
-
-    [true, account_info]
   end
 
   def self.check_results(stripe_obj)
@@ -179,6 +103,30 @@ class StripeAccountForm
     else
       [false, 'unknown stripe object type']
     end
+  end
+
+  def self.parse_account_info(stripe_account_obj)
+    check_results = StripeAccountForm.check_results(stripe_account_obj)
+    return [false, check_results[1]] if check_results[0] == false
+
+    personal_info = StripeAccountForm.parse_personal_info(stripe_account_obj['individual'])
+    return [false, personal_info[1]] if personal_info[0] == false
+
+    id = stripe_account_obj['id']
+    if stripe_account_obj.key?('tos_acceptance')
+     tos_acceptance = stripe_account_obj['tos_acceptance']
+    else
+     tos_acceptance = { 'date' => nil, 'ip' => nil }
+    end
+
+    payouts_enabled = (stripe_account_obj['payouts_enabled'] if stripe_account_obj.key?('payouts_enabled'))
+    requirements = (stripe_account_obj['requirements'] if stripe_account_obj.key?('requirements'))
+    bank_info = Bank.parse_bank_info(stripe_account_obj)
+    bank_info[1] = { 'bank_name' => nil, 'branch_name' => nil, 'account_number' => nil, 'account_holder_name' => nil } unless bank_info[0]
+    account_info = { 'id' => id, 'personal_info' => personal_info[1], 'tos_acceptance' => tos_acceptance,
+                     'bank_info' => bank_info[1], 'payouts_enabled' => payouts_enabled, 'requirements' => requirements, }
+
+    [true, account_info]
   end
 
   def self.parse_personal_info(individual)
@@ -241,6 +189,18 @@ class StripeAccountForm
     address
   end
 
+  def self.convert_attributes(personal_info)
+    gender_res = StripeAccountForm.translate_gender(personal_info['gender'])
+    return false unless gender_res
+
+    date_res = StripeAccountForm.convert_to_date(personal_info['dob'])
+    return false unless date_res
+    
+    personal_info['gender'] = gender_res
+    personal_info['dob'] = date_res
+    personal_info
+  end
+
   def self.translate_gender(word)
     case word
     when 'male'
@@ -253,6 +213,63 @@ class StripeAccountForm
       'female'
     else
       ''
+    end
+  end
+
+  def self.convert_to_date(stripe_date)
+    return false if stripe_date['year'].blank?
+    return false if stripe_date['month'].blank?
+    return false if stripe_date['day'].blank?
+
+    DateTime.new(stripe_date['year'], stripe_date['month'], stripe_date['day'], 0, 0, 0)
+  end
+
+
+  private
+  
+  def create_stripe_individual
+    indiv = {
+      last_name: last_name_kanji.presence,
+      last_name_kanji: last_name_kanji.presence,
+      last_name_kana: last_name_kana.presence,
+      first_name: first_name_kanji.presence,
+      first_name_kanji: first_name_kanji.presence,
+      first_name_kana: first_name_kana.presence,
+      email: email.presence,
+      gender: gender.presence,
+      dob: create_stripe_dob,
+      phone: phone.present? ? international_phone_number : nil,
+    }
+    indiv.merge!(create_stripe_address)
+    indiv
+  end
+
+  def create_stripe_dob
+    if dob.present?
+      { year: dob.year.to_s, month: dob.month.to_s, day: dob.day.to_s }
+    else
+      {}
+    end
+  end
+
+  def create_stripe_address
+    if postal_code.present?
+      {
+        address_kanji: {
+          postal_code: postal_code,
+          state: kanji_state.presence,
+          city: kanji_city.presence,
+          town: kanji_town.presence,
+          line1: kanji_line1.presence,
+          line2: kanji_line2.presence,
+        },
+        address_kana: {
+          line1: kana_line1.present? ? JpKana.hankaku(kana_line1) : nil,
+          line2: kana_line2.present? ? JpKana.hankaku(kana_line2) : nil,
+        },
+      }
+    else
+      {}
     end
   end
 end
