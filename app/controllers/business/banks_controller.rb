@@ -42,10 +42,7 @@ class Business::BanksController < ApplicationController
   def edit
     @account = StripeAccount.find(params[:account_id])
     @bank_info = @account.get_ext_account
-    if @bank_info[0]
-      @ext_acct_form = StripeExtAccountForm.new
-      @ext_acct_form.set_info(@bank_info[1])
-    end
+    @ext_acct_form = StripeExtAccountForm.new(@bank_info[1]) if @bank_info[0]
   end
 
   def update
