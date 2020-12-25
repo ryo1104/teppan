@@ -85,159 +85,41 @@ RSpec.describe StripeAccount, type: :model do
       'type' => 'custom'
     }
   end
-  # let(:account_info_hash) do
-  #   { 'id' => 'acct_1FHvBMCx2rPekxgm',
-  #     'personal_info' => {
-  #       'last_name_kanji' => '山田',
-  #       'last_name_kana' => 'ヤマダ',
-  #       'first_name_kanji' => '賢介',
-  #       'first_name_kana' => 'ケンスケ',
-  #       'gender' => '男性',
-  #       'email' => 'kenske@hoge.com',
-  #       'dob' => { 'year' => 1977, 'month' => 5, 'day' => 24 },
-  #       'postal_code' => '1010021',
-  #       'kanji_state' => '東京都',
-  #       'kanji_city' => '千代田区',
-  #       'kanji_town' => '外神田２丁目',
-  #       'kanji_line1' => '１５−２−２０１',
-  #       'kanji_line2' => '大山ビル',
-  #       'kana_state' => 'ﾄｳｷﾖｳﾄ',
-  #       'kana_city' => 'ﾁﾖﾀﾞｸ',
-  #       'kana_town' => 'ｿﾄｶﾝﾀﾞ 2-',
-  #       'kana_line1' => '15-2-201',
-  #       'kana_line2' => 'オオヤマビル',
-  #       'phone' => '03-7633-2219',
-  #       'verification' => {
-  #         'details' => 'Provided identity information could not be verified',
-  #         'details_code' => 'failed_keyed_identity',
-  #         'document' => { 'back' => nil, 'details' => 'Scan failed', 'details_code' => nil, 'front' => nil },
-  #         'status' => 'unverified'
-  #       }
-  #     },
-  #     'tos_acceptance' => { 'date' => 1_566_575_169, 'ip' => '202.32.34.208', 'user_agent' => nil },
-  #     'bank_info' => { 'bank_name' => nil, 'branch_name' => nil, 'account_number' => nil, 'account_holder_name' => nil },
-  #     'payouts_enabled' => false,
-  #     'requirements' =>
-  #     { 'current_deadline' => nil, 'currently_due' => [], 'disabled_reason' => 'rejected.other', 'eventually_due' => [], 'past_due' => [] } }
-  # end
-  # let(:filled_personal_info) do
-  #   {
-  #     'last_name_kanji' => '山田',
-  #     'last_name_kana' => 'ヤマダ',
-  #     'first_name_kanji' => '賢介',
-  #     'first_name_kana' => 'ケンスケ',
-  #     'gender' => '男性',
-  #     'email' => 'kenske@hoge.com',
-  #     'dob' => { 'year' => 1977, 'month' => 5, 'day' => 24 },
-  #     'postal_code' => '1010021',
-  #     'kanji_state' => '東京都',
-  #     'kanji_city' => '千代田区',
-  #     'kanji_town' => '外神田２丁目',
-  #     'kanji_line1' => '１５−２−２０１',
-  #     'kanji_line2' => '大山ビル',
-  #     'kana_state' => 'ﾄｳｷﾖｳﾄ',
-  #     'kana_city' => 'ﾁﾖﾀﾞｸ',
-  #     'kana_town' => 'ｿﾄｶﾝﾀﾞ 2-',
-  #     'kana_line1' => '15-2-201',
-  #     'kana_line2' => 'ｵｵﾔﾏﾋﾞﾙ',
-  #     'phone' => '+81376332219',
-  #     'verification' =>
-  #       { 'details' => 'Provided identity information could not be verified',
-  #         'details_code' => 'failed_keyed_identity',
-  #         'document' => { 'back' => nil, 'details' => 'Scan failed', 'details_code' => nil, 'front' => nil },
-  #         'status' => 'unverified' }
-  #   }
-  # end
-  # let(:blank_stripe_account_obj) do
-  #   {
-  #     'id' => 'acct_1EfsQ9DbspCWjyde',
-  #     'object' => 'account',
-  #     'business_profile' => { 'mcc' => nil, 'name' => nil, 'product_description' => nil, 'support_address' => nil, 'support_email' => nil, 'support_phone' => nil, 'support_url' => nil, 'url' => nil },
-  #     'business_type' => 'individual',
-  #     'capabilities' => { 'legacy_payments' => 'active' },
-  #     'charges_enabled' => false,
-  #     'country' => 'JP',
-  #     'created' => 1_559_238_730,
-  #     'default_currency' => 'jpy',
-  #     'details_submitted' => false,
-  #     'email' => nil,
-  #     'external_accounts' => { 'object' => 'list', 'data' => [], 'has_more' => false, 'total_count' => 0, 'url' => '/v1/accounts/acct_1EfsQ9DbspCWjyde/external_accounts' },
-  #     'individual' =>
-  #       {
-  #         'id' => 'person_FACppgeqFMxBQW',
-  #         'object' => 'person',
-  #         'account' => 'acct_1EfsQ9DbspCWjyde',
-  #         'address_kana' => { 'city' => nil, 'country' => 'JP', 'line1' => nil, 'line2' => nil, 'postal_code' => nil, 'state' => nil, 'town' => nil },
-  #         'address_kanji' => { 'city' => nil, 'country' => 'JP', 'line1' => nil, 'line2' => nil, 'postal_code' => nil, 'state' => nil, 'town' => nil },
-  #         'created' => 1_559_238_730,
-  #         'dob' => { 'day' => nil, 'month' => nil, 'year' => nil },
-  #         'email' => 'shunpei@hogehoge.com',
-  #         'first_name_kana' => nil,
-  #         'first_name_kanji' => nil,
-  #         'gender' => 'male',
-  #         'last_name_kana' => nil,
-  #         'last_name_kanji' => nil,
-  #         'metadata' => {},
-  #         'relationship' => { 'account_opener' => true, 'director' => false, 'executive' => false, 'owner' => false, 'percent_ownership' => nil, 'title' => nil },
-  #         'requirements' => { 'currently_due' => ['dob.day', 'dob.month', 'dob.year', 'first_name_kana', 'first_name_kanji', 'last_name_kana', 'last_name_kanji'],
-  #                             'eventually_due' => ['dob.day', 'dob.month', 'dob.year', 'first_name_kana', 'first_name_kanji', 'last_name_kana', 'last_name_kanji'],
-  #                             'past_due' => ['dob.day', 'dob.month', 'dob.year', 'first_name_kana', 'first_name_kanji', 'last_name_kana', 'last_name_kanji'],
-  #                             'pending_verification' => [] },
-  #         'verification' => { 'details' => nil, 'details_code' => nil, 'document' => { 'back' => nil, 'details' => nil, 'details_code' => nil, 'front' => nil }, 'status' => 'unverified' }
-  #       },
-  #     'metadata' => {},
-  #     'payouts_enabled' => false,
-  #     'requirements' =>
-  #       {
-  #         'current_deadline' => nil,
-  #         'currently_due' => ['external_account', 'individual.address_kana.line1', 'individual.address_kanji.line1', 'individual.dob.day', 'individual.dob.month', 'individual.dob.year', 'individual.first_name_kana', 'individual.first_name_kanji', 'individual.last_name_kana', 'individual.last_name_kanji', 'individual.phone', 'tos_acceptance.date', 'tos_acceptance.ip'],
-  #         'disabled_reason' => 'requirements.past_due',
-  #         'eventually_due' => ['external_account', 'individual.address_kana.line1', 'individual.address_kanji.line1', 'individual.dob.day', 'individual.dob.month', 'individual.dob.year', 'individual.first_name_kana', 'individual.first_name_kanji', 'individual.last_name_kana', 'individual.last_name_kanji', 'individual.phone', 'tos_acceptance.date', 'tos_acceptance.ip'],
-  #         'past_due' => ['individual.address_kana.line1', 'individual.address_kanji.line1', 'individual.dob.day', 'individual.dob.month', 'individual.dob.year', 'individual.first_name_kana', 'individual.first_name_kanji', 'individual.last_name_kana', 'individual.last_name_kanji', 'individual.phone'],
-  #         'pending_verification' => []
-  #       },
-  #     'settings' =>
-  #       {
-  #         'branding' => { 'icon' => nil, 'logo' => nil, 'primary_color' => nil },
-  #         'card_payments' => { 'decline_on' => { 'avs_failure' => false, 'cvc_failure' => false },
-  #                             'statement_descriptor_prefix' => nil },
-  #         'dashboard' => { 'display_name' => nil, 'timezone' => 'Etc/UTC' },
-  #         'payments' => { 'statement_descriptor' => '', 'statement_descriptor_kana' => nil, 'statement_descriptor_kanji' => nil },
-  #         'payouts' => { 'debit_negative_balances' => false, 'schedule' => { 'delay_days' => 4, 'interval' => 'weekly', 'weekly_anchor' => 'friday' }, 'statement_descriptor' => nil }
-  #       },
-  #     'tos_acceptance' => { 'date' => nil, 'ip' => nil, 'user_agent' => nil },
-  #     'type' => 'custom'
-  #   }
-  # end
-  # let(:blank_personal_info) do
-  #   {
-  #     'last_name_kanji' => nil,
-  #     'last_name_kana' => nil,
-  #     'first_name_kanji' => nil,
-  #     'first_name_kana' => nil,
-  #     'gender' => '男性',
-  #     'email' => 'shunpei@hogehoge.com',
-  #     'dob' => { 'year' => nil, 'month' => nil, 'day' => nil },
-  #     'postal_code' => nil,
-  #     'kanji_state' => nil,
-  #     'kanji_city' => nil,
-  #     'kanji_town' => nil,
-  #     'kanji_line1' => nil,
-  #     'kanji_line2' => nil,
-  #     'kana_state' => nil,
-  #     'kana_city' => nil,
-  #     'kana_town' => nil,
-  #     'kana_line1' => nil,
-  #     'kana_line2' => nil,
-  #     'verification' =>
-  #       {
-  #         'details' => nil,
-  #         'details_code' => nil,
-  #         'document' => { 'back' => nil, 'details' => nil, 'details_code' => nil, 'front' => nil },
-  #         'status' => 'unverified'
-  #       }
-  #   }
-  # end
+  let(:account_info_hash) do
+    { 'id' => 'acct_1FHvBMCx2rPekxgm',
+      'personal_info' => {
+        'last_name_kanji' => '山田',
+        'last_name_kana' => 'ヤマダ',
+        'first_name_kanji' => '賢介',
+        'first_name_kana' => 'ケンスケ',
+        'gender' => '男性',
+        'email' => 'kenske@hoge.com',
+        'dob' => { 'year' => 1977, 'month' => 5, 'day' => 24 },
+        'postal_code' => '1010021',
+        'kanji_state' => '東京都',
+        'kanji_city' => '千代田区',
+        'kanji_town' => '外神田２丁目',
+        'kanji_line1' => '１５−２−２０１',
+        'kanji_line2' => '大山ビル',
+        'kana_state' => 'ﾄｳｷﾖｳﾄ',
+        'kana_city' => 'ﾁﾖﾀﾞｸ',
+        'kana_town' => 'ｿﾄｶﾝﾀﾞ 2-',
+        'kana_line1' => '15-2-201',
+        'kana_line2' => 'オオヤマビル',
+        'phone' => '03-7633-2219',
+        'verification' => {
+          'details' => 'Provided identity information could not be verified',
+          'details_code' => 'failed_keyed_identity',
+          'document' => { 'back' => nil, 'details' => 'Scan failed', 'details_code' => nil, 'front' => nil },
+          'status' => 'unverified'
+        }
+      },
+      'tos_acceptance' => { 'date' => 1_566_575_169, 'ip' => '202.32.34.208', 'user_agent' => nil },
+      'bank_info' => { 'bank_name' => nil, 'branch_name' => nil, 'account_number' => nil, 'account_holder_name' => nil },
+      'payouts_enabled' => false,
+      'requirements' =>
+       { 'current_deadline' => nil, 'currently_due' => [], 'disabled_reason' => 'rejected.other', 'eventually_due' => [], 'past_due' => [] } }
+  end
   let(:new_acct_params) do
     { business_type: 'individual',
       individual: { last_name: '山田', last_name_kanji: '山田', last_name_kana: 'ヤマダ',
@@ -308,14 +190,11 @@ RSpec.describe StripeAccount, type: :model do
       }
     }
   end
-  # let(:stripe_balance_obj) do
-  #   {
-  #     'object' => 'balance',
-  #     'available' => [{ 'amount' => 0, 'currency' => 'jpy', 'source_types' => { 'card' => 0 } }],
-  #     'livemode' => false,
-  #     'pending' => [{ 'amount' => 0, 'currency' => 'jpy', 'source_types' => { 'card' => 0 } }]
-  #   }
-  # end
+  let(:stripe_balance_obj) do 
+    {
+      "object"=>"balance", "available"=>[{"amount"=>0, "currency"=>"jpy", "source_types"=>{"card"=>0}}], "livemode"=>false, "pending"=>[{"amount"=>0, "currency"=>"jpy", "source_types"=>{"card"=>0}}]
+    }
+  end
   let(:zero_balance_obj) do
     {
       'object' => 'balance',
@@ -340,9 +219,6 @@ RSpec.describe StripeAccount, type: :model do
       'pending' => [{ 'amount' => 1, 'currency' => 'jpy', 'source_types' => { 'card' => 0 } }]
     }
   end
-  # let(:blank_bank_info) do
-  #   { 'bank_name' => nil, 'branch_name' => nil, 'account_number' => nil, 'account_holder_name' => nil }
-  # end
   let(:valid_bank_info) { { 'bank_name' => 'STRIPE TEST BANK', 'branch_name' => 'STRIPE TEST BRANCH', 'account_number' => '***1234', 'account_holder_name' => 'ヤマダユウタ' } }
   let(:ext_acct_create_acctid) { 'acct_1FdfXoGJ13miU3q3' } # 銀行 太郎
   let(:ext_acct_create_inputs)  do
@@ -489,7 +365,7 @@ RSpec.describe StripeAccount, type: :model do
         expect(result).to match [true, expected_hash]       
       end
       after do
-        JSON.parse(Stripe::Account.delete(@create_result['id']).to_s) if @create_result.key?('id')
+        Stripe::Account.delete(@create_result['id']) if @create_result.key?('id')
       end
     end
     context 'fails and' do
@@ -498,7 +374,7 @@ RSpec.describe StripeAccount, type: :model do
         @account = create(:stripe_account)
         @acct_form = build(:stripe_account_form)
       end
-      it 'returns false with blank acct_id', type: :doing do
+      it 'returns false with blank acct_id' do
         @account.acct_id = nil
         expect(@account.update_connect_account(@acct_form, test_env_ip)).to match [false, 'acct_id is blank']     
       end
@@ -533,7 +409,7 @@ RSpec.describe StripeAccount, type: :model do
         expect(@account.status).to eq 'deleted'
       end
       after do
-        JSON.parse(Stripe::Account.delete(@account.acct_id).to_s) if @result[0] == false
+        Stripe::Account.delete(@account.acct_id) if @result[0] == false
       end
     end
     context 'fails and' do
@@ -670,10 +546,6 @@ RSpec.describe StripeAccount, type: :model do
       it 'returns false with blank params' do
         expect(@account.create_ext_account(nil)).to match [false, 'stripe_bank_inputs is blank']
       end
-      it 'raises exception with invalid inputs' # do
-      #   allow(Stripe::Account).to receive(:create_external_account).and_raise(StandardError, "some issue occurred.")
-      #   expect(@account.create_ext_account(@stripe_bank_inputs)[1]).to include 'Stripe error'
-      # end
       it 'returns false if Stripe returned blank result' do
         allow(Stripe::Account).to receive(:create_external_account).and_return(nil)
         expect(@account.create_ext_account(@stripe_bank_inputs)).to match [false, 'Stripe returned nil']

@@ -11,8 +11,8 @@ FactoryBot.define do
     trait :with_topic do
       association :topic, factory: :topic
     end
-    trait :with_valuetext do
-      sequence(:valuetext) { |n| "Neta valuetext with over 20 characters #{n}" }
+    trait :with_valuecontent do
+      valuecontent { 'ネタテスト　有料ネタ部分' }
     end
     trait :with_hashtags do
       after(:create) do |neta|

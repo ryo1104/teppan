@@ -8,6 +8,22 @@ RSpec.describe Hashtag, type: :model do
       expect(hashtag).to be_valid
     end
 
+    it 'is valid with numbers' do
+      hashtag = build(:hashtag, hashname: '12345')
+      expect(hashtag).to be_valid
+    end
+
+    it 'is valid with hiragana katakana' do
+      hashtag = build(:hashtag, hashname: 'ひらがなカタカナ')
+      expect(hashtag).to be_valid
+    end
+    
+    it 'is invalid with special characters' do
+      hashtag = build(:hashtag, hashname: '#test')
+      hashtag.valid?
+      expect(hashtag.errors[:hashname]).to include('は英数字・全角かなのみ入力可能です。')
+    end
+
     it 'is invalid without a hashname' do
       hashtag = build(:hashtag, hashname: '')
       hashtag.valid?

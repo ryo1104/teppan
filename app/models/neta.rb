@@ -70,7 +70,11 @@ class Neta < ApplicationRecord
     if price != 0
       if user.premium_user[0]
         if user.stripe_account.present?
-          user.stripe_account.status == 'verified'
+          if user.stripe_account.status == 'verified'
+            true
+          else
+            false
+          end
         else
           false
         end
@@ -123,8 +127,8 @@ class Neta < ApplicationRecord
 
   def check_hashtags(tag_array)
     if tag_array.present?
-      if tag_array.size > 3
-        errors.add(:hashtags, 'は3個までです。')
+      if tag_array.size > 10
+        errors.add(:hashtags, I18n.t('errors.messages.attach_too_many', attach_limit: '10'))
         false
       else
         true
@@ -136,12 +140,19 @@ class Neta < ApplicationRecord
 
   def add_hashtags(tag_array)
     if tag_array.present?
-      hashtags.clear if hashtags.present?
-      tag_array.uniq.map do |tag_name|
-        hashtag = Hashtag.find_or_create_by(hashname: tag_name)
-        hashtag.update_netacount
-        hashtags << hashtag
+      if self.delete_hashtags
+        tag_array.uniq.map do |tag_name|
+          hashtag = Hashtag.find_or_create_by(hashname: tag_name)
+          hashtag.update_hiragana
+          hashtags << hashtag
+          hashtag.update_netacount
+        end
+        true
+      else
+        false
       end
+    else
+      false
     end
   end
 

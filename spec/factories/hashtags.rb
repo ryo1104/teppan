@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :hashtag do
-    hashname { "Hashtag_#{Faker::Lorem.characters(number: 8)}" }
+    hashname { "Hashtag#{Faker::Lorem.characters(number: 8)}" }
     hiragana { 'てすと' }
     hit_count { '0' }
     neta_count { '0' }
