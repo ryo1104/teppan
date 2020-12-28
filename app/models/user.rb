@@ -19,7 +19,7 @@ class User < ApplicationRecord
   has_one_attached :image
   has_rich_text :introduction
   validates :email, presence: true, uniqueness: { case_sensitive: false }
-  validate  :nickname
+  # validate  :nickname
   validate  :image_content_type, if: :was_attached?
   validate  :gender_code_check
   validate  :age_check
@@ -27,6 +27,39 @@ class User < ApplicationRecord
   validate  :stripe_cus_id_check
   validates :follows_count, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :unregistered, inclusion: { in: [true, false] }
+
+
+  def self.find_or_create_for_oauth(auth)
+    auth_check = User.auth_check(auth)
+    return [false, auth_check[1]] unless auth_check[0]
+    
+    if auth.provider == 'twitter'
+      email = auth.info.name + '@twitter-hoge.com' # twitter APIでPrivacyPolicy等の設定をすればauth.info.emailから取得可能になる
+    else
+      email = auth.info.email
+    end
+
+    if auth.info.gender == 'male'
+      gender = 1
+    elsif auth.info.gender == 'female'
+      gender = 2
+    else
+      gender = nil
+    end
+
+    user = User.find_by(email: email)
+    unless user
+      user = User.new(email: email,
+                      provider: auth.provider,
+                      uid: auth.uid,
+                      nickname: auth.info.name,
+                      password: Devise.friendly_token[0, 20],
+                      gender: gender)
+      user.skip_confirmation!
+      user.save
+    end
+    user
+  end
 
   def avatar
     image if image.attached?
@@ -60,26 +93,6 @@ class User < ApplicationRecord
 
   def temp_nickname
     email.split('@')[0] if email.present?
-  end
-
-  def self.find_or_create_for_oauth(auth)
-    email = if auth.provider == 'twitter'
-              auth.info.name + '@twitter-hoge.com' # twitter APIでPrivacyPolicy等の設定をすればauth.info.emailから取得可能になる
-            else
-              auth.info.email
-            end
-
-    user = User.find_by(email: email)
-    unless user
-      user = User.new(email: email,
-                      provider: auth.provider,
-                      uid: auth.uid,
-                      nickname: auth.info.name,
-                      password: Devise.friendly_token[0, 20])
-      user.skip_confirmation!
-      user.save
-    end
-    user
   end
 
   def following_users
@@ -326,62 +339,62 @@ class User < ApplicationRecord
     end
   end
 
-  def set_source(charge_params)
-    if charge_params[:stripeToken].present? # 新規カードを使用
-      if stripe_cus_id.present?
-        card_res = add_card(charge_params[:stripeToken]) # 新規カードを追加し、Cardを返す
-        if card_res[0]
-          [true, card_res[1]]
-        else
-          [false, "failed to add card : #{card_res[1]}"]
-        end
-      else
-        customer_res = create_cus_from_card(charge_params[:stripeToken]) # 新規Customerを作成、カードをセットしCustomerを返す
-        if customer_res[0]
-          [true, customer_res[1]]
-        else
-          [false, "failed to set card to customer : #{customer_res[1]}"]
-        end
-      end
+  # def set_source(charge_params)
+  #   if charge_params[:stripeToken].present? # 新規カードを使用
+  #     if stripe_cus_id.present?
+  #       card_res = add_card(charge_params[:stripeToken]) # 新規カードを追加し、Cardを返す
+  #       if card_res[0]
+  #         [true, card_res[1]]
+  #       else
+  #         [false, "failed to add card : #{card_res[1]}"]
+  #       end
+  #     else
+  #       customer_res = create_cus_from_card(charge_params[:stripeToken]) # 新規Customerを作成、カードをセットしCustomerを返す
+  #       if customer_res[0]
+  #         [true, customer_res[1]]
+  #       else
+  #         [false, "failed to set card to customer : #{customer_res[1]}"]
+  #       end
+  #     end
 
-    elsif charge_params[:card_id].present? # 既存カードを使用
-      if stripe_cus_id.present?
-        customer_res = change_default_card(charge_params[:card_id]) # 既存カードをセットしCustomerを返す
-        if customer_res[0]
-          [true, customer_res[1]]
-        else
-          [false, "failed to change card : #{customer_res[1]}"]
-        end
-      else
-        [false, 'stripe_cus_id is blank']
-      end
+  #   elsif charge_params[:card_id].present? # 既存カードを使用
+  #     if stripe_cus_id.present?
+  #       customer_res = change_default_card(charge_params[:card_id]) # 既存カードをセットしCustomerを返す
+  #       if customer_res[0]
+  #         [true, customer_res[1]]
+  #       else
+  #         [false, "failed to change card : #{customer_res[1]}"]
+  #       end
+  #     else
+  #       [false, 'stripe_cus_id is blank']
+  #     end
 
-    elsif charge_params[:user_points].present? # ポイントを使用
-      if stripe_account.present?
-        if charge_params[:charge_amount].present?
-          user_points = charge_params[:user_points].to_i
-          charge_amount = charge_params[:charge_amount].to_i
-          if user_points >= charge_amount
-            account_res = stripe_account.get_connect_account
-            if account_res[0]
-              [true, account_res[1]] # Account infoを返す
-            else
-              [false, "failed to get stripe account : #{account_res[1]}"]
-            end
-          else
-            [false, 'insufficient points']
-          end
-        else
-          [false, 'charge amount does not exist']
-        end
-      else
-        [false, 'user account does not exist']
-      end
+  #   elsif charge_params[:user_points].present? # ポイントを使用
+  #     if stripe_account.present?
+  #       if charge_params[:charge_amount].present?
+  #         user_points = charge_params[:user_points].to_i
+  #         charge_amount = charge_params[:charge_amount].to_i
+  #         if user_points >= charge_amount
+  #           account_res = stripe_account.get_connect_account
+  #           if account_res[0]
+  #             [true, account_res[1]] # Account infoを返す
+  #           else
+  #             [false, "failed to get stripe account : #{account_res[1]}"]
+  #           end
+  #         else
+  #           [false, 'insufficient points']
+  #         end
+  #       else
+  #         [false, 'charge amount does not exist']
+  #       end
+  #     else
+  #       [false, 'user account does not exist']
+  #     end
 
-    else
-      [false, 'no valid source exists']
-    end
-  end
+  #   else
+  #     [false, 'no valid source exists']
+  #   end
+  # end
 
   def get_sold_netas_info
     trades = Trade.where(seller_id: id, tradeable_type: 'Neta').order('created_at DESC')
@@ -407,7 +420,7 @@ class User < ApplicationRecord
       end
       neta_hash = {}
       netas.each do |neta|
-        neta_hash.merge!({ neta.id => { 'text' => neta.title } })
+        neta_hash.merge!({ neta.id => { 'title' => neta.title } })
       end
       review_hash = {}
       reviews.each do |review|
@@ -421,7 +434,7 @@ class User < ApplicationRecord
                end
         sold_netas_info << {
           'traded_at' => trade.created_at,
-          'text' => neta_hash[trade.tradeable_id]['text'],
+          'title' => neta_hash[trade.tradeable_id]['title'],
           'price' => trade.price,
           'buyer_id' => trade.buyer_id,
           'buyer_nickname' => buyers_hash[trade.buyer_id]['nickname'],
@@ -448,7 +461,7 @@ class User < ApplicationRecord
 
   def image_content_type
     extension = ['image/png', 'image/jpg', 'image/jpeg']
-    errors.add(:image, 'の拡張子はサポートされていません。') unless image.content_type.in?(extension)
+    errors.add(:image, I18n.t('errors.messages.unsupported_file_type')) unless image.content_type.in?(extension)
   end
 
   def was_attached?
@@ -457,7 +470,7 @@ class User < ApplicationRecord
 
   def gender_code_check
     if gender.present?
-      errors.add(:gender, 'Invalid gender code') if gender < 0 || gender > 3
+      errors.add(:gender, 'Invalid gender code') if gender < 1 || gender > 3
     end
   end
 
@@ -472,4 +485,13 @@ class User < ApplicationRecord
       errors.add(:stripe_cus_id, 'invalid stripe_cus_id') unless stripe_cus_id.starts_with? 'cus_'
     end
   end
+
+  def self.auth_check(auth)
+    return [false, 'auth is empty'] if auth.blank?
+    
+    providers = ['yahoojp','twitter','google_oauth2']
+    return [false, 'unknown provider'] unless providers.include?(auth["provider"])
+    [true, nil]
+  end
+
 end

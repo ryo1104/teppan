@@ -7,7 +7,7 @@ module OmniauthMocks
                                                                      'nickname' => 'MockTwitterUser',
                                                                      'image' => 'http://mock_image_url.com',
                                                                      'location' => '',
-                                                                     'email' => 'mock@example.com',
+                                                                     'email' => 'example_user@twitter-hoge.com',
                                                                      'urls' => {
                                                                        'Twitter' => 'https://twitter.com/MockUser1234',
                                                                        'Website' => ''
