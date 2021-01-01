@@ -14,7 +14,7 @@
             <%= render :partial => "business/accounts/bankaccount", locals: { bank_info: @bank_info[1] } %>
             <%= link_to '口座変更', edit_account_bank_path(@account.id), :class => "payout-new__submit btn waves-effect" %><br>
           <% end %><br><br>
-          <table class="striped">
+          <table class="highlight">
             <tbody>
               <tr>
                 <td class="table-40"><b>出金額</b></td>

@@ -6,8 +6,8 @@ RSpec.describe Trade, type: :model do
   let(:neta_create)   { FactoryBot.create(:neta, :with_user, topic: topic_create) }
   let(:review_create) { FactoryBot.create(:review, :with_user, neta: neta_create) }
 
-  describe 'Validations' do
-    it 'is valid with a tradeable, buyer_id, seller_id, stripe_charge_id and price' do
+  describe 'Validations', type: :doing do
+    it 'is valid with a tradeable, buyer_id, seller_id, stripe_ch_id and price' do
       trade = build(:trade, tradeable: neta_create)
       expect(trade).to be_valid
     end
@@ -30,16 +30,16 @@ RSpec.describe Trade, type: :model do
       expect(trade.errors[:seller_id]).to include('を入力してください。')
     end
 
-    it 'is invalid without a stripe_charge_id' do
-      trade = build(:trade, tradeable: neta_create, stripe_charge_id: nil)
+    it 'is invalid without a Stripe charge id' do
+      trade = build(:trade, tradeable: neta_create, stripe_ch_id: nil)
       trade.valid?
-      expect(trade.errors[:stripe_charge_id]).to include('blank stripe_charge_id')
+      expect(trade.errors[:stripe_ch_id]).to include('を入力してください。')
     end
 
-    it 'is invalid if stripe_charge_id does not start with ch_' do
-      trade = build(:trade, tradeable: neta_create, stripe_charge_id: 'aaa' + Faker::Lorem.characters(number: 24))
+    it 'is invalid if Stripe charge id does not start with ch_' do
+      trade = build(:trade, tradeable: neta_create, stripe_ch_id: 'aaa' + Faker::Lorem.characters(number: 24))
       trade.valid?
-      expect(trade.errors[:stripe_charge_id]).to include('invalid stripe_charge_id')
+      expect(trade.errors[:stripe_ch_id]).to include('が正しくありません。')
     end
 
     it 'is invalid without a price' do
@@ -70,23 +70,32 @@ RSpec.describe Trade, type: :model do
       create(:trade, tradeable: neta_create, buyer_id: 1, seller_id: 2)
       trade = build(:trade, tradeable: neta_create, buyer_id: 1, seller_id: 2)
       trade.valid?
-      expect(trade.errors[:buyer_id]).to include('重複した取引情報が存在しています。')
+      expect(trade.errors[:buyer_id]).to include('売買記録はすでに存在します。')
+    end
+  end
+
+  describe 'method::get_seller_revenue(amount)' do
+    it 'returns sellers amount with platform fee deducted' do
+      expect(Trade.get_seller_revenue(100)).to eq 85
+    end
+    it 'returns error when amount is nil' do
+      expect { Trade.get_seller_revenue(nil) }.to raise_error(ArgumentError, 'amount is nil.')
+    end
+    it 'returns error when amount is non integer' do
+      expect { Trade.get_seller_revenue('60') }.to raise_error(ArgumentError, 'amount is not a integer.')
     end
   end
 
   describe 'method::get_ctax(amount)' do
     it 'returns ctax amount' do
-      expect(Trade.get_ctax(60)).to eq 4
+      expect(Trade.get_ctax(60)).to eq 6
     end
     it 'returns error when amount is nil' do
-      expect { Trade.get_ctax(nil) }.to raise_error(ArgumentError, '入力値がありません。')
+      expect { Trade.get_ctax(nil) }.to raise_error(ArgumentError, 'amount is nil.')
     end
     it 'returns error when amount is non integer' do
-      expect { Trade.get_ctax('60') }.to raise_error(ArgumentError, '入力値が整数ではありません。')
+      expect { Trade.get_ctax('60') }.to raise_error(ArgumentError, 'amount is not a integer.')
     end
   end
 
-  describe 'method::charge' do
-    it 'creates charge transaction in Stripe'
-  end
 end

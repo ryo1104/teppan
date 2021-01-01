@@ -4,7 +4,6 @@ include ActionDispatch::TestProcess
 RSpec.describe User, type: :model do
   let(:user_create)           { create(:user) }
   let(:topic_create)          { create(:topic, :with_user) }
-  let(:account_create)        { create(:account) }
   let(:stripe_test_key)       { ENV['STRIPE_SECRET_KEY'] }
   let(:test_stripe_cus_id)    { 'cus_Fg0CeiufnVMq42' } # けんすけ
   let(:test_stripe_customer)  do

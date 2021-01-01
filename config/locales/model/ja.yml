@@ -14,7 +14,7 @@ ja:
       hashtag: ハッシュタグ
       bookmark: お気に入り
       like: イイネ
-      trade: 売買情報
+      trade: 売買記録
       violation: 違反報告
       comment: コメント
     attributes:
@@ -81,6 +81,8 @@ ja:
         private_flag: 非公開設定
       trades:
         price: 価格
+        stripe_ch_id: StripeChargeID
+        stripe_pi_id: StripePaymentIntentID
       user:
         email: メールアドレス
         nickname: アカウント名

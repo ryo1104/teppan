@@ -13,17 +13,17 @@
         <tbody>
           <tr>
             <td class="table-40"><b>お振込金額</b></td>
-            <td class="table-60"><b><%= @stripe_payout_hash[1]["amount"] %>&nbsp;&nbsp;円</b></td>
+            <td class="table-60"><b><%= @stripe_payout[1]["amount"] %>&nbsp;&nbsp;円</b></td>
           </tr>
           <tr>
             <td class="table-40"><b>お振込日</b></td>
-            <td class="table-60"><b><%= Time.zone.at(@stripe_payout_hash[1]["arrival_date"].to_i).strftime("%Y/%m/%d") %></b></td>
+            <td class="table-60"><b><%= Time.zone.at(@stripe_payout[1]["arrival_date"].to_i).strftime("%Y/%m/%d") %></b></td>
           </tr>
         </tbody>
       </table>
       <br>
       <% if @bank_info[1]["account_number"].present? %>
-        <%= render :partial => "bankaccount", locals: { bank_info: @bank_info[1] } %>
+        <%= render :partial => "business/accounts/bankaccount", locals: { bank_info: @bank_info[1] } %>
       <% end %>
       <br><br>
       <%= link_to 'ビジネスアカウントへ戻る', account_path(@account.id), :class => "payout-create__btn btn waves-effect" %>

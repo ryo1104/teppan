@@ -1,7 +1,7 @@
 class Trade < ApplicationRecord
   include StripeUtils
   belongs_to :tradeable, polymorphic: true
-  validates :buyer_id, presence: true, uniqueness: { scope: %i[seller_id tradeable_id tradeable_type], message: '重複した取引情報が存在しています。' }
+  validates :buyer_id, presence: true, uniqueness: { scope: %i[seller_id tradeable_id tradeable_type], message: I18n.t('activerecord.models.trade')+I18n.t('errors.messages.taken') }
   validates :seller_id, presence: true
   validate  :stripe_ch_id_check
   validates :price, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 10_000 }
@@ -12,9 +12,9 @@ class Trade < ApplicationRecord
   # custom validation
   def stripe_ch_id_check
     if stripe_ch_id.present?
-      errors.add(:stripe_ch_id, 'invalid stripe_charge_id') unless stripe_ch_id.starts_with? 'ch_'
+      errors.add(:stripe_ch_id, I18n.t('errors.messages.invalid')) unless stripe_ch_id.starts_with? 'ch_'
     else
-      errors.add(:stripe_ch_id, 'blank stripe_charge_id')
+      errors.add(:stripe_ch_id, I18n.t('errors.messages.empty'))
     end
   end
 
