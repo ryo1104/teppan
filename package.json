@@ -5,7 +5,8 @@
     "build": "webpack",
     "dev": "webpack --progress",
     "watch": "webpack --progress --watch",
-    "heroku-postbuild": "webpack -p"
+    // "heroku-postbuild": "webpack -p",
+    "start": "node frontend/src/application.js"
   },
   "dependencies": {
     "@rails/actiontext": "^6.0.1",
