@@ -4,7 +4,8 @@
   "scripts": {
     "build": "webpack",
     "dev": "webpack --progress",
-    "watch": "webpack --progress --watch"
+    "watch": "webpack --progress --watch",
+    "heroku-postbuild": "webpack -p"
   },
   "dependencies": {
     "@rails/actiontext": "^6.0.1",
