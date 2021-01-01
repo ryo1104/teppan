@@ -25,6 +25,9 @@
     "trix": "^1.0.0",
     "url-loader": "^4.1.0"
   },
+  "engines": {
+    "yarn": "1.x"
+  },
   "version": "0.1.0",
   "devDependencies": {
     "@babel/core": "^7.9.0",
@@ -44,7 +47,7 @@
     "webpack-manifest-plugin": "^2.2.0"
   },
   "description": "teppan frontend",
-  "main": "index.js",
+  "main": "application.js",
   "repository": "git@github.com:ryo1104/teppan.git",
   "author": "nuka",
   "license": "MIT"
