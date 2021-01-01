@@ -3,9 +3,8 @@
   "private": true,
   "scripts": {
     "build": "webpack",
-    "dev": "webpack --progress",
+    "dev"  : "webpack --progress",
     "watch": "webpack --progress --watch",
-    // "heroku-postbuild": "webpack -p",
     "start": "node frontend/src/application.js"
   },
   "dependencies": {
