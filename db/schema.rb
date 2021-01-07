@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_29_160613) do
+ActiveRecord::Schema.define(version: 2021_01_07_144051) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -273,7 +273,7 @@ ActiveRecord::Schema.define(version: 2020_12_29_160613) do
     t.datetime "remember_created_at"
     t.string "nickname"
     t.date "birthdate"
-    t.integer "gender", default: 0
+    t.integer "gender"
     t.string "stripe_cus_id"
     t.integer "follows_count", default: 0, null: false
     t.datetime "created_at", null: false
