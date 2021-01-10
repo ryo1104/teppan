@@ -2,7 +2,7 @@
   <div class="topics-index card">
     <div class="topics-index card-image">
       <% if topic_card.header_image.attached? %>
-        <%= image_tag topic_card.header_image.variant(resize_to_fill: [170, 110], gravity: "Center") %>
+        <%= image_tag topic_card.header_image.variant(resize_to_fill: [170, 150], gravity: "Center") %>
       <% else %>
         <%= image_bundle_tag "teppan_gray.jpeg" %>
       <% end %>
