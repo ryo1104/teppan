@@ -89,6 +89,9 @@ Rails.application.configure do
   #   Bullet.rails_logger = true
   # end
   
+  # Disables log coloration
+  config.colorize_logging = false  
+  
   config.log_formatter = proc do |severity, datetime, progname, msg|
     "[#{severity}] #{datetime}: #{progname} : #{msg}\n"
   end

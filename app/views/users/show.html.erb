@@ -28,19 +28,21 @@
             <% end %>
           </div>
           <div class="user-show-profile__sns">
-            <span class="user-show-profile__follow">
+            <div class="user-show-profile__follow">
               <% if @my_page %>
-                <span class="user-show-profile__following">
+                <div class="user-show-profile__following">
                   <%= link_to user_followings_path(@user.id) do %>
-                    フォロー&nbsp;&nbsp;1234<%= @following_users_count %>
+                    <div class="user-show-profile__follow-tag">フォロー</div>
+                    <div class="user-show-profile__follow-count"><%= @following_users_count %></div>
                   <% end %>
-                </span>
+                </div>
               <% end %>
-              <span class="user-show-profile__followed">
+              <div class="user-show-profile__followed">
                 <%= link_to user_followers_path(@user.id) do %>
-                  フォロワー&nbsp;&nbsp;1234<%= @followed_users_count %>
+                  <div class="user-show-profile__follow-tag">フォロワー</div>
+                  <div class="user-show-profile__follow-count"><%= @followed_users_count %></div>
                 <% end %>
-              </span>
+              </div>
             </span>
             <% unless @my_page %>
               <% unless @user.is_blocked_by(current_user.id) %>
@@ -57,6 +59,7 @@
           </div>
         </div>
       </div>
+    </div>
       <div class="row user-show-profile__lower">
         <div class="user-show-profile__introduction"><%= @user.introduction %></div>
       </div>
@@ -67,7 +70,7 @@
           <%= render partial: "users/notmypage" %>
         <% end %>
       </div>
-    </div>
+    
   </div>
 </div>
 
