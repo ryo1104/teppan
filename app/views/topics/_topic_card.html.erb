@@ -8,7 +8,7 @@
       <% end %>
     </div>
     <div class="topics-index card-content">
-      <div class="topics-index__title"><%= truncate(topic_card.title, length: 25) %></div>
+      <div class="topics-index__title"><%= truncate(topic_card.title, length: 14) %></div>
       <div class="topics-index__postdata">
         <% if topic_card.max_rate == 0 %>
           <span class="js-topics-index__star" rating-data="0"></span>

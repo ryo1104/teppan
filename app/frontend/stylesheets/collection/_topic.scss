@@ -8,17 +8,18 @@
   
   &.card-image {
     img{
-        height: 11rem;
+      height: 15rem;
+      width: 17rem;
     }    
   }
   
   &.card-content {
     padding: 0.4rem;
-    height:  9.5rem;
+    height:  7rem;
   }
   
   &__title {
-    min-height: 3.5rem;
+    min-height: 1rem;
     font-size: 1.3rem;
     color: black;
     font-weight: bold;
