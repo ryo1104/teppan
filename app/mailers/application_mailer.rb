@@ -1,3 +1,3 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'Teppan'
+  default from: "support@#{ENV['TEPPAN_DOMAIN']}"
 end
