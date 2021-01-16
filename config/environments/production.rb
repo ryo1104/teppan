@@ -45,14 +45,24 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
+    address: 'smtp.sendgrid.net',
+    domain: 'teppan-neta.com',
     port: 587,
-    address: 'smtp.gmail.com',
-    domain: 'gmail.com',
-    user_name: ENV['GMAIL_USER_NAME'],
-    password: ENV['GMAIL_USER_PASSWORD'],
-    authentication: 'login',
+    user_name: ENV['SENDGRID_USERNAME'],
+    password: ENV['SENDGRID_PASSWORD'],
+    authentication: 'plain',
     enable_starttls_auto: true
   }
+  # config.action_mailer.smtp_settings = {
+  #   port: 587,
+  #   address: 'smtp.gmail.com',
+  #   domain: 'gmail.com',
+  #   user_name: ENV['GMAIL_USER_NAME'],
+  #   password: ENV['GMAIL_USER_PASSWORD'],
+  #   authentication: 'login',
+  #   enable_starttls_auto: true
+  # }
+  
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
