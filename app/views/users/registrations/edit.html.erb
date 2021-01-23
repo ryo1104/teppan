@@ -18,7 +18,7 @@
         </div>
       
         <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-          <div class="user-register-edit__pending-message">Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+          <div class="user-register-edit__pending-message">お送りしたメールにて承認が未完了です。<%= resource.unconfirmed_email %></div>
         <% end %>
         
         <div class="user-register-edit__field">
