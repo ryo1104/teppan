@@ -46,7 +46,6 @@ Rails.application.routes.draw do
     resources :accounts, module: 'business', only: %i[new create] do
       post :confirm, on: :collection
     end
-    # resources :subscriptions, only: %i[new create show destroy]
     resource :avatar, only: [:destroy], module: 'users'
   end
 
