@@ -20,8 +20,10 @@ ja:
     mailer:
       confirmation_instructions:
         subject: "[Teppan] アカウント本登録のご案内"
+      email_changed:
+        subject: "[Teppan] ご登録メールアドレス変更のご案内"
       password_change:
-        subject: "[Teppan] パスワード変更完了"
+        subject: "[Teppan] パスワード変更完了のご案内"
       reset_password_instructions:
         subject: "[Teppan] パスワード再設定のご案内"
       unlock_instructions:
