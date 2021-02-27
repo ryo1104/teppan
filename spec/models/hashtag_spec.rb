@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Hashtag, type: :model do
-
   describe 'Validations' do
     it 'is valid with a hashname, hit_count, and neta_count' do
       hashtag = build(:hashtag)
@@ -17,7 +16,7 @@ RSpec.describe Hashtag, type: :model do
       hashtag = build(:hashtag, hashname: 'ひらがなカタカナ')
       expect(hashtag).to be_valid
     end
-    
+
     it 'is invalid with special characters' do
       hashtag = build(:hashtag, hashname: '#test')
       hashtag.valid?
@@ -112,7 +111,7 @@ RSpec.describe Hashtag, type: :model do
       expect { hashtag.add_hit(some_user) }.to change(hashtag, :hit_count).by(0)
     end
   end
-  
+
   describe 'method::update_netacount' do
     it 'updates neta count field' do
       some_user = create(:user)
@@ -127,7 +126,6 @@ RSpec.describe Hashtag, type: :model do
   end
 
   describe 'method::update_hiragana' do
-
     it 'updates hashtag with hiragana' do
       hashtag = build(:hashtag, hashname: nil)
       hashtag.update_hiragana
@@ -150,7 +148,5 @@ RSpec.describe Hashtag, type: :model do
       expect(Rails.logger).to receive(:warn).with('Rubyfuri returned a non hiragana : カタカナテスト')
       hashtag.update_hiragana
     end
-
   end
-  
 end

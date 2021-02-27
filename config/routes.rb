@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     resources :comments, only: %i[create destroy]
     resources :likes, only: %i[create destroy]
     resources :bookmarks, only: %i[create destroy]
-    resource  :headerimage, only: [:destroy], module: 'topics'
+    resource  :headerimage, only: %i[destroy], module: 'topics'
   end
 
   resources :netas, only: %i[show edit update destroy] do

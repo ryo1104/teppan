@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe StripeExtAccountForm, type: :model do
-  let(:valid_bank_info) do 
+  let(:valid_bank_info) do
     { 'bank_name' => 'STRIPE TEST BANK', 'branch_name' => 'STRIPE TEST BRANCH', 'account_number' => '0001234', 'account_holder_name' => 'ギンコウタロウ' }
   end
   let(:valid_stripe_inputs) do
-    { :external_account => {:object => "bank_account", :account_number => "0001234", :routing_number => "1100000", :account_holder_name => "ギンコウタロウ", :currency => "jpy", :country => "jp"}, :default_for_currency=>"true"}
+    { external_account: { object: 'bank_account', account_number: '0001234', routing_number: '1100000', account_holder_name: 'ギンコウタロウ', currency: 'jpy', country: 'jp' }, default_for_currency: 'true' }
   end
 
   describe 'Validations' do
@@ -65,5 +65,4 @@ RSpec.describe StripeExtAccountForm, type: :model do
       expect(form.create_bank_inputs).to eq [true, valid_stripe_inputs]
     end
   end
-
 end

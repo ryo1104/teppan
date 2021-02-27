@@ -1,8 +1,11 @@
 <%= link_to topic_path(topic_card.id) do %>
   <div class="topics-index card">
     <div class="topics-index card-image">
-      <% if topic_card.header_image.attached? %>
+      <% if topic_card.header_img_url.present? %>
+        <%= image_tag topic_card.header_img_url %>
+        <% if false %>
         <%= image_tag topic_card.header_image.variant(resize_to_fill: [170, 150], gravity: "Center") %>
+        <% end %>
       <% else %>
         <%= image_bundle_tag "teppan_gray.jpeg" %>
       <% end %>

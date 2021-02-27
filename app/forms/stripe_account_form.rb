@@ -55,7 +55,7 @@ class StripeAccountForm
       individual: create_stripe_individual
     }
     ac_params.merge!(type: 'custom', country: 'JP') if mode == 'create'
-    if self.verification
+    if verification
       ac_params.merge!(tos_acceptance: { date: Time.parse(Time.zone.now.to_s).to_i, ip: remote_ip.to_s })
     end
     ac_params.merge!(settings: { payouts: { schedule: { interval: 'manual' } } })
@@ -113,11 +113,11 @@ class StripeAccountForm
     return [false, personal_info[1]] if personal_info[0] == false
 
     id = stripe_account_obj['id']
-    if stripe_account_obj.key?('tos_acceptance')
-     tos_acceptance = stripe_account_obj['tos_acceptance']
-    else
-     tos_acceptance = { 'date' => nil, 'ip' => nil }
-    end
+    tos_acceptance = if stripe_account_obj.key?('tos_acceptance')
+                       stripe_account_obj['tos_acceptance']
+                     else
+                       { 'date' => nil, 'ip' => nil }
+                     end
 
     payouts_enabled = (stripe_account_obj['payouts_enabled'] if stripe_account_obj.key?('payouts_enabled'))
     requirements = (stripe_account_obj['requirements'] if stripe_account_obj.key?('requirements'))
@@ -195,7 +195,7 @@ class StripeAccountForm
 
     date_res = StripeAccountForm.convert_to_date(personal_info['dob'])
     return false unless date_res
-    
+
     personal_info['gender'] = gender_res
     personal_info['dob'] = date_res
     personal_info
@@ -224,9 +224,8 @@ class StripeAccountForm
     DateTime.new(stripe_date['year'], stripe_date['month'], stripe_date['day'], 0, 0, 0)
   end
 
-
   private
-  
+
   def create_stripe_individual
     indiv = {
       last_name: last_name_kanji.presence,

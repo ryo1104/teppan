@@ -17,7 +17,7 @@ class StripePayout < ApplicationRecord
   def self.create_stripe_payout(amt, acct_id)
     check_inputs = StripePayout.check_inputs(amt, acct_id)
     return [false, check_inputs[1]] unless check_inputs[0]
-    
+
     begin
       stripe_payout = JSON.parse(Stripe::Payout.create({ amount: amt, currency: 'jpy' },
                                                        { stripe_account: acct_id }).to_s)
@@ -29,8 +29,6 @@ class StripePayout < ApplicationRecord
     [true, stripe_payout]
   end
 
-  private
-  
   def self.check_inputs(amt, acct_id)
     return [false, 'amount is blank'] if amt.blank?
     return [false, 'amount is non integer'] unless amt.is_a?(Integer)

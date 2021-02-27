@@ -1,15 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe StripeAccount, type: :model do
-
   let(:account_create)        { create(:stripe_account) }
   let(:stripe_test_key)       { ENV['STRIPE_SECRET_KEY'] }
-  let(:valid_payout_result) do 
-    { 
-      "id"=>"po_1I40cmEyhQyqSyxVsvkfl7Qp", "object"=>"payout", "amount"=>106, "arrival_date"=>1609804800, "automatic"=>false, "balance_transaction"=>"txn_1I40cmEyhQyqSyxVRBa0OnTO", "created"=>1609319144, "currency"=>"jpy", "description"=>nil, "destination"=>"ba_1HdBXBEyhQyqSyxVwE4ZZBJ6", "failure_balance_transaction"=>nil, "failure_code"=>nil, "failure_message"=>nil, "livemode"=>false, "metadata"=>{}, "method"=>"standard", "original_payout"=>nil, "reversed_by"=>nil, "source_type"=>"card", "statement_descriptor"=>nil, "status"=>"pending", "type"=>"bank_account" 
+  let(:valid_payout_result) do
+    {
+      'id' => 'po_1I40cmEyhQyqSyxVsvkfl7Qp', 'object' => 'payout', 'amount' => 106, 'arrival_date' => 1609804800, 'automatic' => false, 'balance_transaction' => 'txn_1I40cmEyhQyqSyxVRBa0OnTO', 'created' => 1609319144, 'currency' => 'jpy', 'description' => nil, 'destination' => 'ba_1HdBXBEyhQyqSyxVwE4ZZBJ6', 'failure_balance_transaction' => nil, 'failure_code' => nil, 'failure_message' => nil, 'livemode' => false, 'metadata' => {}, 'method' => 'standard', 'original_payout' => nil, 'reversed_by' => nil, 'source_type' => 'card', 'statement_descriptor' => nil, 'status' => 'pending', 'type' => 'bank_account'
     }
   end
-  
+
   describe 'Validations' do
     it 'is valid with a stripe_account_id, payout_id, amount' do
       payout = build(:stripe_payout, stripe_account: account_create)
@@ -21,13 +20,13 @@ RSpec.describe StripeAccount, type: :model do
       payout.valid?
       expect(payout.errors[:stripe_account]).to include 'を入力してください'
     end
-    
+
     it 'is invalid without a payout_id' do
       payout = build(:stripe_payout, payout_id: nil)
       payout.valid?
       expect(payout.errors[:payout_id]).to include 'を入力してください。'
     end
-    
+
     it 'is invalid if payout_id does not start with po_' do
       payout = build(:stripe_payout, payout_id: 'aaaa_' + Faker::Lorem.characters(number: 16))
       payout.valid?
@@ -40,7 +39,7 @@ RSpec.describe StripeAccount, type: :model do
       payout.valid?
       expect(payout.errors[:payout_id]).to include('はすでに存在します。')
     end
-    
+
     it 'is invalid without a amount' do
       payout = build(:stripe_payout, amount: nil)
       payout.valid?
@@ -58,9 +57,8 @@ RSpec.describe StripeAccount, type: :model do
       payout.valid?
       expect(payout.errors[:amount]).to include 'は整数で入力してください。'
     end
-
   end
-  
+
   describe 'method::create_stripe_payout' do
     before do
       Stripe.api_key = stripe_test_key
@@ -99,5 +97,4 @@ RSpec.describe StripeAccount, type: :model do
       end
     end
   end
-
 end

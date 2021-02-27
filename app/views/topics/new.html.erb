@@ -9,7 +9,7 @@
       </div>
       <div class="row topic-new">
         <h1>新規トピック</h1>
-        <%= form_with model: @topic, local: true, method: :post do |form| %>
+        <%= form_with model: @topic, local: true, class: 'topic-form__form', data: { 'form-data' => (@s3_direct_post.fields), 'url' => @s3_direct_post.url, 'host' => URI.parse(@s3_direct_post.url).host } do |form| %>
           <% if @topic.errors.any? %>
             <%= render :partial => "topics/errorform" %>
           <% end %>

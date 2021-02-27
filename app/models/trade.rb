@@ -1,7 +1,8 @@
 class Trade < ApplicationRecord
   include StripeUtils
   belongs_to :tradeable, polymorphic: true
-  validates :buyer_id, presence: true, uniqueness: { scope: %i[seller_id tradeable_id tradeable_type], message: I18n.t('activerecord.models.trade')+I18n.t('errors.messages.taken') }
+  validates :buyer_id, presence: true, uniqueness: { scope: %i[seller_id tradeable_id tradeable_type], 
+                       message: I18n.t('activerecord.models.trade') + I18n.t('errors.messages.taken') }
   validates :seller_id, presence: true
   validate  :stripe_ch_id_check
   validates :price, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 10_000 }

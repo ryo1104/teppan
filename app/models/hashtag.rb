@@ -2,11 +2,10 @@ class Hashtag < ApplicationRecord
   has_many  :hashtag_netas
   has_many  :netas, through: :hashtag_netas
   has_many  :hashtag_hits, dependent: :delete_all
-  validates :hashname, presence: true, uniqueness: { case_sensitive: true }, length: { maximum: 30 }, format: { with: /\A[ぁ-んァ-ン０-９a-zA-Z0-9]+\z/, message: I18n.t('errors.messages.normal_char_only') }
-  # validates :hiragana, format: { with: /\A[ぁ-んー－]+\z/, message: I18n.t('errors.messages.hiragana_only') }
+  validates :hashname, presence: true, uniqueness: { case_sensitive: true }, length: { maximum: 30 },
+                       format: { with: /\A[ぁ-んァ-ン０-９a-zA-Z0-9]+\z/, message: I18n.t('errors.messages.normal_char_only') }
   validates :hit_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :neta_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-  # before_validation :update_hiragana
   include JpUtils
 
   # record only 1 hit per day per user
@@ -45,7 +44,7 @@ class Hashtag < ApplicationRecord
     if hashname.present?
       rubyfuri = Rubyfuri::Client.new(ENV['YAHOOJP_ID'])
       yomigana = rubyfuri.furu(hashname)
-      if JpKana.is_hiragana(yomigana)
+      if JpKana.hiragana(yomigana)
         self.hiragana = yomigana
         true
       else

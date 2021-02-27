@@ -10,17 +10,17 @@ class Bank < ApplicationRecord
 
     ext_acct = stripe_account_obj['external_accounts']['data'].find { |n| n['default_for_currency'] == true }
     # stripe_account_obj['external_accounts']['data'].map do |ext_acct|
-      return [false, 'last4 does not exist'] unless ext_acct.key?('last4')
-      return [false, 'account_holder_name does not exist'] unless ext_acct.key?('account_holder_name')
+    return [false, 'last4 does not exist'] unless ext_acct.key?('last4')
+    return [false, 'account_holder_name does not exist'] unless ext_acct.key?('account_holder_name')
 
-      bank_branch_name = Bank.get_bank_branch_names(ext_acct)
-      return [false, bank_branch_name[1]] unless bank_branch_name[0]
+    bank_branch_name = Bank.get_bank_branch_names(ext_acct)
+    return [false, bank_branch_name[1]] unless bank_branch_name[0]
 
-      info = { 'bank_name' => bank_branch_name[1][0], 
-               'branch_name' => bank_branch_name[1][1],
-               'account_number' => '***' + ext_acct['last4'], 
-               'account_holder_name' => ext_acct['account_holder_name'] }
-      return [true, info]
+    info = { 'bank_name' => bank_branch_name[1][0],
+             'branch_name' => bank_branch_name[1][1],
+             'account_number' => '***' + ext_acct['last4'],
+             'account_holder_name' => ext_acct['account_holder_name'] }
+    [true, info]
     # end
   end
 
@@ -41,5 +41,4 @@ class Bank < ApplicationRecord
   def self.get_zengin_all
     ZenginCode::Bank.all
   end
-
 end

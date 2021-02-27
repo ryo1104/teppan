@@ -1,5 +1,5 @@
-<% if @topic.header_image.attached? %>
-  <%= image_tag @topic.header_image, :class => 'topic__header-image' %>
+<% if @topic.header_img_url.present? %>
+  <%= image_tag @topic.header_img_url, :class => 'topic__header-image' %>
 <% end %>
 <h1 class="topic__title"><%= @topic.title %></h1>
 <div class="topic__text">

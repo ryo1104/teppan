@@ -2,20 +2,22 @@
   <div class = "topic-form__header-img-label">ヘッダー画像</div>
   <%= form.label :header_image do %>
     <% if @topic.id.present? %>
-      <% if @topic.header_image.attached? %>
-        <span class="topic-form__header-img-filename"><%= @topic.header_image.filename %></span>
+      <% if @topic.header_img_url.present? %>
+        <%= image_tag @topic.header_img_url, :class => 'topic-form__header-img-content' %><br>
         <span class="topic-form__header-img-deletelink">
-          <%= link_to "削除", topic_headerimage_path(@topic.id), :method => :delete %>
-        </span>
-        <br>
-        <%= image_tag @topic.header_image, :class => 'topic-form__header-img-content' %><br>
+          <%= link_to "画像を削除", topic_headerimage_path(@topic.id), :method => :delete %>
+        </span><br>
       <% else %>
-        <%= image_bundle_tag "photo_icon.png", :class => 'topic-form__header-img-content' %>
-        <%= form.file_field :header_image, :class => 'topic-form__header-img-filefield' %><br>      
+        <%= form.file_field :header_img_url, :class => 'js-topic-form__header-img-filefield' %>
+        <div class="topic-form__header-img-wrapper">
+          <canvas id="js-topic-header-canvas" class="topic-form__header-img-preview" />
+        </div>
       <% end %>
     <% else %>
-      <%= image_bundle_tag "photo_icon.png", :class => 'topic-form__header-img-content' %>
-      <%= form.file_field :header_image, :class => 'topic-form__header-img-filefield' %><br>
+      <%= form.file_field :header_img_url, :class => 'js-topic-form__header-img-filefield' %>
+      <div class="topic-form__header-img-wrapper">
+        <canvas id="js-topic-header-canvas" class="topic-form__header-img-preview" />
+      </div>
     <% end %>
   <% end %>
 </div>

@@ -97,5 +97,4 @@ RSpec.describe Trade, type: :model do
       expect { Trade.get_ctax('60') }.to raise_error(ArgumentError, 'amount is not a integer.')
     end
   end
-
 end

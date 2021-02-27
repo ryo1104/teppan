@@ -1,5 +1,5 @@
 import $ from 'jquery';
-require("jquery-ui")
+require("jquery-ui.autocomplete")
 
 $(function () {
     $(".js-hashtag-index__search-input").autocomplete({

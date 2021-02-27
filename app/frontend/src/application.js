@@ -4,6 +4,7 @@ require('@rails/actiontext')
 require('jquery')
 require('trix')
 require('materialize')
+
 import './generic'
 import './stars'
 

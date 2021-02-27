@@ -9,15 +9,15 @@
       </div>
       <div class="row topic-edit">
         <h1>トピック編集</h1>
-        <%= form_with model: @topic, local: true, method: :patch do |form| %>
+        <%= form_with model: @topic, local: true, class: 'topic-form__form', data: { 'form-data' => (@s3_direct_post.fields), 'url' => @s3_direct_post.url, 'host' => URI.parse(@s3_direct_post.url).host } do |form| %>
           <% if @topic.errors.any? %>
             <%= render :partial => "errorform" %>
           <% end %>
           <%= render :partial => "topicform", locals: { form: form } %>
-          <%= button_tag :type => "submit", class: "topic-new__submit btn waves-effect" do %>
+          <%= button_tag :type => "submit", class: "topic-edit__submit btn waves-effect" do %>
             <i class="topic-edit__submit material-icons left">refresh</i>更新
           <% end %>
-          <%= link_to topic_path(@topic.id), {:method => :delete, :class => 'topic-new__submit btn waves-effect', data: { confirm: "本当にトピックを削除しますか？" }} do %>
+          <%= link_to topic_path(@topic.id), {:method => :delete, :class => 'topic-edit__submit btn waves-effect', data: { confirm: "本当にトピックを削除しますか？" }} do %>
             <i class="topic-edit__submit material-icons left">delete</i>
             <span>削除</span>
           <% end %>

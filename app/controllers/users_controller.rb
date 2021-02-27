@@ -5,11 +5,11 @@ class UsersController < ApplicationController
     @userrate = @user.average_rate
     # @lastlogin = @user.current_sign_in_at
     @posted_netas = @user.netas.includes(:reviews, :hashtags, :user).where(private_flag: false)
-    @posted_topics = @user.topics.includes([header_image_attachment: :blob], :netas, :user).where(private_flag: false)
+    @posted_topics = @user.topics.includes(:netas, :user).where(private_flag: false)
     if my_page
       redirect_to edit_user_path(@user.id) if @user.nickname.blank?
       @draft_netas = @user.netas.includes(:hashtags, :user).where(private_flag: true)
-      @draft_topics = @user.topics.includes([header_image_attachment: :blob], :netas, :user).where(private_flag: true)
+      @draft_topics = @user.topics.includes(:netas, :user).where(private_flag: true)
       @bought_trades = Trade.where(buyer_id: @user.id, tradeable_type: 'Neta')
       @bought_netas = User.bought_netas(@bought_trades)
       @bookmarked_netas = @user.bookmarked_netas

@@ -40,27 +40,26 @@ RSpec.describe Topic, type: :model do
       expect(topic.errors[:content]).to include('を入力してください。')
     end
 
-    it 'is invalid if header attachment is not in supported image format' do
-      topic = FactoryBot.create(:topic, :with_user)
-      file = fixture_file_upload('/files/erd.pdf', 'application/pdf')
-      topic.header_image.attach(file)
-      expect(topic.errors[:header_image]).to include('のファイル形式が正しくありません。')
-    end
-    
-    it 'is invalid if attachment size is over 5MB' do
-      topic = FactoryBot.create(:topic, :with_user)
-      file = fixture_file_upload('/files/IMG_6MB.jpeg', 'image/jpeg')
-      topic.header_image.attach(file)
-      expect(topic.errors[:header_image]).to include('のサイズは5MB以下にしてください。')
-    end
+    # it 'is invalid if header attachment is not in supported image format' do
+    #   topic = FactoryBot.create(:topic, :with_user)
+    #   file = fixture_file_upload('/files/erd.pdf', 'application/pdf')
+    #   topic.header_image.attach(file)
+    #   expect(topic.errors[:header_image]).to include('のファイル形式が正しくありません。')
+    # end
 
-    it 'is valid if attachment size is within 5MB' do
-      topic = FactoryBot.create(:topic, :with_user)
-      file = fixture_file_upload('/files/IMG_3MB.jpeg', 'image/jpeg')
-      topic.header_image.attach(file)
-      expect(topic).to be_valid
-    end
+    # it 'is invalid if attachment size is over 5MB' do
+    #   topic = FactoryBot.create(:topic, :with_user)
+    #   file = fixture_file_upload('/files/IMG_6MB.jpeg', 'image/jpeg')
+    #   topic.header_image.attach(file)
+    #   expect(topic.errors[:header_image]).to include('のサイズは5MB以下にしてください。')
+    # end
 
+    # it 'is valid if attachment size is within 5MB' do
+    #   topic = FactoryBot.create(:topic, :with_user)
+    #   file = fixture_file_upload('/files/IMG_3MB.jpeg', 'image/jpeg')
+    #   topic.header_image.attach(file)
+    #   expect(topic).to be_valid
+    # end
   end
 
   describe 'method::max_rate' do
@@ -148,5 +147,4 @@ RSpec.describe Topic, type: :model do
       expect(topic.add_pageview(another_user)).to eq pageview
     end
   end
-
 end

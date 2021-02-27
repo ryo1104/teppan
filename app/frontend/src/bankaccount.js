@@ -1,5 +1,5 @@
 import $ from 'jquery';
-require("jquery-ui")
+require("jquery-ui.autocomplete")
 
 $(function () {
     $("#js-bank_name_input").autocomplete({

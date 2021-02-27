@@ -99,7 +99,7 @@ RSpec.describe Neta, type: :model do
       user = user_create
       topic = create(:topic, :with_user)
       create(:neta, user: user, topic: topic)
-      expect(Neta.average_rate(user.netas)).to eq 0 
+      expect(Neta.average_rate(user.netas)).to eq 0
     end
   end
 
@@ -263,22 +263,22 @@ RSpec.describe Neta, type: :model do
       expect(neta.bookmarked(some_user2.id)).to eq false
     end
   end
-  
+
   describe 'method::check_hashtags' do
     before do
       @neta = create(:neta, user: user_create, topic: topic_create)
     end
     it 'returns false when tag array has more than 10 items' do
-      tags = ['tag1','tag2','tag3','tag4','tag5','tag6','tag7','tag8','tag9','tag10','tag11']
+      tags = ['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6', 'tag7', 'tag8', 'tag9', 'tag10', 'tag11']
       expect(@neta.check_hashtags(tags)).to eq false
     end
     it 'returns error message when tag array has more than 10 items' do
-      tags = ['tag1','tag2','tag3','tag4','tag5','tag6','tag7','tag8','tag9','tag10','tag11']
+      tags = ['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6', 'tag7', 'tag8', 'tag9', 'tag10', 'tag11']
       @neta.check_hashtags(tags)
-      expect(@neta.errors[:hashtags]).to include('は10個までです。') 
+      expect(@neta.errors[:hashtags]).to include('は10個までです。')
     end
     it 'returns true when tag array has 10 items or less' do
-      tags = ['tag1','tag2','tag3','tag4','tag5','tag6','tag7','tag8','tag9','tag10']
+      tags = ['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6', 'tag7', 'tag8', 'tag9', 'tag10']
       expect(@neta.check_hashtags(tags)).to eq true
     end
     it 'returns true even when tag array is empty' do
@@ -286,7 +286,7 @@ RSpec.describe Neta, type: :model do
       expect(@neta.check_hashtags(tags)).to eq true
     end
   end
-  
+
   describe 'method::add_hashtags' do
     before do
       @neta = create(:neta, user: user_create, topic: topic_create)
@@ -296,12 +296,12 @@ RSpec.describe Neta, type: :model do
       expect(@neta.add_hashtags(tags)).to eq false
     end
     it 'returns false if delete_hashtags returns false' do
-      tags = ['tag1','tag2','tag3','tag4','tag5','tag6','tag7','tag8','tag9','tag10']
+      tags = ['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6', 'tag7', 'tag8', 'tag9', 'tag10']
       allow(@neta).to receive(:delete_hashtags).and_return(false)
       expect(@neta.add_hashtags(tags)).to eq false
     end
     it 'creates hashtag if does not exist' do
-      tags = ['tag1','tag2','tag3']
+      tags = ['tag1', 'tag2', 'tag3']
       hashtag1 = create(:hashtag, hashname: 'tag1')
       create(:hashtag_neta, neta: @neta, hashtag: hashtag1)
       create(:hashtag, hashname: 'tag2')
@@ -310,7 +310,7 @@ RSpec.describe Neta, type: :model do
       expect(Hashtag.find_by(hashname: 'tag3').hashname).to eq 'tag3'
     end
     it 'adds hashtag to neta' do
-      tags = ['tag1','tag2','tag3']
+      tags = ['tag1', 'tag2', 'tag3']
       other_neta = create(:neta, user: user_create, topic: topic_create)
       hashtag1 = create(:hashtag, hashname: 'tag1')
       create(:hashtag_neta, neta: @neta, hashtag: hashtag1)
@@ -321,7 +321,7 @@ RSpec.describe Neta, type: :model do
       expect(HashtagNeta.where(neta_id: @neta.id).count).to eq 3
     end
     it 'returns true if hashtags have been added' do
-      tags = ['tag1','tag2','tag3']
+      tags = ['tag1', 'tag2', 'tag3']
       other_neta = create(:neta, user: user_create, topic: topic_create)
       hashtag1 = create(:hashtag, hashname: 'tag1')
       create(:hashtag_neta, neta: @neta, hashtag: hashtag1)
@@ -332,7 +332,7 @@ RSpec.describe Neta, type: :model do
       expect(@neta.add_hashtags(tags)).to eq true
     end
   end
-  
+
   describe 'delete_hashtags' do
     before do
       @neta = create(:neta, user: user_create, topic: topic_create)
@@ -375,5 +375,5 @@ RSpec.describe Neta, type: :model do
     it 'returns blank string if no hashtags associated exist' do
       expect(@neta.get_hashtags_str).to eq ''
     end
-  end  
+  end
 end

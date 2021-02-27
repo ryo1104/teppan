@@ -28,24 +28,21 @@ class User < ApplicationRecord
   validates :follows_count, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :unregistered, inclusion: { in: [true, false] }
 
-
   def self.find_or_create_for_oauth(auth)
     auth_check = User.auth_check(auth)
     return [false, auth_check[1]] unless auth_check[0]
-    
-    if auth.provider == 'twitter'
-      email = auth.info.name + '@twitter-hoge.com' # twitter APIでPrivacyPolicy等の設定をすればauth.info.emailから取得可能になる
-    else
-      email = auth.info.email
-    end
 
-    if auth.info.gender == 'male'
-      gender = 1
-    elsif auth.info.gender == 'female'
-      gender = 2
-    else
-      gender = nil
-    end
+    email = if auth.provider == 'twitter'
+              auth.info.name + '@twitter-hoge.com' # twitter APIでPrivacyPolicy等の設定をすればauth.info.emailから取得可能になる
+            else
+              auth.info.email
+            end
+
+    gender = if auth.info.gender == 'male'
+               1
+             elsif auth.info.gender == 'female'
+               2
+             end
 
     user = User.find_by(email: email)
     unless user
@@ -189,7 +186,7 @@ class User < ApplicationRecord
     bookmarks.each do |bookmark|
       i_topicids << bookmark.bookmarkable_id if bookmark.bookmarkable_type == 'Topic'
     end
-    Topic.includes([header_image_attachment: :blob], { user: [image_attachment: :blob] }, :netas).where(id: i_topicids).order('created_at DESC')
+    Topic.includes({ user: [image_attachment: :blob] }, :netas).where(id: i_topicids).order('created_at DESC')
   end
 
   def get_customer
@@ -209,119 +206,6 @@ class User < ApplicationRecord
     end
   end
 
-  def get_cards
-    if stripe_cus_id.present?
-      begin
-        cards = JSON.parse(Stripe::Customer.list_sources(stripe_cus_id, { limit: 3, object: 'card' }).to_s)
-      rescue StandardError => e
-        return [false, "Stripe error - #{e.message}"]
-      end
-      if cards['data'].present?
-        [true, cards]
-      else
-        [false, 'cards list does not exist']
-      end
-    else
-      [false, 'stripe_cus_id is blank']
-    end
-  end
-
-  def get_card_details(card_id)
-    if stripe_cus_id.present?
-      if card_id.present?
-        begin
-          customer = Stripe::Customer.retrieve(stripe_cus_id)
-          card = JSON.parse(customer.sources.retrieve(card_id).to_s)
-        rescue StandardError => e
-          return [false, "Stripe error - #{e.message}"]
-        end
-        if card['object'] == 'card'
-          if card['customer'] == stripe_cus_id
-            [true, card]
-          else
-            [false, "customer_id on card is #{card['customer']} does not match user.stripe_cus_id #{stripe_cus_id}"]
-          end
-        else
-          [false, 'card data does not exist']
-        end
-      else
-        [false, 'card_id is blank']
-      end
-    else
-      [false, 'stripe_cus_id is blank']
-    end
-  end
-
-  def add_card(token)
-    if stripe_cus_id.present?
-      if token.present?
-        begin
-          card = JSON.parse(Stripe::Customer.create_source(stripe_cus_id, { source: token }).to_s)
-        rescue StandardError => e
-          return [false, "Stripe error - #{e.message}"]
-        end
-      else
-        return [false, 'token is blank']
-      end
-    else
-      return [false, 'stripe_cus_id is blank']
-    end
-
-    chg_default_card_res = change_default_card(card['id'])
-    if chg_default_card_res[0]
-      [true, card]
-    else
-      [false, "error updating default card : #{chg_default_card_res[1]}"]
-    end
-  end
-
-  def change_default_card(card_id)
-    if card_id.present?
-      cards = get_cards
-      if cards[0]
-        card_exists = false
-        cards[1]['data'].each do |card_obj|
-          card_exists = true if card_obj['id'] == card_id
-        end
-        return [false, 'card does not exist with this user'] unless card_exists
-      else
-        return [false, "failed to get cards : #{cards[1]}"]
-      end
-
-      begin
-        customer = JSON.parse(Stripe::Customer.update(stripe_cus_id, { default_source: card_id }).to_s)
-      rescue StandardError => e
-        return [false, "Stripe error - #{e.message}"]
-      end
-
-      if customer['id'].present?
-        [true, customer]
-      else
-        [false, 'customer not present in results']
-      end
-    else
-      [false, 'card_id is blank']
-    end
-  end
-
-  def create_cus_from_card(token)
-    if token.present?
-      begin
-        customer = JSON.parse(Stripe::Customer.create({ name: nickname, source: token, email: email }).to_s)
-      rescue StandardError => e
-        return [false, "Stripe error - #{e.message}"]
-      end
-      if customer['id'].present?
-        update!(stripe_cus_id: customer['id'])
-        [true, customer]
-      else
-        [false, 'customer not present in results']
-      end
-    else
-      [false, 'token is blank']
-    end
-  end
-
   def get_balance
     if stripe_account.present?
       res = stripe_account.get_balance
@@ -338,63 +222,6 @@ class User < ApplicationRecord
       [false, "user's account does not exist"]
     end
   end
-
-  # def set_source(charge_params)
-  #   if charge_params[:stripeToken].present? # 新規カードを使用
-  #     if stripe_cus_id.present?
-  #       card_res = add_card(charge_params[:stripeToken]) # 新規カードを追加し、Cardを返す
-  #       if card_res[0]
-  #         [true, card_res[1]]
-  #       else
-  #         [false, "failed to add card : #{card_res[1]}"]
-  #       end
-  #     else
-  #       customer_res = create_cus_from_card(charge_params[:stripeToken]) # 新規Customerを作成、カードをセットしCustomerを返す
-  #       if customer_res[0]
-  #         [true, customer_res[1]]
-  #       else
-  #         [false, "failed to set card to customer : #{customer_res[1]}"]
-  #       end
-  #     end
-
-  #   elsif charge_params[:card_id].present? # 既存カードを使用
-  #     if stripe_cus_id.present?
-  #       customer_res = change_default_card(charge_params[:card_id]) # 既存カードをセットしCustomerを返す
-  #       if customer_res[0]
-  #         [true, customer_res[1]]
-  #       else
-  #         [false, "failed to change card : #{customer_res[1]}"]
-  #       end
-  #     else
-  #       [false, 'stripe_cus_id is blank']
-  #     end
-
-  #   elsif charge_params[:user_points].present? # ポイントを使用
-  #     if stripe_account.present?
-  #       if charge_params[:charge_amount].present?
-  #         user_points = charge_params[:user_points].to_i
-  #         charge_amount = charge_params[:charge_amount].to_i
-  #         if user_points >= charge_amount
-  #           account_res = stripe_account.get_connect_account
-  #           if account_res[0]
-  #             [true, account_res[1]] # Account infoを返す
-  #           else
-  #             [false, "failed to get stripe account : #{account_res[1]}"]
-  #           end
-  #         else
-  #           [false, 'insufficient points']
-  #         end
-  #       else
-  #         [false, 'charge amount does not exist']
-  #       end
-  #     else
-  #       [false, 'user account does not exist']
-  #     end
-
-  #   else
-  #     [false, 'no valid source exists']
-  #   end
-  # end
 
   def get_sold_netas_info
     trades = Trade.where(seller_id: id, tradeable_type: 'Neta').order('created_at DESC')
@@ -455,9 +282,18 @@ class User < ApplicationRecord
     end
   end
 
-  private
+  def self.auth_check(auth)
+    return [false, 'auth is empty'] if auth.blank?
 
-  # Custom Validations
+    providers = ['yahoojp', 'twitter', 'google_oauth2']
+    return [false, 'unknown provider'] unless providers.include?(auth['provider'])
+
+    [true, nil]
+  end
+
+  private_class_method :auth_check
+
+  private
 
   def image_content_type
     extension = ['image/png', 'image/jpg', 'image/jpeg']
@@ -485,13 +321,4 @@ class User < ApplicationRecord
       errors.add(:stripe_cus_id, 'invalid stripe_cus_id') unless stripe_cus_id.starts_with? 'cus_'
     end
   end
-
-  def self.auth_check(auth)
-    return [false, 'auth is empty'] if auth.blank?
-    
-    providers = ['yahoojp','twitter','google_oauth2']
-    return [false, 'unknown provider'] unless providers.include?(auth["provider"])
-    [true, nil]
-  end
-
 end

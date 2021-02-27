@@ -1,7 +1,7 @@
 require 'rails_helper'
-include ActionDispatch::TestProcess
 
 RSpec.describe User, type: :model do
+  include ActionDispatch::TestProcess
   let(:user_create)           { create(:user) }
   let(:topic_create)          { create(:topic, :with_user) }
   let(:stripe_test_key)       { ENV['STRIPE_SECRET_KEY'] }
@@ -304,13 +304,12 @@ RSpec.describe User, type: :model do
       user.image.attach(file)
       expect(user.errors[:image]).to include('のファイル形式が正しくありません。')
     end
-    
+
     it 'is invalid if unregistered flag is neither true or false' do
       user = build(:user, unregistered: nil)
       user.valid?
       expect(user.errors[:unregistered]).to include('が入力にありません。')
     end
-    
   end
 
   describe 'method::find_or_create_for_oauth(auth)' do
@@ -609,7 +608,7 @@ RSpec.describe User, type: :model do
       create(:neta, user: @user, topic: @topic3, reviews_count: 0, price: 0)
       create(:neta, :with_valuecontent, user: @user, topic: @topic3, reviews_count: 1, price: 200)
       netas = Neta.where(user_id: @user.id).where(price: 0).where.not(average_rate: 0)
-      expect(@user.free_reviewed_netas).to match netas      
+      expect(@user.free_reviewed_netas).to match netas
     end
     it 'returns blank (=> Active Record::Relation []) when no free AND reviewed netas exist' do
       expect(@user.free_reviewed_netas).to be_empty

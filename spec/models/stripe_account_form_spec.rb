@@ -3,41 +3,42 @@ require 'rails_helper'
 RSpec.describe StripeAccountForm, type: :model do
   let(:stripe_inputs_hash) do
     {
-      :business_type => "individual", 
-      :individual => {
-        :last_name => "山田", 
-        :last_name_kanji => "山田", 
-        :last_name_kana => "ヤマダ", 
-        :first_name => "賢介", 
-        :first_name_kanji => "賢介", 
-        :first_name_kana => "ケンスケ", 
-        :email => "kenske@hoge.com", 
-        :gender => "男性", 
-        :dob => {:year => "2001", :month => "12", :day => "6"}, 
-        :phone => "+81376332219", 
-        :address_kanji => {
-          :postal_code => "1010021", 
-          :state => "東京都", 
-          :city => "千代田区", 
-          :town => "外神田２丁目", 
-          :line1 => "１５−２−２０１", 
-          :line2 => "大山ビル"}, 
-          :address_kana => {
-            :line1 => "15-2-201", 
-            :line2 => "オオヤマビル"
-          }
-        }, 
-        :type => "custom", 
-        :country => "JP", 
-        :tos_acceptance => {:date => Time.parse(Time.zone.now.to_s).to_i, :ip => "0.0.0.0"}, 
-        :settings => {
-          :payouts => {
-            :schedule => {:interval=>"manual"}
-          }
+      business_type: 'individual',
+      individual: {
+        last_name: '山田',
+        last_name_kanji: '山田',
+        last_name_kana: 'ヤマダ',
+        first_name: '賢介',
+        first_name_kanji: '賢介',
+        first_name_kana: 'ケンスケ',
+        email: 'kenske@hoge.com',
+        gender: '男性',
+        dob: { year: '2001', month: '12', day: '6' },
+        phone: '+81376332219',
+        address_kanji: {
+          postal_code: '1010021',
+          state: '東京都',
+          city: '千代田区',
+          town: '外神田２丁目',
+          line1: '１５−２−２０１',
+          line2: '大山ビル'
+        },
+        address_kana: {
+          line1: '15-2-201',
+          line2: 'オオヤマビル'
+        }
+      },
+      type: 'custom',
+      country: 'JP',
+      tos_acceptance: { date: Time.parse(Time.zone.now.to_s).to_i, ip: '0.0.0.0' },
+      settings: {
+        payouts: {
+          schedule: { interval: 'manual' }
         }
       }
+    }
   end
-  let(:stripe_account_obj)  do
+  let(:stripe_account_obj) do
     {
       'id' => 'acct_1FHvBMCx2rPekxgm',
       'object' => 'account',
@@ -160,7 +161,7 @@ RSpec.describe StripeAccountForm, type: :model do
        { 'current_deadline' => nil, 'currently_due' => [], 'disabled_reason' => 'rejected.other', 'eventually_due' => [], 'past_due' => [] } }
   end
   let(:personal_info_hash) do
-    {  
+    {
       'last_name_kanji' => '山田',
       'last_name_kana' => 'ヤマダ',
       'first_name_kanji' => '賢介',
@@ -189,7 +190,7 @@ RSpec.describe StripeAccountForm, type: :model do
     }
   end
   let(:personal_info_converted) do
-    {  
+    {
       'last_name_kanji' => '山田',
       'last_name_kana' => 'ヤマダ',
       'first_name_kanji' => '賢介',
@@ -439,7 +440,7 @@ RSpec.describe StripeAccountForm, type: :model do
       expect(form.create_inputs('0.0.0.0', 'create')).to eq stripe_inputs_hash
     end
   end
-  
+
   describe 'method::international_phone_number' do
     it 'returns valid phone number' do
       form = build(:stripe_account_form, phone: valid_phone_number)
@@ -461,7 +462,7 @@ RSpec.describe StripeAccountForm, type: :model do
       expect(form.national_phone_number).to eq false
     end
   end
-  
+
   describe 'method::check_results(stripe_obj)' do
     before do
       @stripe_acct_obj = stripe_account_obj
@@ -610,5 +611,4 @@ RSpec.describe StripeAccountForm, type: :model do
       expect(result).to eq personal_info_converted
     end
   end
-
 end

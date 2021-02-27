@@ -1,14 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe Inquiry, type: :model do
-
   describe 'Validations' do
     it 'is invalid without an email address' do
       inquiry = build(:inquiry, email: '')
       inquiry.valid?
       expect(inquiry.errors[:email]).to include('を入力してください。')
     end
-    
+
     it 'is invalid with an invalid email address 1' do
       inquiry = build(:inquiry, email: 'testtest')
       inquiry.valid?
@@ -38,12 +37,11 @@ RSpec.describe Inquiry, type: :model do
       inquiry.valid?
       expect(inquiry.errors[:message]).to include('を入力してください。')
     end
-    
+
     it 'is invalid if message is longer than 400 characters' do
       inquiry = build(:inquiry, email: 'aaa@bbbccc.com', message: Faker::Lorem.characters(number: 401))
       inquiry.valid?
       expect(inquiry.errors[:message]).to include('は400文字以内で入力してください。')
     end
-    
   end
 end

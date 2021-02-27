@@ -62,7 +62,22 @@ module.exports = {
       // modules: [ path.resolve(frontend_path, 'images') , 'node_modules'],
       alias: {
           'materialize' : 'materialize-css/dist/js/materialize.min',
-          'jquery-ui': 'jquery-ui-dist/jquery-ui.min.js'
+          'jquery.ui.widget': 'jquery-ui/ui/widget',
+          'load-image': 'blueimp-load-image/js/load-image',
+          'load-image-scale': 'blueimp-load-image/js/load-image-scale',
+          'load-image-meta': 'blueimp-load-image/js/load-image-meta',
+          'load-image-fetch': 'blueimp-load-image/js/load-image-fetch',
+          'load-image-orientation': 'blueimp-load-image/js/load-image-orientation',
+          'load-image-exif': 'blueimp-load-image/js/load-image-exif',
+          'load-image-exif-map': 'blueimp-load-image/js/load-image-exif-map',
+          'load-image-iptc': 'blueimp-load-image/js/load-image-iptc',
+          'load-image-iptc-map': 'blueimp-load-image/js/load-image-iptc-map',
+          'canvas-to-blob': 'blueimp-canvas-to-blob/js/canvas-to-blob.min',
+          'iframe-transport': 'blueimp-file-upload/js/jquery.iframe-transport',
+          'jquery.fileupload': 'blueimp-file-upload/js/jquery.fileupload',
+          'jquery.fileupload-process': 'blueimp-file-upload/js/jquery.fileupload-process',
+          'jquery.fileupload-image': 'blueimp-file-upload/js/jquery.fileupload-image',
+          'jquery-ui.autocomplete' : 'jquery-ui/ui/widgets/autocomplete'
       }
     },
     // resolveLoader: {

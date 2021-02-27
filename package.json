@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "webpack",
-    "dev"  : "webpack --progress",
+    "dev": "webpack --progress",
     "watch": "webpack --progress --watch",
     "heroku-postbuild": "webpack -p"
   },
@@ -12,8 +12,11 @@
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
     "@stripe/stripe-js": "^1.5.0",
+    "blueimp-file-upload": "^10.31.0",
+    "blueimp-load-image": "^5.14.0",
     "jquery": "^3.4.1",
     "jquery-datetimepicker": "^2.5.21",
+    "jquery-ui": "^1.12.1",
     "jquery-ui-dist": "^1.12.1",
     "materialize-css": "^1.0.0",
     "node-sass": "^4.13.1",

@@ -1,21 +1,21 @@
 class Neta < ApplicationRecord
-  belongs_to      :user
-  belongs_to      :topic
+  belongs_to  :user
+  belongs_to  :topic
   counter_culture :topic
-  has_rich_text   :content
-  has_rich_text   :valuecontent
-  has_many        :reviews
-  has_many        :trades, as: :tradeable
-  has_many        :pageviews, as: :pageviewable
-  has_many        :bookmarks, as: :bookmarkable
-  has_many        :rankings, as: :rankable
-  has_many        :hashtag_netas
-  has_many        :hashtags, through: :hashtag_netas
-  validates       :title,     presence: true, length: { in: 5..35 }
-  validates       :price,     presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 10_000 }
-  validates       :private_flag, inclusion: { in: [true, false] }
-  validate        :content_check
-  validate        :valuecontent_check
+  has_rich_text :content
+  has_rich_text :valuecontent
+  has_many :reviews
+  has_many :trades, as: :tradeable
+  has_many :pageviews, as: :pageviewable
+  has_many :bookmarks, as: :bookmarkable
+  has_many :rankings, as: :rankable
+  has_many :hashtag_netas
+  has_many :hashtags, through: :hashtag_netas
+  validates :title, presence: true, length: { in: 5..35 }
+  validates :price, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 10_000 }
+  validates :private_flag, inclusion: { in: [true, false] }
+  validate  :content_check
+  validate  :valuecontent_check
 
   def self.average_rate(netas)
     gross_count = 0
@@ -70,11 +70,7 @@ class Neta < ApplicationRecord
     if price != 0
       if user.premium_user[0]
         if user.stripe_account.present?
-          if user.stripe_account.status == 'verified'
-            true
-          else
-            false
-          end
+          user.stripe_account.status == 'verified'
         else
           false
         end
@@ -140,7 +136,7 @@ class Neta < ApplicationRecord
 
   def add_hashtags(tag_array)
     if tag_array.present?
-      if self.delete_hashtags
+      if delete_hashtags
         tag_array.uniq.map do |tag_name|
           hashtag = Hashtag.find_or_create_by(hashname: tag_name)
           hashtag.update_hiragana

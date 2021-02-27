@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_07_144051) do
+ActiveRecord::Schema.define(version: 2021_02_05_134036) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -245,6 +245,7 @@ ActiveRecord::Schema.define(version: 2021_01_07_144051) do
     t.integer "netas_count", default: 0, null: false
     t.integer "comments_count", default: 0, null: false
     t.boolean "private_flag", default: false, null: false
+    t.string "header_img_url"
   end
 
   create_table "trades", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|

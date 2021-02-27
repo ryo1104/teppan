@@ -190,9 +190,9 @@ RSpec.describe StripeAccount, type: :model do
       }
     }
   end
-  let(:stripe_balance_obj) do 
+  let(:stripe_balance_obj) do
     {
-      "object"=>"balance", "available"=>[{"amount"=>0, "currency"=>"jpy", "source_types"=>{"card"=>0}}], "livemode"=>false, "pending"=>[{"amount"=>0, "currency"=>"jpy", "source_types"=>{"card"=>0}}]
+      'object' => 'balance', 'available' => [{ 'amount' => 0, 'currency' => 'jpy', 'source_types' => { 'card' => 0 } }], 'livemode' => false, 'pending' => [{ 'amount' => 0, 'currency' => 'jpy', 'source_types' => { 'card' => 0 } }]
     }
   end
   let(:zero_balance_obj) do
@@ -221,7 +221,7 @@ RSpec.describe StripeAccount, type: :model do
   end
   let(:valid_bank_info) { { 'bank_name' => 'STRIPE TEST BANK', 'branch_name' => 'STRIPE TEST BRANCH', 'account_number' => '***1234', 'account_holder_name' => 'ヤマダユウタ' } }
   let(:ext_acct_create_acctid) { 'acct_1FdfXoGJ13miU3q3' } # 銀行 太郎
-  let(:ext_acct_create_inputs)  do
+  let(:ext_acct_create_inputs) do
     {
       external_account:
       {
@@ -268,7 +268,6 @@ RSpec.describe StripeAccount, type: :model do
       account.valid?
       expect(account.errors[:ext_acct_id]).to include('ext_acct_id does not start with ba_')
     end
-
   end
 
   describe 'method::get_connect_account' do
@@ -297,7 +296,7 @@ RSpec.describe StripeAccount, type: :model do
       end
       it 'returns false when parse_account_info returns false' do
         account = create(:stripe_account, acct_id: test_acct_id)
-        allow(StripeAccountForm).to receive(:parse_account_info).and_return([false, "Some parsing error"])
+        allow(StripeAccountForm).to receive(:parse_account_info).and_return([false, 'Some parsing error'])
         expect(account.get_connect_account).to match [false, 'error in parse_account_info : Some parsing error']
       end
     end
@@ -330,7 +329,7 @@ RSpec.describe StripeAccount, type: :model do
       end
       it 'returns false when parse_account_info returns false' do
         allow(@acct_form).to receive(:create_inputs).and_return(new_acct_params)
-        allow(StripeAccountForm).to receive(:parse_account_info).and_return([false, "Some parsing error"])
+        allow(StripeAccountForm).to receive(:parse_account_info).and_return([false, 'Some parsing error'])
         @result = StripeAccount.create_connect_account(@acct_form, test_env_ip)
         expect(@result).to match [false, 'error in parse_account_info : Some parsing error']
       end
@@ -362,7 +361,7 @@ RSpec.describe StripeAccount, type: :model do
         expected_hash.merge!({ 'tos_acceptance' => result[1]['tos_acceptance'] })
         expected_hash.merge!({ 'requirements' => result[1]['requirements'] })
 
-        expect(result).to match [true, expected_hash]       
+        expect(result).to match [true, expected_hash]
       end
       after do
         Stripe::Account.delete(@create_result['id']) if @create_result.key?('id')
@@ -376,23 +375,23 @@ RSpec.describe StripeAccount, type: :model do
       end
       it 'returns false with blank acct_id' do
         @account.acct_id = nil
-        expect(@account.update_connect_account(@acct_form, test_env_ip)).to match [false, 'acct_id is blank']     
+        expect(@account.update_connect_account(@acct_form, test_env_ip)).to match [false, 'acct_id is blank']
       end
       it 'returns exception with invalid inputs' do
         allow(@acct_form).to receive(:create_inputs).and_return(nil)
         result = @account.update_connect_account(@acct_form, test_env_ip)
-        expect(result[1]).to include('Stripe error')       
+        expect(result[1]).to include('Stripe error')
       end
       it 'returns false when parse_account_info returns false' do
         allow(@acct_form).to receive(:create_inputs).and_return(update_acct_params)
         allow(Stripe::Account).to receive(:update).and_return({})
-        allow(StripeAccountForm).to receive(:parse_account_info).and_return([false, "Some parsing error"])
+        allow(StripeAccountForm).to receive(:parse_account_info).and_return([false, 'Some parsing error'])
         result = @account.update_connect_account(@acct_form, test_env_ip)
         expect(result).to match [false, 'error in parse_account_info : Some parsing error']
       end
     end
   end
-  
+
   describe 'method::delete_connect_account' do
     context 'successfully' do
       before do
@@ -419,7 +418,7 @@ RSpec.describe StripeAccount, type: :model do
       end
       it 'returns false with blank acct_id' do
         @account.acct_id = nil
-        expect(@account.delete_connect_account).to match [false, 'acct_id is blank'] 
+        expect(@account.delete_connect_account).to match [false, 'acct_id is blank']
       end
       it 'returns false when balance is not zero' do
         allow(@account).to receive(:zero_balance).and_return(false)
@@ -520,12 +519,12 @@ RSpec.describe StripeAccount, type: :model do
       end
       it 'returns false when parse_bank_info returns false' do
         allow(Stripe::Account).to receive(:retrieve).and_return(stripe_account_obj.to_json)
-        allow(Bank).to receive(:parse_bank_info).and_return([false, "some error"])
+        allow(Bank).to receive(:parse_bank_info).and_return([false, 'some error'])
         expect(@account.get_ext_account).to eq [false, 'error in parse_bank_info : some error']
       end
     end
   end
-  
+
   describe 'method::create_ext_account' do
     before do
       Stripe.api_key = stripe_test_key
@@ -565,7 +564,7 @@ RSpec.describe StripeAccount, type: :model do
       end
     end
   end
-  
+
   describe 'method::delete_ext_account' do
     before do
       Stripe.api_key = stripe_test_key
@@ -582,10 +581,10 @@ RSpec.describe StripeAccount, type: :model do
         create_res = @account.create_ext_account(@stripe_bank_inputs)
         old_stripe_bank_id = @account.ext_acct_id
         @account.ext_acct_id = create_res[1]['id']
-        expect(@account.delete_ext_account(old_stripe_bank_id)).to eq [true, {'id' => old_stripe_bank_id, 'object' => 'bank_account', 'currency' => 'jpy', 'deleted' => true }]
+        expect(@account.delete_ext_account(old_stripe_bank_id)).to eq [true, { 'id' => old_stripe_bank_id, 'object' => 'bank_account', 'currency' => 'jpy', 'deleted' => true }]
       end
     end
-    context 'fails and' do 
+    context 'fails and' do
       it 'returns false with blank acct_id' do
         @account.acct_id = nil
         expect(@account.delete_ext_account(@stripe_bank_inputs)).to match [false, 'acct_id is blank']
@@ -597,7 +596,7 @@ RSpec.describe StripeAccount, type: :model do
       it 'returns false if old_stripe_bank_id is default external account' do
         create_res = @account.create_ext_account(@stripe_bank_inputs)
         old_stripe_bank_id = create_res[1]['id']
-        expect(@account.delete_ext_account(old_stripe_bank_id)[1]).to include "is the default account so it cannot be deleted."
+        expect(@account.delete_ext_account(old_stripe_bank_id)[1]).to include 'is the default account so it cannot be deleted.'
       end
     end
     after do
@@ -610,5 +609,4 @@ RSpec.describe StripeAccount, type: :model do
       end
     end
   end
-
 end

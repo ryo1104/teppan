@@ -38,7 +38,11 @@ class Users::SessionsController < Devise::SessionsController
   def get_user
     if params['user']['email'].present?
       @user = User.find_by(email: params['user']['email'])
-      true
+      if @user
+        true
+      else
+        false
+      end
     else
       false
     end
