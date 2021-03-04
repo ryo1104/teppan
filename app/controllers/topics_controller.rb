@@ -15,7 +15,7 @@ class TopicsController < ApplicationController
   def create
     @topic = Topic.new(post_params)
     if @topic.save
-      redirect_to topics_path, notice: 'トピックを作成しました。' and return
+      redirect_to topics_path, notice: I18n.t('controller.topic.created') and return
     else
       render :new and return
     end
@@ -25,7 +25,7 @@ class TopicsController < ApplicationController
     @topic = Topic.includes({ user: [image_attachment: :blob] }).find(params[:id])
     @owner = owner(@topic)
     if @topic.private_flag && @owner == false
-      @message = 'この投稿は非公開に設定されています。'
+      @message = I18n.t('controller.topic.private')
     else
       @netas = @topic.netas.includes({ user: [image_attachment: :blob] }, :hashtags).where(private_flag: false).order('average_rate DESC')
       @comments = @topic.comments.includes({ user: [image_attachment: :blob] }).order('created_at DESC')
@@ -38,7 +38,7 @@ class TopicsController < ApplicationController
 
   def edit
     @topic = Topic.find(params[:id])
-    redirect_to topic_path(@topic.id), alert: '権限がありません。' and return unless owner(@topic)
+    redirect_to topic_path(@topic.id), alert: I18n.t('controller.general.no_access') and return unless owner(@topic)
   end
 
   def update
@@ -46,29 +46,26 @@ class TopicsController < ApplicationController
     if owner(@topic)
       delete_s3_object
       if @topic.update(post_params)
-        redirect_to topic_path(@topic.id), notice: 'トピックを更新しました。' and return
+        redirect_to topic_path(@topic.id), notice: I18n.t('controller.topic.updated') and return
       else
         render :edit and return
       end
     else
-      redirect_to topic_path(@topic.id), alert: '権限がありません。' and return
+      redirect_to topic_path(@topic.id), alert: I18n.t('controller.general.no_access') and return
     end
   end
 
   def destroy
     @topic = Topic.includes(:netas, :pageviews, :bookmarks).find(params[:id])
     if owner(@topic)
-      if delete_s3_object
-        if @topic.destroy
-          redirect_to topics_path, notice: 'トピックを削除しました。' and return
-        else
-          render :edit and return
-        end
+      delete_s3_object
+      if @topic.destroy
+        redirect_to topics_path, notice: I18n.t('controller.topic.deleted') and return
       else
-        redirect_to topic_path(@topic.id), alert: 'ヘッダー画像が削除できません。' and return
+        render :edit and return
       end
     else
-      redirect_to topic_path(@topic.id), alert: '権限がありません。' and return
+      redirect_to topic_path(@topic.id), alert: I18n.t('controller.general.no_access') and return
     end
   end
 
@@ -87,7 +84,8 @@ class TopicsController < ApplicationController
   end
 
   def set_s3_direct_post
-    @s3_direct_post = S3_BUCKET.presigned_post(key: "topic_header_images/#{SecureRandom.uuid}/${filename}", success_action_status: '201', acl: 'public-read')
+    @s3_direct_post = S3_BUCKET.presigned_post(key: "topic_header_images/#{SecureRandom.uuid}/${filename}",
+                                               success_action_status: '201', acl: 'public-read')
   end
 
   def delete_s3_object

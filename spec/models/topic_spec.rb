@@ -40,6 +40,23 @@ RSpec.describe Topic, type: :model do
       expect(topic.errors[:content]).to include('を入力してください。')
     end
 
+    it 'is invalid if header_img_url is not AWS S3' do
+      topic = build(:topic, :with_user, header_img_url: '/hogehoge_url')
+      topic.valid?
+      expect(topic.errors[:header_img_url]).to include('が正しくありません。')
+    end
+
+    it 'is invalid with invalid header_img_url' do
+      topic = build(:topic, :with_user, header_img_url: '//teppan-dev.s3.ap-northeast-1.amazonaws.com/aaaa')
+      topic.valid?
+      expect(topic.errors[:header_img_url]).to include('が正しくありません。')
+    end
+
+    it 'is valid with valid header_img_url ' do
+      topic = build(:topic, :with_user, header_img_url: '//teppan-dev.s3.ap-northeast-1.amazonaws.com/topic_header_images/7819d418-1f6a-443a-84ba-fc59a77d5622/mcdonalds.png')
+      expect(topic).to be_valid
+    end
+
     # it 'is invalid if header attachment is not in supported image format' do
     #   topic = FactoryBot.create(:topic, :with_user)
     #   file = fixture_file_upload('/files/erd.pdf', 'application/pdf')

@@ -1,5 +1,7 @@
 ja:
   controller:
+    general: 
+      no_access: '権限がありません。'
     account:
       ineligible: 'ビジネスアカウントを作成するユーザー条件を満たしていません。'
       exists: 'すでにビジネスアカウントが存在します。'
@@ -13,3 +15,8 @@ ja:
       deleted: 'ビジネスアカウントを削除しました。'
       not_deleted: 'ビジネスアカウントを削除できませんでした。'
       not_retrieved: 'アカウント情報が取得できませんでした。'
+    topic:
+      created: 'トピックが作成されました。'
+      updated: 'トピックが更新されました。'
+      deleted: 'トピックが削除されました。'
+      private: 'このトピックは非公開に設定されています。'

@@ -8,12 +8,8 @@ class Topic < ApplicationRecord
   has_many      :comments,  as: :commentable, dependent: :destroy
   has_many      :likes,     as: :likeable, dependent: :destroy
   validates     :title,     presence: true, uniqueness: { case_sensitive: true }, length: { maximum: 35 }
-  # validate      :check_header_image, if: :was_attached?
   validate      :content_exists
-
-  def was_attached?
-    header_image.attached?
-  end
+  validate      :header_img_check
 
   def max_rate
     maxrate = 0
@@ -71,5 +67,18 @@ class Topic < ApplicationRecord
     #     errors.add(:content, " size must be smaller than 5MB")
     #   end
     # end
+  end
+
+  def header_img_check
+    if header_img_url.present?
+      if header_img_url.include?('amazonaws.com/')
+        path = header_img_url.split('amazonaws.com/')[1]
+        unless path.include?('topic_header_images')
+          errors.add(:header_img_url, I18n.t('errors.messages.invalid'))
+        end
+      else
+        errors.add(:header_img_url, I18n.t('errors.messages.invalid'))
+      end
+    end
   end
 end

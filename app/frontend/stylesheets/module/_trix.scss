@@ -1,11 +1,11 @@
 trix-editor {
   @include sp { 
     height: 25rem;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
   }
   @include pc {
     height: 30rem;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
   }
   overflow-y: auto;
   ul {

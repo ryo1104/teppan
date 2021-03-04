@@ -1,5 +1,4 @@
 class Topics::HeaderimagesController < ApplicationController
-
   def destroy
     @topic = Topic.find(params[:topic_id])
     if @topic.header_img_url.present?
