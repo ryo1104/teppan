@@ -9,6 +9,7 @@ require 'rspec/rails'
 require 'devise'
 require './spec/support/omni_auth_mocks'
 require './spec/support/controller_macros'
+require './spec/support/fakes3'
 # require_relative 'support/controller_macros'
 
 require 'dotenv'
@@ -70,6 +71,20 @@ RSpec.configure do |config|
   # OmniAuthをテストモードに変更
   OmniAuth.config.test_mode = true
   config.include OmniauthMocks
-
   config.render_views
+
+  config.before :each do |_example|
+    # S3_BUCKETをfakes3に接続したスタブに置き換える
+    s3_client = Aws::S3::Client.new(
+      access_key_id: 'dummy_aws_access_key_id',
+      secret_access_key: 'dummy_aws_secret_access_key',
+      region: 'ap-northeast-1',
+      endpoint: "http://#{Glint::Server.info[:fakes3][:address]}/",
+      force_path_style: true
+    )
+    Aws::S3::Resource.new(client: s3_client).create_bucket(
+      bucket: 'dummy_bucket_name'
+    )
+    stub_const('S3_BUCKET', Aws::S3::Resource.new(client: s3_client).bucket('dummy_bucket_name'))
+  end
 end

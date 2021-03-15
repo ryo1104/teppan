@@ -124,11 +124,15 @@ GEM
       railties (>= 5.0.0)
     faker (2.13.0)
       i18n (>= 1.6, < 2)
+    fakes3 (0.2.5)
+      builder
+      thor
     faraday (1.0.1)
       multipart-post (>= 1.2, < 3)
     fast_jsonapi (1.5)
       activesupport (>= 4.2)
     ffi (1.13.1)
+    glint (0.1.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     gretel (4.0.0)
@@ -397,7 +401,9 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   faker
+  fakes3 (= 0.2.5)
   fast_jsonapi
+  glint
   gretel
   image_processing (~> 1.2)
   jquery-rails

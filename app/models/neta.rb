@@ -169,6 +169,19 @@ class Neta < ApplicationRecord
     end
   end
 
+  def self.details_from_ids(ids)
+    netas = Neta.where(id: ids)
+    if netas.present?
+      neta_hash = {}
+      netas.each do |neta|
+        neta_hash.merge!({ neta.id => { 'title' => neta.title } })
+      end
+      neta_hash
+    else
+      false
+    end
+  end
+
   private
 
   def content_check

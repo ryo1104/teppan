@@ -840,242 +840,242 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe 'method::get_cards' do
-    before do
-      @user = create(:user)
-      Stripe.api_key = stripe_test_key
-    end
-    context 'user with valid cus_id' do
-      before do
-        @user.stripe_cus_id = test_stripe_cus_id
-      end
-      it 'retrieves cards info' do
-        expect(@user.get_cards).to eq [true, test_stripe_cards]
-      end
-    end
-    context 'user with invalid cus_id' do
-      before do
-        @user.stripe_cus_id = 'bbbbbb'
-      end
-      it 'returns false when no such cus_id exists' do
-        expect(@user.get_cards).to eq [false, "Stripe error - No such customer: '#{@user.stripe_cus_id}'"]
-      end
-    end
-    context 'user with blank cus_id' do
-      before do
-        @user.stripe_cus_id = nil
-      end
-      it 'returns false' do
-        expect(@user.get_cards).to eq [false, 'stripe_cus_id is blank']
-      end
-    end
-  end
+  # describe 'method::get_cards' do
+  #   before do
+  #     @user = create(:user)
+  #     Stripe.api_key = stripe_test_key
+  #   end
+  #   context 'user with valid cus_id' do
+  #     before do
+  #       @user.stripe_cus_id = test_stripe_cus_id
+  #     end
+  #     it 'retrieves cards info' do
+  #       expect(@user.get_cards).to eq [true, test_stripe_cards]
+  #     end
+  #   end
+  #   context 'user with invalid cus_id' do
+  #     before do
+  #       @user.stripe_cus_id = 'bbbbbb'
+  #     end
+  #     it 'returns false when no such cus_id exists' do
+  #       expect(@user.get_cards).to eq [false, "Stripe error - No such customer: '#{@user.stripe_cus_id}'"]
+  #     end
+  #   end
+  #   context 'user with blank cus_id' do
+  #     before do
+  #       @user.stripe_cus_id = nil
+  #     end
+  #     it 'returns false' do
+  #       expect(@user.get_cards).to eq [false, 'stripe_cus_id is blank']
+  #     end
+  #   end
+  # end
 
-  describe 'method::get_card_details' do
-    before do
-      @user = create(:user)
-      Stripe.api_key = stripe_test_key
-    end
-    context 'user with valid cus_id' do
-      before do
-        @user.stripe_cus_id = test_stripe_cus_id
-      end
-      context 'card_id is valid' do
-        before do
-          @card_id = test_stripe_card_id_1
-        end
-        it 'retrieves card details' do
-          expect(@user.get_card_details(@card_id)).to eq [true, test_stripe_card]
-        end
-      end
-      context 'card_id is invalid' do
-        before do
-          @card_id = 'cccccc'
-        end
-        it 'returns false when card_id does not exist on user' do
-          expect(@user.get_card_details(@card_id)).to eq [false, "Stripe error - No such source: '#{@card_id}'"]
-        end
-        it 'returns false when card_id is blank' do
-          expect(@user.get_card_details(nil)).to eq [false, 'card_id is blank']
-        end
-      end
-    end
-    context 'user with invalid cus_id' do
-      before do
-        @user.stripe_cus_id = 'dddddd'
-        @card_id = test_stripe_card_id_1
-      end
-      it 'returns false' do
-        expect(@user.get_card_details(@card_id)).to eq [false, "Stripe error - No such customer: '#{@user.stripe_cus_id}'"]
-      end
-    end
-    context 'user with blank cus_id' do
-      before do
-        @user.stripe_cus_id = nil
-        @card_id = test_stripe_card_id_1
-      end
-      it 'returns false' do
-        expect(@user.get_card_details(@card_id)).to eq [false, 'stripe_cus_id is blank']
-      end
-    end
-  end
+  # describe 'method::get_card_details' do
+  #   before do
+  #     @user = create(:user)
+  #     Stripe.api_key = stripe_test_key
+  #   end
+  #   context 'user with valid cus_id' do
+  #     before do
+  #       @user.stripe_cus_id = test_stripe_cus_id
+  #     end
+  #     context 'card_id is valid' do
+  #       before do
+  #         @card_id = test_stripe_card_id_1
+  #       end
+  #       it 'retrieves card details' do
+  #         expect(@user.get_card_details(@card_id)).to eq [true, test_stripe_card]
+  #       end
+  #     end
+  #     context 'card_id is invalid' do
+  #       before do
+  #         @card_id = 'cccccc'
+  #       end
+  #       it 'returns false when card_id does not exist on user' do
+  #         expect(@user.get_card_details(@card_id)).to eq [false, "Stripe error - No such source: '#{@card_id}'"]
+  #       end
+  #       it 'returns false when card_id is blank' do
+  #         expect(@user.get_card_details(nil)).to eq [false, 'card_id is blank']
+  #       end
+  #     end
+  #   end
+  #   context 'user with invalid cus_id' do
+  #     before do
+  #       @user.stripe_cus_id = 'dddddd'
+  #       @card_id = test_stripe_card_id_1
+  #     end
+  #     it 'returns false' do
+  #       expect(@user.get_card_details(@card_id)).to eq [false, "Stripe error - No such customer: '#{@user.stripe_cus_id}'"]
+  #     end
+  #   end
+  #   context 'user with blank cus_id' do
+  #     before do
+  #       @user.stripe_cus_id = nil
+  #       @card_id = test_stripe_card_id_1
+  #     end
+  #     it 'returns false' do
+  #       expect(@user.get_card_details(@card_id)).to eq [false, 'stripe_cus_id is blank']
+  #     end
+  #   end
+  # end
 
-  describe 'method::add_card' do
-    before do
-      @user = create(:user)
-      Stripe.api_key = stripe_test_key
-    end
-    context 'user with valid cus_id' do
-      context 'token is blank' do
-        it 'returns false' do
-          expect(@user.add_card(nil)).to eq [false, 'token is blank']
-        end
-      end
-      context 'token is valid' do
-        before do
-          @token = 'tok_jp'
-          @user.stripe_cus_id = test_stripe_cus_id_2
-          allow_any_instance_of(User).to receive(:change_default_card).and_return([true, nil])
-        end
-        it 'returns added card' do
-          @added_card = @user.add_card(@token)
-          expect(@added_card[1]['object']).to eq 'card'
-        end
-        after do
-          Stripe::Customer.delete_source(@user.stripe_cus_id, @added_card[1]['id'])
-        end
-      end
-      context 'token is invalid' do
-        before do
-          @user.stripe_cus_id = test_stripe_cus_id_2
-          allow_any_instance_of(User).to receive(:change_default_card).and_return([true, nil])
-        end
-        it 'returns false when CvC check fails' do
-          @token = 'tok_cvcCheckFail'
-          expect(@user.add_card(@token)).to eq [false, "Stripe error - Your card's security code is incorrect."]
-        end
-        it 'returns false when declined status' do
-          @token = 'tok_chargeDeclined'
-          expect(@user.add_card(@token)).to eq [false, 'Stripe error - Your card was declined.']
-        end
-        it 'returns false when declined status insufficient funds' do
-          @token = 'tok_chargeDeclinedInsufficientFunds'
-          expect(@user.add_card(@token)).to eq [false, 'Stripe error - Your card has insufficient funds.']
-        end
-        it 'returns false when declined status incorrect cvc' do
-          @token = 'tok_chargeDeclinedIncorrectCvc'
-          expect(@user.add_card(@token)).to eq [false, "Stripe error - Your card's security code is incorrect."]
-        end
-        it 'returns false when declined status expired card' do
-          @token = 'tok_chargeDeclinedExpiredCard'
-          expect(@user.add_card(@token)).to eq [false, 'Stripe error - Your card has expired.']
-        end
-      end
-    end
-    context 'user with invalid cus_id' do
-      before do
-        @user.stripe_cus_id = 'eeeeee'
-        @token = 'tok_jp'
-      end
-      it 'returns false' do
-        expect(@user.add_card(@token)).to eq [false, "Stripe error - No such customer: '#{@user.stripe_cus_id}'"]
-      end
-    end
-    context 'user with blank cus_id' do
-      before do
-        @user.stripe_cus_id = nil
-        @token = 'tok_jp'
-      end
-      it 'returns false' do
-        expect(@user.add_card(@token)).to eq [false, 'stripe_cus_id is blank']
-      end
-    end
-  end
+  # describe 'method::add_card' do
+  #   before do
+  #     @user = create(:user)
+  #     Stripe.api_key = stripe_test_key
+  #   end
+  #   context 'user with valid cus_id' do
+  #     context 'token is blank' do
+  #       it 'returns false' do
+  #         expect(@user.add_card(nil)).to eq [false, 'token is blank']
+  #       end
+  #     end
+  #     context 'token is valid' do
+  #       before do
+  #         @token = 'tok_jp'
+  #         @user.stripe_cus_id = test_stripe_cus_id_2
+  #         allow_any_instance_of(User).to receive(:change_default_card).and_return([true, nil])
+  #       end
+  #       it 'returns added card' do
+  #         @added_card = @user.add_card(@token)
+  #         expect(@added_card[1]['object']).to eq 'card'
+  #       end
+  #       after do
+  #         Stripe::Customer.delete_source(@user.stripe_cus_id, @added_card[1]['id'])
+  #       end
+  #     end
+  #     context 'token is invalid' do
+  #       before do
+  #         @user.stripe_cus_id = test_stripe_cus_id_2
+  #         allow_any_instance_of(User).to receive(:change_default_card).and_return([true, nil])
+  #       end
+  #       it 'returns false when CvC check fails' do
+  #         @token = 'tok_cvcCheckFail'
+  #         expect(@user.add_card(@token)).to eq [false, "Stripe error - Your card's security code is incorrect."]
+  #       end
+  #       it 'returns false when declined status' do
+  #         @token = 'tok_chargeDeclined'
+  #         expect(@user.add_card(@token)).to eq [false, 'Stripe error - Your card was declined.']
+  #       end
+  #       it 'returns false when declined status insufficient funds' do
+  #         @token = 'tok_chargeDeclinedInsufficientFunds'
+  #         expect(@user.add_card(@token)).to eq [false, 'Stripe error - Your card has insufficient funds.']
+  #       end
+  #       it 'returns false when declined status incorrect cvc' do
+  #         @token = 'tok_chargeDeclinedIncorrectCvc'
+  #         expect(@user.add_card(@token)).to eq [false, "Stripe error - Your card's security code is incorrect."]
+  #       end
+  #       it 'returns false when declined status expired card' do
+  #         @token = 'tok_chargeDeclinedExpiredCard'
+  #         expect(@user.add_card(@token)).to eq [false, 'Stripe error - Your card has expired.']
+  #       end
+  #     end
+  #   end
+  #   context 'user with invalid cus_id' do
+  #     before do
+  #       @user.stripe_cus_id = 'eeeeee'
+  #       @token = 'tok_jp'
+  #     end
+  #     it 'returns false' do
+  #       expect(@user.add_card(@token)).to eq [false, "Stripe error - No such customer: '#{@user.stripe_cus_id}'"]
+  #     end
+  #   end
+  #   context 'user with blank cus_id' do
+  #     before do
+  #       @user.stripe_cus_id = nil
+  #       @token = 'tok_jp'
+  #     end
+  #     it 'returns false' do
+  #       expect(@user.add_card(@token)).to eq [false, 'stripe_cus_id is blank']
+  #     end
+  #   end
+  # end
 
-  describe 'method::change_default_card' do
-    before do
-      @user = create(:user)
-      Stripe.api_key = stripe_test_key
-    end
-    context 'card exists in user source' do
-      before do
-        @user.stripe_cus_id = test_stripe_cus_id
-        @card_id = test_stripe_card_id_2
-      end
-      it 'returns customer with default source set as card_id' do
-        expect(@user.change_default_card(@card_id)[1]['default_source']).to eq @card_id
-      end
-      after do
-        Stripe::Customer.update(@user.stripe_cus_id, { default_source: test_stripe_card_id_1 })
-      end
-    end
-    context 'card does not exist in user source' do
-      before do
-        @user.stripe_cus_id = test_stripe_cus_id
-        @card_id = 'cccccc'
-      end
-      it 'returns false' do
-        expect(@user.change_default_card(@card_id)).to eq [false, 'card does not exist with this user']
-      end
-    end
-    context 'no cards exist in user source' do
-      before do
-        @user.stripe_cus_id = test_stripe_cus_id
-        @card_id = test_stripe_card_id_2
-        allow_any_instance_of(User).to receive(:get_cards).and_return([false, nil])
-      end
-      it 'returns false' do
-        expect(@user.change_default_card(@card_id)[0]).to eq false
-      end
-    end
-    context 'Stripe returns blank customer data' do
-      before do
-        @user.stripe_cus_id = test_stripe_cus_id
-        @card_id = test_stripe_card_id_2
-        allow(Stripe::Customer).to receive(:update).and_return({})
-      end
-      it 'returns false' do
-        expect(@user.change_default_card(@card_id)).to eq [false, 'customer not present in results']
-      end
-    end
-  end
+  # describe 'method::change_default_card' do
+  #   before do
+  #     @user = create(:user)
+  #     Stripe.api_key = stripe_test_key
+  #   end
+  #   context 'card exists in user source' do
+  #     before do
+  #       @user.stripe_cus_id = test_stripe_cus_id
+  #       @card_id = test_stripe_card_id_2
+  #     end
+  #     it 'returns customer with default source set as card_id' do
+  #       expect(@user.change_default_card(@card_id)[1]['default_source']).to eq @card_id
+  #     end
+  #     after do
+  #       Stripe::Customer.update(@user.stripe_cus_id, { default_source: test_stripe_card_id_1 })
+  #     end
+  #   end
+  #   context 'card does not exist in user source' do
+  #     before do
+  #       @user.stripe_cus_id = test_stripe_cus_id
+  #       @card_id = 'cccccc'
+  #     end
+  #     it 'returns false' do
+  #       expect(@user.change_default_card(@card_id)).to eq [false, 'card does not exist with this user']
+  #     end
+  #   end
+  #   context 'no cards exist in user source' do
+  #     before do
+  #       @user.stripe_cus_id = test_stripe_cus_id
+  #       @card_id = test_stripe_card_id_2
+  #       allow_any_instance_of(User).to receive(:get_cards).and_return([false, nil])
+  #     end
+  #     it 'returns false' do
+  #       expect(@user.change_default_card(@card_id)[0]).to eq false
+  #     end
+  #   end
+  #   context 'Stripe returns blank customer data' do
+  #     before do
+  #       @user.stripe_cus_id = test_stripe_cus_id
+  #       @card_id = test_stripe_card_id_2
+  #       allow(Stripe::Customer).to receive(:update).and_return({})
+  #     end
+  #     it 'returns false' do
+  #       expect(@user.change_default_card(@card_id)).to eq [false, 'customer not present in results']
+  #     end
+  #   end
+  # end
 
-  describe 'method::create_cus_from_card' do
-    before do
-      @user = create(:user)
-      Stripe.api_key = stripe_test_key
-    end
-    context 'token is blank' do
-      it 'returns false' do
-        expect(@user.create_cus_from_card(nil)).to eq [false, 'token is blank']
-      end
-    end
-    context 'token is valid' do
-      before do
-        @token = 'tok_jp'
-      end
-      it 'returns new customer data' do
-        @customer = @user.create_cus_from_card(@token)[1]
-        expect(@customer['object']).to eq 'customer'
-      end
-      it 'updates customer with stripe_cus_id' do
-        @customer = @user.create_cus_from_card(@token)[1]
-        expect(@user.stripe_cus_id).to eq @customer['id']
-      end
-      after do
-        Stripe::Customer.delete(@customer['id'])
-      end
-    end
-    context 'Stripe returns blank customer data' do
-      before do
-        @token = 'tok_jp'
-        allow(Stripe::Customer).to receive(:create).and_return({})
-      end
-      it 'returns false' do
-        expect(@user.create_cus_from_card(@token)).to eq [false, 'customer not present in results']
-      end
-    end
-  end
+  # describe 'method::create_cus_from_card' do
+  #   before do
+  #     @user = create(:user)
+  #     Stripe.api_key = stripe_test_key
+  #   end
+  #   context 'token is blank' do
+  #     it 'returns false' do
+  #       expect(@user.create_cus_from_card(nil)).to eq [false, 'token is blank']
+  #     end
+  #   end
+  #   context 'token is valid' do
+  #     before do
+  #       @token = 'tok_jp'
+  #     end
+  #     it 'returns new customer data' do
+  #       @customer = @user.create_cus_from_card(@token)[1]
+  #       expect(@customer['object']).to eq 'customer'
+  #     end
+  #     it 'updates customer with stripe_cus_id' do
+  #       @customer = @user.create_cus_from_card(@token)[1]
+  #       expect(@user.stripe_cus_id).to eq @customer['id']
+  #     end
+  #     after do
+  #       Stripe::Customer.delete(@customer['id'])
+  #     end
+  #   end
+  #   context 'Stripe returns blank customer data' do
+  #     before do
+  #       @token = 'tok_jp'
+  #       allow(Stripe::Customer).to receive(:create).and_return({})
+  #     end
+  #     it 'returns false' do
+  #       expect(@user.create_cus_from_card(@token)).to eq [false, 'customer not present in results']
+  #     end
+  #   end
+  # end
 
   describe 'method::get_balance' do
     before do
@@ -1221,46 +1221,4 @@ RSpec.describe User, type: :model do
   #     end
   #   end
   # end
-
-  describe 'method::get_sold_netas_info' do
-    before do
-      @topic1 = create(:topic, :with_user)
-      @topic2 = create(:topic, :with_user)
-      @topic3 = create(:topic, :with_user)
-      @user1 = create(:user)
-      @user2 = create(:user)
-      @user3 = create(:user)
-      @neta1 = create(:neta, :with_valuecontent, user: @user1, topic: @topic1)
-      @neta2 = create(:neta, :with_valuecontent, user: @user2, topic: @topic1)
-      @neta3 = create(:neta, :with_valuecontent, user: @user1, topic: @topic2)
-      @neta4 = create(:neta, :with_valuecontent, user: @user2, topic: @topic2)
-      @neta5 = create(:neta, :with_valuecontent, user: @user1, topic: @topic3)
-      @neta6 = create(:neta, :with_valuecontent, user: @user2, topic: @topic3)
-      @neta7 = create(:neta, :with_valuecontent, user: @user3, topic: @topic3)
-    end
-    context 'when no sold netas exist for user' do
-      before do
-        @trade1 = create(:trade, tradeable: @neta6, seller_id: @user2.id, buyer_id: @user1.id)
-        @trade2 = create(:trade, tradeable: @neta7, seller_id: @user3.id, buyer_id: @user2.id)
-      end
-      it 'returns false' do
-        expect(@user1.get_sold_netas_info).to eq [false, "No sold netas found for user_id #{@user1.id}"]
-      end
-    end
-    context 'when sold netas exist for user' do
-      before do
-        @trade1 = create(:trade, tradeable: @neta3, seller_id: @user1.id, buyer_id: @user3.id)
-        @trade2 = create(:trade, tradeable: @neta5, seller_id: @user1.id, buyer_id: @user2.id)
-        @trade3 = create(:trade, tradeable: @neta6, seller_id: @user2.id, buyer_id: @user1.id)
-        @trade4 = create(:trade, tradeable: @neta7, seller_id: @user3.id, buyer_id: @user2.id)
-      end
-      it 'returns sold netas' do
-        sold_netas_info = [
-          { 'traded_at' => @trade1.created_at, 'title' => @neta3.title, 'price' => @trade1.price, 'buyer_id' => @user3.id, 'buyer_nickname' => @user3.nickname, 'review_rate' => nil },
-          { 'traded_at' => @trade2.created_at, 'title' => @neta5.title, 'price' => @trade2.price, 'buyer_id' => @user2.id, 'buyer_nickname' => @user2.nickname, 'review_rate' => nil }
-        ]
-        expect(@user1.get_sold_netas_info).to eq [true, sold_netas_info]
-      end
-    end
-  end
 end

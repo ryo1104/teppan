@@ -165,4 +165,58 @@ class Trade < ApplicationRecord
     c_tax = Trade.get_ctax(price)
     [true, { price: price, seller_revenue: seller_revenue, fee: fee, c_tax: c_tax }]
   end
+
+  def self.get_trades_info(who, id, tradeable_type)
+    trades = if who == 'seller'
+               Trade.where(seller_id: id, tradeable_type: tradeable_type).order('created_at DESC')
+             elsif who == 'buyer'
+               Trade.where(buyer_id: id, tradeable_type: tradeable_type).order('created_at DESC')
+             end
+    if trades.present?
+      ids = collect_ids(trades)
+      buyers_hash = User.details_from_ids(ids['buyer_ids'])
+      neta_hash = Neta.details_from_ids(ids['tradeable_ids'])
+      review_hash = Review.details_from_ids(tradeable_type, ids['tradeable_ids'])
+      sold_netas_info = sold_netas_details(trades, buyers_hash, neta_hash, review_hash)
+      [true, sold_netas_info]
+    else
+      [false, "No sold netas found for user_id #{seller_id}"]
+    end
+  end
+
+  def self.collect_ids(trades)
+    tradeable_ids = []
+    buyer_ids = []
+    trades.each do |trade|
+      buyer_ids << trade.buyer_id
+      tradeable_ids << trade.tradeable_id
+    end
+    buyer_ids.uniq!
+    tradeable_ids.uniq!
+    { 'buyer_ids' => buyer_ids, 'tradeable_ids' => tradeable_ids }
+  end
+
+  def self.sold_netas_details(trades, buyers_hash, neta_hash, review_hash)
+    if trades.present?
+      sold_netas_info = []
+      trades.each do |trade|
+        rate = if review_hash.key?('neta_' + trade.tradeable_id.to_s + '_user_' + trade.buyer_id.to_s)
+                 review_hash['neta_' + trade.tradeable_id.to_s + '_user_' + trade.buyer_id.to_s]['rate']
+               end
+        sold_netas_info << {
+          'traded_at' => trade.created_at,
+          'title' => neta_hash[trade.tradeable_id]['title'],
+          'price' => trade.price,
+          'buyer_id' => trade.buyer_id,
+          'buyer_nickname' => buyers_hash[trade.buyer_id]['nickname'],
+          'review_rate' => rate
+        }
+      end
+      sold_netas_info
+    else
+      false
+    end
+  end
+
+  private_class_method :sold_netas_details, :collect_ids
 end

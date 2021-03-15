@@ -11,7 +11,7 @@ class Ranking < ApplicationRecord
     end
   end
 
-  def self.generate_neta_ranks(span, top_x)
+  def self.generate_neta_ranks(span, _top_x)
     from = Time.zone.now - span.days
     to = Time.zone.now
     netas = Neta.where(created_at: from..to)
@@ -20,15 +20,23 @@ class Ranking < ApplicationRecord
       score = neta.pageviews_count + neta.bookmarks_count * 5 + neta.reviews_count * neta.average_rate * 10 + neta.price * 0.1
       fulllist.merge!({ neta.id => score })
     end
-    sorted_full = fulllist.sort_by { |_k, v| v }.reverse
-    ret_list = {}
-    sorted_full.each_with_index do |data, i|
-      if i < top_x
-        ret_list.merge!({ 'rank_' + (i + 1).to_s => { 'neta_id' => data[0], 'score' => data[1] } })
-      else
-        break
+    sort_neta_ranks(fulllist)
+  end
+
+  def self.sort_neta_ranks(fulllist)
+    sorted_list = {}
+    if fulllist.present?
+      sorted_full = fulllist.sort_by { |_k, v| v }.reverse
+      sorted_full.each_with_index do |data, i|
+        if i < top_x
+          sorted_list.merge!({ 'rank_' + (i + 1).to_s => { 'neta_id' => data[0], 'score' => data[1] } })
+        else
+          break
+        end
       end
     end
-    ret_list
+    sorted_list
   end
+
+  private_class_method :sort_neta_ranks
 end

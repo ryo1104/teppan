@@ -29,7 +29,7 @@ class User < ApplicationRecord
   validates :unregistered, inclusion: { in: [true, false] }
 
   def self.find_or_create_for_oauth(auth)
-    auth_check = User.auth_check(auth)
+    auth_check = auth_check(auth)
     return [false, auth_check[1]] unless auth_check[0]
 
     email = if auth.provider == 'twitter'
@@ -223,56 +223,69 @@ class User < ApplicationRecord
     end
   end
 
-  def get_sold_netas_info
-    trades = Trade.where(seller_id: id, tradeable_type: 'Neta').order('created_at DESC')
-
-    if trades.present?
-
-      neta_ids = []
-      buyer_ids = []
-      trades.each do |trade|
-        buyer_ids << trade.buyer_id
-        neta_ids << trade.tradeable_id
+  def self.details_from_ids(ids)
+    users = User.where(id: ids)
+    if users.present?
+      users_hash = {}
+      users.each do |user|
+        users_hash.merge!({ user.id => { 'nickname' => user.nickname } })
       end
-      buyer_ids.uniq!
-      neta_ids.uniq!
-
-      buyers = User.where(id: buyer_ids)
-      netas = Neta.where(id: neta_ids)
-      reviews = Review.where(neta_id: neta_ids)
-
-      buyers_hash = {}
-      buyers.each do |buyer|
-        buyers_hash.merge!({ buyer.id => { 'nickname' => buyer.nickname } })
-      end
-      neta_hash = {}
-      netas.each do |neta|
-        neta_hash.merge!({ neta.id => { 'title' => neta.title } })
-      end
-      review_hash = {}
-      reviews.each do |review|
-        review_hash.merge!({ 'neta_' + review.neta_id.to_s + '_user_' + review.user_id.to_s => { 'rate' => review.rate } })
-      end
-
-      sold_netas_info = []
-      trades.each do |trade|
-        rate = if review_hash.has_key?('neta_' + trade.tradeable_id.to_s + '_user_' + trade.buyer_id.to_s)
-                 review_hash['neta_' + trade.tradeable_id.to_s + '_user_' + trade.buyer_id.to_s]['rate']
-               end
-        sold_netas_info << {
-          'traded_at' => trade.created_at,
-          'title' => neta_hash[trade.tradeable_id]['title'],
-          'price' => trade.price,
-          'buyer_id' => trade.buyer_id,
-          'buyer_nickname' => buyers_hash[trade.buyer_id]['nickname'],
-          'review_rate' => rate
-        }
-      end
-      [true, sold_netas_info]
+      users_hash
     else
-      [false, "No sold netas found for user_id #{id}"]
+      false
     end
   end
+
+  # def get_sold_netas_info
+  #   trades = Trade.where(seller_id: id, tradeable_type: 'Neta').order('created_at DESC')
+
+  #   if trades.present?
+
+  #     neta_ids = []
+  #     buyer_ids = []
+  #     trades.each do |trade|
+  #       buyer_ids << trade.buyer_id
+  #       neta_ids << trade.tradeable_id
+  #     end
+  #     buyer_ids.uniq!
+  #     neta_ids.uniq!
+
+  #     buyers = User.where(id: buyer_ids)
+  #     netas = Neta.where(id: neta_ids)
+  #     reviews = Review.where(neta_id: neta_ids)
+
+  #     buyers_hash = {}
+  #     buyers.each do |buyer|
+  #       buyers_hash.merge!({ buyer.id => { 'nickname' => buyer.nickname } })
+  #     end
+  #     neta_hash = {}
+  #     netas.each do |neta|
+  #       neta_hash.merge!({ neta.id => { 'title' => neta.title } })
+  #     end
+  #     review_hash = {}
+  #     reviews.each do |review|
+  #       review_hash.merge!({ 'neta_' + review.neta_id.to_s + '_user_' + review.user_id.to_s => { 'rate' => review.rate } })
+  #     end
+
+  #     sold_netas_info = []
+  #     trades.each do |trade|
+  #       rate = if review_hash.has_key?('neta_' + trade.tradeable_id.to_s + '_user_' + trade.buyer_id.to_s)
+  #               review_hash['neta_' + trade.tradeable_id.to_s + '_user_' + trade.buyer_id.to_s]['rate']
+  #             end
+  #       sold_netas_info << {
+  #         'traded_at' => trade.created_at,
+  #         'title' => neta_hash[trade.tradeable_id]['title'],
+  #         'price' => trade.price,
+  #         'buyer_id' => trade.buyer_id,
+  #         'buyer_nickname' => buyers_hash[trade.buyer_id]['nickname'],
+  #         'review_rate' => rate
+  #       }
+  #     end
+  #     [true, sold_netas_info]
+  #   else
+  #     [false, "No sold netas found for user_id #{id}"]
+  #   end
+  # end
 
   def can_unregister
     if get_balance[0]

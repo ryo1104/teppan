@@ -97,4 +97,54 @@ RSpec.describe Trade, type: :model do
       expect { Trade.get_ctax('60') }.to raise_error(ArgumentError, 'amount is not a integer.')
     end
   end
+  describe 'method::get_checkout_session'
+  describe 'method::fulfill_order'
+  describe 'method::get_trade_params'
+  describe 'method::get_seller_info'
+  describe 'method::get_buyer_info'
+  describe 'method::get_neta_id'
+  describe 'method::create_trade_amounts'
+  describe 'method::get_trades_info'
+
+  # describe 'method::get_trades_info' do
+  #   before do
+  #     @topic1 = create(:topic, :with_user)
+  #     @topic2 = create(:topic, :with_user)
+  #     @topic3 = create(:topic, :with_user)
+  #     @user1 = create(:user)
+  #     @user2 = create(:user)
+  #     @user3 = create(:user)
+  #     @neta1 = create(:neta, :with_valuecontent, user: @user1, topic: @topic1)
+  #     @neta2 = create(:neta, :with_valuecontent, user: @user2, topic: @topic1)
+  #     @neta3 = create(:neta, :with_valuecontent, user: @user1, topic: @topic2)
+  #     @neta4 = create(:neta, :with_valuecontent, user: @user2, topic: @topic2)
+  #     @neta5 = create(:neta, :with_valuecontent, user: @user1, topic: @topic3)
+  #     @neta6 = create(:neta, :with_valuecontent, user: @user2, topic: @topic3)
+  #     @neta7 = create(:neta, :with_valuecontent, user: @user3, topic: @topic3)
+  #   end
+  #   context 'when no sold netas exist for user' do
+  #     before do
+  #       @trade1 = create(:trade, tradeable: @neta6, seller_id: @user2.id, buyer_id: @user1.id)
+  #       @trade2 = create(:trade, tradeable: @neta7, seller_id: @user3.id, buyer_id: @user2.id)
+  #     end
+  #     it 'returns false' do
+  #       expect(@user1.get_sold_netas_info).to eq [false, "No sold netas found for user_id #{@user1.id}"]
+  #     end
+  #   end
+  #   context 'when sold netas exist for user' do
+  #     before do
+  #       @trade1 = create(:trade, tradeable: @neta3, seller_id: @user1.id, buyer_id: @user3.id)
+  #       @trade2 = create(:trade, tradeable: @neta5, seller_id: @user1.id, buyer_id: @user2.id)
+  #       @trade3 = create(:trade, tradeable: @neta6, seller_id: @user2.id, buyer_id: @user1.id)
+  #       @trade4 = create(:trade, tradeable: @neta7, seller_id: @user3.id, buyer_id: @user2.id)
+  #     end
+  #     it 'returns sold netas' do
+  #       sold_netas_info = [
+  #         { 'traded_at' => @trade1.created_at, 'title' => @neta3.title, 'price' => @trade1.price, 'buyer_id' => @user3.id, 'buyer_nickname' => @user3.nickname, 'review_rate' => nil },
+  #         { 'traded_at' => @trade2.created_at, 'title' => @neta5.title, 'price' => @trade2.price, 'buyer_id' => @user2.id, 'buyer_nickname' => @user2.nickname, 'review_rate' => nil }
+  #       ]
+  #       expect(@user1.get_sold_netas_info).to eq [true, sold_netas_info]
+  #     end
+  #   end
+  # end
 end

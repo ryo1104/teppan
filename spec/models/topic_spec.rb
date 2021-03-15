@@ -2,6 +2,13 @@ require 'rails_helper'
 
 RSpec.describe Topic, type: :model do
   let(:user_create)   { FactoryBot.create(:user) }
+  let(:s3_object) do
+    S3_BUCKET.put_object(
+      acl: 'public-read',
+      key: "//teppan-dev.s3.ap-northeast-1.amazonaws.com/topic_header_images/#{Faker::Lorem.characters(number: 30)}/test.png",
+      body: File.open('spec/fixtures/files/IMG_3MB.jpeg')
+    )
+  end
 
   describe 'Validations', type: :doing do
     it 'is valid with a user_id, title and text' do
@@ -56,27 +63,16 @@ RSpec.describe Topic, type: :model do
       topic = build(:topic, :with_user, header_img_url: '//teppan-dev.s3.ap-northeast-1.amazonaws.com/topic_header_images/7819d418-1f6a-443a-84ba-fc59a77d5622/mcdonalds.png')
       expect(topic).to be_valid
     end
+  end
 
-    # it 'is invalid if header attachment is not in supported image format' do
-    #   topic = FactoryBot.create(:topic, :with_user)
-    #   file = fixture_file_upload('/files/erd.pdf', 'application/pdf')
-    #   topic.header_image.attach(file)
-    #   expect(topic.errors[:header_image]).to include('のファイル形式が正しくありません。')
-    # end
-
-    # it 'is invalid if attachment size is over 5MB' do
-    #   topic = FactoryBot.create(:topic, :with_user)
-    #   file = fixture_file_upload('/files/IMG_6MB.jpeg', 'image/jpeg')
-    #   topic.header_image.attach(file)
-    #   expect(topic.errors[:header_image]).to include('のサイズは5MB以下にしてください。')
-    # end
-
-    # it 'is valid if attachment size is within 5MB' do
-    #   topic = FactoryBot.create(:topic, :with_user)
-    #   file = fixture_file_upload('/files/IMG_3MB.jpeg', 'image/jpeg')
-    #   topic.header_image.attach(file)
-    #   expect(topic).to be_valid
-    # end
+  describe 'header image S3 direct upload' do
+    subject { build(:topic, user: user_create, header_img_url: s3_object.key) }
+    it 'saves the S3 object' do
+      expect(subject).to be_valid
+    end
+    it 'gets the header image from S3' do
+      expect(S3_BUCKET.object(subject.header_img_url).presigned_url(:get, expires_in: 300)).not_to be_blank
+    end
   end
 
   describe 'method::max_rate' do
