@@ -22,8 +22,9 @@
         margin-left: 0rem;
       }
       @include pc {
-        width: 20rem;
-        margin-left: 23.5rem;
+        width: 18rem;
+        float: right;
+        margin-right: 1rem;
       }
     }
     
@@ -72,7 +73,7 @@
     position: fixed;
     bottom: 20px;
     @include sp { right: 2rem; }
-    @include pc { right: 40rem; }
+    @include pc { right: 24%; }
     background-color: $tp-green;
     i {
       font-size: 2.3rem;

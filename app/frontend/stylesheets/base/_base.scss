@@ -4,14 +4,22 @@ html {
 
 body{
   @include sp { font-size:  1.5em; } 
-  @include pc { font-size:  1.4em; } 
+  @include pc { font-size:  1.6em; } 
   background-color: white;
 }
 
 .page-body{
-  margin: 0;
-  padding: 1rem;
-  min-height: 100rem;
+  @include sp {
+    margin: 0;
+    padding: 1rem;
+    min-height: 100rem;
+  }
+  @include pc {
+    width: 75rem;
+    margin: 0 auto;
+    padding: 1rem;
+    min-height: 100rem;
+  }
 }
 
 a {

@@ -1,17 +1,17 @@
 <nav class="navbar">
   <div>
     <a href="<%= root_path %>" class="navbar__logo left">Teppan</a>
-    <ul class="navbar__contents right hide-on-med-and-down">
-      <li class="hide-on-med-and-down"><%= link_to "１分ネタ", topics_path, method: :get, :class => 'navbar__item' %></li>
+    <ul class="navbar__contents right hide-on-small-and-down">
+      <li class="hide-on-small-and-down"><%= link_to "１分ネタ", topics_path, method: :get, :class => 'navbar__item' %></li>
       <% if user_signed_in? %>
-        <li class="hide-on-med-and-down"><%= link_to "マイページ", user_path(current_user), :class => 'navbar__item' %></li>
-        <li class="hide-on-med-and-down"><%= link_to "ログアウト", destroy_user_session_path, method: :delete, :class => 'navbar__item' %></li>
+        <li class="hide-on-small-and-down"><%= link_to "マイページ", user_path(current_user), :class => 'navbar__item' %></li>
+        <li class="hide-on-small-and-down"><%= link_to "ログアウト", destroy_user_session_path, method: :delete, :class => 'navbar__item' %></li>
       <% else %>
-        <li class="hide-on-med-and-down"><%= link_to "ログイン", new_user_session_path, :class => 'navbar__item' %></li>
-        <li class="hide-on-med-and-down"><%= link_to "ユーザー登録", new_user_registration_path, :class => 'navbar__item' %></li>
+        <li class="hide-on-small-and-down"><%= link_to "ログイン", new_user_session_path, :class => 'navbar__item' %></li>
+        <li class="hide-on-small-and-down"><%= link_to "ユーザー登録", new_user_registration_path, :class => 'navbar__item' %></li>
       <% end %>
     </ul>
-    <a href="#" data-target="slide-out" class="sidenav-trigger hide-on-large-only right"><i class="navbar__sidenav__icon material-icons">menu</i></a>
+    <a href="#" data-target="slide-out" class="sidenav-trigger hide-on-med-and-up right"><i class="navbar__sidenav__icon material-icons">menu</i></a>
   </div>
 </nav>
 

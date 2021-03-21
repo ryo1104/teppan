@@ -2,7 +2,7 @@
 <% breadcrumb :show_user, @user %>
 <div class="page-body">
   <div class="row">
-    <div class="col s12 m6 content">
+    <div class="col s12 m12 content">
       <div class="row content-header">
         <%= render partial: "layouts/breadcrumbs" %>
       </div>
@@ -20,9 +20,9 @@
           <h1 class="user-show-profile__nickname"><%= @user.nickname %></h1>
           <div class="user-show-profile__basic">
             <% if @userrate == 0 %>
-              ネタ評価&nbsp;&nbsp;<span class="js-user-show-profile__star" rating-data="0"></span>&nbsp;
+              総合評価&nbsp;&nbsp;<span class="js-user-show-profile__star" rating-data="0"></span>&nbsp;
             <% else %>
-              ネタ評価<br>
+              総合評価<br>
               <span class="js-user-show-profile__star" rating-data="<%= @userrate %>"></span>&nbsp;&nbsp;
               <span class="user-show-profile__rating"><%= format("%.2f", @userrate ) %></span>
             <% end %>

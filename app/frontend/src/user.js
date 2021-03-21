@@ -18,7 +18,7 @@ $(document).ready( function() {
 });
 
 
-$('.js-user-edit-form__image-upload').change(function(e){
+$('.js-user-profile-form__image-upload').change(function(e){
   const file = e.target.files[0];
   const reader = new FileReader();
 

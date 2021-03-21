@@ -86,7 +86,7 @@
     position: fixed;
     bottom: 2rem;
     @include sp { right: 2rem; }
-    @include pc { right: 64rem; }
+    @include pc { right: 24%; }
     background-color: $tp-green;
 
     &.material-icons {

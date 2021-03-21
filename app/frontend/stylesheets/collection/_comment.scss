@@ -1,6 +1,9 @@
 .comment {
 
   &-new {
+    &.collection-item {
+      padding: 1rem;
+    }
     &__textarea {
       width: 100%; 
       height: 6rem;
