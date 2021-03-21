@@ -22,11 +22,16 @@
     
     &__avatar {
       &-container {
-        padding: 0.5rem 0 0 0;
+        @include sp {
+          padding: 0.5rem 0 0 0;
+        }
+        @include pc {
+          padding: 0.5rem 0 0 2.5rem;
+        }
       }
       
       &-img {
-        @include user-img-lg
+        @include user-img-xl
       }
     }
     
@@ -61,7 +66,7 @@
       color: $tp-orange;
       
       &ing {
-        margin: 0 1rem 0 0;
+        margin: 0 0.5rem 0 0;
         float: left;
         min-width: 10rem;
       }

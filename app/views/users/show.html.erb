@@ -7,7 +7,7 @@
         <%= render partial: "layouts/breadcrumbs" %>
       </div>
       <div class="row user-show-profile__upper">
-        <div class="col s3 m3 user-show-profile__left">
+        <div class="col s4 m3 user-show-profile__left">
           <div class="user-show-profile__avatar-container">
             <% if @user.avatar.present? %>
               <%= image_tag @user.avatar.variant(resize_to_fill: [70, 70], gravity: "Center"), { :class => "user-show-profile__avatar-img" } %>
@@ -16,7 +16,7 @@
             <% end %>
           </div>
         </div>
-        <div class="col s9 m9 user-show-profile__right">
+        <div class="col s8 m9 user-show-profile__right">
           <h1 class="user-show-profile__nickname"><%= @user.nickname %></h1>
           <div class="user-show-profile__basic">
             <% if @userrate == 0 %>
