@@ -36,7 +36,7 @@
     }
     
     &__basic {
-      font-size: 1.3rem;
+      font-size: 1.5rem;
       margin: 0.2rem 0;
       line-height: 2rem;
     }
@@ -168,12 +168,12 @@
       &--pass.material-icons {
         font-size: 1.8rem;
         color: $tp-green;
-        margin: 0 0 0 1rem;
+        margin: 0.5rem 0 0 3rem;
       }
       &--fail.material-icons {
         font-size: 1.8rem;
         color: $tp-orange-dark;
-        margin: 0 0 0 1rem;
+        margin: 0.5rem 0 0 3rem;
       }
     }
     
