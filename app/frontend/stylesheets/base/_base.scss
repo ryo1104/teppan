@@ -38,7 +38,9 @@ strong {
 input {
 
 }
-
+input[type=date]:not(.browser-default) {
+  font-size: 1.4rem;
+}
 
 textarea{
   border-color: $tp-lightgray;

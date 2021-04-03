@@ -10,7 +10,6 @@
   
   &__avatar-img {
     @include user-img-md;
-    margin-top: 0.5rem;
   }
   
   &__nickname {
@@ -29,7 +28,8 @@
   }
   
   &__follow-info {
-    color: $tp-gray;
+    color: $tp-orange;
+    font-weight: bold;
   }
   
   &__followers {

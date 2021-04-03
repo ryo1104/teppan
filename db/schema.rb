@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_06_130239) do
+ActiveRecord::Schema.define(version: 2021_03_28_014556) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -292,6 +292,7 @@ ActiveRecord::Schema.define(version: 2021_03_06_130239) do
     t.boolean "unregistered", default: false, null: false
     t.string "provider"
     t.string "uid"
+    t.string "avatar_img_url"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

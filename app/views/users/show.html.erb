@@ -9,8 +9,8 @@
       <div class="row user-show-profile__upper">
         <div class="col s4 m3 user-show-profile__left">
           <div class="user-show-profile__avatar-container">
-            <% if @user.avatar.present? %>
-              <%= image_tag @user.avatar.variant(resize_to_fill: [70, 70], gravity: "Center"), { :class => "user-show-profile__avatar-img" } %>
+            <% if @user.avatar_img_url.present? %>
+              <%= image_tag @user.avatar_img_url, { :class => "user-show-profile__avatar-img" } %>
             <% else %>
               <%= image_bundle_tag "no_user_image.png", { :class => "user-show-profile__avatar-img" } %>
             <% end %>

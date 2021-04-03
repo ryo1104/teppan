@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  before_action :set_s3_direct_post, only: [:edit, :update]
+
   def show
     get_user(params[:id])
     @premium_user = @user.premium_user
@@ -45,7 +47,7 @@ class UsersController < ApplicationController
   end
 
   def update_params
-    params.require(:user).permit(:nickname, :image, :birthdate, :gender, :introduction)
+    params.require(:user).permit(:nickname, :avatar_img_url, :birthdate, :gender, :introduction)
   end
 
   def my_page
@@ -62,5 +64,10 @@ class UsersController < ApplicationController
     @bookmarked_topics_count = @bookmarked_topics.present? ? @bookmarked_topics.count : 0
     @followed_users_count = @user.follows_count
     @following_users_count = @user.following_users_count
+  end
+
+  def set_s3_direct_post
+    @s3_direct_post = S3_BUCKET.presigned_post(key: "user_avatar_images/#{SecureRandom.uuid}/${filename}",
+                                               success_action_status: '201', acl: 'public-read')
   end
 end

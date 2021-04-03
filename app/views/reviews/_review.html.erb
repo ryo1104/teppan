@@ -4,8 +4,8 @@
   <div class="review-index__text"><%= review.text %></div>
   <div class="review-index__footer">
     <%= link_to user_path(review.user.id) do %>
-      <% if review.user.avatar.present? %>
-        <%= image_tag review.user.avatar, {:class => "review-index__author-image"} %>
+      <% if review.user.avatar_img_url.present? %>
+        <%= image_tag review.user.avatar_img_url, {:class => "review-index__author-image"} %>
       <% else %>
         <%= image_bundle_tag "no_user_image.png", {:class => "review-index__author-image"} %>
       <% end %>

@@ -1,0 +1,82 @@
+.user-profile-form {
+  
+  &__message {
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
+  
+  &__avatar {
+    &-container {
+      padding: 0.5rem 0 0 0;
+    }
+    
+    &-img {
+      @extend .circle;
+      @include sp {
+        height: 10rem;
+        width: 10rem;
+      }
+      @include pc { 
+        height: 12rem;
+        width: 12rem;
+      }
+    }
+  }
+  
+  &__delete-avatar-link {
+    
+  }
+  
+  &__nickname {
+    width: 21rem;
+
+    &-input {
+      font-size: 1.4rem !important;
+    }
+  }
+  
+  &__birthdate {
+    width: 21rem;
+    
+    &-input {
+      font-size: 1.4rem;
+    }
+  }
+  
+  &__gender {
+    width: 21rem;
+    margin: 0.5rem 0;
+    &-message {
+      font-size: 1.2rem;
+      color: $tp-gray;
+      margin: 0 0 0.5rem 0;
+    }
+    &-label {
+      margin-right: 1rem;
+    }
+  }
+  
+  &__introdution {
+    &-area {
+      
+    }
+    &-label {
+      
+    }
+    &-input{
+      
+    }
+  }
+  
+  &__submit {
+    &.btn.waves-effect {
+      @include button-normal;
+      margin: 1rem 0 0 0;
+    }
+  }
+
+}
+
+.js-user-edit-form__image-upload {
+  display: none;
+}

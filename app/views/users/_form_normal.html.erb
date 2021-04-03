@@ -1,18 +1,20 @@
 <%= javascript_bundle_tag 'user' %>
-<h1>プロフィール編集</h1>          
-<%= form_with model: @user, local: true, method: :patch, :class => "user-profile-form" do |f| %>
+<h1>プロフィール編集</h1>
+<%= form_with model: @user, local: true, :class => "user-profile-form", method: :patch, data: { 'form-data' => (@s3_direct_post.fields), 'url' => @s3_direct_post.url, 'host' => URI.parse(@s3_direct_post.url).host } do |f| %>
   <div class="user-profile-form__upper">
     <div class="col s4 m3 user-profile-form__left">
       <%= f.label :image do %>
         <div class="user-profile-form__avatar-container">
-          <% if @user.avatar.present? %>
-            <%= image_tag @user.avatar.variant(resize_to_fill: [70, 70], gravity: "Center"), { :class => "user-profile-form__avatar-img" } %><br>
+          <% if @user.avatar_img_url.present? %>
+            <%= image_tag @user.avatar_img_url, { :class => "user-profile-form__avatar-img" } %><br>
             <%= link_to "画像変更", user_avatar_path(@user.id), :method => :delete, :class => "user-profile-form__delete-avatar-link" %>
           <% else %>
-            <%= image_bundle_tag "no_user_image.png", { :class => "user-profile-form__avatar-img" } %>
+            <div class="user-profile-form__avatar-img-wrapper">
+              <canvas id="js-user-avatar-canvas" class="user-profile-form__avatar-img" />
+            </div>
+            <%= f.file_field :avatar_img_url, :id => 'js-user-avatar-file_field', :class => 'user-profile-form__avatar-img-filefield' %>
           <% end %>
         </div>
-        <%= f.file_field :image, {:class => "js-user-profile-form__image-upload"} %>
       <% end %>
     </div>
     <div class="col s8 m9 user-profile-form__right">

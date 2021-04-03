@@ -2,8 +2,8 @@
   <%= link_to user_path(follower.id) do %>
     <div class="row follow-list">
       <div class="col s3 m3">
-        <% if follower.avatar.present? %>
-          <%= image_tag follower.avatar.variant(resize_to_fill: [50, 50], gravity: "Center"), { :class => "follow-list__avatar-img" } %>
+        <% if follower.avatar_img_url.present? %>
+          <%= image_tag follower.avatar_img_url, { :class => "follow-list__avatar-img" } %>
         <% else %>
           <%= image_bundle_tag "no_user_image.png", { :class => "follow-list__avatar-img" } %>
         <% end %>

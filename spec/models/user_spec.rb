@@ -298,12 +298,12 @@ RSpec.describe User, type: :model do
       expect(user.errors[:follows_count]).to include('は0以上の値にしてください。')
     end
 
-    it 'is invalid if unsupported file type for image was attached' do
-      user = create(:user, nickname: nil, gender: nil, birthdate: nil)
-      file = fixture_file_upload('/files/トラ.gif', 'image/gif')
-      user.image.attach(file)
-      expect(user.errors[:image]).to include('のファイル形式が正しくありません。')
-    end
+    # it 'is invalid if unsupported file type for image was attached' do
+    #   user = create(:user, nickname: nil, gender: nil, birthdate: nil)
+    #   file = fixture_file_upload('/files/トラ.gif', 'image/gif')
+    #   user.image.attach(file)
+    #   expect(user.errors[:image]).to include('のファイル形式が正しくありません。')
+    # end
 
     it 'is invalid if unregistered flag is neither true or false' do
       user = build(:user, unregistered: nil)
@@ -401,11 +401,6 @@ RSpec.describe User, type: :model do
         expect(user).to eq the_new_user
       end
     end
-  end
-
-  describe 'method::avatar' do
-    it 'returns saved image if exists'
-    it 'returns no_user_image.jpg if no image saved'
   end
 
   describe 'method::age' do

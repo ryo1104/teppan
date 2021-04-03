@@ -3,7 +3,7 @@ class TopicsController < ApplicationController
   before_action :set_s3_direct_post, only: [:new, :edit, :create, :update]
 
   def index
-    @search = Topic.includes({ user: [image_attachment: :blob] }, :netas).where(private_flag: false).ransack(params[:q])
+    @search = Topic.includes(:user, :netas).where(private_flag: false).ransack(params[:q])
     @topic_cards = @search.result(distinct: true).order('created_at DESC').page(params[:page]).per(20)
     @hashtag_ranking = Hashtag.get_ranking(10)
   end
@@ -22,13 +22,13 @@ class TopicsController < ApplicationController
   end
 
   def show
-    @topic = Topic.includes({ user: [image_attachment: :blob] }).find(params[:id])
+    @topic = Topic.includes(:user).find(params[:id])
     @owner = owner(@topic)
     if @topic.private_flag && @owner == false
       @message = I18n.t('controller.topic.private')
     else
-      @netas = @topic.netas.includes({ user: [image_attachment: :blob] }, :hashtags).where(private_flag: false).order('average_rate DESC')
-      @comments = @topic.comments.includes({ user: [image_attachment: :blob] }).order('created_at DESC')
+      @netas = @topic.netas.includes(:user, :hashtags).where(private_flag: false).order('average_rate DESC')
+      @comments = @topic.comments.includes(:user).order('created_at DESC')
       if user_signed_in?
         @newcomment = Comment.new
         @topic.add_pageview(current_user)

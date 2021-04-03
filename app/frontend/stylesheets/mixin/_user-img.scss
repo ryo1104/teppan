@@ -6,8 +6,8 @@
 
 @mixin user-img-md {
   @extend .circle;
-  height: 5rem;
-  width: 5rem;
+  height: 6rem;
+  width: 6rem;
 }
 
 @mixin user-img-lg {
@@ -18,6 +18,6 @@
 
 @mixin user-img-xl {
   @extend .circle;
-  height: 10rem;
-  width: 10rem;
+  height: 12rem;
+  width: 12rem;
 }

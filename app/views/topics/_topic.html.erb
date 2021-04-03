@@ -12,8 +12,8 @@
 </div>
 <div class="topic__footer">
   <%= link_to user_path(@topic.user_id) do %>
-    <% if @topic.user.avatar.present? %>
-      <%= image_tag @topic.user.avatar, {:class => "topic__author-image"} %>
+    <% if @topic.user.avatar_img_url.present? %>
+      <%= image_tag @topic.user.avatar_img_url, {:class => "topic__author-image"} %>
     <% else %>
       <%= image_bundle_tag "no_user_image.png", {:class => "topic__author-image"} %>
     <% end %>

@@ -11,8 +11,8 @@
     <span class="review__count"><%= neta.reviews_count %></span>
     <div class="neta-index__footer">
       <%= link_to user_path(neta.user_id) do %>
-        <% if neta.user.avatar.present? %>
-          <%= image_tag neta.user.avatar.variant(resize_to_fill: [25, 25], gravity: "Center"), {:class => "neta-index__author-image"} %>
+        <% if neta.user.avatar_img_url.present? %>
+          <%= image_tag neta.user.avatar_img_url, {:class => "neta-index__author-image"} %>
         <% else %>
           <%= image_bundle_tag "no_user_image.png", {:class => "neta-index__author-image"} %>
         <% end %>

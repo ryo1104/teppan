@@ -8,8 +8,8 @@
   </div>
   <div class="comment-index__footer">
     <%= link_to user_path(comment.user.id) do %>
-      <% if comment.user.avatar.present? %>
-        <%= image_tag comment.user.avatar, {:class => "comment-index__author-image"} %>
+      <% if comment.user.avatar_img_url.present? %>
+        <%= image_tag comment.user.avatar_img_url, {:class => "comment-index__author-image"} %>
       <% else %>
         <%= image_bundle_tag "no_user_image.png", {:class => "comment-index__author-image"} %>
       <% end %>

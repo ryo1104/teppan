@@ -1,6 +1,5 @@
 class Topic < ApplicationRecord
   belongs_to :user
-  # has_one_attached :header_image
   has_rich_text :content
   has_many      :netas, dependent: :restrict_with_error
   has_many      :pageviews, as: :pageviewable, dependent: :destroy

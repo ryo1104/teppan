@@ -34,7 +34,7 @@ class NetasController < ApplicationController
     else
       @is_free = @neta.is_free
       @for_sale = @neta.for_sale
-      @reviews = @neta.reviews.includes({ user: [image_attachment: :blob] }).order('created_at DESC')
+      @reviews = @neta.reviews.includes(:user).order('created_at DESC')
       @myreview = @reviews.find_by(user_id: current_user.id)
       @newreview = Review.new unless @myreview
       unless @owner

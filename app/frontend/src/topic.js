@@ -46,7 +46,6 @@ $(function() {
     var canvas_width = $('.topic-form__header-img-wrapper').width();
     var canvas_height = $('.topic-form__header-img-wrapper').height();
     const MIN_SIZE = 350;
-
     fileInput.after(barContainer);
     fileInput.fileupload({
       fileInput:       fileInput,

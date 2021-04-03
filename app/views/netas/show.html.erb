@@ -54,8 +54,8 @@
           <% end %>
           <div class="neta-show__footer">
             <%= link_to user_path(@neta.user_id) do %>
-              <% if @neta.user.avatar.present? %>
-                <%= image_tag @neta.user.avatar, {:class => "neta-show__author-image"} %>
+              <% if @neta.user.avatar_img_url.present? %>
+                <%= image_tag @neta.user.avatar_img_url, {:class => "neta-show__author-image"} %>
               <% else %>
                 <%= image_bundle_tag "no_user_image.png", {:class => "neta-show__author-image"} %>
               <% end %>
