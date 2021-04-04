@@ -29,21 +29,22 @@
           </div>
           <div class="user-show-profile__sns">
             <div class="user-show-profile__follow">
-              <% if @my_page %>
+
                 <div class="user-show-profile__following">
                   <%= link_to user_followings_path(@user.id) do %>
-                    <div class="user-show-profile__follow-tag">フォロー</div>
+                    <div class="user-show-profile__follow-tag">フォロー中</div>
                     <div class="user-show-profile__follow-count"><%= @following_users_count %></div>
                   <% end %>
                 </div>
-              <% end %>
+             
               <div class="user-show-profile__followed">
                 <%= link_to user_followers_path(@user.id) do %>
                   <div class="user-show-profile__follow-tag">フォロワー</div>
                   <div class="user-show-profile__follow-count"><%= @followed_users_count %></div>
                 <% end %>
               </div>
-            </span>
+            </div>
+            <br>
             <% unless @my_page %>
               <% unless @user.is_blocked_by(current_user.id) %>
                 <span id="follows_buttons_<%= @user.id %>">

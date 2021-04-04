@@ -1,0 +1,20 @@
+.violation-new {
+  &__target-user {
+    margin: 0.5rem 0;
+  }
+  &__text {
+    width: 100%;
+    min-height: 20rem;
+    font-size: 1.4rem;
+  }
+  &__submit {
+    &.btn.waves-effect {
+      @include button-normal;
+      margin-top: 1rem;
+    }
+    
+    &.material-icons.left {
+      margin: 0;
+    }
+  }
+}

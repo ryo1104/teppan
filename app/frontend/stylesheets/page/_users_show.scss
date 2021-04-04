@@ -78,20 +78,17 @@
         float: left;
         min-width: 10rem;
       }
-      a{
-        color: $tp-orange;
-        font-size: 1.4rem;
-        font-weight: bold;
-      }
       &ed {
         margin: 0 0.5rem 0 0;
         float: left;
       }
       &-tag {
+        color: $tp-orange;
         margin-right: 0.5rem;
         float: left;
       }
       &-count {
+        color: $tp-orange;
         padding: 0 0.5rem;
         float: left;
       }
