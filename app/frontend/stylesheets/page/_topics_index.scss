@@ -31,16 +31,15 @@
     input[type=text]{
       font-size: 1.3rem;
       height: 3rem;
-      width: 17rem;
+      width: 13.5rem;
       margin: 0 0.5rem 0 0;
+      padding: 0px 0.8rem 0px 2.5rem;
     }
     
     &__icon {
       &.material-icons {
-        color: $tp-green;
+        color: $tp-lightgray;
         position: relative;
-        @include sp { left: 15rem; }
-        @include pc { left: 15rem; }
         top: -2.75rem;
       }
     }  
