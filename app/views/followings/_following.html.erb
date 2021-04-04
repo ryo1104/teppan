@@ -1,14 +1,14 @@
 <li class="follow-list collection-item">
   <%= link_to user_path(following.id) do %>
     <div class="row follow-list">
-      <div class="col s3 m3">
+      <div class="col s3 m2">
         <% if following.avatar_img_url.present? %>
           <%= image_tag following.avatar_img_url, { :class => "follow-list__avatar-img" } %>
         <% else %>
           <%= image_bundle_tag "no_user_image.png", { :class => "follow-list__avatar-img" } %>
         <% end %>
       </div>
-      <div class="col s9 m9">
+      <div class="col s9 m10">
         <div class="follow-list__nickname"><%= following.nickname %></div>
         <div class="follow-list__rating">
           <% if following.average_rate == 0 %>
