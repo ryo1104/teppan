@@ -113,10 +113,10 @@ RSpec.describe AccountsController, type: :controller do
     }
   end
   let(:stripe_delete_success) { { 'account' => { 'id' => test_stripe_acct_id, 'object' => 'account', 'deleted' => true } } }
-  render_views
+  # render_views
 
   describe 'GET #new', type: :doing do
-    context 'as an authenticated user' do
+    context 'as a signed in user' do
       before do
         @user = user_create
         sign_in @user
@@ -184,7 +184,7 @@ RSpec.describe AccountsController, type: :controller do
   end
 
   describe 'POST #create' do
-    context 'as an authenticated user' do
+    context 'as a signed in user' do
       before do
         @user = user_create
         sign_in @user
@@ -292,7 +292,7 @@ RSpec.describe AccountsController, type: :controller do
   end
 
   describe 'GET #show' do
-    context 'as an authenticated user' do
+    context 'as a signed in user' do
       before do
         @user = user_create
         sign_in @user
@@ -414,7 +414,7 @@ RSpec.describe AccountsController, type: :controller do
   end
 
   describe 'GET #edit' do
-    context 'as an authenticated user' do
+    context 'as a signed in user' do
       before do
         @user = user_create
         sign_in @user
@@ -505,7 +505,7 @@ RSpec.describe AccountsController, type: :controller do
   end
 
   describe 'POST #update' do
-    context 'as an authenticated user' do
+    context 'as a signed in user' do
       before do
         @user = user_create
         sign_in @user
@@ -608,7 +608,7 @@ RSpec.describe AccountsController, type: :controller do
     end
   end
   describe 'DELETE #destroy' do
-    context 'as an authenticated user' do
+    context 'as a signed in user' do
       before do
         @user = user_create
         sign_in @user

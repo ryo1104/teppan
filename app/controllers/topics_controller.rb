@@ -1,6 +1,6 @@
 class TopicsController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[index show]
-  before_action :set_s3_direct_post, only: [:new, :edit, :create, :update]
+  before_action :set_s3_direct_post, only: [:new, :edit, :create, :update, :destroy]
 
   def index
     @search = Topic.includes(:user, :netas).where(private_flag: false).ransack(params[:q])
@@ -24,7 +24,7 @@ class TopicsController < ApplicationController
   def show
     @topic = Topic.includes(:user).find(params[:id])
     @owner = owner(@topic)
-    if @topic.private_flag && @owner == false
+    if @topic.private_flag && !@owner
       @message = I18n.t('controller.topic.private')
     else
       @netas = @topic.netas.includes(:user, :hashtags).where(private_flag: false).order('average_rate DESC')
@@ -44,7 +44,6 @@ class TopicsController < ApplicationController
   def update
     @topic = Topic.find(params[:id])
     if owner(@topic)
-      delete_s3_object
       if @topic.update(post_params)
         redirect_to topic_path(@topic.id), notice: I18n.t('controller.topic.updated') and return
       else
@@ -58,11 +57,14 @@ class TopicsController < ApplicationController
   def destroy
     @topic = Topic.includes(:netas, :pageviews, :bookmarks).find(params[:id])
     if owner(@topic)
-      delete_s3_object
-      if @topic.destroy
-        redirect_to topics_path, notice: I18n.t('controller.topic.deleted') and return
+      if @topic.deleteable
+        if @topic.destroy
+          redirect_to topics_path, notice: I18n.t('controller.topic.deleted') and return
+        else
+          render :edit and return
+        end
       else
-        render :edit and return
+        redirect_to topic_path(@topic.id), alert: I18n.t('controller.topic.has_child') and return
       end
     else
       redirect_to topic_path(@topic.id), alert: I18n.t('controller.general.no_access') and return
@@ -88,20 +90,4 @@ class TopicsController < ApplicationController
                                                success_action_status: '201', acl: 'public-read')
   end
 
-  def delete_s3_object
-    if @topic.header_img_url.present?
-      if @topic.header_img_url.include?('amazonaws.com/')
-        object = S3_BUCKET.object(@topic.header_img_url.split('amazonaws.com/')[1])
-        if object.present?
-          object.delete
-        else
-          false
-        end
-      else
-        false
-      end
-    else
-      true
-    end
-  end
 end

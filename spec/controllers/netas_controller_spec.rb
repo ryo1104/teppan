@@ -43,7 +43,7 @@ RSpec.describe NetasController, type: :controller do
       end
     end
 
-    context 'as an authenticated user' do
+    context 'as a signed in user' do
       # before do
       #   @user = user_create
       # @user.confirm
@@ -113,7 +113,7 @@ RSpec.describe NetasController, type: :controller do
   end
 
   describe 'GET #new' do
-    context 'as an authenticated user' do
+    context 'as a signed in user' do
       login_user
 
       before(:each) do
@@ -166,7 +166,7 @@ RSpec.describe NetasController, type: :controller do
   end
 
   describe 'POST #create' do
-    context 'as an authenticated user' do
+    context 'as a signed in user' do
       before do
         @user = user_create
         sign_in @user
@@ -421,7 +421,7 @@ RSpec.describe NetasController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    context 'as an authenticated user' do
+    context 'as a signed in user' do
       before do
         @user = user_create
         sign_in @user

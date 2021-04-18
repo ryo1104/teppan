@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe FollowsController, type: :request do
   describe 'POST #create' do
-    context 'as an authenticated user' do
+    context 'as a signed in user' do
       before do
         @target_user = FactoryBot.create(:user)
         @follower = FactoryBot.create(:user, nickname: 'follower')
@@ -53,7 +53,7 @@ RSpec.describe FollowsController, type: :request do
   end
 
   describe 'DELETE #destroy' do
-    context 'as an authenticated user' do
+    context 'as a signed in user' do
       before do
         @target_user = FactoryBot.create(:user)
         @follower = FactoryBot.create(:user, nickname: 'follower')
@@ -109,7 +109,7 @@ RSpec.describe FollowsController, type: :request do
     end
   end
   describe 'GET #index' do
-    context 'as an authenticated user' do
+    context 'as a signed in user' do
       before do
         @target_user = FactoryBot.create(:user)
         @follows = create_list(:follow, 3, user: @target_user)

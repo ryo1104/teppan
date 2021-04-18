@@ -8,7 +8,7 @@ class Topic < ApplicationRecord
   has_many      :likes,     as: :likeable, dependent: :destroy
   validates     :title,     presence: true, uniqueness: { case_sensitive: true }, length: { maximum: 35 }
   validate      :content_exists
-  validate      :header_img_check
+  validate      :header_url_check
 
   def max_rate
     maxrate = 0
@@ -49,14 +49,48 @@ class Topic < ApplicationRecord
     to = Time.zone.now
     pageviews.find_or_create_by(user_id: user.id, created_at: from..to)
   end
+  
+  def deleteable
+    if netas.present?
+      false
+    else
+      true
+    end
+  end
+  
+  def destroy
+    if purge_s3_object
+      super
+    else
+      false
+    end
+  end
+
+  def purge_s3_object
+    if header_url_check
+      object = S3_BUCKET.object(header_img_url.split('amazonaws.com/')[1])
+      if object.present?
+        object.delete
+        true
+      else
+        false
+      end
+    else
+      if errors.present?
+        false
+      else
+        true
+      end
+    end
+  end
 
   private
 
-  def check_header_image
-    errors.add(:header_image, I18n.t('errors.messages.file_size_limit', filesize: '5MB')) if header_image.blob.byte_size > 5.megabyte
-    extension = %w[image/png image/jpg image/jpeg image/gif]
-    errors.add(:header_image, I18n.t('errors.messages.unsupported_file_type')) unless header_image.content_type.in?(extension)
-  end
+  # def check_header_image
+  #   errors.add(:header_image, I18n.t('errors.messages.file_size_limit', filesize: '5MB')) if header_image.blob.byte_size > 5.megabyte
+  #   extension = %w[image/png image/jpg image/jpeg image/gif]
+  #   errors.add(:header_image, I18n.t('errors.messages.unsupported_file_type')) unless header_image.content_type.in?(extension)
+  # end
 
   def content_exists
     errors.add(:content, I18n.t('errors.messages.blank')) unless content.body.present?
@@ -68,16 +102,23 @@ class Topic < ApplicationRecord
     # end
   end
 
-  def header_img_check
+  def header_url_check
     if header_img_url.present?
       if header_img_url.include?('amazonaws.com/')
         path = header_img_url.split('amazonaws.com/')[1]
-        unless path.include?('topic_header_images')
+        if path.include?('topic_header_images')
+          true
+        else
           errors.add(:header_img_url, I18n.t('errors.messages.invalid'))
+          false
         end
       else
         errors.add(:header_img_url, I18n.t('errors.messages.invalid'))
+        false
       end
+    else
+      false
     end
   end
+
 end

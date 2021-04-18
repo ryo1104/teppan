@@ -6,7 +6,7 @@ RSpec.describe LikesController, type: :request do
   let(:neta_create)       { FactoryBot.create(:neta, :with_user, topic: topic_create) }
 
   describe 'POST #create' do
-    context 'as an authenticated user' do
+    context 'as a signed in user' do
       before do
         @user = user_create
         sign_in @user
@@ -151,7 +151,7 @@ RSpec.describe LikesController, type: :request do
   end
 
   describe 'DELETE #destroy' do
-    context 'as an authenticated user' do
+    context 'as a signed in user' do
       before do
         @user = user_create
         sign_in @user

@@ -1,5 +1,5 @@
 <li class="review-new collection-item">
-  <%= form_for [neta, newreview] do |f| %>
+  <%= form_with model: [neta, newreview], url: neta_reviews_path, local: true, method: :post do |f| %>
     <div class="review-new__prompt">評価して下さい！</div>
     <%= f.hidden_field :rate, id: :reviewnew__rate %>
     <div class="review-new__rate">

@@ -1,16 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe Topic, type: :model do
-  let(:user_create)   { FactoryBot.create(:user) }
+  let(:user_create)   { create(:user) }
   let(:s3_object) do
     S3_BUCKET.put_object(
-      acl: 'public-read',
-      key: "//teppan-dev.s3.ap-northeast-1.amazonaws.com/topic_header_images/#{Faker::Lorem.characters(number: 30)}/test.png",
-      body: File.open('spec/fixtures/files/IMG_3MB.jpeg')
+      acl: 'public-read-write',
+      key: "amazonaws.com/topic_header_images/#{Faker::Lorem.characters(number: 30)}/トラ.jpg",
+      body: File.open('spec/fixtures/files/トラ.jpg')
     )
   end
 
-  describe 'Validations', type: :doing do
+  describe 'Validations' do
     it 'is valid with a user_id, title and text' do
       topic = build(:topic, :with_user)
       expect(topic).to be_valid
@@ -62,16 +62,6 @@ RSpec.describe Topic, type: :model do
     it 'is valid with valid header_img_url ' do
       topic = build(:topic, :with_user, header_img_url: '//teppan-dev.s3.ap-northeast-1.amazonaws.com/topic_header_images/7819d418-1f6a-443a-84ba-fc59a77d5622/mcdonalds.png')
       expect(topic).to be_valid
-    end
-  end
-
-  describe 'header image S3 direct upload' do
-    subject { build(:topic, user: user_create, header_img_url: s3_object.key) }
-    it 'saves the S3 object' do
-      expect(subject).to be_valid
-    end
-    it 'gets the header image from S3' do
-      expect(S3_BUCKET.object(subject.header_img_url).presigned_url(:get, expires_in: 300)).not_to be_blank
     end
   end
 
@@ -158,6 +148,50 @@ RSpec.describe Topic, type: :model do
       another_user = create(:user)
       pageview = create(:pageview, pageviewable: topic, user: another_user, created_at: Time.zone.now - 1.day)
       expect(topic.add_pageview(another_user)).to eq pageview
+    end
+  end
+  
+  describe 'header image direct upload to S3' do
+    subject { build(:topic, user: user_create, header_img_url: s3_object.key) }
+    it 'saves the url' do
+      expect(subject).to be_valid
+    end
+    it 'saves image to S3' do
+      expect(S3_BUCKET.object(subject.header_img_url).presigned_url(:get, expires_in: 300)).not_to be_blank
+    end
+  end  
+  
+  describe 'method::deleteable' do
+    it 'returns false when associated netas exist' do
+      topic = create(:topic, user: user_create)
+      create(:neta, topic: topic, user: user_create)
+      expect(topic.deleteable).to eq false
+    end
+    it 'returns true when associated netas does not exist' do
+      topic = create(:topic, user: user_create)
+      create(:neta, topic: topic, user: user_create)
+      expect(topic.deleteable).to eq false
+    end
+  end
+  
+  describe 'method::purge_s3_object', type: :doing do
+    it 'returns true even if header image does not exist' do
+      topic = create(:topic, :with_user, header_img_url: nil)
+      expect(topic.purge_s3_object).to eq true
+    end
+    it 'returns false when header_img_url is not valid' do
+      topic = create(:topic, :with_user)
+      topic.header_img_url = 'http:://'
+      expect(topic.purge_s3_object).to eq false
+    end
+    it 'returns false when header image (S3 obj) does not exist' #do
+    #   topic = create(:topic, :with_user, header_img_url: S3_BUCKET.object(s3_object.key).public_url )
+    #   allow_any_instance_of(S3_BUCKET).to receive(:object).and_return(nil)
+    #   expect(topic.purge_s3_object).to eq false
+    # end
+    it 'returns true when header image (S3 obj) is deleted' do
+      topic = create(:topic, :with_user, header_img_url: S3_BUCKET.object(s3_object.key).public_url )
+      expect(topic.purge_s3_object).to eq true
     end
   end
 end

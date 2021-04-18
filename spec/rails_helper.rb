@@ -8,12 +8,14 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'devise'
 require './spec/support/omni_auth_mocks'
-require './spec/support/controller_macros'
 require './spec/support/fakes3'
-# require_relative 'support/controller_macros'
-
+# require './spec/support/controller_macros'
 require 'dotenv'
 Dotenv.load('.env.development')
+
+require 'capybara/rspec'
+require './spec/support/capybara'
+
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -65,13 +67,15 @@ RSpec.configure do |config|
 
   config.include FactoryBot::Syntax::Methods
   config.include Devise::Test::ControllerHelpers, type: :controller
+  # config.include Devise::Test::ControllerHelpers, type: :view
   config.include Devise::Test::IntegrationHelpers, type: :request
-  config.extend ControllerMacros, type: :controller
+  config.include Devise::Test::IntegrationHelpers, type: :system
+  # config.extend ControllerMacros, type: :controller
 
   # OmniAuthをテストモードに変更
   OmniAuth.config.test_mode = true
   config.include OmniauthMocks
-  config.render_views
+  # config.render_views
 
   config.before :each do |_example|
     # S3_BUCKETをfakes3に接続したスタブに置き換える
@@ -79,7 +83,7 @@ RSpec.configure do |config|
       access_key_id: 'dummy_aws_access_key_id',
       secret_access_key: 'dummy_aws_secret_access_key',
       region: 'ap-northeast-1',
-      endpoint: "http://#{Glint::Server.info[:fakes3][:address]}/",
+      endpoint: "http://#{Glint::Server.info[:fakes3][:address]}",
       force_path_style: true
     )
     Aws::S3::Resource.new(client: s3_client).create_bucket(

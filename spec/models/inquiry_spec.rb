@@ -27,7 +27,7 @@ RSpec.describe Inquiry, type: :model do
     end
 
     it 'is valid with a valid email address' do
-      inquiry = build(:inquiry, email: 'abc@abcdefg.com')
+      inquiry = build(:inquiry)
       inquiry.valid?
       expect(inquiry).to be_valid
     end

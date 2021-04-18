@@ -8,7 +8,7 @@ RSpec.describe ReviewsController, type: :controller do
   render_views
 
   describe 'POST #create' do
-    context 'as an authenticated user' do
+    context 'as a signed in user' do
       before do
         @user = user_create
         sign_in @user
@@ -66,7 +66,7 @@ RSpec.describe ReviewsController, type: :controller do
   end
 
   describe 'GET #show' do
-    context 'as an authenticated user' do
+    context 'as a signed in user' do
       before do
         @user = user_create
         sign_in @user

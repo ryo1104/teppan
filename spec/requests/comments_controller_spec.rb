@@ -7,7 +7,7 @@ RSpec.describe CommentsController, type: :request do
   let(:review_create)     { FactoryBot.create(:review, :with_user, neta: neta_create) }
 
   describe 'POST #create' do
-    context 'as an authenticated user' do
+    context 'as a signed in user' do
       before do
         @user = user_create
         sign_in @user
@@ -110,7 +110,7 @@ RSpec.describe CommentsController, type: :request do
   end
 
   describe 'DELETE #destroy' do
-    context 'as an authenticated user' do
+    context 'as a signed in user' do
       before do
         @user = user_create
         sign_in @user

@@ -5,7 +5,7 @@ RSpec.describe ViolationsController, type: :controller do
   render_views
 
   describe 'GET #new' do
-    context 'as an authenticated user' do
+    context 'as a signed in user' do
       before do
         @violater = FactoryBot.create(:user)
         @user = FactoryBot.create(:user)
@@ -33,7 +33,7 @@ RSpec.describe ViolationsController, type: :controller do
         get :new, params: { user_id: @violater.id }
         expect(response).to redirect_to '/users/sign_in'
       end
-      it 'returns a 302 status code' do
+      it 'returns a 302 status code', type: :doing do
         get :new, params: { user_id: @violater.id }
         expect(response).to have_http_status('302')
       end
@@ -41,7 +41,7 @@ RSpec.describe ViolationsController, type: :controller do
   end
 
   describe 'POST #create' do
-    context 'as an authenticated user' do
+    context 'as a signed in user' do
       before do
         @user = user_create
         sign_in @user
