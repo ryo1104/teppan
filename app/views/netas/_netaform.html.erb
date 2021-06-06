@@ -29,4 +29,3 @@
   <%= form.label :private_flag, "公開／非公開", :class => 'neta-form__private-label' %>
   <%= form.select :private_flag, [['公開', false], ['非公開', true]], { include_blank: false, selected: @neta.private_flag }, { class: "browser-default", :id => "neta-form__private-flag" } %>
 </div>
-<%= form.hidden_field :timestamp, :value => @stale_form_check_timestamp %>

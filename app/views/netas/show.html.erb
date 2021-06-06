@@ -12,15 +12,25 @@
         <div class="row neta-show">
           <h1 class="neta-show__title"><%= @neta.title %></h1>
           <div class="neta-show__text--free"><%= @neta.content %></div>
-          <div class="neta-show__price">
+          <div class="neta-show__value-content">
             <% if @neta.price != 0 %>
-              <% unless (@purchased || @owner) %>
+              <% if ( @owner || @my_trade.present? ) %>
+                <p class="neta-show__text-divider">---------  以下、有料部分   ---------</p>
+                <% if @neta.valuecontent.present? %>
+                  <div class="neta-show__text--value"><%= @neta.valuecontent %></div>
+                <% end %>
+                <% if @my_trade.present? %>
+                  <span class="neta-show__price--inactive"><%= number_to_currency(@my_trade.price, locale: 'ja') %>で購入済み</span>
+                <% else %>
+                  <span class="neta-show__price--active">価格：<%= number_to_currency(@neta.price, locale: 'ja') %></span>
+                <% end %>
+              <% else %>
                 <% if @for_sale %>
                   <div class="neta-show__text-divider">--------  これより先は有料コンテンツです  --------</div>
                   <span class="neta-show__price--active">価格：<%= number_to_currency(@neta.price, locale: 'ja') %></span>&nbsp;&nbsp;
                   <%= link_to "購入", new_neta_trade_path(@neta.id), {:class => 'neta-show__purchase btn waves-effect' } %>
                   <span class="neta-show__bookmark">
-                    <% if user_signed_in? && @owner == false %>
+                    <% if user_signed_in? %>
                       <span id="bookmark_buttons_<%= @neta.class.name.downcase %>_<%= @neta.id %>">
                         <%= render partial: 'bookmarks/bookmark', locals: { bookmarkable: @neta } %>
                       </span>
@@ -33,23 +43,15 @@
                   <span class="neta-show__price--inactive"><%= number_to_currency(@neta.price, locale: 'ja') %></span>
                   <div class="btn btn-primary withripple custom inactive">購入</div>
                 <% end %>
-              <% else %>
-                <p class="neta-show__text-divider">---------  以下、有料部分   ---------</p>
-                <% if @neta.valuecontent.present? %>
-                  <div class="neta-show__text--value"><%= @neta.valuecontent %></div>
-                <% end %>
-                <% if @owner %>
-                  <span class="neta-show__price--active">価格：<%= number_to_currency(@neta.price, locale: 'ja') %></span>
-                <% else %>
-                  <span class="neta-show__price--inactive"><%= number_to_currency(@purchased.price, locale: 'ja') %>で購入済み</span>
-                <% end %>
               <% end %>
             <% end %>
           </div>
+
           <% @neta.hashtags.each do |tag| %>
             <div class="neta-show__hashtag"><%= link_to "#"+tag.hashname, "/hashtags/netas?keyword=#{tag.hashname}" %></div>
           <% end %>
-          <% if @owner && !@reviews.present? %>
+
+          <% if @owner %>
             <div class="neta-show__edit-link"><%= link_to "編集", edit_neta_path(@neta.id) %></div>
           <% end %>
           <div class="neta-show__footer">
@@ -67,17 +69,11 @@
           </div>
         </div>  
         <div class="row neta-show__review">
-          <% if !@owner && !@myreview %>
-            <% if @is_free %>
+          <% if !@owner && @my_review.blank? %>
+            <% unless ( @for_sale && @my_trade.blank? ) %>
               <ul class="neta-show__review-index collection">
-                <%= render partial: "reviews/reviewform", locals: { neta: @neta, newreview: @newreview } %>
+                <%= render partial: "reviews/reviewform", locals: { neta: @neta, new_review: @new_review } %>
               </ul>
-            <% else %>
-              <% if @for_sale && @purchased %>
-                <ul class="neta-show__review-index collection">
-                  <%= render partial: "reviews/reviewform", locals: { neta: @neta, newreview: @newreview } %>
-                </ul>
-              <% end %>
             <% end %>
           <% else %>
             <h2>レビュー(<%= @reviews.count %>件)</h2>

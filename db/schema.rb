@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_28_014556) do
+ActiveRecord::Schema.define(version: 2021_05_26_021549) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -144,7 +144,7 @@ ActiveRecord::Schema.define(version: 2021_03_28_014556) do
     t.datetime "updated_at", null: false
     t.integer "hit_count", default: 0, null: false
     t.integer "neta_count", default: 0, null: false
-    t.string "hiragana"
+    t.string "yomigana"
     t.index ["hashname"], name: "index_hashtags_on_hashname", unique: true
   end
 

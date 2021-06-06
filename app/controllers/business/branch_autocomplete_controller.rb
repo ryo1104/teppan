@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Business::BranchAutocompleteController < ApplicationController
   def index
     bank = Bank.find_by(name: params[:bankname])

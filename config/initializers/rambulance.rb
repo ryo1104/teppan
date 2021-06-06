@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rambulance.setup do |config|
   # List of pairs of exception/corresponding http status. In Rails, the default
   # mappings are below:
@@ -32,8 +34,8 @@ Rambulance.setup do |config|
     # "CanCan::AccessDenied"          => :forbidden,
     # "Pundit::NotAuthorizedError"    => :forbidden,
     # "YourCustomException"           => :not_found
-    'ErrorUtils::AccessDeniedError'   => :forbidden,
-    'StripeUtils::StripeWebhookError' => :bad_request,
+    'ErrorUtils::AccessDeniedError' => :forbidden,
+    'StripeUtils::StripeWebhookError' => :bad_request
   }
 
   # The template name for the layout of the error pages. The default value is

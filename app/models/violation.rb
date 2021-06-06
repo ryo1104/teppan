@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Violation < ApplicationRecord
   belongs_to  :user
   validates   :user_id, uniqueness: { scope: :reporter_id, case_sensitive: true, message: "この#{Violation.model_name.human}はすでに存在します。" }

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Business::AccountsController < ApplicationController
   include StripeUtils
 

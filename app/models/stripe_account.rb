@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StripeAccount < ApplicationRecord
   include StripeUtils
 
@@ -118,7 +120,7 @@ class StripeAccount < ApplicationRecord
     balance_hash = balance_res[1]
     available_bal = balance_hash['available'][0]['amount'].presence || 0
     pending_bal = balance_hash['pending'][0]['amount'].presence || 0
-    if available_bal == 0 && pending_bal == 0
+    if available_bal.zero? && pending_bal.zero?
       true
     else
       false

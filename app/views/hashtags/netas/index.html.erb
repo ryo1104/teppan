@@ -12,7 +12,7 @@
         <%= f.hidden_field :hashname, :value => "search" %>
         <i class="hashtag-index__search-icon material-icons">search</i>
       <% end %>
-      <% unless @netas %>
+      <% unless @netas.present? %>
         <div> (ネタの投稿はまだありません) </div>
       <% else %>
         <h1>#<%= @tag.hashname %></h1>

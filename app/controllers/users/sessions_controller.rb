@@ -14,10 +14,10 @@ class Users::SessionsController < Devise::SessionsController
       if registered_user
         super
       else
-        redirect_to new_user_session_path, alert: 'メールアドレスまたはパスワードが無効です。' and return
+        redirect_to new_user_session_path, alert: I18n.t('controller.user.session.invalid') and return
       end
     else
-      redirect_to new_user_session_path, alert: 'メールアドレスまたはパスワードが無効です。' and return
+      redirect_to new_user_session_path, alert: I18n.t('controller.user.session.invalid') and return
     end
   end
 

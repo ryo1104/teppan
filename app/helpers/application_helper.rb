@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
   require 'uri'
 
@@ -8,5 +10,4 @@ module ApplicationHelper
       'Teppan | ネタ話のフリマサイト'
     end
   end
-
 end

@@ -32,10 +32,10 @@ RSpec.describe TopicsController, type: :request do
           @topic1 = create(:topic, user: @user1, title: '検索用タイトル１', content: '検索用テキスト　あああいいいうううえええおおお')
           @topic2 = create(:topic, user: @user2, title: '検索用タイトル２けけけ', content: '検索用テキスト　あああかかかさささたたたななな')
           @neta1 = create(:neta, :with_user, topic: @topic1, title: '検索用テキスト　あああいいいうううえええおおお', valuecontent: 'aaa', price: 50, average_rate: 3.01)
-          @neta2 = create(:neta, :with_user, topic: @topic1, title: '検索用テキスト　かかかきききくくくけけけこここ', valuecontent: 'aaa',price: 100, average_rate: 2.99)
+          @neta2 = create(:neta, :with_user, topic: @topic1, title: '検索用テキスト　かかかきききくくくけけけこここ', valuecontent: 'aaa', price: 100, average_rate: 2.99)
           @neta3 = create(:neta, :with_user, topic: @topic2, title: '検索用テキスト　検索用Text ABCDEFG H12１２', valuecontent: 'aaa', price: 200, average_rate: 0)
           @neta4 = create(:neta, user: @user3, topic: @topic1, title: '検索用Text ABCDEFG HIJKLMN123１２３', valuecontent: 'aaa', price: 300, average_rate: 5)
-          @params = { :q => {} }
+          @params = { q: {} }
         end
         it 'topics containing keyword in title' do
           @params[:q][:title_or_netas_title_or_user_nickname_cont] = 'タイトル'
@@ -52,7 +52,7 @@ RSpec.describe TopicsController, type: :request do
           get topics_url, params: @params
           expect(assigns(:topic_cards)).to match_array([@topic2])
         end
-        it "0 records when no topics, netas, or users contain the keyword" do
+        it '0 records when no topics, netas, or users contain the keyword' do
           @params[:q][:title_or_netas_title_or_user_nickname_cont] = 'Text that does not exist in database'
           get topics_url, params: @params
           expect(assigns(:topic_cards).count).to be 0
@@ -86,7 +86,7 @@ RSpec.describe TopicsController, type: :request do
           @topic1 = create(:topic, user: @user1, title: '検索用タイトル１', content: '検索用テキスト　あああいいいうううえええおおお')
           @topic2 = create(:topic, user: @user2, title: '検索用タイトル２けけけ', content: '検索用テキスト　あああかかかさささたたたななな')
           @neta1 = create(:neta, :with_user, topic: @topic1, title: '検索用テキスト　あああいいいうううえええおおお', valuecontent: 'aaa', price: 50, average_rate: 3.01)
-          @neta2 = create(:neta, :with_user, topic: @topic1, title: '検索用テキスト　かかかきききくくくけけけこここ', valuecontent: 'aaa',price: 100, average_rate: 2.99)
+          @neta2 = create(:neta, :with_user, topic: @topic1, title: '検索用テキスト　かかかきききくくくけけけこここ', valuecontent: 'aaa', price: 100, average_rate: 2.99)
           @neta3 = create(:neta, :with_user, topic: @topic2, title: '検索用テキスト　検索用Text ABCDEFG H12１２', valuecontent: 'aaa', price: 200, average_rate: 0)
           @neta4 = create(:neta, user: @user3, topic: @topic1, title: '検索用Text ABCDEFG HIJKLMN123１２３', valuecontent: 'aaa', price: 300, average_rate: 5)
           @params = {}
@@ -107,7 +107,7 @@ RSpec.describe TopicsController, type: :request do
           get topics_url, params: @params
           expect(assigns(:topic_cards)).to match_array([@topic2])
         end
-        it "0 records when no topics, netas, or users contain the keyword" do
+        it '0 records when no topics, netas, or users contain the keyword' do
           @params[:q][:title_or_netas_title_or_user_nickname_cont] = 'Text that does not exist in database'
           get topics_url, params: @params
           expect(assigns(:topic_cards).count).to be 0
@@ -174,31 +174,46 @@ RSpec.describe TopicsController, type: :request do
       @test_netas = create_list(:neta, 3, :with_user, topic: @test_topic)
       @test_comments = create_list(:comment, 3, :with_user, commentable: @test_topic)
     end
-    context 'as authenticated user' do
+    subject { get topic_url @test_topic.id }
+    context 'as a signed in user' do
       before do
         @user = user_create
         sign_in @user
       end
       it 'displays the topic' do
-        get topic_url @test_topic.id
+        subject
         expect(response.body).to include 'テストトピックタイトル'
       end
       it 'displays netas associated with the topic' do
-        get topic_url @test_topic.id
+        subject
         expect(response.body).to include 'ネタテスト　タイトル'
       end
       it 'displays comments associated with the topic' do
-        get topic_url @test_topic.id
+        subject
         expect(response.body).to include 'テストコメント'
       end
       it 'adds pageview' do
         expect do
-          get topic_url @test_topic.id
+          subject
         end.to change(Pageview, :count).by(1)
       end
       it 'returns a 200 status code' do
-        get topic_url @test_topic.id
+        subject
         expect(response).to have_http_status('200')
+      end
+      context 'when private flag is true while not the owner of topic' do
+        before do
+          @private_topic = create(:topic, :with_user, title: '非公開トピックタイトル', private_flag: true)
+        end
+        subject { get topic_url @private_topic.id }
+        it 'displays block message that topic is private' do
+          subject
+          expect(response.body).to include 'このトピックは非公開に設定されています。'
+        end
+        it 'returns a 200 status code' do
+          subject
+          expect(response).to have_http_status('200')
+        end
       end
     end
     context 'as guest' do
@@ -222,7 +237,7 @@ RSpec.describe TopicsController, type: :request do
   end
 
   describe 'GET #edit' do
-    context 'as authenticated user' do
+    context 'as a signed in user' do
       before do
         @user = user_create
         sign_in @user
@@ -270,7 +285,7 @@ RSpec.describe TopicsController, type: :request do
   end
 
   describe 'PATCH #update' do
-    context 'as authenticated user' do
+    context 'as a signed in user' do
       before do
         @user = user_create
         sign_in @user
@@ -278,23 +293,23 @@ RSpec.describe TopicsController, type: :request do
       end
       context 'but not topic owner' do
         it 'redirects to topic#show' do
-          patch topic_url @test_topic, params: { :topic => { :title => '変更後テストトピックタイトル' } }
+          patch topic_url @test_topic, params: { topic: { title: '変更後テストトピックタイトル' } }
           expect(response).to redirect_to topic_path(@test_topic.id)
         end
       end
       context 'and topic owner' do
         it 'updates topic' do
           expect do
-            patch topic_url @test_topic, params: { :topic => { :title => '変更後テストトピックタイトル' } }
+            patch topic_url @test_topic, params: { topic: { title: '変更後テストトピックタイトル' } }
           end.to change { Topic.find(@test_topic.id).title }.from('テストトピックタイトル').to('変更後テストトピックタイトル')
         end
         it 'redirects to topic#show when update succeeds' do
-          patch topic_url @test_topic, params: { :topic => { :title => '変更後テストトピックタイトル' } }
+          patch topic_url @test_topic, params: { topic: { title: '変更後テストトピックタイトル' } }
           expect(response).to redirect_to topic_path(@test_topic.id)
         end
         it 'displays topic#edit when update fails' do
           allow_any_instance_of(Topic).to receive(:update).and_return(false)
-          patch topic_url @test_topic, params: { :topic => { :title => 'Title for topic controller update test', :text => 'Text for topic controller update test' } }
+          patch topic_url @test_topic, params: { topic: { title: 'Title for topic controller update test', text: 'Text for topic controller update test' } }
           expect(response.body).to include 'テストトピックタイトル'
         end
       end
@@ -304,18 +319,18 @@ RSpec.describe TopicsController, type: :request do
         @test_topic = topic_create
       end
       it 'returns a 302 status code' do
-        patch topic_url @test_topic, params: { :topic => { :title => '変更後テストトピックタイトル' } }
+        patch topic_url @test_topic, params: { topic: { title: '変更後テストトピックタイトル' } }
         expect(response).to have_http_status('302')
       end
       it 'redirects to user sign-in page' do
-        patch topic_url @test_topic, params: { :topic => { :title => '変更後テストトピックタイトル' } }
+        patch topic_url @test_topic, params: { topic: { title: '変更後テストトピックタイトル' } }
         expect(response).to redirect_to new_user_session_url
       end
     end
   end
 
   describe 'DELETE #destroy' do
-    context 'as authenticated user' do
+    context 'as a signed in user' do
       before do
         @user = user_create
         sign_in @user
@@ -329,7 +344,7 @@ RSpec.describe TopicsController, type: :request do
             delete topic_url @test_topic
           end.to change(Topic, :count).by(0)
         end
-        it 'redirects to topic#show', type: :doing do
+        it 'redirects to topic#show' do
           delete topic_url @test_topic
           expect(response).to redirect_to topic_path(@test_topic.id)
         end
@@ -347,7 +362,7 @@ RSpec.describe TopicsController, type: :request do
               delete topic_url @test_topic
             end.to change(Topic, :count).by(-1)
           end
-          it 'displays topic#edit when destroy fails' do
+          it 'displays topic#edit when destroy fails', type: :doing do
             allow_any_instance_of(Topic).to receive(:destroy).and_return(false)
             delete topic_url @test_topic
             expect(response.body).to include 'テストトピックタイトル'

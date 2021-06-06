@@ -41,6 +41,7 @@ Layout/LineLength:
   Max: 140
   Exclude:
     - '**/spec/**/*'
+    - '**/config/**/*'
 
 Metrics/ClassLength:
   CountComments: false
@@ -77,11 +78,18 @@ Metrics/CyclomaticComplexity:
 Style/StringLiterals:
   EnforcedStyle: single_quotes
 
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+  Exclude:
+    - '**/config/**/*'
+
 Style/Documentation:
   Enabled: false
 
 Style/FrozenStringLiteralComment:
   Enabled: true
+  Exclude:
+    - '**/spec/**/*'
 
 Style/GuardClause:
   Enabled: false # need to switch to true

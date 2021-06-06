@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StripePayout < ApplicationRecord
   belongs_to :stripe_account
   include StripeUtils

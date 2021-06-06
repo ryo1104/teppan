@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Copycheck < ApplicationRecord
   belongs_to :neta
 

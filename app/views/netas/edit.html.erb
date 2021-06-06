@@ -16,10 +16,8 @@
           <%= button_tag :type => "submit", data: {disable_with: '保存中...'}, :class => "neta-edit__update btn waves-effect" do %>
             <i class="material-icons left">refresh</i>更新
           <% end %>
-          <% if @editable %>
-            <%= link_to neta_path(@neta.id), {:method => :delete, :class => 'neta-edit__delete btn waves-effect', data: { confirm: "本当に削除しますか？" }} do %>
-              <i class="material-icons left">delete</i>削除
-            <% end %>
+          <%= link_to neta_path(@neta.id), {:method => :delete, :class => 'neta-edit__delete btn waves-effect', data: { confirm: "本当に削除しますか？" }} do %>
+            <i class="material-icons left">delete</i>削除
           <% end %>
         <% end %>
       </div>

@@ -1,4 +1,6 @@
+# frozen_string_literal: true
+
 class HashtagSerializer
   include FastJsonapi::ObjectSerializer
-  attributes :hashname, :hiragana
+  attributes :hashname, :yomigana
 end

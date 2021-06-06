@@ -22,8 +22,11 @@
     }
   }
   
-  &__price {
+  &__value-content {
     margin: 0 0 3rem 0;
+  }
+  
+  &__price {
 
     &--active {
       color: $tp-orange;

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Topic < ApplicationRecord
   belongs_to :user
   has_rich_text :content
@@ -49,20 +51,12 @@ class Topic < ApplicationRecord
     to = Time.zone.now
     pageviews.find_or_create_by(user_id: user.id, created_at: from..to)
   end
-  
+
   def deleteable
     if netas.present?
       false
     else
       true
-    end
-  end
-  
-  def destroy
-    if purge_s3_object
-      super
-    else
-      false
     end
   end
 
@@ -86,14 +80,8 @@ class Topic < ApplicationRecord
 
   private
 
-  # def check_header_image
-  #   errors.add(:header_image, I18n.t('errors.messages.file_size_limit', filesize: '5MB')) if header_image.blob.byte_size > 5.megabyte
-  #   extension = %w[image/png image/jpg image/jpeg image/gif]
-  #   errors.add(:header_image, I18n.t('errors.messages.unsupported_file_type')) unless header_image.content_type.in?(extension)
-  # end
-
   def content_exists
-    errors.add(:content, I18n.t('errors.messages.blank')) unless content.body.present?
+    errors.add(:content, I18n.t('errors.messages.blank')) if content.body.blank?
     # Need attachment checks. Below does not work because at this point blob is not attached.
     # self.content.embeds.blobs.each do |blob|
     #   if blob.byte_size.to_i > 5.megabytes
@@ -120,5 +108,4 @@ class Topic < ApplicationRecord
       false
     end
   end
-
 end

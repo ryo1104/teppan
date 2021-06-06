@@ -1,17 +1,16 @@
 require 'rails_helper'
 
-describe "Topics", type: :system do
+describe 'Topics', type: :system do
   before :each do
     create(:user, email: 'aaaaaa@hoge.com')
   end
 
   context 'as a guest' do
-    it "displays the topic list" do
+    it 'displays the topic list' do
       visit topics_url
       expect(page).to have_content 'あなたのその鉄板ネタ、売れるかも'
     end
   end
-
 end
 
 # feature 'post', type: :feature do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JpUtils
   extend ActiveSupport::Concern
   require 'nkf'
@@ -12,11 +14,11 @@ module JpUtils
     end
 
     def self.hiragana(str)
-      # 全角ひらがな
-      if str.match(/\A[ぁ-んー－]+\z/)
-        true
-      else
+      # 全角ひらがな、または英数字
+      if str.match(/\A(?:\p{Hiragana}|[ー－]|[a-zA-Z0-9０-９])+\z/).blank?
         false
+      else
+        true
       end
     end
   end

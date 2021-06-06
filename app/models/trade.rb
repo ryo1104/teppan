@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Trade < ApplicationRecord
   include StripeUtils
   belongs_to :tradeable, polymorphic: true
@@ -70,7 +72,7 @@ class Trade < ApplicationRecord
                                },
                                # receipt_email: buyer.email
                                receipt_email: ENV['ADMIN_EMAIL_ADDRESS']
-                             },
+                             }
                            })
 
     JSON.parse(Stripe::Checkout::Session.create(checkout_params).to_s)
@@ -158,7 +160,7 @@ class Trade < ApplicationRecord
 
     price = charge_obj['amount'].to_i
     return [false, 'Unable to get price.'] if price.blank?
-    return [false, 'Price is not positive.'] unless price > 0
+    return [false, 'Price is not positive.'] unless price.positive?
 
     seller_revenue = Trade.get_seller_revenue(price)
     fee = price - seller_revenue

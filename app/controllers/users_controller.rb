@@ -1,23 +1,17 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
-  before_action :set_s3_direct_post, only: [:edit, :update]
+  before_action :set_s3_direct_post, only: %i[edit update]
 
   def show
     get_user(params[:id])
-    @premium_user = @user.premium_user
-    @userrate = @user.average_rate
-    # @lastlogin = @user.current_sign_in_at
-    @posted_netas = @user.netas.includes(:reviews, :hashtags, :user).where(private_flag: false)
-    @posted_topics = @user.topics.includes(:netas, :user).where(private_flag: false)
+    get_posted_info
     if my_page
       redirect_to edit_user_path(@user.id) if @user.nickname.blank?
-      @draft_netas = @user.netas.includes(:hashtags, :user).where(private_flag: true)
-      @draft_topics = @user.topics.includes(:netas, :user).where(private_flag: true)
-      @bought_trades = Trade.where(buyer_id: @user.id, tradeable_type: 'Neta')
-      @bought_netas = User.bought_netas(@bought_trades)
-      @bookmarked_netas = @user.bookmarked_netas
-      @bookmarked_topics = @user.bookmarked_topics
-      @account_exists = true if @user.stripe_account.present?
-      @sold_netas_info = Trade.get_trades_info('seller', @user.id, 'Neta') if @account_exists
+      get_draft_info
+      get_traded_info
+      get_bookmarked_info
+      get_stripe_info
     end
     get_counts
   end
@@ -44,6 +38,8 @@ class UsersController < ApplicationController
 
   def get_user(id)
     @user = User.includes({ netas: %i[reviews hashtags] }, :bookmarks).find(id)
+    @premium_user = @user.premium_user
+    @userrate = @user.average_rate
   end
 
   def update_params
@@ -52,6 +48,31 @@ class UsersController < ApplicationController
 
   def my_page
     @my_page = @user.id == current_user.id
+  end
+
+  def get_posted_info
+    @posted_netas = @user.netas.includes(:reviews, :hashtags, :user).where(private_flag: false)
+    @posted_topics = @user.topics.includes(:netas, :user).where(private_flag: false)
+  end
+
+  def get_draft_info
+    @draft_netas = @user.netas.includes(:hashtags, :user).where(private_flag: true)
+    @draft_topics = @user.topics.includes(:netas, :user).where(private_flag: true)
+  end
+
+  def get_traded_info
+    @bought_trades = Trade.where(buyer_id: @user.id, tradeable_type: 'Neta')
+    @bought_netas = User.bought_netas(@bought_trades)
+    @sold_netas_info = Trade.get_trades_info('seller', @user.id, 'Neta') if @account_exists
+  end
+
+  def get_bookmarked_info
+    @bookmarked_netas = @user.bookmarked_netas
+    @bookmarked_topics = @user.bookmarked_topics
+  end
+
+  def get_stripe_info
+    @account_exists = true if @user.stripe_account.present?
   end
 
   def get_counts

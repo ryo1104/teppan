@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TradesController < ApplicationController
   include StripeUtils
   before_action :load_tradeable, except: %i[webhook done]

@@ -4,6 +4,9 @@
     <div class="col s12 m12 content">
       <h1>違反報告</h1>
       <%= form_with model: [@user, @violation], url: user_violations_path, local: true, method: :post, :class => 'violation-new__form' do |f| %>
+        <% if @violation.errors.any? %>
+          <%= render :partial => "errorform" %>
+        <% end %>
         <div class="violation-new__target-user">報告対象：<%= link_to @user.nickname, user_path(@user.id) %></div>
         <%= f.check_box :block, :class => 'reset-checkbox', :as => :boolean, :required => true %>
         <%= f.label :block, 'ユーザーをブロック' %>

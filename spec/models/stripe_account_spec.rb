@@ -558,9 +558,7 @@ RSpec.describe StripeAccount, type: :model do
       @account.acct_id = ext_acct_create_acctid
       bank_accounts = JSON.parse(Stripe::Account.list_external_accounts(@account.acct_id, { limit: 10, object: 'bank_account' }).to_s)
       bank_accounts['data'].each do |bank_acct|
-        unless bank_acct['default_for_currency']
-          Stripe::Account.delete_external_account(@account.acct_id, bank_acct['id'])
-        end
+        Stripe::Account.delete_external_account(@account.acct_id, bank_acct['id']) unless bank_acct['default_for_currency']
       end
     end
   end
@@ -603,9 +601,7 @@ RSpec.describe StripeAccount, type: :model do
       @account.acct_id = ext_acct_create_acctid
       bank_accounts = JSON.parse(Stripe::Account.list_external_accounts(@account.acct_id, { limit: 10, object: 'bank_account' }).to_s)
       bank_accounts['data'].each do |bank_acct|
-        unless bank_acct['default_for_currency']
-          Stripe::Account.delete_external_account(@account.acct_id, bank_acct['id'])
-        end
+        Stripe::Account.delete_external_account(@account.acct_id, bank_acct['id']) unless bank_acct['default_for_currency']
       end
     end
   end

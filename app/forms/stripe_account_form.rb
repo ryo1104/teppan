@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StripeAccountForm
   include ActiveModel::Model
   include ActiveModel::Attributes
@@ -55,9 +57,7 @@ class StripeAccountForm
       individual: create_stripe_individual
     }
     ac_params.merge!(type: 'custom', country: 'JP') if mode == 'create'
-    if verification
-      ac_params.merge!(tos_acceptance: { date: Time.parse(Time.zone.now.to_s).to_i, ip: remote_ip.to_s })
-    end
+    ac_params.merge!(tos_acceptance: { date: Time.parse(Time.zone.now.to_s).to_i, ip: remote_ip.to_s }) if verification
     ac_params.merge!(settings: { payouts: { schedule: { interval: 'manual' } } })
     ac_params
   end
@@ -124,7 +124,7 @@ class StripeAccountForm
     bank_info = Bank.parse_bank_info(stripe_account_obj)
     bank_info[1] = { 'bank_name' => nil, 'branch_name' => nil, 'account_number' => nil, 'account_holder_name' => nil } unless bank_info[0]
     account_info = { 'id' => id, 'personal_info' => personal_info[1], 'tos_acceptance' => tos_acceptance,
-                     'bank_info' => bank_info[1], 'payouts_enabled' => payouts_enabled, 'requirements' => requirements, }
+                     'bank_info' => bank_info[1], 'payouts_enabled' => payouts_enabled, 'requirements' => requirements }
 
     [true, account_info]
   end
@@ -165,7 +165,7 @@ class StripeAccountForm
       'first_name_kana' => individual['first_name_kana'].presence,
       'gender' => gender,
       'email' => individual['email'].presence,
-      'dob' => dob,
+      'dob' => dob
     }
   end
 
@@ -177,7 +177,7 @@ class StripeAccountForm
                        'kanji_city' => individual['address_kanji']['city'],
                        'kanji_town' => individual['address_kanji']['town'],
                        'kanji_line1' => individual['address_kanji']['line1'],
-                       'kanji_line2' => individual['address_kanji']['line2'], })
+                       'kanji_line2' => individual['address_kanji']['line2'] })
     end
     if individual.key?('address_kana')
       address.merge!({ 'kana_state' => individual['address_kana']['state'],
@@ -237,7 +237,7 @@ class StripeAccountForm
       email: email.presence,
       gender: gender.presence,
       dob: create_stripe_dob,
-      phone: phone.present? ? international_phone_number : nil,
+      phone: phone.present? ? international_phone_number : nil
     }
     indiv.merge!(create_stripe_address)
     indiv
@@ -260,12 +260,12 @@ class StripeAccountForm
           city: kanji_city.presence,
           town: kanji_town.presence,
           line1: kanji_line1.presence,
-          line2: kanji_line2.presence,
+          line2: kanji_line2.presence
         },
         address_kana: {
           line1: kana_line1.present? ? JpKana.hankaku(kana_line1) : nil,
-          line2: kana_line2.present? ? JpKana.hankaku(kana_line2) : nil,
-        },
+          line2: kana_line2.present? ? JpKana.hankaku(kana_line2) : nil
+        }
       }
     else
       {}

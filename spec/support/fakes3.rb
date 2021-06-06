@@ -9,9 +9,7 @@ RSpec.configure do |config|
     end
     # サーバが止まったタイミングでファイルを消す
     server.on_stopped = lambda {
-      if Dir.exist? Glint::Server.info[:fakes3][:root]
-        FileUtils.remove_entry_secure(Glint::Server.info[:fakes3][:root])
-      end
+      FileUtils.remove_entry_secure(Glint::Server.info[:fakes3][:root]) if Dir.exist? Glint::Server.info[:fakes3][:root]
     }
     server.start
 

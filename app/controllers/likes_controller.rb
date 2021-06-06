@@ -1,25 +1,28 @@
+# frozen_string_literal: true
+
 class LikesController < ApplicationController
-  before_action :load_likeable
+  before_action :load_likeable, only: %i[create destroy]
 
   def create
-    @like = @likeable.likes.create!(create_params)
-    @likeable.reload
-  rescue StandardError => e
-    ErrorUtility.log_and_notify e
-    redirect_to "/#{@likeable.class.name.pluralize.downcase}/#{@likeable.id}", alert: 'システムエラーが発生しました。' and return
+    like = @likeable.likes.new(create_params)
+    if like.save
+      @likeable.reload
+    else
+      redirect_to user_path(current_user.id) and return
+    end
   end
 
   def destroy
-    @like = Like.find(params[:id])
-    if @like.user_id == current_user.id
-      @like.destroy!
-      @likeable.reload
+    like = Like.find(params[:id])
+    if like.user_id == current_user.id
+      if like.destroy
+        @likeable.reload
+      else
+        redirect_to user_path(current_user.id) and return
+      end
     else
-      redirect_to "/#{@likeable.class.name.pluralize.downcase}/#{@likeable.id}", alert: '他のユーザーのいいねは削除できません。' and return
+      redirect_to user_path(current_user.id), alert: I18n.t('controller.general.no_access') and return
     end
-  rescue StandardError => e
-    ErrorUtility.log_and_notify e
-    redirect_to "/#{@likeable.class.name.pluralize.downcase}/#{@likeable.id}", 'システムエラーが発生しました。' and return
   end
 
   private
@@ -30,7 +33,6 @@ class LikesController < ApplicationController
   end
 
   def create_params
-    hash = { 'user_id' => current_user.id }
-    hash
+    { 'user_id' => current_user.id }
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module StripeUtils
   extend ActiveSupport::Concern
   require 'stripe'

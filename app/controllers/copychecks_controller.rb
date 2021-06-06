@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CopychecksController < ApplicationController
   def new
     @check_obj = Copycheck.new

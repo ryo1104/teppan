@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class InquiryMailer < ApplicationMailer
   def confirm_email(inquiry)
     @inquiry = inquiry

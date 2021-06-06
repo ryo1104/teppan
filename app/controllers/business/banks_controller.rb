@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Business::BanksController < ApplicationController
   def new
     @account = StripeAccount.find(params[:account_id])

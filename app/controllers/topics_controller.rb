@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class TopicsController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[index show]
-  before_action :set_s3_direct_post, only: [:new, :edit, :create, :update, :destroy]
+  before_action :set_s3_direct_post, only: %i[new edit update destroy]
 
   def index
     @search = Topic.includes(:user, :netas).where(private_flag: false).ransack(params[:q])
@@ -45,6 +47,7 @@ class TopicsController < ApplicationController
     @topic = Topic.find(params[:id])
     if owner(@topic)
       if @topic.update(post_params)
+        @topic.purge_s3_object
         redirect_to topic_path(@topic.id), notice: I18n.t('controller.topic.updated') and return
       else
         render :edit and return
@@ -56,18 +59,14 @@ class TopicsController < ApplicationController
 
   def destroy
     @topic = Topic.includes(:netas, :pageviews, :bookmarks).find(params[:id])
-    if owner(@topic)
-      if @topic.deleteable
-        if @topic.destroy
-          redirect_to topics_path, notice: I18n.t('controller.topic.deleted') and return
-        else
-          render :edit and return
-        end
+    if deleteable
+      if @topic.destroy
+        redirect_to topics_path, notice: I18n.t('controller.topic.deleted') and return
       else
-        redirect_to topic_path(@topic.id), alert: I18n.t('controller.topic.has_child') and return
+        render :edit and return
       end
     else
-      redirect_to topic_path(@topic.id), alert: I18n.t('controller.general.no_access') and return
+      redirect_to topic_path(@topic.id), alert: @message and return
     end
   end
 
@@ -86,8 +85,22 @@ class TopicsController < ApplicationController
   end
 
   def set_s3_direct_post
-    @s3_direct_post = S3_BUCKET.presigned_post(key: "topic_header_images/#{SecureRandom.uuid}/${filename}",
+    @s3_direct_post = S3_BUCKET.presigned_post(key: 'https://ap-southeast-1.console.aws.amazon.com/',
                                                success_action_status: '201', acl: 'public-read')
   end
 
+  def deleteable
+    if owner(@topic)
+      if @topic.deleteable
+        @topic.purge_s3_object
+        true
+      else
+        @message = I18n.t('controller.topic.has_child')
+        false
+      end
+    else
+      @message = I18n.t('controller.general.no_access')
+      false
+    end
+  end
 end

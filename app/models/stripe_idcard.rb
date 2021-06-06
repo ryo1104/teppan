@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StripeIdcard < ApplicationRecord
   include StripeUtils
   belongs_to        :stripe_account

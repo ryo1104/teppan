@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -88,10 +90,10 @@ Rails.application.configure do
   #   Bullet.console = true
   #   Bullet.rails_logger = true
   # end
-  
+
   # Disables log coloration
-  config.colorize_logging = false  
-  
+  config.colorize_logging = false
+
   config.log_formatter = proc do |severity, datetime, progname, msg|
     "[#{severity}] #{datetime}: #{progname} : #{msg}\n"
   end

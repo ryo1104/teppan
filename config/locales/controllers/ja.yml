@@ -16,9 +16,26 @@ ja:
       deleted: 'ビジネスアカウントを削除しました。'
       not_deleted: 'ビジネスアカウントを削除できませんでした。'
       not_retrieved: 'アカウント情報が取得できませんでした。'
+    comment:
+      not_created: 'コメントを投稿できませんでした。'
+      not_deleted: 'コメントを削除できませんでした。'
+    follower:
+      duplicate: 'すでにこのユーザーをフォローしています。'
+      blank: 'このユーザーのフォローが存在しません。'
+    neta:
+      created: 'ネタが投稿されました。'
+      updated: 'ネタが更新されました。'
+      deleted: 'ネタが削除されました。'
+      private: 'このネタは非公開に設定されています。'
+      uneditable: 'このネタに関連するデータがすでに存在するため、編集できません。'
+      undeleteable: 'このネタに関連するデータがすでに存在するため、削除できません。'
     topic:
       created: 'トピックが作成されました。'
       updated: 'トピックが更新されました。'
       deleted: 'トピックが削除されました。'
       private: 'このトピックは非公開に設定されています。'
       has_child: 'このトピックに関連する投稿が存在します。'
+    user:
+      session:
+        invalid: 'メールアドレスまたはパスワードが無効です。'
+      

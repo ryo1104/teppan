@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Neta < ApplicationRecord
   belongs_to  :user
   belongs_to  :topic
@@ -41,7 +43,7 @@ class Neta < ApplicationRecord
     if reviews.present?
       avg = reviews.average(:rate).round(2)
       if avg.is_a? Numeric
-        if update!(average_rate: avg)
+        if update(average_rate: avg)
           [true, avg]
         else
           [false, 'error updating average_rate']
@@ -59,11 +61,11 @@ class Neta < ApplicationRecord
   end
 
   def editable
-    trades.count == 0
+    trades.count.zero?
   end
 
   def is_free
-    price == 0
+    price.zero?
   end
 
   def for_sale
@@ -136,17 +138,12 @@ class Neta < ApplicationRecord
 
   def add_hashtags(tag_array)
     if tag_array.present?
-      if delete_hashtags
-        tag_array.uniq.map do |tag_name|
-          hashtag = Hashtag.find_or_create_by(hashname: tag_name)
-          hashtag.update_hiragana
-          hashtags << hashtag
-          hashtag.update_netacount
-        end
-        true
-      else
-        false
+      tag_array.uniq.map do |tag_name|
+        hashtag = Hashtag.find_or_create_by(hashname: tag_name)
+        hashtags << hashtag unless hashtags.find_by(hashname: tag_name)
+        hashtag.update_netacount
       end
+      true
     else
       false
     end
@@ -185,7 +182,7 @@ class Neta < ApplicationRecord
   private
 
   def content_check
-    errors.add(:content, 'を入力してください。') unless content.body.present?
+    errors.add(:content, 'を入力してください。') if content.body.blank?
     # Need attachment checks. Below does not work because at this point blob is not attached..
     # self.content.embeds.blobs.each do |blob|
     #   if blob.byte_size.to_i > 10.megabytes
@@ -196,7 +193,7 @@ class Neta < ApplicationRecord
 
   def valuecontent_check
     if price != 0
-      errors.add(:valuecontent, 'を入力してください。') unless valuecontent.body.present?
+      errors.add(:valuecontent, 'を入力してください。') if valuecontent.body.blank?
       # Need attachment checks. Below does not work because at this point blob is not attached..
       # self.valuecontent.embeds.blobs.each do |blob|
       #   if blob.byte_size.to_i > 10.megabytes

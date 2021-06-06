@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -36,16 +38,14 @@ group :development, :test do
   gem 'factory_bot_rails' # , '~> 5.0.2'
   gem 'pry-rails'
   gem 'rails-controller-testing'
-  gem 'rspec-rails' # , '~> 4.0.0.beta4'
-  # gem 'hirb'
-  # gem 'hirb-unicode'
+  gem 'rspec-rails'
   gem 'unicode-display_width', '>= 1.4.0'
 end
 
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem 'listen' # , '>= 3.0.5', '< 3.2'
-  gem 'web-console' # , '>= 3.3.0'
+  gem 'listen'
+  gem 'web-console'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'bullet'
   gem 'rails-erd'
@@ -53,24 +53,23 @@ group :development do
   gem 'rubocop-rails', require: false
   gem 'spring'
   gem 'spring-commands-rspec'
-  gem 'spring-watcher-listen' # , '~> 2.0.0'
+  gem 'spring-watcher-listen'
 end
 
 group :test do
   gem 'capybara'
-  gem 'selenium-webdriver'
-  gem 'webdrivers'
-  gem 'launchy'
   gem 'faker'
   gem 'fakes3', '0.2.5' # latest fakes3 version is not free.
   gem 'glint'
+  gem 'launchy'
+  gem 'selenium-webdriver'
+  gem 'webdrivers'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 gem 'devise'
-# gem 'jp_prefecture'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'kaminari'

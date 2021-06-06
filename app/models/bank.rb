@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Bank < ApplicationRecord
   require 'zengin_code'
   validates :code, presence: true, uniqueness: { case_sensitive: true }

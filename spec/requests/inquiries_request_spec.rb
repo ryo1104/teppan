@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe InquiriesController, type: :request do
-  let(:inquiry_attributes)      { attributes_for(:inquiry) }
+  let(:inquiry_attributes) { attributes_for(:inquiry) }
 
   describe 'GET #new' do
     it 'returns a 200 status code' do
@@ -26,7 +26,7 @@ RSpec.describe InquiriesController, type: :request do
     it 'sends email' do
       expect do
         post inquiries_url, params: { inquiry: { email: @attributes[:email], message: @attributes[:message] } }
-      end.to change{ActionMailer::Base.deliveries.count}.by(1)
+      end.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
     it 'displays page' do
       post inquiries_url, params: { inquiry: { email: @attributes[:email], message: @attributes[:message] } }

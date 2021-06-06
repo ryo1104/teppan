@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module WebpackBundleHelper
   class BundleNotFound < StandardError; end
 
@@ -34,24 +36,28 @@ module WebpackBundleHelper
 
   # image_bundle_tag の場合は、entry はちゃんと拡張子付きで書いて欲しい
   def image_bundle_tag(entry, **options)
-    raise ArgumentError, "Extname is missing with #{entry}" unless File.extname(entry).present?
+    raise ArgumentError, "Extname is missing with #{entry}" if File.extname(entry).blank?
 
     image_tag asset_bundle_path("images/#{entry}"), **options
   end
 
   def favicon_bundle_tag(entry, **options)
+    raise BundleNotFound, "Could not find bundle with name #{entry}" unless manifest.key? "images/#{entry}"
+
     path = asset_bundle_path("images/#{entry}")
-    favicon_link_tag(path, options)
+    favicon_link_tag(path, **options)
   end
-  
+
   def apple_touch_icon_tag(entry, **options)
+    raise BundleNotFound, "Could not find bundle with name #{entry}" unless manifest.key? "images/#{entry}"
+
     path = asset_bundle_path("images/#{entry}")
-    favicon_link_tag(path, options)
+    favicon_link_tag(path, **options)
   end
 
   private
 
-  MANIFEST_PATH = 'public/packs/manifest.json'.freeze
+  MANIFEST_PATH = 'public/packs/manifest.json'
 
   def manifest
     @manifest ||= JSON.parse(File.read(MANIFEST_PATH))

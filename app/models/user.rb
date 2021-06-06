@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   include StripeUtils
 
@@ -63,7 +65,7 @@ class User < ApplicationRecord
       # Rubyは整数同士の除算は小数部は切り捨てられるため、floorは不要
       age = (Time.zone.today.strftime(date_format).to_i - birthdate.strftime(date_format).to_i) / 10_000
 
-      age if age > 0
+      age if age.positive?
     else
       ' - '
     end
@@ -242,7 +244,7 @@ class User < ApplicationRecord
   def self.auth_check(auth)
     return [false, 'auth is empty'] if auth.blank?
 
-    providers = ['yahoojp', 'twitter', 'google_oauth2']
+    providers = %w[yahoojp twitter google_oauth2]
     return [false, 'unknown provider'] unless providers.include?(auth['provider'])
 
     [true, nil]
