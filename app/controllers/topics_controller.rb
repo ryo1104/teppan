@@ -85,7 +85,7 @@ class TopicsController < ApplicationController
   end
 
   def set_s3_direct_post
-    @s3_direct_post = S3_BUCKET.presigned_post(key: 'https://ap-southeast-1.console.aws.amazon.com/',
+    @s3_direct_post = S3_BUCKET.presigned_post(key: "topic_header_images/#{SecureRandom.uuid}/${filename}",
                                                success_action_status: '201', acl: 'public-read')
   end
 

@@ -13,7 +13,7 @@ class Neta < ApplicationRecord
   has_many :rankings, as: :rankable
   has_many :hashtag_netas
   has_many :hashtags, through: :hashtag_netas
-  validates :title, presence: true, length: { in: 5..35 }
+  validates :title, presence: true, length: { maximum: 35 }
   validates :price, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 10_000 }
   validates :private_flag, inclusion: { in: [true, false] }
   validate  :content_check

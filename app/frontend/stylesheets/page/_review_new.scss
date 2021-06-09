@@ -6,7 +6,7 @@
   &__prompt {
     margin: 0.5rem 0;
     font-weight: bold;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
   }
   
   &__rate {
@@ -23,15 +23,6 @@
     height: 6rem;
     border-color: $tp-lightgray;
     padding: 0.5rem;
-  }
-  
-  &__user {
-    margin: 0.5rem 0 1rem 0;
-
-    &-name {
-      color: $tp-gray;
-      font-size: 1.1rem;
-    }
   }
   
   &__author-image {

@@ -30,6 +30,11 @@ RSpec.describe Neta, type: :model do
       neta.valid?
       expect(neta.errors[:content]).to include('を入力してください。')
     end
+    it 'is invalid if title is longer than 35 characters', type: :doing do
+      neta = build(:neta, user: user_create, topic: topic_create, title: 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもや')
+      neta.valid?
+      expect(neta.errors[:title]).to include('は35文字以内で入力してください。')
+    end
     it 'is invalid if content is longer than 800 characters' # do
     #   neta = build(:neta, content: Faker::Lorem.characters(number: 801), user: user_create, topic: topic_create)
     #   neta.valid?
@@ -287,7 +292,7 @@ RSpec.describe Neta, type: :model do
     end
   end
 
-  describe 'method::add_hashtags', type: :doing do
+  describe 'method::add_hashtags' do
     before do
       @neta = create(:neta, user: user_create, topic: topic_create)
     end

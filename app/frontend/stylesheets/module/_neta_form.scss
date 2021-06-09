@@ -3,7 +3,7 @@
   &__title {
     
     &-text {
-      font-size: 1.4rem !important;
+      font-size: 1.5rem !important;
     }
   }
   
@@ -36,13 +36,13 @@
       &--active {
         width: 8rem !important;
         height: 2.5rem !important;
-        font-size: 1.4rem !important;
+        font-size: 1.5rem !important;
         text-align: right;
       }
       &--inactive {
         width: 8rem !important;
         height: 2.5rem !important;
-        font-size: 1.4rem !important;
+        font-size: 1.5rem !important;
         text-align: right;
         color: $tp-lightgray !important;
       }
@@ -63,6 +63,6 @@
 #neta-form__private-flag {
   width: 9rem;
   height: 3.3rem;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   border-color: $tp-lightgray;
 }
