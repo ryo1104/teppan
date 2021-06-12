@@ -9,7 +9,11 @@
         <% end %>
         <% if @user.nickname.present? %>
           <%= render :partial => "layouts/breadcrumbs" %>
-          <%= render :partial => "users/form_normal" %>
+          <% if @s3_direct_post.present? %>
+            <%= render :partial => "users/form_with_avatar" %>
+          <% else %>
+            <%= render :partial => "users/form_without_avatar" %>
+          <% end %>
         <% else %>
           <%= render :partial => "users/form_initial" %>
         <% end %>

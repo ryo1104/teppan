@@ -241,6 +241,24 @@ class User < ApplicationRecord
     end
   end
 
+  def purge_s3_object
+    if avatar_url_check
+      object = S3_BUCKET.object(avatar_img_url.split('amazonaws.com/')[1])
+      if object.present?
+        object.delete
+        true
+      else
+        false
+      end
+    else
+      if errors.present?
+        false
+      else
+        true
+      end
+    end
+  end
+
   def self.auth_check(auth)
     return [false, 'auth is empty'] if auth.blank?
 
@@ -278,6 +296,25 @@ class User < ApplicationRecord
   def stripe_cus_id_check
     if stripe_cus_id.present?
       errors.add(:stripe_cus_id, 'invalid stripe_cus_id') unless stripe_cus_id.starts_with? 'cus_'
+    end
+  end
+  
+  def avatar_url_check
+    if avatar_img_url.present?
+      if avatar_img_url.include?('amazonaws.com/')
+        path = avatar_img_url.split('amazonaws.com/')[1]
+        if path.include?('user_avatar_images')
+          true
+        else
+          errors.add(:avatar_img_url, I18n.t('errors.messages.invalid'))
+          false
+        end
+      else
+        errors.add(:avatar_img_url, I18n.t('errors.messages.invalid'))
+        false
+      end
+    else
+      false
     end
   end
 end

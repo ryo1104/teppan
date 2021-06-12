@@ -2,7 +2,7 @@
 
 class TopicsController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[index show]
-  before_action :set_s3_direct_post, only: %i[new edit update destroy]
+  before_action :set_s3_direct_post, only: %i[new edit]
 
   def index
     @search = Topic.includes(:user, :netas).where(private_flag: false).ransack(params[:q])
@@ -46,8 +46,8 @@ class TopicsController < ApplicationController
   def update
     @topic = Topic.find(params[:id])
     if owner(@topic)
+      @topic.purge_s3_object if post_params[:header_img_url].present?
       if @topic.update(post_params)
-        @topic.purge_s3_object
         redirect_to topic_path(@topic.id), notice: I18n.t('controller.topic.updated') and return
       else
         render :edit and return
@@ -103,4 +103,5 @@ class TopicsController < ApplicationController
       false
     end
   end
+  
 end

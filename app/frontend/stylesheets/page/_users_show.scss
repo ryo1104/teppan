@@ -26,7 +26,7 @@
           padding: 0.5rem 0 0 0;
         }
         @include pc {
-          padding: 0.5rem 0 0 2rem;
+          padding: 0.5rem 0 1rem 0.5rem;
         }
       }
       
@@ -37,8 +37,8 @@
           width: 10rem;
         }
         @include pc { 
-          height: 12rem;
-          width: 12rem;
+          height: 15rem;
+          width: 15rem;
         }
       }
     }

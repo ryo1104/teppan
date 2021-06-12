@@ -9,13 +9,25 @@
       </div>
       <div class="row topic-new">
         <h1>新規トピック</h1>
-        <%= form_with model: @topic, local: true, class: 'topic-form__form', data: { 'form-data' => (@s3_direct_post.fields), 'url' => @s3_direct_post.url, 'host' => URI.parse(@s3_direct_post.url).host } do |form| %>
-          <% if @topic.errors.any? %>
-            <%= render :partial => "topics/errorform" %>
+        <% if @s3_direct_post.present? %>
+          <%= form_with model: @topic, local: true, class: 'topic-form__form', data: { 'form-data' => (@s3_direct_post.fields), 'url' => @s3_direct_post.url, 'host' => URI.parse(@s3_direct_post.url).host } do |form| %>
+            <% if @topic.errors.any? %>
+              <%= render :partial => "topics/errorform" %>
+            <% end %>
+            <%= render :partial => "topicform", locals: { form: form } %>
+            <%= button_tag :type => "submit", class: "topic-new__submit btn waves-effect" do %>
+              <i class="topic-new__submit material-icons left">create</i>投稿
+            <% end %>
           <% end %>
-          <%= render :partial => "topicform", locals: { form: form } %>
-          <%= button_tag :type => "submit", class: "topic-new__submit btn waves-effect" do %>
-            <i class="topic-new__submit material-icons left">create</i>投稿
+        <% else %>
+          <%= form_with model: @topic, local: true, class: 'topic-form__form' do |form| %>
+            <% if @topic.errors.any? %>
+              <%= render :partial => "topics/errorform" %>
+            <% end %>
+            <%= render :partial => "topicform", locals: { form: form } %>
+            <%= button_tag :type => "submit", class: "topic-new__submit btn waves-effect" do %>
+              <i class="topic-new__submit material-icons left">create</i>投稿
+            <% end %>
           <% end %>
         <% end %>
       </div>

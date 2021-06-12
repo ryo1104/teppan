@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  before_action :set_s3_direct_post, only: %i[edit update]
+  before_action :set_s3_direct_post, only: %i[edit]
 
   def show
     get_user(params[:id])
@@ -24,6 +24,7 @@ class UsersController < ApplicationController
   def update
     get_user(params[:id])
     if my_page
+      @user.purge_s3_object if update_params[:avatar_img_url].present?
       if @user.update(update_params)
         redirect_to user_path(@user.id), notice: 'プロフィールを更新しました。' and return
       else
