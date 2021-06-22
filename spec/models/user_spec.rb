@@ -803,37 +803,37 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe 'method::get_customer' do
-    before do
-      @user = create(:user)
-      Stripe.api_key = stripe_test_key
-    end
-    context 'user with valid cus_id' do
-      before do
-        @user.stripe_cus_id = test_stripe_cus_id
-        @customer = JSON.parse(Stripe::Customer.retrieve(@user.stripe_cus_id).to_s)
-      end
-      it 'retrieves customer info' do
-        expect(@user.get_customer).to eq [true, @customer]
-      end
-    end
-    context 'user with invalid cus_id' do
-      before do
-        @user.stripe_cus_id = 'aaaaaa'
-      end
-      it 'returns false when no such cus_id exists' do
-        expect(@user.get_customer).to eq [false, "Stripe error - No such customer: '#{@user.stripe_cus_id}'"]
-      end
-    end
-    context 'user with blank cus_id' do
-      before do
-        @user.stripe_cus_id = nil
-      end
-      it 'returns false' do
-        expect(@user.get_customer).to eq [false, 'stripe_cus_id is blank']
-      end
-    end
-  end
+  # describe 'method::get_customer' do
+  #   before do
+  #     @user = create(:user)
+  #     Stripe.api_key = stripe_test_key
+  #   end
+  #   context 'user with valid cus_id' do
+  #     before do
+  #       @user.stripe_cus_id = test_stripe_cus_id
+  #       @customer = JSON.parse(Stripe::Customer.retrieve(@user.stripe_cus_id).to_s)
+  #     end
+  #     it 'retrieves customer info' do
+  #       expect(@user.get_customer).to eq [true, @customer]
+  #     end
+  #   end
+  #   context 'user with invalid cus_id' do
+  #     before do
+  #       @user.stripe_cus_id = 'aaaaaa'
+  #     end
+  #     it 'returns false when no such cus_id exists' do
+  #       expect(@user.get_customer).to eq [false, "Stripe error - No such customer: '#{@user.stripe_cus_id}'"]
+  #     end
+  #   end
+  #   context 'user with blank cus_id' do
+  #     before do
+  #       @user.stripe_cus_id = nil
+  #     end
+  #     it 'returns false' do
+  #       expect(@user.get_customer).to eq [false, 'stripe_cus_id is blank']
+  #     end
+  #   end
+  # end
 
   # describe 'method::get_cards' do
   #   before do

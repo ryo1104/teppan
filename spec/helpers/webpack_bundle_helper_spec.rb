@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe WebpackBundleHelper, type: :helper do
   before do
-
     manifest = {
       "account.js": '/packs/js/account-44b20c130756b62e6152.js',
       "application.css": '/packs/css/application-44b20c130756b62e6152.css',

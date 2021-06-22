@@ -32,7 +32,7 @@
             </tr>
             <tr>
               <td class="table-half-split">生年月日</td>
-              <td class="table-half-split"><%= @account_form.birthdate.strftime("%Y年 %m月 %d日") %></td>
+              <td class="table-half-split"><%= @account_form.dob.strftime("%Y年 %m月 %d日") %></td>
             </tr>
             <tr>
               <td class="table-half-split">ご住所</td>
@@ -60,7 +60,7 @@
             <%= f.hidden_field :first_name_kana, :value => @account_form.first_name_kana %>
             <%= f.hidden_field :gender, :value => @account_form.gender %>
             <%= f.hidden_field :email, :value => @account_form.email %>
-            <%= f.hidden_field :birthdate, :value => @account_form.birthdate %>
+            <%= f.hidden_field :dob, :value => @account_form.dob %>
             <%= f.hidden_field :postal_code, :value => @account_form.postal_code %>
             <%= f.hidden_field :state, :value => @account_form.state %>
             <%= f.hidden_field :city, :value => @account_form.city %>
@@ -84,7 +84,7 @@
             <%= f.hidden_field :first_name_kana, :value => @account_form.first_name_kana %>
             <%= f.hidden_field :gender, :value => @account_form.gender %>
             <%= f.hidden_field :email, :value => @account_form.email %>
-            <%= f.hidden_field :birthdate, :value => @account_form.birthdate %>
+            <%= f.hidden_field :dob, :value => @account_form.dob %>
             <%= f.hidden_field :postal_code, :value => @account_form.postal_code %>
             <%= f.hidden_field :state, :value => @account_form.state %>
             <%= f.hidden_field :city, :value => @account_form.city %>

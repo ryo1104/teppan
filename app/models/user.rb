@@ -186,22 +186,22 @@ class User < ApplicationRecord
     Topic.includes(:user, :netas).where(id: i_topicids).order('created_at DESC')
   end
 
-  def get_customer
-    if stripe_cus_id.present?
-      begin
-        customer = JSON.parse(Stripe::Customer.retrieve(stripe_cus_id).to_s)
-      rescue StandardError => e
-        return [false, "Stripe error - #{e.message}"]
-      end
-      if customer['id'].present?
-        [true, customer]
-      else
-        [false, 'customer data does not exist']
-      end
-    else
-      [false, 'stripe_cus_id is blank']
-    end
-  end
+  # def get_customer
+  #   if stripe_cus_id.present?
+  #     begin
+  #       customer = JSON.parse(Stripe::Customer.retrieve(stripe_cus_id).to_s)
+  #     rescue StandardError => e
+  #       return [false, "Stripe error - #{e.message}"]
+  #     end
+  #     if customer['id'].present?
+  #       [true, customer]
+  #     else
+  #       [false, 'customer data does not exist']
+  #     end
+  #   else
+  #     [false, 'stripe_cus_id is blank']
+  #   end
+  # end
 
   def get_balance
     if stripe_account.present?
@@ -250,12 +250,10 @@ class User < ApplicationRecord
       else
         false
       end
+    elsif errors.present?
+      false
     else
-      if errors.present?
-        false
-      else
-        true
-      end
+      true
     end
   end
 
@@ -298,7 +296,7 @@ class User < ApplicationRecord
       errors.add(:stripe_cus_id, 'invalid stripe_cus_id') unless stripe_cus_id.starts_with? 'cus_'
     end
   end
-  
+
   def avatar_url_check
     if avatar_img_url.present?
       if avatar_img_url.include?('amazonaws.com/')
