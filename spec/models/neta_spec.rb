@@ -225,31 +225,31 @@ RSpec.describe Neta, type: :model do
     end
   end
 
-  describe 'method::has_dependents' do
+  describe 'method::dependents' do
     it 'returns true if review exists' do
       neta = create(:neta, user: user_create, topic: topic_create)
       create(:review, :with_user, neta: neta)
-      expect(neta.has_dependents).to eq true
+      expect(neta.dependents).to eq true
     end
     it 'returns true if trade exists' do
       neta = create(:neta, user: user_create, topic: topic_create)
       create(:trade, tradeable: neta)
-      expect(neta.has_dependents).to eq true
+      expect(neta.dependents).to eq true
     end
     it 'returns true if pageview exists' do
       neta = create(:neta, user: user_create, topic: topic_create)
       create(:pageview, pageviewable: neta, user: user_create)
-      expect(neta.has_dependents).to eq true
+      expect(neta.dependents).to eq true
     end
     it 'returns true if bookmark exists' do
       neta = create(:neta, user: user_create, topic: topic_create)
       create(:bookmark, bookmarkable: neta, user: user_create)
-      expect(neta.has_dependents).to eq true
+      expect(neta.dependents).to eq true
     end
     it 'returns true if exists in ranking'
     it 'returns false if no dependent data exists' do
       neta = create(:neta, user: user_create, topic: topic_create)
-      expect(neta.has_dependents).to eq false
+      expect(neta.dependents).to eq false
     end
   end
 

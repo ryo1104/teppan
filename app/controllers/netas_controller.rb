@@ -69,7 +69,7 @@ class NetasController < ApplicationController
   def destroy
     @neta = Neta.includes(:trades, :bookmarks, :reviews, :pageviews, :rankings, :hashtag_netas).find(params[:id])
     if @neta.owner(current_user)
-      if @neta.has_dependents
+      if @neta.dependents
         redirect_to neta_path(params[:id]), alert: I18n.t('controller.neta.undeleteable') and return
       else
         topic_id = @neta.topic_id

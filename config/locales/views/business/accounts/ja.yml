@@ -4,5 +4,4 @@ ja:
       external_account: '銀行口座情報'
       individual:
         verification:
-          document: 'ご本人様確認書類'
-      test: 'ロケールテスト'
+          document: 'ご本人様確認'

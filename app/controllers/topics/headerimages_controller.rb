@@ -10,10 +10,10 @@ class Topics::HeaderimagesController < ApplicationController
           @topic.header_img_url = nil
           @topic.save
         else
-          Rails.logger.error "S3 object delete failed. Topic ID : #{@topic.id}"
+          logger.error "S3 object delete failed. Topic ID : #{@topic.id}"
         end
       else
-        Rails.logger.error "topic.header_img_url is blank. Topic ID : #{@topic.id}"
+        logger.error "topic.header_img_url is blank. Topic ID : #{@topic.id}"
       end
       redirect_to edit_topic_path(@topic.id) and return
     else

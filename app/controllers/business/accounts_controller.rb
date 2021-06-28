@@ -8,6 +8,8 @@ class Business::AccountsController < ApplicationController
     redirect_to user_path(current_user.id), alert: I18n.t('controller.account.ineligible') and return unless qualified(@user)
     if @user.stripe_account.present?
       redirect_to edit_account_path(@user.stripe_account.id), alert: I18n.t('controller.account.exists') and return
+    elsif params[:stripe_account_form].present?
+      @account_form = StripeAccountForm.new(form_params)
     else
       @account_form = StripeAccountForm.new
     end
@@ -27,10 +29,10 @@ class Business::AccountsController < ApplicationController
 
   def create
     @user = User.find(params[:user_id])
-    render :new and return if params[:back]
     redirect_to user_path(current_user.id), alert: I18n.t('controller.account.ineligible') and return unless qualified(@user)
 
     @account_form = StripeAccountForm.new(form_params)
+    render :new and return if params[:back]
     render :new and return unless @account_form.valid?
 
     create_account
@@ -42,23 +44,24 @@ class Business::AccountsController < ApplicationController
     @stripe_account_info = @account.get_connect_account
     if @stripe_account_info[0]
       converted_res = StripeAccountForm.convert_attributes(@stripe_account_info[1]['personal_info'])
-      if converted_res
-        redirect_to account_path(@account.id), alert: I18n.t('controller.account.not_retrieved') and return
+      if converted_res[0]
+        @account_form = StripeAccountForm.new(converted_res[1])
       else
-        @account_form = StripeAccountForm.new
-        @account_form.attributes = converted_res
+        logger.error "convert_attributes returned error. #{converted_res[1]}, data : #{@stripe_account_info[1]['personal_info']}"
+        redirect_to account_path(@account.id), alert: I18n.t('controller.account.not_retrieved') and return
       end
     else
+      logger.error @stripe_account_info[1]
       redirect_to account_path(@account.id), alert: I18n.t('controller.account.not_retrieved') and return
     end
   end
 
   def update
     @account = StripeAccount.find(params[:id])
+    @account_form = StripeAccountForm.new(form_params)
     render :edit and return if params[:back]
 
     my_info(@account.user_id)
-    @account_form = StripeAccountForm.new(form_params)
     update_account_info
   end
 
@@ -83,8 +86,8 @@ class Business::AccountsController < ApplicationController
 
   def form_params
     params.require(:stripe_account_form).permit(:last_name_kanji, :last_name_kana, :first_name_kanji, :first_name_kana,
-                                                :postal_code, :state, :city, :town, :kanji_line1, :kanji_line2, :kana_line1, :kana_line2,
-                                                :gender, :birthdate, :phone, :email, :user_agreement)
+                                                :postal_code, :kanji_state, :kanji_city, :kanji_town, :kanji_line1, :kanji_line2,
+                                                :kana_line1, :kana_line2, :gender, :dob, :phone, :email, :verification)
   end
 
   def my_info(user_id)
@@ -108,7 +111,7 @@ class Business::AccountsController < ApplicationController
     if stripe_result_acct[0]
       @account_info = stripe_result_acct[1]
     else
-      Rails.logger.error "get_connect_account returned false : #{stripe_result_acct[1]}"
+      logger.error "get_connect_account returned false : #{stripe_result_acct[1]}"
       redirect_to user_path(current_user.id), alert: I18n.t('controller.account.no_info') and return
     end
   end
@@ -129,10 +132,11 @@ class Business::AccountsController < ApplicationController
     stripe_result = @account.update_connect_account(@account_form, request.remote_ip)
     if stripe_result[0]
       @account_info = stripe_result[1]
+      logger.info "Stripe updated.  acct_id : #{@account_info['id']}"
       @account.update!(status: @account_info['personal_info']['verification']['status'])
       redirect_to account_path(@account.id), notice: I18n.t('controller.account.updated') and return
     else
-      Rails.logger.error "update_connect_account returned false : #{stripe_result[1]}"
+      logger.error "update_connect_account returned false : #{stripe_result[1]}"
       redirect_to edit_account_path(@account.id), alert: I18n.t('controller.account.not_updated') and return
     end
   end
@@ -151,7 +155,7 @@ class Business::AccountsController < ApplicationController
       @balance_info = stripe_result_balance[1]
       @payout_threshold = 1000
     else
-      Rails.logger.error "get_balance returned false : #{stripe_result_balance[1]}"
+      logger.error "get_balance returned false : #{stripe_result_balance[1]}"
       redirect_to user_path(current_user.id), alert: I18n.t('controller.account.nil_balance') and return
     end
   end
@@ -159,9 +163,10 @@ class Business::AccountsController < ApplicationController
   def create_account
     @stripe_result = StripeAccount.create_connect_account(@account_form, request.remote_ip)
     if @stripe_result[0]
+      logger.info "Stripe connect account created. acct_id : #{@stripe_result[1]['id']}"
       add_record
     else
-      Rails.logger.error "create_connect_account returned false : #{@stripe_result[1]}.  User ID : #{@user.id}, email : #{@user.email}"
+      logger.error "create_connect_account returned false : #{@stripe_result[1]}.  User ID : #{@user.id}, email : #{@user.email}"
       redirect_to user_path(@user.id), alert: I18n.t('controller.account.not_created') + @stripe_result[1].to_s and return
     end
   end
@@ -180,15 +185,15 @@ class Business::AccountsController < ApplicationController
   def delete_account
     stripe_del_acct_res = @account.delete_connect_account
     if stripe_del_acct_res[0]
+      logger.info "Stripe delete succeeded. acct_id : #{stripe_del_acct_res[1]['id']}"
       if @account.destroy
-        Rails.logger.error "account.destroy succeeded. Account id : #{@account.id}, delete_result = #{stripe_del_acct_res[1]}"
         redirect_to user_path(current_user.id), alert: I18n.t('controller.account.deleted') and return
       else
-        Rails.logger.error "account.destroy failed. Account id : #{@account.id}"
+        logger.error "ActiveRecord destroy failed. Account id : #{@account.id}"
         redirect_to account_path(@account.id), alert: I18n.t('controller.account.not_deleted') and return
       end
     else
-      Rails.logger.error "delete_connect_account failed : #{stripe_del_acct_res[1]}"
+      logger.error "Stripe delete failed : #{stripe_del_acct_res[1]}"
       redirect_to account_path(@account.id), alert: I18n.t('controller.account.not_deleted') and return
     end
   end

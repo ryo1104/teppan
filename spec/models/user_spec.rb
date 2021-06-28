@@ -520,7 +520,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe 'method::is_followed_by(user_id)' do
+  describe 'method::followed_by(user_id)' do
     before do
       @user = create(:user)
       @follower = create(:user)
@@ -528,15 +528,15 @@ RSpec.describe User, type: :model do
 
     it 'returns true if user is already followed by follower' do
       @follow = create(:follow, user: @user, follower_id: @follower.id)
-      expect(@user.is_followed_by(@follower.id)).to eq true
+      expect(@user.followed_by(@follower.id)).to eq true
     end
 
     it 'returns false if user is not followed by follower' do
-      expect(@user.is_followed_by(@follower.id)).to eq false
+      expect(@user.followed_by(@follower.id)).to eq false
     end
   end
 
-  describe 'method::is_blocked_by(user_id)' do
+  describe 'method::blocked_by(user_id)' do
     before do
       @user = create(:user)
       @reporter = create(:user)
@@ -544,11 +544,11 @@ RSpec.describe User, type: :model do
 
     it 'returns true if user is already blocked by follower' do
       @violation = create(:violation, user: @user, reporter_id: @reporter.id)
-      expect(@user.is_blocked_by(@reporter.id)).to eq true
+      expect(@user.blocked_by(@reporter.id)).to eq true
     end
 
     it 'returns false if user is not blocked by follower' do
-      expect(@user.is_blocked_by(@reporter.id)).to eq false
+      expect(@user.blocked_by(@reporter.id)).to eq false
     end
   end
 

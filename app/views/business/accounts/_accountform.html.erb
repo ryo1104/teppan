@@ -17,9 +17,13 @@
   <%= f.label :gender, '性別', :class => "account-form__gender-label" %>
   <%= f.select :gender, [["",""], ["男性","male"], ["女性","female"]], {}, {:class => "browser-default"} %>
 </div>
-<div class="account-form__birthdate">
-  <%= f.label :dob, '生年月日', :class => "account-form__birthdate-label" %>
-  <%= f.date_field :dob, :value => user.birthdate, :required => true, :class => "account-form__birthdate-field" %>
+<div class="account-form__dob">
+  <%= f.label :dob, '生年月日', :class => "account-form__dob-label" %>
+  <% if user.birthdate.present? %>
+    <%= f.date_field :dob, :value => user.birthdate.strftime("%Y-%m-%d"), :required => true, :class => "account-form__dob-field" %>
+  <% else %>
+    <%= f.date_field :dob, :required => true, :class => "account-form__dob-field" %>
+  <% end %>
 </div>
 <div class="account-form__postal-code">
   <%= f.label :postal_code, '郵便番号', :class => "account-form__postal-code-label" %>
@@ -28,7 +32,7 @@
 <div class="row account-form__address">
   <div class="col s12 m2 account-form__address-head">
     <%= f.label :kanji_state, '都道府県・市区郡', :class => "account-form__address-label" %>
-  </div>
+  </div><br>
   <div class="col s4 m2 account-form__address-prefecture">
     <%= f.text_field :kanji_state, :id => "js-prefecture", :placeholder => "例) 東京都", :required => true %>
   </div>

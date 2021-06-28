@@ -191,14 +191,14 @@ class StripeAccountForm
 
   def self.convert_attributes(personal_info)
     gender_res = StripeAccountForm.translate_gender(personal_info['gender'])
-    return false unless gender_res
+    return [false, 'translate gender returned false'] unless gender_res
 
     date_res = StripeAccountForm.convert_to_date(personal_info['dob'])
-    return false unless date_res
+    return [false, 'convert date returned false'] unless date_res
 
     personal_info['gender'] = gender_res
     personal_info['dob'] = date_res
-    personal_info
+    [true, personal_info]
   end
 
   def self.translate_gender(word)
@@ -212,7 +212,7 @@ class StripeAccountForm
     when '女性'
       'female'
     else
-      ''
+      false
     end
   end
 

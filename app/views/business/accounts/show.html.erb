@@ -37,28 +37,29 @@
         </div>
       <% else %>
         <h1>ビジネスアカウント登録</h1>
+        <br>
         <div class="account-show__individual">
           <h2>お客様情報</h2>
           <%= render :partial => "individual" %>
           <%= link_to '変更', edit_account_path(@account.id), :class => "account-show__btn btn waves-effect" %>
-        </div>
+        </div><br>
         <div class="account-show__bank-account">
-          <h2>銀行口座</h2>
+          <h2>銀行口座情報</h2>
           <% if @account_info["bank_info"]["bank_name"].present? %>
             <%= render :partial => "bankaccount", locals: { bank_info: @account_info["bank_info"] } %>
             <%= link_to '口座変更', edit_account_bank_path(@account.id), :class => "account-show__btn btn waves-effect" %><br>
           <% else %>
             <%= link_to '登録', new_account_bank_path(@account.id), :class => "account-show__btn btn waves-effect" %><br>
           <% end %>
-        </div>
+        </div><br>
         <div class="account-show__identification">
-          <h2>ご本人様確認書類</h2>
+          <h2>ご本人様確認 （運転免許証など）</h2>
           <% if @account_info["personal_info"]["verification"]["status"] == "verified" %>
             確認済<br>
           <% else %>
             <%= render :partial => "idcard" %>
           <% end %>
-        </div>
+        </div><br>
         <div class="account-show__missing-info">
           <h2>不足情報</h2>
           <% @account_info["requirements"]["eventually_due"].map do |pending_item| %>
@@ -72,6 +73,5 @@
       <% end %>
       </div>
     </div>
-    <%= t("accounts.show.test") %>
   </div>
 </div>

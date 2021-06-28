@@ -29,24 +29,40 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   # DELETE /resource
+  # def destroy
+  #   if user_signed_in? && resource.class.name == 'User'
+  #     if resource.id == current_user.id
+  #       user = User.find(resource.id)
+  #       if user.can_unregister[0]
+  #         if user.update(unregistered: true)
+  #           sign_out(resource)
+  #         else
+  #           redirect_to user_path(current_user.id), alert: '退会処理に失敗しました。' and return
+  #         end
+  #       else
+  #         redirect_to user_path(current_user.id), alert: '必要なデータを削除して下さい。' and return
+  #       end
+  #     else
+  #       redirect_to user_path(current_user.id), alert: '権限がありません。' and return
+  #     end
+  #   else
+  #     redirect_to root_path and return
+  #   end
+  # end
+
   def destroy
-    if user_signed_in? && resource.class.name == 'User'
-      if resource.id == current_user.id
-        user = User.find(resource.id)
-        if user.can_unregister[0]
-          if user.update(unregistered: true)
-            sign_out(resource)
-          else
-            redirect_to user_path(current_user.id), alert: '退会処理に失敗しました。' and return
-          end
-        else
-          redirect_to user_path(current_user.id), alert: '必要なデータを削除して下さい。' and return
-        end
+    get_user(resource)
+    deleteable = @user.can_unregister
+    if deleteable[0]
+      if @user.update(unregistered: true)
+        logger.info "User id #{@user.id} has been unregistered."
+        sign_out(resource)
       else
-        redirect_to user_path(current_user.id), alert: '権限がありません。' and return
+        redirect_to user_path(current_user.id), alert: I18n.t('controller.user.registration.unregister_failed') and return
       end
     else
-      redirect_to root_path and return
+      logger.error "User id #{@user.id} cannot be unregistered. #{deleteable[1]}"
+      redirect_to user_path(current_user.id), alert: I18n.t('controller.user.registration.data_exists') and return
     end
   end
 
@@ -86,6 +102,18 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   private
+
+  def get_user(resource)
+    if user_signed_in? && resource.class.name == 'User'
+      if resource.id == current_user.id
+        @user = User.find(resource.id)
+      else
+        redirect_to user_path(current_user.id), alert: I18n.t('controller.general.no_access') and return
+      end
+    else
+      redirect_to root_path and return
+    end
+  end
 
   def unregistered_user
     if params['user']['email'].present?

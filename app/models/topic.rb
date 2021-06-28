@@ -69,12 +69,10 @@ class Topic < ApplicationRecord
       else
         false
       end
+    elsif errors.present?
+      false
     else
-      if errors.present?
-        false
-      else
-        true
-      end
+      true
     end
   end
 

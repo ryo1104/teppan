@@ -9,8 +9,8 @@ class UsersController < ApplicationController
     if my_page
       redirect_to edit_user_path(@user.id) if @user.nickname.blank?
       get_draft_info
-      get_traded_info
       get_bookmarked_info
+      get_traded_info
       get_stripe_info
     end
     get_counts
@@ -64,7 +64,7 @@ class UsersController < ApplicationController
   def get_traded_info
     @bought_trades = Trade.where(buyer_id: @user.id, tradeable_type: 'Neta')
     @bought_netas = User.bought_netas(@bought_trades)
-    @sold_netas_info = Trade.get_trades_info('seller', @user.id, 'Neta') if @account_exists
+    @sold_netas_info = Trade.get_trades_info('seller', @user.id, 'Neta')
   end
 
   def get_bookmarked_info

@@ -57,20 +57,20 @@ class TradesController < ApplicationController
   def check_event
     if @event.key?('type')
       unless @event['type'] == 'checkout.session.completed'
-        Rails.logger.error "event type is not checkout.session.completed, but instead #{@event['type']}."
+        logger.error "event type is not checkout.session.completed, but instead #{@event['type']}."
         raise StripeUtils::StripeWebhookError, 'event type is not checkout.session.completed.'
       end
     else
-      Rails.logger.error 'event type does not exist'
+      logger.error 'event type does not exist'
       raise StripeUtils::StripeWebhookError, 'event type does not exist'
     end
     if @event.key?('data')
       unless @event['data'].key?('object')
-        Rails.logger.error 'event object does not exist'
+        logger.error 'event object does not exist'
         raise StripeUtils::StripeWebhookError, 'event object does not exist'
       end
     else
-      Rails.logger.error 'event data does not exist'
+      logger.error 'event data does not exist'
       raise StripeUtils::StripeWebhookError, 'event data does not exist'
     end
   end
@@ -78,7 +78,7 @@ class TradesController < ApplicationController
   def execute_purchase
     @result = Trade.fulfill_order(@event['data']['object'])
     unless @result[0]
-      Rails.logger.error "fulfill order failed. #{@result[1]}"
+      logger.error "fulfill order failed. #{@result[1]}"
       raise StripeUtils::StripeWebhookError, "決済処理が正しく完了できませんでした。 #{@result[1]}"
     end
   end

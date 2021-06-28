@@ -4,9 +4,9 @@ module ErrorUtils
   extend ActiveSupport::Concern
 
   class ErrorUtility
-    def self.log_and_notify(e)
-      Rails.logger.error "#{e.class} / #{e.message}"
-      Rails.logger.error e.backtrace.join("\n")
+    def self.log_and_notify(exc)
+      Rails.logger.error "#{exc.class} / #{exc.message}"
+      Rails.logger.error exc.backtrace.join("\n")
     end
   end
 

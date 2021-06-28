@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_26_021549) do
+ActiveRecord::Schema.define(version: 2021_06_28_041151) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 2021_05_26_021549) do
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id", "bookmarkable_type", "bookmarkable_id"], name: "unique_bookmark", unique: true
   end
 
   create_table "branches", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -123,6 +124,7 @@ ActiveRecord::Schema.define(version: 2021_05_26_021549) do
     t.integer "follower_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id", "follower_id"], name: "unique_follow", unique: true
   end
 
   create_table "hashtag_hits", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -161,6 +163,7 @@ ActiveRecord::Schema.define(version: 2021_05_26_021549) do
     t.string "likeable_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id", "likeable_type", "likeable_id"], name: "unique_like", unique: true
   end
 
   create_table "netas", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -201,6 +204,7 @@ ActiveRecord::Schema.define(version: 2021_05_26_021549) do
     t.integer "rate"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id", "neta_id"], name: "unique_review", unique: true
   end
 
   create_table "stripe_accounts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -221,6 +225,7 @@ ActiveRecord::Schema.define(version: 2021_05_26_021549) do
     t.string "stripe_file_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["stripe_account_id", "frontback"], name: "unique_idcard", unique: true
   end
 
   create_table "stripe_payouts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -247,6 +252,7 @@ ActiveRecord::Schema.define(version: 2021_05_26_021549) do
     t.integer "comments_count", default: 0, null: false
     t.boolean "private_flag", default: false, null: false
     t.string "header_img_url"
+    t.index ["title"], name: "index_topics_on_title", unique: true
   end
 
   create_table "trades", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -305,6 +311,7 @@ ActiveRecord::Schema.define(version: 2021_05_26_021549) do
     t.boolean "block", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id", "reporter_id"], name: "unique_violation", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

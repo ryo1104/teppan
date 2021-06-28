@@ -13,11 +13,11 @@ class User < ApplicationRecord
   has_many  :pageviews,  -> { order('created_at DESC') }
   has_many  :bookmarks,  -> { order('created_at DESC') }
   has_many  :hashtag_hits, -> { order('created_at DESC') }
-  has_many  :comments
-  has_many  :follows
-  has_many  :reviews
-  has_many  :violations
-  has_one   :stripe_account
+  has_many  :comments, dependent: :destroy
+  has_many  :follows, dependent: :destroy
+  has_many  :reviews, dependent: :destroy
+  has_many  :violations, dependent: :destroy
+  has_one   :stripe_account, dependent: :destroy
   has_rich_text :introduction
   validates :email, presence: true, uniqueness: { case_sensitive: false }
   # validate  :nickname
@@ -113,7 +113,7 @@ class User < ApplicationRecord
     f_users
   end
 
-  def is_followed_by(user_id)
+  def followed_by(user_id)
     follow = Follow.find_by(user_id: id, follower_id: user_id)
     if follow.present?
       true
@@ -122,7 +122,7 @@ class User < ApplicationRecord
     end
   end
 
-  def is_blocked_by(user_id)
+  def blocked_by(user_id)
     violation = Violation.find_by(user_id: id, reporter_id: user_id)
     if violation.present?
       true

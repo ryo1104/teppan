@@ -6,7 +6,7 @@ class ReviewsController < ApplicationController
     @review = @neta.reviews.new(create_params)
     if @review.save
       rate_update_res = @neta.update_average_rate
-      Rails.logger.error "#{rate_update_res[1]}. Neta id : #{@neta.id}" unless rate_update_res[0]
+      logger.error "#{rate_update_res[1]}. Neta id : #{@neta.id}" unless rate_update_res[0]
       redirect_to neta_path(@neta.id) and return
     else
       render :new and return

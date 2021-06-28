@@ -9,7 +9,7 @@ class Users::AvatarsController < ApplicationController
         @user.avatar_img_url = nil
         @user.save
       else
-        Rails.logger.error "S3 object delete failed. User ID : #{@user.id}"
+        logger.error "S3 object delete failed. User ID : #{@user.id}"
       end
       redirect_to edit_user_path(@user.id) and return
     else

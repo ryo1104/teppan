@@ -549,7 +549,7 @@ RSpec.describe NetasController, type: :request do
         end
         context 'when dependent records exist' do
           before do
-            allow_any_instance_of(Neta).to receive(:has_dependents).and_return(true)
+            allow_any_instance_of(Neta).to receive(:dependents).and_return(true)
           end
           it 'does not delete the neta' do
             expect do

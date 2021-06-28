@@ -6,12 +6,12 @@ class Neta < ApplicationRecord
   counter_culture :topic
   has_rich_text :content
   has_rich_text :valuecontent
-  has_many :reviews
-  has_many :trades, as: :tradeable
-  has_many :pageviews, as: :pageviewable
-  has_many :bookmarks, as: :bookmarkable
-  has_many :rankings, as: :rankable
-  has_many :hashtag_netas
+  has_many :reviews, dependent: :destroy
+  has_many :trades, as: :tradeable, dependent: :destroy
+  has_many :pageviews, as: :pageviewable, dependent: :destroy
+  has_many :bookmarks, as: :bookmarkable, dependent: :destroy
+  has_many :rankings, as: :rankable, dependent: :destroy
+  has_many :hashtag_netas, dependent: :destroy
   has_many :hashtags, through: :hashtag_netas
   validates :title, presence: true, length: { maximum: 35 }
   validates :price, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 10_000 }
@@ -64,10 +64,6 @@ class Neta < ApplicationRecord
     trades.count.zero?
   end
 
-  def is_free
-    price.zero?
-  end
-
   def for_sale
     if price != 0
       if user.premium_user[0]
@@ -98,7 +94,7 @@ class Neta < ApplicationRecord
     pageviews.find_or_create_by(user_id: user.id, created_at: from..to)
   end
 
-  def has_dependents
+  def dependents
     if reviews.present?
       true
     elsif trades.present?

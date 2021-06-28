@@ -9,9 +9,6 @@ class Trade < ApplicationRecord
   validate  :stripe_ch_id_check
   validates :price, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 10_000 }
 
-  $teppan_fee_rate = 0.15
-  $c_tax_rate = 0.10
-
   # custom validation
   def stripe_ch_id_check
     if stripe_ch_id.present?
@@ -24,7 +21,7 @@ class Trade < ApplicationRecord
   def self.get_seller_revenue(amount)
     if amount.present?
       if amount.is_a?(Integer)
-        (amount * (1 - $teppan_fee_rate)).floor
+        (amount * (1 - 0.15)).floor
       else
         raise ArgumentError, 'amount is not a integer.'
       end
@@ -36,7 +33,7 @@ class Trade < ApplicationRecord
   def self.get_ctax(amount)
     if amount.present?
       if amount.is_a?(Integer)
-        (amount * $c_tax_rate).floor
+        (amount * 0.10).floor
       else
         raise ArgumentError, 'amount is not a integer.'
       end
@@ -182,7 +179,7 @@ class Trade < ApplicationRecord
       sold_netas_info = sold_netas_details(trades, buyers_hash, neta_hash, review_hash)
       [true, sold_netas_info]
     else
-      [false, "No sold netas found for user_id #{seller_id}"]
+      [false, "No sold netas found for user_id #{id}"]
     end
   end
 

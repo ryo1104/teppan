@@ -16,12 +16,24 @@ ja:
       deleted: 'ビジネスアカウントを削除しました。'
       not_deleted: 'ビジネスアカウントを削除できませんでした。'
       not_retrieved: 'アカウント情報が取得できませんでした。'
+    banks:
+      ineligible: 'ビジネスアカウントを作成するユーザー条件を満たしていません。'
+      no_info: '銀行口座情報を取得できませんでした。'
+      account_non_exist: 'ビジネスアカウントを先に申請して下さい。'
+      created: '銀行口座情報を登録しました。'
+      updated: '銀行口座情報を更新しました。'
+      not_created: '銀行口座の登録に失敗しました。'
+      not_updated: '銀行口座の更新に失敗しました。'
     comment:
       not_created: 'コメントを投稿できませんでした。'
       not_deleted: 'コメントを削除できませんでした。'
     follower:
       duplicate: 'すでにこのユーザーをフォローしています。'
       blank: 'このユーザーのフォローが存在しません。'
+    idcards:
+      received: 'ご本人様確認書類を受領しました。'
+      not_received: 'ご本人様確認書類の登録に失敗しました。'
+      deleted: 'ファイルを削除しました。'
     neta:
       created: 'ネタが投稿されました。'
       updated: 'ネタが更新されました。'
@@ -29,6 +41,12 @@ ja:
       private: 'このネタは非公開に設定されています。'
       uneditable: 'このネタに関連するデータがすでに存在するため、編集できません。'
       undeleteable: 'このネタに関連するデータがすでに存在するため、削除できません。'
+    payouts:
+      account_non_exist: 'ビジネスアカウントを先に申請して下さい。'
+      no_bank_info: '振込先口座情報が取得できませんでした。'
+      no_payout: '出金処理は中断されました。管理者にお問い合わせ下さい。'
+      record_not_saved: '出金処理に一部エラーが発生しています。管理者にお問い合わせ下さい。'
+      balance_not_retrieved: '出金可能残高を取得できませんでした。'
     topic:
       created: 'トピックが作成されました。'
       updated: 'トピックが更新されました。'
@@ -38,4 +56,7 @@ ja:
     user:
       session:
         invalid: 'メールアドレスまたはパスワードが無効です。'
+      registration:
+        data_exists: '関連するデータが存在するため、削除できません。'
+        unregister_failed: '退会処理に失敗しました。'
       

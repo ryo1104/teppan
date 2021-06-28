@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Hashtag < ApplicationRecord
-  has_many  :hashtag_netas
+  has_many  :hashtag_netas, dependent: :destroy
   has_many  :netas, through: :hashtag_netas
   has_many  :hashtag_hits, dependent: :delete_all
   validates :hashname, presence: true, uniqueness: { case_sensitive: true }, length: { maximum: 30 },

@@ -36,25 +36,6 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Max: 19
 
-# Offense count: 1
-# Configuration parameters: MinNameLength, AllowNamesEndingInNumbers, AllowedNames, ForbiddenNames.
-# AllowedNames: at, by, db, id, in, io, ip, of, on, os, pp, to
-Naming/MethodParameterName:
-  Exclude:
-    - 'app/models/concerns/error_utils.rb'
-
-# Offense count: 4
-# Configuration parameters: NamePrefix, ForbiddenPrefixes, AllowedMethods, MethodDefinitionMacros.
-# NamePrefix: is_, has_, have_
-# ForbiddenPrefixes: is_, has_, have_
-# AllowedMethods: is_a?
-# MethodDefinitionMacros: define_method, define_singleton_method
-Naming/PredicateName:
-  Exclude:
-    - 'spec/**/*'
-    - 'app/models/neta.rb'
-    - 'app/models/user.rb'
-
 # Offense count: 2
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: slashes, arguments
@@ -62,15 +43,6 @@ Rails/FilePath:
   Exclude:
     - 'config/application.rb'
     - 'config/environments/development.rb'
-
-# Offense count: 12
-# Configuration parameters: Include.
-# Include: app/models/**/*.rb
-Rails/HasManyOrHasOneDependent:
-  Exclude:
-    - 'app/models/hashtag.rb'
-    - 'app/models/neta.rb'
-    - 'app/models/user.rb'
 
 # Offense count: 3
 # Configuration parameters: Include.
@@ -87,28 +59,6 @@ Rails/InverseOf:
   Exclude:
     - 'app/models/user.rb'
 
-# Offense count: 7
-# Configuration parameters: Include.
-# Include: app/models/**/*.rb
-Rails/UniqueValidationWithoutIndex:
-  Exclude:
-    - 'app/models/bookmark.rb'
-    - 'app/models/follow.rb'
-    - 'app/models/like.rb'
-    - 'app/models/review.rb'
-    - 'app/models/stripe_idcard.rb'
-    - 'app/models/topic.rb'
-    - 'app/models/violation.rb'
 
-# Offense count: 4
-# Configuration parameters: AllowedVariables.
-Style/GlobalVars:
-  Exclude:
-    - 'app/models/trade.rb'
 
-# Offense count: 1
-# Configuration parameters: AllowIfModifier.
-Style/IfInsideElse:
-  Exclude:
-    - 'app/models/topic.rb'
 

@@ -608,7 +608,7 @@ RSpec.describe StripeAccountForm, type: :model do
   describe 'method::convert_attributes', type: :doing do
     it 'converts stripe retrieved data to form attributes' do
       result = StripeAccountForm.convert_attributes(personal_info_hash)
-      expect(result).to eq personal_info_converted
+      expect(result).to eq [true, personal_info_converted]
     end
   end
 end
