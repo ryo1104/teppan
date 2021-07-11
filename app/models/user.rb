@@ -8,11 +8,11 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :confirmable,
          :trackable, :omniauthable, omniauth_providers: %i[google_oauth2 twitter yahoojp]
 
-  has_many  :topics, -> { order('netas_count DESC') }
-  has_many  :netas, -> { order('average_rate DESC') }
-  has_many  :pageviews,  -> { order('created_at DESC') }
-  has_many  :bookmarks,  -> { order('created_at DESC') }
-  has_many  :hashtag_hits, -> { order('created_at DESC') }
+  has_many  :topics, -> { order('netas_count DESC') }, dependent: :destroy
+  has_many  :netas, -> { order('average_rate DESC') }, dependent: :destroy
+  has_many  :pageviews,  -> { order('created_at DESC') }, dependent: :destroy
+  has_many  :bookmarks,  -> { order('created_at DESC') }, dependent: :destroy
+  has_many  :hashtag_hits, -> { order('created_at DESC') }, dependent: :destroy
   has_many  :comments, dependent: :destroy
   has_many  :follows, dependent: :destroy
   has_many  :reviews, dependent: :destroy
