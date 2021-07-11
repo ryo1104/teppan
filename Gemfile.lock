@@ -417,7 +417,7 @@ DEPENDENCIES
   listen
   material_icons
   mini_magick (~> 4.10)
-  mysql2 (>= 0.4.4)
+  mysql2
   omniauth
   omniauth-google-oauth2
   omniauth-twitter

@@ -10,15 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_28_041151) do
+ActiveRecord::Schema.define(version: 2021_07_07_023025) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
     t.string "record_type", null: false
     t.bigint "record_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
   end
 
@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 2021_06_28_041151) do
     t.string "commentable_type"
     t.integer "likes_count", default: 0, null: false
     t.boolean "is_deleted", default: false, null: false
+    t.index ["user_id"], name: "fk_rails_03de2dc08c"
   end
 
   create_table "copycheck_statuses", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -117,6 +118,7 @@ ActiveRecord::Schema.define(version: 2021_06_28_041151) do
     t.datetime "updated_at", null: false
     t.integer "queue_id"
     t.text "text", size: :medium
+    t.index ["neta_id"], name: "fk_rails_95e11130c3"
   end
 
   create_table "follows", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -132,11 +134,14 @@ ActiveRecord::Schema.define(version: 2021_06_28_041151) do
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["hashtag_id"], name: "fk_rails_42fb40a9cb"
+    t.index ["user_id"], name: "fk_rails_d4395efe2f"
   end
 
   create_table "hashtag_netas", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "neta_id"
     t.integer "hashtag_id"
+    t.index ["hashtag_id"], name: "fk_rails_4423013fcc"
     t.index ["neta_id", "hashtag_id"], name: "index_hashtag_netas_on_neta_id_and_hashtag_id", unique: true
   end
 
@@ -153,8 +158,8 @@ ActiveRecord::Schema.define(version: 2021_06_28_041151) do
   create_table "inquiries", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "email"
     t.text "message"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "likes", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -178,6 +183,8 @@ ActiveRecord::Schema.define(version: 2021_06_28_041151) do
     t.float "average_rate", default: 0.0
     t.integer "bookmarks_count", default: 0, null: false
     t.boolean "private_flag", default: false, null: false
+    t.index ["topic_id"], name: "fk_rails_db6e4640ce"
+    t.index ["user_id"], name: "fk_rails_128dac0d75"
   end
 
   create_table "pageviews", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -186,6 +193,7 @@ ActiveRecord::Schema.define(version: 2021_06_28_041151) do
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "fk_rails_3fdda99dcd"
   end
 
   create_table "rankings", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -204,6 +212,7 @@ ActiveRecord::Schema.define(version: 2021_06_28_041151) do
     t.integer "rate"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["neta_id"], name: "fk_rails_4564c578b1"
     t.index ["user_id", "neta_id"], name: "unique_review", unique: true
   end
 
@@ -235,9 +244,7 @@ ActiveRecord::Schema.define(version: 2021_06_28_041151) do
     t.datetime "updated_at", null: false
     t.integer "amount", default: 0, null: false
     t.index ["payout_id"], name: "index_stripe_payouts_on_payout_id", unique: true
-  end
-
-  create_table "tables", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.index ["stripe_account_id"], name: "fk_rails_981e366b28"
   end
 
   create_table "topics", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -253,6 +260,7 @@ ActiveRecord::Schema.define(version: 2021_06_28_041151) do
     t.boolean "private_flag", default: false, null: false
     t.string "header_img_url"
     t.index ["title"], name: "index_topics_on_title", unique: true
+    t.index ["user_id"], name: "fk_rails_7b812cfb44"
   end
 
   create_table "trades", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -284,8 +292,8 @@ ActiveRecord::Schema.define(version: 2021_06_28_041151) do
     t.integer "gender"
     t.string "stripe_cus_id"
     t.integer "follows_count", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.string "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
@@ -315,4 +323,24 @@ ActiveRecord::Schema.define(version: 2021_06_28_041151) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "bookmarks", "users"
+  add_foreign_key "branches", "banks"
+  add_foreign_key "comments", "users"
+  add_foreign_key "copychecks", "netas"
+  add_foreign_key "follows", "users"
+  add_foreign_key "hashtag_hits", "hashtags"
+  add_foreign_key "hashtag_hits", "users"
+  add_foreign_key "hashtag_netas", "hashtags"
+  add_foreign_key "hashtag_netas", "netas"
+  add_foreign_key "likes", "users"
+  add_foreign_key "netas", "topics"
+  add_foreign_key "netas", "users"
+  add_foreign_key "pageviews", "users"
+  add_foreign_key "reviews", "netas"
+  add_foreign_key "reviews", "users"
+  add_foreign_key "stripe_accounts", "users"
+  add_foreign_key "stripe_idcards", "stripe_accounts"
+  add_foreign_key "stripe_payouts", "stripe_accounts"
+  add_foreign_key "topics", "users"
+  add_foreign_key "violations", "users"
 end
