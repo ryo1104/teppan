@@ -54,11 +54,5 @@ RSpec.describe Comment, type: :model do
       comment.valid?
       expect(comment.errors[:likes_count]).to include('は0以上の値にしてください。')
     end
-
-    it 'is invalid if is_deleted flag is nil' do
-      comment = Comment.new(commentable: topic, user: user, text: Faker::Lorem.characters(number: 200), is_deleted: nil)
-      comment.valid?
-      expect(comment.errors[:is_deleted]).to include('が入力にありません。')
-    end
   end
 end

@@ -90,10 +90,10 @@ RSpec.describe CommentsController, type: :request do
             @topic = topic_create
             @comment = create(:comment, user: @user, commentable: @topic)
           end
-          it 'updates deleted flag to true' do
+          it 'populates deleted flag with date' do
             delete topic_comment_path(@topic.id, @comment.id)
             @comment.reload
-            expect(@comment.is_deleted).to eq true
+            expect(@comment.deleted_at).to_not eq nil
           end
           it 'redirects to review#show' do
             delete topic_comment_path(@topic.id, @comment.id)

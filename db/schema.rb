@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_07_023025) do
+ActiveRecord::Schema.define(version: 2021_07_12_062611) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -83,7 +83,7 @@ ActiveRecord::Schema.define(version: 2021_07_07_023025) do
     t.integer "commentable_id"
     t.string "commentable_type"
     t.integer "likes_count", default: 0, null: false
-    t.boolean "is_deleted", default: false, null: false
+    t.datetime "deleted_at"
     t.index ["user_id"], name: "fk_rails_03de2dc08c"
   end
 

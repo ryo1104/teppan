@@ -15,7 +15,7 @@ class CommentsController < ApplicationController
   def destroy
     comment = Comment.find(params[:id])
     if comment.user_id == current_user.id
-      if comment.update(is_deleted: true)
+      if comment.update(deleted_at: Time.zone.now)
         redirect_to "/#{@commentable.class.name.pluralize.downcase}/#{@commentable.id}" and return
       else
         redirect_to user_path(current_user.id), alert: I18n.t('controller.comment.not_deleted') and return
@@ -33,6 +33,6 @@ class CommentsController < ApplicationController
   end
 
   def create_params
-    params.require(:comment).permit(:text).merge(user_id: current_user.id, is_deleted: false)
+    params.require(:comment).permit(:text).merge(user_id: current_user.id)
   end
 end
