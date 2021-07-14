@@ -1,4 +1,16 @@
 <% @page_title = @neta.title %>
+<% @page_description = @neta.content.to_plain_text.squish.truncate(120) %>
+<%= content_for(:ogp_article) do %>
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="<%= asset_bundle_path("images/logo-color-1.png") %>">
+<% end %>
+<% content_for(:twitter_card) do %>
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="<%= page_title %>" />
+  <meta name="twitter:description" content="<%= page_description %>" />
+  <meta name="twitter:image" content="<%= asset_bundle_path("images/logo-color-1.png") %>" />
+  <meta name="twitter:url" content="<%= request.url %>" /> 
+<% end %>
 <% breadcrumb :show_neta, @neta %>
 <div class="page-body">
   <div class="row">

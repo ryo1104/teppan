@@ -1,4 +1,16 @@
 <% @page_title = @user.nickname %>
+<% @page_description = @user.introduction.to_plain_text.squish.truncate(120) %>
+<%= content_for(:ogp_article) do %>
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="<%= @user.avatar_img_url %>">
+<% end %>
+<% content_for(:twitter_card) do %>
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="<%= page_title %>" />
+  <meta name="twitter:description" content="<%= page_description %>" />
+  <meta name="twitter:image" content="<%= @user.avatar_img_url %>" />
+  <meta name="twitter:url" content="<%= request.url %>" /> 
+<% end %>
 <% breadcrumb :show_user, @user %>
 <div class="page-body">
   <div class="row">

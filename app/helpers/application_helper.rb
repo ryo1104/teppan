@@ -10,4 +10,12 @@ module ApplicationHelper
       'Teppan | ネタ話のフリマサイト'
     end
   end
+  
+  def page_description
+    if @page_description
+      @page_description
+    else
+      'あなたのその鉄板ネタ、売れるかも？ここぞという時の鉄板ネタ、買えるかも？'
+    end
+  end
 end
