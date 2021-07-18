@@ -188,8 +188,8 @@ class Neta < ApplicationRecord
   end
 
   def valuecontent_check
-    if price != 0
-      errors.add(:valuecontent, 'を入力してください。') if valuecontent.body.blank?
+    if price != 0 && valuecontent.body.blank?
+      errors.add(:valuecontent, 'を入力してください。')
       # Need attachment checks. Below does not work because at this point blob is not attached..
       # self.valuecontent.embeds.blobs.each do |blob|
       #   if blob.byte_size.to_i > 10.megabytes

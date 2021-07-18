@@ -20,7 +20,7 @@ class Bank < ApplicationRecord
 
     info = { 'bank_name' => bank_branch_name[1][0],
              'branch_name' => bank_branch_name[1][1],
-             'account_number' => '***' + ext_acct['last4'],
+             'account_number' => "***#{ext_acct['last4']}",
              'account_holder_name' => ext_acct['account_holder_name'] }
     [true, info]
     # end

@@ -1,12 +1,12 @@
 <div class="user-oauth-login__yahoo">
   <%= image_bundle_tag "yahoo.png", {:class => "user-oauth-login__yahoo--icon"} %>
-  <span class="user-oauth-login__yahoo--link"><%= link_to 'Yahoo! Japan IDでログイン', '/users/auth/yahoojp' %></span>
+  <span class="user-oauth-login__yahoo--link"><%= link_to 'Yahoo! Japan IDでログイン', '/users/auth/yahoojp', method: :post %></span>
 </div>
 <div class="user-oauth-login__google">
   <%= image_bundle_tag "google.png", {:class => "user-oauth-login__google--icon"} %>
-  <%= link_to 'Googleでログイン', '/users/auth/google_oauth2' %>
+  <%= link_to 'Googleでログイン', '/users/auth/google_oauth2', method: :post %>
 </div>
 <div class="user-oauth-login__twitter">
   <%= image_bundle_tag "twitter.png", {:class => "user-oauth-login__twitter--icon"} %>
-  <%= link_to 'Twitterでログイン', '/users/auth/twitter' %>
+  <%= link_to 'Twitterでログイン', '/users/auth/twitter', method: :post %>
 </div>

@@ -75,6 +75,9 @@ Metrics/PerceivedComplexity:
 Metrics/CyclomaticComplexity:
   Max: 10
 
+Metrics/ParameterLists:
+  Max: 6
+
 Style/StringLiterals:
   EnforcedStyle: single_quotes
 
@@ -100,3 +103,12 @@ Lint/AmbiguousBlockAssociation:
 
 Lint/ParenthesesAsGroupedExpression:
   Enabled: false
+
+Rails/FilePath:
+  Exclude:
+    - 'config/application.rb'
+    - 'config/environments/development.rb'
+
+Rails/HelperInstanceVariable:
+  Exclude:
+    - 'app/helpers/application_helper.rb'

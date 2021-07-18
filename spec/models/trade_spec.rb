@@ -37,7 +37,7 @@ RSpec.describe Trade, type: :model do
     end
 
     it 'is invalid if Stripe charge id does not start with ch_' do
-      trade = build(:trade, tradeable: neta_create, stripe_ch_id: 'aaa' + Faker::Lorem.characters(number: 24))
+      trade = build(:trade, tradeable: neta_create, stripe_ch_id: "aaa#{Faker::Lorem.characters(number: 24)}")
       trade.valid?
       expect(trade.errors[:stripe_ch_id]).to include('が正しくありません。')
     end

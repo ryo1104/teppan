@@ -28,7 +28,7 @@ RSpec.describe StripeAccount, type: :model do
     end
 
     it 'is invalid if payout_id does not start with po_' do
-      payout = build(:stripe_payout, payout_id: 'aaaa_' + Faker::Lorem.characters(number: 16))
+      payout = build(:stripe_payout, payout_id: "aaaa_#{Faker::Lorem.characters(number: 16)}")
       payout.valid?
       expect(payout.errors[:payout_id]).to include('payout_id does not start with po_')
     end

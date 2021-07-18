@@ -6,11 +6,11 @@
   <meta property="og:image" content="<%= @topic.header_img_url %>">
 <% end %>
 <% content_for(:twitter_card) do %>
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="<%= page_title %>" />
-  <meta name="twitter:description" content="<%= page_description %>" />
-  <meta name="twitter:image" content="<%= @topic.header_img_url %>" />
-  <meta name="twitter:url" content="<%= request.url %>" /> 
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="<%= page_title %>">
+  <meta name="twitter:description" content="<%= page_description %>">
+  <meta name="twitter:image" content="<%= @topic.header_img_url %>">
+  <meta name="twitter:url" content="<%= request.url %>"> 
 <% end %>
 <% breadcrumb :show_topic, @topic %>
 <div class="page-body">

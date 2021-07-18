@@ -13,15 +13,11 @@ class StripeAccount < ApplicationRecord
 
   # custom validation
   def acct_id_check
-    if acct_id.present?
-      errors.add(:acct_id, 'acct_id does not start with acct_') unless acct_id.starts_with? 'acct_'
-    end
+    errors.add(:acct_id, 'acct_id does not start with acct_') if acct_id.present? && !(acct_id.starts_with? 'acct_')
   end
 
   def ext_acct_id_check
-    if ext_acct_id.present?
-      errors.add(:ext_acct_id, 'ext_acct_id does not start with ba_') unless ext_acct_id.starts_with? 'ba_'
-    end
+    errors.add(:ext_acct_id, 'ext_acct_id does not start with ba_') if ext_acct_id.present? && !(ext_acct_id.starts_with? 'ba_')
   end
 
   def get_connect_account

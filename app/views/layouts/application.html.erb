@@ -18,11 +18,11 @@
     <% if content_for?(:twitter_card) %>
       <%= yield(:twitter_card) %>
     <% else %>
-      <meta name="twitter:card" content="summary" />
-      <meta name="twitter:title" content="<%= page_title %>" />
-      <meta name="twitter:description" content="<%= page_description %>" />
-      <meta name="twitter:image" content="<%= ENV['HOST_URL'] + asset_bundle_path("images/logo-color-1.png") %>" />
-      <meta name="twitter:url" content="<%= request.url %>" />
+      <meta name="twitter:card" content="summary">
+      <meta name="twitter:title" content="<%= page_title %>">
+      <meta name="twitter:description" content="<%= page_description %>">
+      <meta name="twitter:image" content="<%= ENV['HOST_URL'] + asset_bundle_path("images/logo-color-1.png") %>">
+      <meta name="twitter:url" content="<%= request.url %>">
     <% end %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>

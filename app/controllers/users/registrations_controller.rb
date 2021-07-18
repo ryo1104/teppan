@@ -5,9 +5,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # before_action :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up
-  def new
-    super
-  end
 
   # POST /resource
   def create
@@ -19,14 +16,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   # GET /resource/edit
-  def edit
-    super
-  end
 
   # PUT /resource
-  def update
-    super
-  end
 
   # DELETE /resource
   # def destroy
@@ -104,7 +95,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   private
 
   def get_user(resource)
-    if user_signed_in? && resource.class.name == 'User'
+    if user_signed_in? && resource.instance_of?(User)
       if resource.id == current_user.id
         @user = User.find(resource.id)
       else
@@ -118,9 +109,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def unregistered_user
     if params['user']['email'].present?
       user = User.find_by(email: params['user']['email'])
-      if user.present?
-        return true if user.unregistered
-      end
+      return true if user.present? && user.unregistered
     end
     false
   end

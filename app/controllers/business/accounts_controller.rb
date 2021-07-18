@@ -17,10 +17,11 @@ class Business::AccountsController < ApplicationController
 
   def confirm
     @mode = params[:mode]
-    if @mode == 'new'
+    case @mode
+    when 'new'
       @user = User.find(params[:user_id])
       @account_form = StripeAccountForm.new(form_params)
-    elsif @mode == 'edit'
+    when 'edit'
       @account = StripeAccount.find(params[:id])
       @account_form = StripeAccountForm.new(form_params)
       @user = @account.user
@@ -117,13 +118,12 @@ class Business::AccountsController < ApplicationController
   end
 
   def update_account_status
-    if @account_info['personal_info']['verification']['status'].present?
-      unless @account.status == @account_info['personal_info']['verification']['status']
-        if @account.update(status: @account_info['personal_info']['verification']['status'])
-          @account.reload
-        else
-          raise ActiveRecord::RecordNotSaved, "update_account_status failed. ['personal_info'] = #{@account_info['personal_info']}"
-        end
+    if @account_info['personal_info']['verification']['status'].present? &&
+        @account.status != @account_info['personal_info']['verification']['status']
+      if @account.update(status: @account_info['personal_info']['verification']['status'])
+        @account.reload
+      else
+        raise ActiveRecord::RecordNotSaved, "update_account_status failed. ['personal_info'] = #{@account_info['personal_info']}"
       end
     end
   end

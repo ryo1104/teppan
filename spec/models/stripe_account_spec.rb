@@ -249,7 +249,7 @@ RSpec.describe StripeAccount, type: :model do
     end
 
     it 'is invalid if acct_id does not start with acct_' do
-      account = build(:stripe_account, user: user_create, acct_id: 'aaaa_' + Faker::Lorem.characters(number: 16))
+      account = build(:stripe_account, user: user_create, acct_id: "aaaa_#{Faker::Lorem.characters(number: 16)}")
       account.valid?
       expect(account.errors[:acct_id]).to include('acct_id does not start with acct_')
     end
@@ -264,7 +264,7 @@ RSpec.describe StripeAccount, type: :model do
     end
 
     it 'is invalid if ext_acct_id does not start with ba_' do
-      account = build(:stripe_account, user: user_create, ext_acct_id: 'aaaa_' + Faker::Lorem.characters(number: 16))
+      account = build(:stripe_account, user: user_create, ext_acct_id: "aaaa_#{Faker::Lorem.characters(number: 16)}")
       account.valid?
       expect(account.errors[:ext_acct_id]).to include('ext_acct_id does not start with ba_')
     end
@@ -291,7 +291,7 @@ RSpec.describe StripeAccount, type: :model do
         expect(account.get_connect_account).to match [false, 'acct_id is blank']
       end
       it 'raises exception with invalid inputs' do
-        account = create(:stripe_account, acct_id: test_acct_id + 'aaa')
+        account = create(:stripe_account, acct_id: "#{test_acct_id}aaa")
         expect(account.get_connect_account[1]).to include('Stripe error')
       end
       it 'returns false when parse_account_info returns false' do
@@ -335,6 +335,7 @@ RSpec.describe StripeAccount, type: :model do
       end
     end
     after do
+      puts "New account to be deleted is #{@result[1]['id']}" if @result[0]
       Stripe::Account.delete(@result[1]['id']) if @result[0]
     end
   end
@@ -344,6 +345,7 @@ RSpec.describe StripeAccount, type: :model do
       before do
         Stripe.api_key = stripe_test_key
         @create_result = JSON.parse(Stripe::Account.create(new_acct_params).to_s)
+        puts "New account created is #{@create_result['id']}" if @create_result.key?('id')
         @account = create(:stripe_account, acct_id: @create_result['id'])
         @acct_form = build(:stripe_account_form)
       end
@@ -364,6 +366,7 @@ RSpec.describe StripeAccount, type: :model do
         expect(result).to match [true, expected_hash]
       end
       after do
+        puts "New account to be deleted is #{@create_result['id']}" if @create_result.key?('id')
         Stripe::Account.delete(@create_result['id']) if @create_result.key?('id')
       end
     end
@@ -397,6 +400,7 @@ RSpec.describe StripeAccount, type: :model do
       before do
         Stripe.api_key = stripe_test_key
         @create_result = JSON.parse(Stripe::Account.create(new_acct_params).to_s)
+        puts "New account created is #{@create_result['id']}" if @create_result.key?('id')
         @account = create(:stripe_account, acct_id: @create_result['id'])
       end
       it 'deletes connect account' do
@@ -408,6 +412,7 @@ RSpec.describe StripeAccount, type: :model do
         expect(@account.status).to eq 'deleted'
       end
       after do
+        puts "New account to be deleted is #{@account.acct_id}" if @result[0] == false
         Stripe::Account.delete(@account.acct_id) if @result[0] == false
       end
     end
@@ -457,7 +462,7 @@ RSpec.describe StripeAccount, type: :model do
       expect(account.get_balance).to eq [false, 'acct_id is blank']
     end
     it 'raises exception with invalid acct_id' do
-      account = create(:stripe_account, acct_id: test_acct_id + 'aaa')
+      account = create(:stripe_account, acct_id: "#{test_acct_id}aaa")
       expect(account.get_balance[1]).to include('Stripe error')
     end
     it 'returns false when check_results returns false' do

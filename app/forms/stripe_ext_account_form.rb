@@ -18,18 +18,7 @@ class StripeExtAccountForm
     if bank_name.present?
       bank = Bank.find_by(name: bank_name)
       if bank.present?
-        if branch_name.present?
-          branch = bank.branches.find_by(name: branch_name)
-          if branch.present?
-            true
-          else
-            errors.add(:branch_name, :not_found)
-            false
-          end
-        else
-          errors.add(:branch_name, :blank)
-          false
-        end
+        branch_check(bank, branch_name)
       else
         errors.add(:bank_name, :not_found)
         false
@@ -37,6 +26,19 @@ class StripeExtAccountForm
     else
       errors.add(:bank_name, :blank)
       false
+    end
+  end
+
+  def branch_check(bank, branch_name)
+    if branch_name.present?
+      if bank.branches.find_by(name: branch_name).present?
+        true
+      else
+        errors.add(:branch_name, :not_found)
+        false
+      end
+    else
+      errors.add(:branch_name, :blank)
     end
   end
 

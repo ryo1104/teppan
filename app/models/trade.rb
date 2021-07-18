@@ -166,9 +166,10 @@ class Trade < ApplicationRecord
   end
 
   def self.get_trades_info(who, id, tradeable_type)
-    trades = if who == 'seller'
+    trades = case who
+             when 'seller'
                Trade.where(seller_id: id, tradeable_type: tradeable_type).order('created_at DESC')
-             elsif who == 'buyer'
+             when 'buyer'
                Trade.where(buyer_id: id, tradeable_type: tradeable_type).order('created_at DESC')
              end
     if trades.present?
@@ -199,8 +200,8 @@ class Trade < ApplicationRecord
     if trades.present?
       sold_netas_info = []
       trades.each do |trade|
-        rate = if review_hash.key?('neta_' + trade.tradeable_id.to_s + '_user_' + trade.buyer_id.to_s)
-                 review_hash['neta_' + trade.tradeable_id.to_s + '_user_' + trade.buyer_id.to_s]['rate']
+        rate = if review_hash.key?("neta_#{trade.tradeable_id}_user_#{trade.buyer_id}")
+                 review_hash["neta_#{trade.tradeable_id}_user_#{trade.buyer_id}"]['rate']
                end
         sold_netas_info << {
           'traded_at' => trade.created_at,

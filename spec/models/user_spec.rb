@@ -194,8 +194,8 @@ RSpec.describe User, type: :model do
       'url' => '/v1/customers/cus_Fg0CeiufnVMq42/sources'
     }
   end
-  let(:test_stripe_card_id_1) { 'card_1FX9FyEThOtNwrS9uOsjxpPw' }
-  let(:test_stripe_card)      do
+  let(:test_stripe_card_id1) { 'card_1FX9FyEThOtNwrS9uOsjxpPw' }
+  let(:test_stripe_card) do
     {
       'id' => 'card_1FX9FyEThOtNwrS9uOsjxpPw',
       'object' => 'card',
@@ -223,9 +223,9 @@ RSpec.describe User, type: :model do
     }
   end
 
-  let(:test_stripe_cus_id_2)  { 'cus_FGwAu264LHTBMA' } # たろう
-  let(:test_stripe_card_id_2) { 'card_1FX9BuEThOtNwrS9sDa03dMX' }
-  let(:test_stripe_card_2)    do
+  let(:test_stripe_cus_id2)  { 'cus_FGwAu264LHTBMA' } # たろう
+  let(:test_stripe_card_id2) { 'card_1FX9BuEThOtNwrS9sDa03dMX' }
+  let(:test_stripe_card2)    do
     { 'id' => 'card_1FYCdDEThOtNwrS9SCkZDw4V', 'object' => 'card', 'address_city' => nil, 'address_country' => nil, 'address_line1' => nil, 'address_line1_check' => nil, 'address_line2' => nil, 'address_state' => nil, 'address_zip' => nil, 'address_zip_check' => nil, 'brand' => 'Visa', 'country' => 'JP', 'customer' => 'cus_FGwAu264LHTBMA', 'cvc_check' => nil, 'dynamic_last4' => nil, 'exp_month' => 10, 'exp_year' => 2020, 'fingerprint' => 'KaeQWgsMtmfoUXNy', 'funding' => 'credit', 'last4' => '0003', 'metadata' => {}, 'name' => nil, 'tokenization_method' => nil }
   end
   let(:test_stripe_acct_id)   { 'acct_1FHvBMCx2rPekxgm' } # けんすけ
@@ -268,28 +268,28 @@ RSpec.describe User, type: :model do
     it 'is invalid if gender code is smaller than 1' do
       user = build(:user, gender: 0)
       user.valid?
-      expect(user.errors[:gender]).to include('Invalid gender code')
+      expect(user.errors[:gender]).to include('が正しくありません。')
     end
 
     it 'is invalid if gender code is greater than 3' do
       user = build(:user, gender: 4)
       user.valid?
-      expect(user.errors[:gender]).to include('Invalid gender code')
+      expect(user.errors[:gender]).to include('が正しくありません。')
     end
 
     it 'is invalid if age is less than 13 years old' do
       testdate = Time.zone.today.prev_year(13) + 1.day
       user = build(:user, birthdate: testdate)
       user.valid?
-      expect(user.errors[:birthdate]).to include('：１３歳未満はご利用できません。')
+      expect(user.errors[:birthdate]).to include('：13歳未満はご利用できません。')
     end
 
     it 'is invalid if introduction is longer than 800 characters'
 
     it 'is invalid if stripe_cus_id does not start with cus_' do
-      user = build(:user, stripe_cus_id: 'aaa_' + Faker::Lorem.characters(number: 14))
+      user = build(:user, stripe_cus_id: "aaa_#{Faker::Lorem.characters(number: 14)}")
       user.valid?
-      expect(user.errors[:stripe_cus_id]).to include('invalid stripe_cus_id')
+      expect(user.errors[:stripe_cus_id]).to include('が正しくありません。')
     end
 
     it 'is invalid if follows_count is negative' do
@@ -877,7 +877,7 @@ RSpec.describe User, type: :model do
   #     end
   #     context 'card_id is valid' do
   #       before do
-  #         @card_id = test_stripe_card_id_1
+  #         @card_id = test_stripe_card_id1
   #       end
   #       it 'retrieves card details' do
   #         expect(@user.get_card_details(@card_id)).to eq [true, test_stripe_card]
@@ -898,7 +898,7 @@ RSpec.describe User, type: :model do
   #   context 'user with invalid cus_id' do
   #     before do
   #       @user.stripe_cus_id = 'dddddd'
-  #       @card_id = test_stripe_card_id_1
+  #       @card_id = test_stripe_card_id1
   #     end
   #     it 'returns false' do
   #       expect(@user.get_card_details(@card_id)).to eq [false, "Stripe error - No such customer: '#{@user.stripe_cus_id}'"]
@@ -907,7 +907,7 @@ RSpec.describe User, type: :model do
   #   context 'user with blank cus_id' do
   #     before do
   #       @user.stripe_cus_id = nil
-  #       @card_id = test_stripe_card_id_1
+  #       @card_id = test_stripe_card_id1
   #     end
   #     it 'returns false' do
   #       expect(@user.get_card_details(@card_id)).to eq [false, 'stripe_cus_id is blank']
@@ -929,7 +929,7 @@ RSpec.describe User, type: :model do
   #     context 'token is valid' do
   #       before do
   #         @token = 'tok_jp'
-  #         @user.stripe_cus_id = test_stripe_cus_id_2
+  #         @user.stripe_cus_id = test_stripe_cus_id2
   #         allow_any_instance_of(User).to receive(:change_default_card).and_return([true, nil])
   #       end
   #       it 'returns added card' do
@@ -942,7 +942,7 @@ RSpec.describe User, type: :model do
   #     end
   #     context 'token is invalid' do
   #       before do
-  #         @user.stripe_cus_id = test_stripe_cus_id_2
+  #         @user.stripe_cus_id = test_stripe_cus_id2
   #         allow_any_instance_of(User).to receive(:change_default_card).and_return([true, nil])
   #       end
   #       it 'returns false when CvC check fails' do
@@ -995,13 +995,13 @@ RSpec.describe User, type: :model do
   #   context 'card exists in user source' do
   #     before do
   #       @user.stripe_cus_id = test_stripe_cus_id
-  #       @card_id = test_stripe_card_id_2
+  #       @card_id = test_stripe_card_id2
   #     end
   #     it 'returns customer with default source set as card_id' do
   #       expect(@user.change_default_card(@card_id)[1]['default_source']).to eq @card_id
   #     end
   #     after do
-  #       Stripe::Customer.update(@user.stripe_cus_id, { default_source: test_stripe_card_id_1 })
+  #       Stripe::Customer.update(@user.stripe_cus_id, { default_source: test_stripe_card_id1 })
   #     end
   #   end
   #   context 'card does not exist in user source' do
@@ -1016,7 +1016,7 @@ RSpec.describe User, type: :model do
   #   context 'no cards exist in user source' do
   #     before do
   #       @user.stripe_cus_id = test_stripe_cus_id
-  #       @card_id = test_stripe_card_id_2
+  #       @card_id = test_stripe_card_id2
   #       allow_any_instance_of(User).to receive(:get_cards).and_return([false, nil])
   #     end
   #     it 'returns false' do
@@ -1026,7 +1026,7 @@ RSpec.describe User, type: :model do
   #   context 'Stripe returns blank customer data' do
   #     before do
   #       @user.stripe_cus_id = test_stripe_cus_id
-  #       @card_id = test_stripe_card_id_2
+  #       @card_id = test_stripe_card_id2
   #       allow(Stripe::Customer).to receive(:update).and_return({})
   #     end
   #     it 'returns false' do
@@ -1138,18 +1138,18 @@ RSpec.describe User, type: :model do
   #     context 'valid customer and credit card' do
   #       before do
   #         @user.stripe_cus_id = test_stripe_cus_id
-  #         @charge_params = { card_id: test_stripe_card_id_2, price: 100, ctax: 10, charge_amount: 110, seller_revenue: 99 }
+  #         @charge_params = { card_id: test_stripe_card_id2, price: 100, ctax: 10, charge_amount: 110, seller_revenue: 99 }
   #       end
   #       it 'returns true and customer' do
-  #         expect(@user.set_source(@charge_params)[1]['default_source']).to eq test_stripe_card_id_2
+  #         expect(@user.set_source(@charge_params)[1]['default_source']).to eq test_stripe_card_id2
   #       end
   #       after do
-  #         Stripe::Customer.update(@user.stripe_cus_id, { default_source: test_stripe_card_id_1 })
+  #         Stripe::Customer.update(@user.stripe_cus_id, { default_source: test_stripe_card_id1 })
   #       end
   #     end
   #     context 'invalid customer' do
   #       before do
-  #         @charge_params = { card_id: test_stripe_card_id_2, price: 100, ctax: 10, charge_amount: 110, seller_revenue: 99 }
+  #         @charge_params = { card_id: test_stripe_card_id2, price: 100, ctax: 10, charge_amount: 110, seller_revenue: 99 }
   #       end
   #       it 'returns false when stripe_cus_id is blank' do
   #         @user.stripe_cus_id = nil

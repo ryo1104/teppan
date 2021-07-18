@@ -14,7 +14,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def callback_from(provider)
-    provider_name = provider_jp(provider.to_s)
+    provider_name = I18n.t("controller.user.omniauth_callbacks.#{provider}")
     if provider_name.present?
       @user = User.find_or_create_for_oauth(request.env['omniauth.auth'])
       if @user.persisted? && @user.unregistered == false
@@ -29,30 +29,19 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   # GET|POST /resource/auth/twitter
-  def passthru
-    super
-  end
+  # def passthru
+  #   super
+  # end
 
   # GET|POST /users/auth/twitter/callback
-  def failure
-    super
-  end
+  # def failure
+  #   super
+  # end
 
-  protected
+  # protected
 
   # The path used when OmniAuth fails
-  def after_omniauth_failure_path_for(scope)
-    super(scope)
-  end
-
-  def provider_jp(str)
-    case str
-    when 'yahoojp'
-      'Yahoo Japan'
-    when 'twitter'
-      'Twitter'
-    when 'google_oauth2'
-      'Google'
-    end
-  end
+  # def after_omniauth_failure_path_for(scope)
+  #   super(scope)
+  # end
 end

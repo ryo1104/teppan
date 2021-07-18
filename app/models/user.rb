@@ -8,11 +8,11 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :confirmable,
          :trackable, :omniauthable, omniauth_providers: %i[google_oauth2 twitter yahoojp]
 
-  has_many  :topics, -> { order('netas_count DESC') }, dependent: :destroy
-  has_many  :netas, -> { order('average_rate DESC') }, dependent: :destroy
-  has_many  :pageviews,  -> { order('created_at DESC') }, dependent: :destroy
-  has_many  :bookmarks,  -> { order('created_at DESC') }, dependent: :destroy
-  has_many  :hashtag_hits, -> { order('created_at DESC') }, dependent: :destroy
+  has_many  :topics, -> { order('netas_count DESC') }, dependent: :destroy, inverse_of: :user
+  has_many  :netas, -> { order('average_rate DESC') }, dependent: :destroy, inverse_of: :user
+  has_many  :pageviews,  -> { order('created_at DESC') }, dependent: :destroy, inverse_of: :user
+  has_many  :bookmarks,  -> { order('created_at DESC') }, dependent: :destroy, inverse_of: :user
+  has_many  :hashtag_hits, -> { order('created_at DESC') }, dependent: :destroy, inverse_of: :user
   has_many  :comments, dependent: :destroy
   has_many  :follows, dependent: :destroy
   has_many  :reviews, dependent: :destroy
@@ -20,11 +20,8 @@ class User < ApplicationRecord
   has_one   :stripe_account, dependent: :destroy
   has_rich_text :introduction
   validates :email, presence: true, uniqueness: { case_sensitive: false }
-  # validate  :nickname
-  # validate  :image_content_type, if: :was_attached?
   validate  :gender_code_check
   validate  :age_check
-  # validates :introduction, length: { maximum: 800 }
   validate  :stripe_cus_id_check
   validates :follows_count, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :unregistered, inclusion: { in: [true, false] }
@@ -34,14 +31,15 @@ class User < ApplicationRecord
     return [false, auth_check[1]] unless auth_check[0]
 
     email = if auth.provider == 'twitter'
-              auth.info.name + '@twitter-hoge.com' # twitter APIでPrivacyPolicy等の設定をすればauth.info.emailから取得可能になる
+              "#{auth.info.name}@twitter-hoge.com" # twitter APIでPrivacyPolicy等の設定をすればauth.info.emailから取得可能になる
             else
               auth.info.email
             end
 
-    gender = if auth.info.gender == 'male'
+    gender = case auth.info.gender
+             when 'male'
                1
-             elsif auth.info.gender == 'female'
+             when 'female'
                2
              end
 
@@ -73,9 +71,10 @@ class User < ApplicationRecord
 
   def gender_str
     if gender.present?
-      if gender == 1
+      case gender
+      when 1
         '男性'
-      elsif gender == 2
+      when 2
         '女性'
       else
         ' - '
@@ -95,8 +94,7 @@ class User < ApplicationRecord
     follows.each do |follow|
       following_user_ids << follow.user_id
     end
-    f_users = User.includes(:netas).where(id: following_user_ids.uniq)
-    f_users
+    User.includes(:netas).where(id: following_user_ids.uniq)
   end
 
   def following_users_count
@@ -109,8 +107,7 @@ class User < ApplicationRecord
     follows.each do |follow|
       followed_user_ids << follow.follower_id
     end
-    f_users = User.includes(:netas).where(id: followed_user_ids.uniq)
-    f_users
+    User.includes(:netas).where(id: followed_user_ids.uniq)
   end
 
   def followed_by(user_id)
@@ -270,31 +267,19 @@ class User < ApplicationRecord
 
   private
 
-  # def image_content_type
-  #   extension = ['image/png', 'image/jpg', 'image/jpeg']
-  #   errors.add(:image, I18n.t('errors.messages.unsupported_file_type')) unless image.content_type.in?(extension)
-  # end
-
-  # def was_attached?
-  #   image.attached?
-  # end
-
   def gender_code_check
-    if gender.present?
-      errors.add(:gender, 'Invalid gender code') if gender < 1 || gender > 3
-    end
+    errors.add(:gender, I18n.t('errors.messages.invalid')) if gender.present? && (gender < 1 || gender > 3)
   end
 
   def age_check
-    if birthdate.present?
-      errors.add(:birthdate, '：１３歳未満はご利用できません。') if birthdate > Time.zone.today.prev_year(13)
+    if birthdate.present? && (birthdate > Time.zone.today.prev_year(13))
+      errors.add(:birthdate,
+                 I18n.t('errors.messages.underage', age_limit: '13'))
     end
   end
 
   def stripe_cus_id_check
-    if stripe_cus_id.present?
-      errors.add(:stripe_cus_id, 'invalid stripe_cus_id') unless stripe_cus_id.starts_with? 'cus_'
-    end
+    errors.add(:stripe_cus_id, I18n.t('errors.messages.invalid')) if stripe_cus_id.present? && !(stripe_cus_id.starts_with? 'cus_')
   end
 
   def avatar_url_check

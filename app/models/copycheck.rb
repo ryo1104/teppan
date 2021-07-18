@@ -20,8 +20,7 @@ class Copycheck < ApplicationRecord
       }
       req.set_form_data(data)
       res = http.request(req)
-      obj = JSON.parse(res.body)
-      obj
+      JSON.parse(res.body)
 
     end
   end
@@ -45,8 +44,7 @@ class Copycheck < ApplicationRecord
     req.set_form_data(data)
     res = http.request(req)
 
-    obj = JSON.parse(res.body)
-    obj
+    JSON.parse(res.body)
   end
 
   def get_ccd_result_detail(queue_id)
@@ -70,8 +68,7 @@ class Copycheck < ApplicationRecord
     req.set_form_data(data)
     res = http.request(req)
 
-    obj = JSON.parse(res.body)
-    obj
+    JSON.parse(res.body)
   end
 
   def save_weblike_list(web_like_list)

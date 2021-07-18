@@ -31,7 +31,7 @@ class Ranking < ApplicationRecord
       sorted_full = fulllist.sort_by { |_k, v| v }.reverse
       sorted_full.each_with_index do |data, i|
         if i < top_x
-          sorted_list.merge!({ 'rank_' + (i + 1).to_s => { 'neta_id' => data[0], 'score' => data[1] } })
+          sorted_list.merge!({ "rank_#{i + 1}" => { 'neta_id' => data[0], 'score' => data[1] } })
         else
           break
         end

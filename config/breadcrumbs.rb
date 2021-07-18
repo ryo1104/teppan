@@ -88,7 +88,7 @@ end
 
 # netas#hashtags
 crumb :hashtag do |tag|
-  link '#' + tag.hashname.to_s, "/neta/hashtag/#{tag.hashname}"
+  link "##{tag.hashname}", "/neta/hashtag/#{tag.hashname}"
   parent :root
 end
 

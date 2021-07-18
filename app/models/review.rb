@@ -11,9 +11,10 @@ class Review < ApplicationRecord
   def self.details_from_ids(parent_class, ids)
     review_hash = {}
 
-    if parent_class == 'Neta'
+    case parent_class
+    when 'Neta'
       reviews = Review.where(neta_id: ids)
-    elsif parent_class == 'User'
+    when 'User'
       reviews = Review.where(user_id: ids)
     else
       return false
@@ -21,7 +22,7 @@ class Review < ApplicationRecord
 
     if reviews.present?
       reviews.each do |review|
-        review_hash.merge!({ 'neta_' + review.neta_id.to_s + '_user_' + review.user_id.to_s => { 'rate' => review.rate } })
+        review_hash.merge!({ "neta_#{review.neta_id}_user_#{review.user_id}" => { 'rate' => review.rate } })
       end
     end
 

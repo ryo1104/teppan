@@ -5,7 +5,7 @@ FactoryBot.define do
     first_name_kanji  { '賢介' }
     first_name_kana   { 'ケンスケ' }
     gender            { '男性' }
-    email             { 'kenske' + '@hoge.com' }
+    email             { 'kenske@hoge.com' }
     dob               { DateTime.new(2001, 12, 6, 0, 0, 0) }
     postal_code       { '1010021' }
     kanji_state       { '東京都' }

@@ -92,13 +92,12 @@ class StripeAccountForm
       else
         [true, nil]
       end
-    when 'balance' then
+    when 'balance'
       return [false, 'params for :available does not exist'] if stripe_obj.key?('available') == false
       return [false, 'params for :pending does not exist'] if stripe_obj.key?('pending') == false
 
-      if ENV['RAILS_ENV'] == 'production'
-        return [false, 'livemode is set to false'] unless stripe_obj['livemode']
-      end
+      return [false, 'livemode is set to false'] if ENV['RAILS_ENV'] == 'production' && !(stripe_obj['livemode'])
+
       [true, nil]
     else
       [false, 'unknown stripe object type']
@@ -134,11 +133,9 @@ class StripeAccountForm
     personal_info.merge!(StripeAccountForm.parse_person(individual))
     personal_info.merge!(StripeAccountForm.parse_address(individual))
 
-    if individual.key?('phone')
-      if individual['phone'].present?
-        phone_object = TelephoneNumber.parse(individual['phone'])
-        personal_info.merge!({ 'phone' => phone_object.national_number }) if phone_object.valid?
-      end
+    if individual.key?('phone') && individual['phone'].present?
+      phone_object = TelephoneNumber.parse(individual['phone'])
+      personal_info.merge!({ 'phone' => phone_object.national_number }) if phone_object.valid?
     end
     personal_info.merge!({ 'verification' => individual['verification'] }) if individual.key?('verification')
 

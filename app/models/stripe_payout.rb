@@ -11,9 +11,7 @@ class StripePayout < ApplicationRecord
 
   # custom validation
   def payout_id_check
-    if payout_id.present?
-      errors.add(:payout_id, 'payout_id does not start with po_') unless payout_id.starts_with? 'po_'
-    end
+    errors.add(:payout_id, 'payout_id does not start with po_') if payout_id.present? && !(payout_id.starts_with? 'po_')
   end
 
   def self.create_stripe_payout(amt, acct_id)
