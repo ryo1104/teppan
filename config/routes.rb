@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   end
 
   match '/trades/webhook' => 'trades#webhook', :via => %i[get post]
-  match '/trades/done' => 'trades#done', :via => :get
+  get '/trades/done' => 'trades#done'
 
   namespace :hashtags do
     resources :netas, only: [:index]

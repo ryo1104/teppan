@@ -13,6 +13,7 @@ AllCops:
     - 'db/**/*'
     - 'test/**/*'
     - 'bin/**/*'
+  NewCops: enable
 
 Rails:
   Enabled: true
@@ -100,6 +101,9 @@ Style/GuardClause:
 Lint/AmbiguousBlockAssociation:
   Exclude:
     - '**/spec/**/*'
+
+Lint/DuplicateBranch:
+  Enabled: false
 
 Lint/ParenthesesAsGroupedExpression:
   Enabled: false

@@ -112,20 +112,12 @@ class User < ApplicationRecord
 
   def followed_by(user_id)
     follow = Follow.find_by(user_id: id, follower_id: user_id)
-    if follow.present?
-      true
-    else
-      false
-    end
+    follow.present?
   end
 
   def blocked_by(user_id)
     violation = Violation.find_by(user_id: id, reporter_id: user_id)
-    if violation.present?
-      true
-    else
-      false
-    end
+    violation.present?
   end
 
   def average_rate
@@ -247,10 +239,8 @@ class User < ApplicationRecord
       else
         false
       end
-    elsif errors.present?
-      false
     else
-      true
+      errors.blank?
     end
   end
 

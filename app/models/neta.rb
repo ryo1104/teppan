@@ -29,10 +29,10 @@ class Neta < ApplicationRecord
           gross_count += neta.reviews_count
         end
       end
-      if gross_count != 0
-        (gross_rate / gross_count.to_f).round(2)
-      else
+      if gross_count.zero?
         0
+      else
+        (gross_rate / gross_count.to_f).round(2)
       end
     else
       0
@@ -65,13 +65,11 @@ class Neta < ApplicationRecord
   end
 
   def for_sale
-    if price != 0
-      if user.premium_user[0]
-        if user.stripe_account.present?
-          user.stripe_account.status == 'verified'
-        else
-          false
-        end
+    if price.zero?
+      false
+    elsif user.premium_user[0]
+      if user.stripe_account.present?
+        user.stripe_account.status == 'verified'
       else
         false
       end
@@ -103,20 +101,14 @@ class Neta < ApplicationRecord
       true
     elsif bookmarks.present?
       true
-    elsif rankings.present?
-      true
     else
-      false
+      rankings.present?
     end
   end
 
   def bookmarked(user_id)
     bookmark = bookmarks.find_by(user_id: user_id)
-    if bookmark.present?
-      true
-    else
-      false
-    end
+    bookmark.present?
   end
 
   def check_hashtags(tag_array)

@@ -39,11 +39,7 @@ class Topic < ApplicationRecord
 
   def bookmarked(user_id)
     bookmark = bookmarks.find_by(user_id: user_id)
-    if bookmark.present?
-      true
-    else
-      false
-    end
+    bookmark.present?
   end
 
   def add_pageview(user)
@@ -53,11 +49,7 @@ class Topic < ApplicationRecord
   end
 
   def deleteable
-    if netas.present?
-      false
-    else
-      true
-    end
+    netas.blank?
   end
 
   def purge_s3_object
@@ -69,10 +61,8 @@ class Topic < ApplicationRecord
       else
         false
       end
-    elsif errors.present?
-      false
     else
-      true
+      errors.blank?
     end
   end
 

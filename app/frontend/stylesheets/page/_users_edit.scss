@@ -1,0 +1,22 @@
+.user-edit {
+  &-form {
+    &__message {
+      
+    }
+    
+    &__nickname {
+      max-width: 28rem;
+    }
+    
+    &__birthdate {
+      max-width: 28rem;
+    }
+    
+    &__submit {
+      &.btn.waves-effect {
+        @include button-normal;
+        margin-bottom: 2rem;
+      }
+    }
+  }
+}

@@ -116,11 +116,7 @@ class StripeAccount < ApplicationRecord
     balance_hash = balance_res[1]
     available_bal = balance_hash['available'][0]['amount'].presence || 0
     pending_bal = balance_hash['pending'][0]['amount'].presence || 0
-    if available_bal.zero? && pending_bal.zero?
-      true
-    else
-      false
-    end
+    available_bal.zero? && pending_bal.zero?
   end
 
   def get_ext_account

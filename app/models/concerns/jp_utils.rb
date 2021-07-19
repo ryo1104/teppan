@@ -15,11 +15,7 @@ module JpUtils
 
     def self.hiragana(str)
       # 全角ひらがな、または英数字
-      if str.match(/\A(?:\p{Hiragana}|[ー－]|[a-zA-Z0-9０-９])+\z/).blank?
-        false
-      else
-        true
-      end
+      str.match(/\A(?:\p{Hiragana}|[ー－]|[a-zA-Z0-9０-９])+\z/).present?
     end
   end
 end

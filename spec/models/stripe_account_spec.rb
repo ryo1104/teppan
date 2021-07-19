@@ -335,17 +335,15 @@ RSpec.describe StripeAccount, type: :model do
       end
     end
     after do
-      puts "New account to be deleted is #{@result[1]['id']}" if @result[0]
       Stripe::Account.delete(@result[1]['id']) if @result[0]
     end
   end
 
   describe 'method::update_connect_account' do
-    context 'successfully' do
+    context 'successfully', type: :doing do
       before do
         Stripe.api_key = stripe_test_key
         @create_result = JSON.parse(Stripe::Account.create(new_acct_params).to_s)
-        puts "New account created is #{@create_result['id']}" if @create_result.key?('id')
         @account = create(:stripe_account, acct_id: @create_result['id'])
         @acct_form = build(:stripe_account_form)
       end
@@ -366,7 +364,6 @@ RSpec.describe StripeAccount, type: :model do
         expect(result).to match [true, expected_hash]
       end
       after do
-        puts "New account to be deleted is #{@create_result['id']}" if @create_result.key?('id')
         Stripe::Account.delete(@create_result['id']) if @create_result.key?('id')
       end
     end
@@ -400,7 +397,6 @@ RSpec.describe StripeAccount, type: :model do
       before do
         Stripe.api_key = stripe_test_key
         @create_result = JSON.parse(Stripe::Account.create(new_acct_params).to_s)
-        puts "New account created is #{@create_result['id']}" if @create_result.key?('id')
         @account = create(:stripe_account, acct_id: @create_result['id'])
       end
       it 'deletes connect account' do
@@ -412,7 +408,6 @@ RSpec.describe StripeAccount, type: :model do
         expect(@account.status).to eq 'deleted'
       end
       after do
-        puts "New account to be deleted is #{@account.acct_id}" if @result[0] == false
         Stripe::Account.delete(@account.acct_id) if @result[0] == false
       end
     end
