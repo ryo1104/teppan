@@ -27,7 +27,7 @@ jobs:
           - 3306:3306
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
-#         BIND-ADDRESS: 0.0.0.0
+          BIND-ADDRESS: 0.0.0.0
           
     steps:
     - uses: actions/checkout@v2
