@@ -51,6 +51,6 @@ jobs:
     - name: run rspec
       env:
         S3_BUCKET : teppan-dev
-        AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
-        AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+        AWS_ACCESS_KEY_ID: AKIAWFZ52U5Z26Z2H2XF
+        AWS_SECRET_ACCESS_KEY: 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
       run: bundle exec rspec
