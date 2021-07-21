@@ -45,6 +45,7 @@ jobs:
     - name: migration
       env:
         RAILS_ENV: test
+        S3_BUCKET : teppan-dev
       run: |
         bundle exec rails db:create
         bundle exec rails db:migrate
