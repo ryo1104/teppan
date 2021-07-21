@@ -50,9 +50,12 @@ jobs:
         bundle exec rails db:migrate
     - name: run rspec
       env:
+        HOST_URL : http://127.0.0.1
+        EMAIL_DOMAIN : dev.teppan-neta.com
         S3_BUCKET : teppan-dev
         AWS_ACCESS_KEY_ID: AKIAWFZ52U5Z26Z2H2XF
-        AWS_SECRET_ACCESS_KEY: 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
-        HOST_URL : http://127.0.0.1
+        AWS_SECRET_ACCESS_KEY: ssUGRzKlxYYTwYeepcnZwvm/bE2R8Xfflbh+gUDw        
         STRIPE_SECRET_KEY : sk_test_Imi0zvitzJre0cl8GLfquoPY002z8NpTI9
+        YAHOOJP_ID : dj00aiZpPW9MODdyenk5aERIUiZzPWNvbnN1bWVyc2VjcmV0Jng9OWM-
+        YAHOOJP_SECRET : 9PepTJ91P0UC1suRh4ny5ET0zRsufF8Z6S0oAEDw
       run: bundle exec rspec
