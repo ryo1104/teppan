@@ -27,6 +27,7 @@ jobs:
           - 3306:3306
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
+#         BIND-ADDRESS: 0.0.0.0
           
     steps:
     - uses: actions/checkout@v2
@@ -47,6 +48,7 @@ jobs:
         RAILS_ENV: test
         S3_BUCKET : teppan-dev
       run: |
+        sudo systemctl start mysql
         bundle exec rails db:create
         bundle exec rails db:migrate
     - name: run rspec
