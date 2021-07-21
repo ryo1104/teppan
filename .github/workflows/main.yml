@@ -53,4 +53,6 @@ jobs:
         S3_BUCKET : teppan-dev
         AWS_ACCESS_KEY_ID: AKIAWFZ52U5Z26Z2H2XF
         AWS_SECRET_ACCESS_KEY: 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
+        HOST_URL : http://127.0.0.1
+        STRIPE_SECRET_KEY : sk_test_Imi0zvitzJre0cl8GLfquoPY002z8NpTI9
       run: bundle exec rspec
