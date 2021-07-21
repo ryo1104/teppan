@@ -48,7 +48,7 @@ jobs:
         RAILS_ENV: test
         S3_BUCKET : teppan-dev
       run: |
-        sudo systemctl start mysql
+        mysql -h 127.0.0.1 --port 3306 -u root
         bundle exec rails db:create
         bundle exec rails db:migrate
     - name: run rspec
