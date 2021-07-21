@@ -17,9 +17,7 @@ jobs:
   rspec:
 
     runs-on: ubuntu-latest
-#     strategy:
-#       matrix:
-#         ruby-version: ['2.6', '2.7', '3.0']
+
     services:
       mysql:
         image: mysql:5.7
@@ -27,7 +25,6 @@ jobs:
           - 3306:3306
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
-#           BIND-ADDRESS: 0.0.0.0
           
     steps:
     - uses: actions/checkout@v2
@@ -52,4 +49,6 @@ jobs:
         bundle exec rails db:create
         bundle exec rails db:migrate
     - name: run rspec
+      env:
+        S3_BUCKET : teppan-dev
       run: bundle exec rspec
