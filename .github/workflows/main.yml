@@ -47,10 +47,10 @@ jobs:
         HOST_URL : http://127.0.0.1
         EMAIL_DOMAIN : dev.teppan-neta.com
         S3_BUCKET : teppan-dev
-        AWS_ACCESS_KEY_ID: AKIAWFZ52U5Z26Z2H2XF
-        AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}      
+        AWS_ACCESS_KEY_ID: AWS_DUMMY_ID
+        AWS_SECRET_ACCESS_KEY: AWS_DUMMY_SECRET   
         STRIPE_SECRET_KEY : ${{secrets.STRIPE_SECRET_KEY}}
-        YAHOOJP_ID : dj00aiZpPW9MODdyenk5aERIUiZzPWNvbnN1bWVyc2VjcmV0Jng9OWM-
+        YAHOOJP_ID : ${{secrets.YAHOOJP_ID}}
         YAHOOJP_SECRET : ${{secrets.YAHOOJP_SECRET}}
       run: bundle exec rspec
   
