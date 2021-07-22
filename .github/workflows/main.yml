@@ -15,24 +15,18 @@ on:
 
 jobs:
   rspec:
-
     runs-on: ubuntu-latest
-
     services:
       mysql:
         image: mysql:5.7
         ports:
           - 3306:3306
         env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes          
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby
-    # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
-    # change this to (see https://github.com/ruby/setup-ruby#versioning):
-    # uses: ruby/setup-ruby@v1
-      uses: ruby/setup-ruby@473e4d8fe5dd94ee328fdfca9f8c9c7afc9dae5e
+      uses: ruby/setup-ruby@v1
       with:
         ruby-version: 2.7.2
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
@@ -55,7 +49,21 @@ jobs:
         S3_BUCKET : teppan-dev
         AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
         AWS_SECRET_ACCESS_KEY: ssUGRzKlxYYTwYeepcnZwvm/bE2R8Xfflbh+gUDw        
-        STRIPE_SECRET_KEY : sk_test_Imi0zvitzJre0cl8GLfquoPY002z8NpTI9
+        STRIPE_SECRET_KEY : ${{secrets.STRIPE_SECRET_KEY}}
         YAHOOJP_ID : dj00aiZpPW9MODdyenk5aERIUiZzPWNvbnN1bWVyc2VjcmV0Jng9OWM-
-        YAHOOJP_SECRET : 9PepTJ91P0UC1suRh4ny5ET0zRsufF8Z6S0oAEDw
+        YAHOOJP_SECRET : ${{secrets.YAHOOJP_SECRET}}
       run: bundle exec rspec
+  
+  rubocop:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7.2
+        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+    - name: run rubocop
+      run: |
+        gem install rubocop
+        rubocop
