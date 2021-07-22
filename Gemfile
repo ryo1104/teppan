@@ -39,7 +39,8 @@ group :development, :test do
   gem 'pry-rails'
   gem 'rails-controller-testing'
   gem 'rspec-rails'
-  gem 'unicode-display_width', '>= 1.4.0'
+  gem 'rubocop', require: false
+  gem 'rubocop-rails', require: false
 end
 
 group :development do
@@ -49,11 +50,10 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'bullet'
   gem 'rails-erd'
-  gem 'rubocop', require: false
-  gem 'rubocop-rails', require: false
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'spring-watcher-listen'
+  gem 'unicode-display_width', '>= 1.4.0'
 end
 
 group :test do
