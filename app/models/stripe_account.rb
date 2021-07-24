@@ -26,7 +26,7 @@ class StripeAccount < ApplicationRecord
     begin
       stripe_account_obj = JSON.parse(Stripe::Account.retrieve(acct_id).to_s)
     rescue StandardError => e
-      ErrorUtility.log_and_notify e
+      ErrorUtility.log_and_notify(exc: e, data: { 'object' => inspect })
       return [false, "Stripe error - #{e.message}"]
     end
     account_info = StripeAccountForm.parse_account_info(stripe_account_obj)
@@ -42,7 +42,7 @@ class StripeAccount < ApplicationRecord
     begin
       stripe_account_obj = JSON.parse(Stripe::Account.create(stripe_inputs).to_s)
     rescue StandardError => e
-      ErrorUtility.log_and_notify e
+      ErrorUtility.log_and_notify(exc: e, data: { 'object' => account_form.inspect, 'remote_ip' => remote_ip })
       return [false, "Stripe error - #{e.message}"]
     end
     account_info = StripeAccountForm.parse_account_info(stripe_account_obj)
@@ -60,7 +60,7 @@ class StripeAccount < ApplicationRecord
     begin
       stripe_account_obj = JSON.parse(Stripe::Account.update(acct_id, stripe_inputs).to_s)
     rescue StandardError => e
-      ErrorUtility.log_and_notify e
+      ErrorUtility.log_and_notify(exc: e, data: { 'object' => inspect, 'stripe_inputs' => stripe_inputs })
       return [false, "Stripe error - #{e.message}"]
     end
     account_info = StripeAccountForm.parse_account_info(stripe_account_obj)
@@ -78,7 +78,7 @@ class StripeAccount < ApplicationRecord
     begin
       deleted_stripe_account = JSON.parse(Stripe::Account.delete(acct_id).to_s)
     rescue StandardError => e
-      ErrorUtility.log_and_notify e
+      ErrorUtility.log_and_notify(exc: e, data: { 'object' => inspect })
       return [false, "Stripe error - #{e.message}"]
     end
     if deleted_stripe_account['deleted']
@@ -98,7 +98,7 @@ class StripeAccount < ApplicationRecord
     begin
       stripe_balance_obj = JSON.parse(Stripe::Balance.retrieve({ stripe_account: acct_id }).to_s)
     rescue StandardError => e
-      ErrorUtility.log_and_notify e
+      ErrorUtility.log_and_notify(exc: e, data: { 'object' => inspect })
       return [false, "Stripe error - #{e.message}"]
     end
     check_results = StripeAccountForm.check_results(stripe_balance_obj)

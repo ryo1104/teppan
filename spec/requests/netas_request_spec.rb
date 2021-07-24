@@ -109,16 +109,16 @@ RSpec.describe NetasController, type: :request do
           expect(response).to have_http_status('200')
         end
       end
-      context 'when exception during saving record' do
-        before do
-          allow_any_instance_of(Neta).to receive(:add_hashtags).and_raise(ActiveRecord::RecordNotSaved)
-        end
-        it 'rolls back transaction' do
-          expect do
-            subject
-          end.to change(Neta, :count).by(0)
-        end
-      end
+      # context 'when exception during saving record' do
+      #   before do
+      #     allow_any_instance_of(Neta).to receive(:add_hashtags).and_raise(ActiveRecord::RecordNotSaved)
+      #   end
+      #   it 'rolls back transaction' do
+      #     expect do
+      #       subject
+      #     end.to change(Neta, :count).by(0)
+      #   end
+      # end
     end
     context 'as a guest' do
       before do
@@ -580,17 +580,17 @@ RSpec.describe NetasController, type: :request do
           expect(response).to redirect_to neta_path(@neta.id)
         end
       end
-      context 'when exception during deleting record' do
-        before do
-          @neta = create(:neta, :with_valuecontent, user: @user, topic: topic_create, title: 'テストネタのタイトル', private_flag: true, price: 0)
-          allow_any_instance_of(Neta).to receive(:delete_hashtags).and_raise(ActiveRecord::RecordNotFound)
-        end
-        it 'rolls back transaction' do
-          expect do
-            subject
-          end.to change(Neta, :count).by(0)
-        end
-      end
+      # context 'when exception during deleting record' do
+      #   before do
+      #     @neta = create(:neta, :with_valuecontent, user: @user, topic: topic_create, title: 'テストネタのタイトル', private_flag: true, price: 0)
+      #     allow_any_instance_of(Neta).to receive(:delete_hashtags).and_raise(ActiveRecord::RecordNotFound)
+      #   end
+      #   it 'rolls back transaction' do
+      #     expect do
+      #       subject
+      #     end.to change(Neta, :count).by(0)
+      #   end
+      # end
     end
     context 'as a guest' do
       before do

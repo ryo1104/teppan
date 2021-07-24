@@ -35,6 +35,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'dotenv-rails'
   gem 'factory_bot_rails' # , '~> 5.0.2'
   gem 'pry-rails'
   gem 'rails-controller-testing'
@@ -86,7 +87,7 @@ gem 'ransack'
 # breadcrumbs
 gem 'gretel'
 
-# 課金サービス
+# 課金
 gem 'stripe'
 gem 'zengin_code', require: false
 
@@ -99,6 +100,9 @@ gem 'aws-sdk-s3'
 # Error pages
 gem 'rambulance'
 
+# ExceptionメールやSlackで通知
+gem 'exception_notification'
+
 # 読み仮名
 gem 'rubyfuri'
 
@@ -107,6 +111,3 @@ gem 'fast_jsonapi'
 
 # Phone number
 gem 'telephone_number'
-
-# 環境変数
-gem 'dotenv-rails'

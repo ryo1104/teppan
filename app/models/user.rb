@@ -175,23 +175,6 @@ class User < ApplicationRecord
     Topic.includes(:user, :netas).where(id: i_topicids).order('created_at DESC')
   end
 
-  # def get_customer
-  #   if stripe_cus_id.present?
-  #     begin
-  #       customer = JSON.parse(Stripe::Customer.retrieve(stripe_cus_id).to_s)
-  #     rescue StandardError => e
-  #       return [false, "Stripe error - #{e.message}"]
-  #     end
-  #     if customer['id'].present?
-  #       [true, customer]
-  #     else
-  #       [false, 'customer data does not exist']
-  #     end
-  #   else
-  #     [false, 'stripe_cus_id is blank']
-  #   end
-  # end
-
   def get_balance
     if stripe_account.present?
       res = stripe_account.get_balance

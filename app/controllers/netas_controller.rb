@@ -19,8 +19,6 @@ class NetasController < ApplicationController
     else
       render :new and return
     end
-  rescue StandardError => e
-    ErrorUtility.log_and_notify e
   end
 
   def show
@@ -62,8 +60,6 @@ class NetasController < ApplicationController
       @current_tags = @neta.get_hashtags_str
       render :edit and return
     end
-  rescue StandardError => e
-    ErrorUtility.log_and_notify e
   end
 
   def destroy
@@ -82,8 +78,6 @@ class NetasController < ApplicationController
     else
       redirect_to neta_path(params[:id]), alert: I18n.t('controller.general.no_access') and return
     end
-  rescue StandardError => e
-    ErrorUtility.log_and_notify e
   end
 
   private

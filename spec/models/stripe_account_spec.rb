@@ -340,7 +340,7 @@ RSpec.describe StripeAccount, type: :model do
   end
 
   describe 'method::update_connect_account' do
-    context 'successfully', type: :doing do
+    context 'successfully' do
       before do
         Stripe.api_key = stripe_test_key
         @create_result = JSON.parse(Stripe::Account.create(new_acct_params).to_s)
