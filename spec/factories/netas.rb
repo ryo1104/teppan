@@ -13,6 +13,7 @@ FactoryBot.define do
     end
     trait :with_valuecontent do
       valuecontent { 'ネタテスト　有料部分' }
+      price { '100' }
     end
     trait :with_hashtags do
       after(:create) do |neta|

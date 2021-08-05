@@ -12,7 +12,7 @@ class Neta < ApplicationRecord
   has_many :bookmarks, as: :bookmarkable, dependent: :destroy
   has_many :rankings, as: :rankable, dependent: :destroy
   has_many :hashtag_netas, dependent: :destroy
-  has_many :hashtags, through: :hashtag_netas
+  has_many :hashtags, through: :hashtag_netas, dependent: :destroy
   validates :title, presence: true, length: { maximum: 35 }
   validates :price, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 10_000 }
   validates :private_flag, inclusion: { in: [true, false] }
@@ -97,8 +97,6 @@ class Neta < ApplicationRecord
       true
     elsif trades.present?
       true
-    elsif pageviews.present?
-      true
     elsif bookmarks.present?
       true
     else
@@ -111,37 +109,46 @@ class Neta < ApplicationRecord
     bookmark.present?
   end
 
-  def check_hashtags(tag_array)
-    if tag_array.present?
-      if tag_array.size > 10
-        errors.add(:hashtags, I18n.t('errors.messages.attach_too_many', attach_limit: '10'))
-        false
-      else
-        true
-      end
+  def save_with_hashtags(tag_array)
+    if tag_array.blank?
+      save
     else
-      true
-    end
-  end
+      return false unless hashtag_check(tag_array)
 
-  def add_hashtags(tag_array)
-    if tag_array.present?
-      tag_array.uniq.map do |tag_name|
-        hashtag = Hashtag.find_or_create_by(hashname: tag_name)
-        hashtags << hashtag unless hashtags.find_by(hashname: tag_name)
-        hashtag.update_netacount
+      ActiveRecord::Base.transaction do
+        clear_hashtags
+        save!
+        tag_array.uniq.map do |tag_name|
+          unless hashtags.find_by(hashname: tag_name)
+            tag = Hashtag.find_or_create_by(hashname: tag_name)
+            hashtags << tag
+          end
+        end
       end
       true
-    else
-      false
     end
+  rescue StandardError => e
+    ErrorUtility.log_and_notify(exc: e, data: { 'tag_array' => tag_array })
+    false
   end
 
-  def delete_hashtags
-    hashtags.clear if hashtags.present?
+  def delete_with_hashtags
+    ActiveRecord::Base.transaction do
+      clear_hashtags
+      destroy!
+    end
+    true
+  rescue StandardError => e
+    ErrorUtility.log_and_notify(exc: e, data: { 'neta' => self, 'hashtags' => hashtags })
+    false
   end
 
-  def get_hashtags_str
+  def clear_hashtags
+    # only destroy will work with counter culture
+    hashtags.destroy_all if hashtags.present?
+  end
+
+  def hashtags_str
     if hashtags.present?
       tags = hashtags
       tag_array = []
@@ -171,6 +178,7 @@ class Neta < ApplicationRecord
 
   def content_check
     errors.add(:content, 'を入力してください。') if content.body.blank?
+    errors.add(:content, 'は300字以内で入力してください。') if content.to_plain_text.squish.length > 300
     # Need attachment checks. Below does not work because at this point blob is not attached..
     # self.content.embeds.blobs.each do |blob|
     #   if blob.byte_size.to_i > 10.megabytes
@@ -180,14 +188,30 @@ class Neta < ApplicationRecord
   end
 
   def valuecontent_check
-    if price != 0 && valuecontent.body.blank?
-      errors.add(:valuecontent, 'を入力してください。')
+    if price != 0
+      errors.add(:valuecontent, 'を入力してください。') if valuecontent.body.blank?
+      errors.add(:valuecontent, 'は300字以内で入力してください。') if valuecontent.to_plain_text.squish.length > 300
       # Need attachment checks. Below does not work because at this point blob is not attached..
       # self.valuecontent.embeds.blobs.each do |blob|
       #   if blob.byte_size.to_i > 10.megabytes
       #     errors.add(:valuecontent, " size must be smaller than 10MB")
       #   end
       # end
+    elsif valuecontent.body.present?
+      errors.add(:valuecontent, 'は価格０では入力できません。')
+    end
+  end
+
+  def hashtag_check(tag_array)
+    if tag_array.present?
+      if tag_array.size > 10
+        errors.add(:hashtags, I18n.t('errors.messages.attach_too_many', attach_limit: '10'))
+        false
+      else
+        true
+      end
+    else
+      true
     end
   end
 end

@@ -2,7 +2,7 @@
 
 class Hashtag < ApplicationRecord
   has_many  :hashtag_netas, dependent: :destroy
-  has_many  :netas, through: :hashtag_netas
+  has_many  :netas, through: :hashtag_netas, dependent: :destroy
   has_many  :hashtag_hits, dependent: :delete_all
   validates :hashname, presence: true, uniqueness: { case_sensitive: true }, length: { maximum: 30 },
                        format: { with: /\A(?:\p{Hiragana}|\p{Katakana}|[ー－]|[a-zA-Z0-9０-９]|[一-龠々])+\z/,
@@ -11,7 +11,6 @@ class Hashtag < ApplicationRecord
                                  message: I18n.t('errors.messages.hiragana_only') }
   validates :hit_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :neta_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-  # include JpUtils
   before_validation :update_yomigana
 
   # record only 1 hit per day per user
@@ -22,11 +21,6 @@ class Hashtag < ApplicationRecord
       hashtag_hits.create!(user_id: user.id)
       increment(:hit_count, 1)
     end
-  end
-
-  def update_netacount
-    count = netas.count
-    update!(neta_count: count)
   end
 
   def self.fix_netacount

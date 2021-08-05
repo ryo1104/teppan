@@ -10,11 +10,7 @@ class NetasController < ApplicationController
   def create
     @topic = Topic.find(params[:topic_id])
     @neta = @topic.netas.new(create_params)
-    if @neta.valid? && @neta.check_hashtags(tag_array)
-      Neta.transaction do
-        @neta.save!
-        @neta.add_hashtags(tag_array)
-      end
+    if @neta.save_with_hashtags(tag_array)
       redirect_to neta_path(@neta.id), notice: I18n.t('controller.neta.created') and return
     else
       render :new and return
@@ -42,41 +38,33 @@ class NetasController < ApplicationController
     redirect_to neta_path(params[:id]), alert: I18n.t('controller.neta.dependency') and return unless @neta.editable
 
     @qualified = current_user.premium_qualified
-    @current_tags = @neta.get_hashtags_str
+    @current_tags = @neta.hashtags_str
   end
 
   def update
     @neta = Neta.find(params[:id])
     @neta.assign_attributes(update_params)
-    if @neta.valid? && @neta.check_hashtags(tag_array)
-      Neta.transaction do
-        @neta.save!
-        @neta.delete_hashtags
-        @neta.add_hashtags(tag_array)
-      end
-      redirect_to neta_path(params[:id]), notice: I18n.t('controller.neta.updated') and return
+    if @neta.save_with_hashtags(tag_array)
+      redirect_to neta_path(@neta.id), notice: I18n.t('controller.neta.updated') and return
     else
       @qualified = current_user.premium_qualified
-      @current_tags = @neta.get_hashtags_str
+      @current_tags = @neta.hashtags_str
       render :edit and return
     end
   end
 
   def destroy
     @neta = Neta.includes(:trades, :bookmarks, :reviews, :pageviews, :rankings, :hashtag_netas).find(params[:id])
-    if @neta.owner(current_user)
-      if @neta.dependents
-        redirect_to neta_path(params[:id]), alert: I18n.t('controller.neta.undeleteable') and return
-      else
-        topic_id = @neta.topic_id
-        Neta.transaction do
-          @neta.delete_hashtags
-          @neta.destroy!
-        end
+    deleteable = delete_check
+    if deleteable[0]
+      topic_id = @neta.topic_id
+      if @neta.delete_with_hashtags
         redirect_to topic_path(topic_id), notice: I18n.t('controller.neta.deleted') and return
+      else
+        redirect_to neta_path(params[:id]), alert: I18n.t('controller.general.no_access') and return
       end
     else
-      redirect_to neta_path(params[:id]), alert: I18n.t('controller.general.no_access') and return
+      redirect_to neta_path(params[:id]), alert: deleteable[1] and return
     end
   end
 
@@ -105,5 +93,17 @@ class NetasController < ApplicationController
 
   def session_params
     params.require(:neta).permit(:timestamp)
+  end
+
+  def delete_check
+    if @neta.owner(current_user)
+      if @neta.dependents
+        [false, I18n.t('controller.neta.undeleteable')]
+      else
+        [true, nil]
+      end
+    else
+      [false, I18n.t('controller.general.no_access')]
+    end
   end
 end

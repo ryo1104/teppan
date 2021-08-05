@@ -252,7 +252,7 @@ RSpec.describe NetasController, type: :request do
         context 'when private flag is true' do
           context 'and price is zero' do
             before do
-              @neta = create(:neta, :with_valuecontent, user: @user, topic: topic_create, title: 'テストネタのタイトル', private_flag: true, price: 0)
+              @neta = create(:neta, :with_valuecontent, user: @user, topic: topic_create, title: 'テストネタのタイトル', private_flag: true)
             end
             it 'shows free content' do
               subject
@@ -282,7 +282,7 @@ RSpec.describe NetasController, type: :request do
         context 'when private flag is false' do
           context 'and price is zero' do
             before do
-              @neta = create(:neta, :with_valuecontent, user: @user, topic: topic_create, title: 'テストネタのタイトル', private_flag: true, price: 0)
+              @neta = create(:neta, :with_valuecontent, user: @user, topic: topic_create, title: 'テストネタのタイトル', private_flag: true)
             end
             it 'shows free content' do
               subject
@@ -311,7 +311,7 @@ RSpec.describe NetasController, type: :request do
         end
         context 'reviews exist' do
           before do
-            @neta = create(:neta, :with_valuecontent, user: @user, topic: topic_create, title: 'テストネタのタイトル', private_flag: false, price: 0)
+            @neta = create(:neta, :with_valuecontent, user: @user, topic: topic_create, title: 'テストネタのタイトル', private_flag: false)
             some_user1 = create(:user)
             some_user2 = create(:user)
             create(:review, neta: @neta, user: some_user1)
@@ -361,7 +361,7 @@ RSpec.describe NetasController, type: :request do
       end
       context 'as a neta owner' do
         before do
-          @neta = create(:neta, :with_valuecontent, user: @user, topic: topic_create, title: 'テストネタのタイトル', private_flag: true, price: 0)
+          @neta = create(:neta, :with_valuecontent, user: @user, topic: topic_create, title: 'テストネタのタイトル', private_flag: true)
         end
         context 'and neta is editable' do
           before do
@@ -522,7 +522,7 @@ RSpec.describe NetasController, type: :request do
       end
       context 'as a neta owner' do
         before do
-          @neta = create(:neta, :with_valuecontent, user: @user, topic: topic_create, title: 'テストネタのタイトル', private_flag: true, price: 0)
+          @neta = create(:neta, :with_valuecontent, user: @user, topic: topic_create, title: 'テストネタのタイトル', private_flag: true)
         end
         it 'deletes the neta' do
           expect do
@@ -569,7 +569,7 @@ RSpec.describe NetasController, type: :request do
       context 'not as a neta owner' do
         before do
           @another_user = create(:user)
-          @neta = create(:neta, :with_valuecontent, user: @another_user, topic: topic_create, title: 'テストネタのタイトル', private_flag: true, price: 0)
+          @neta = create(:neta, :with_valuecontent, user: @another_user, topic: topic_create, title: 'テストネタのタイトル', private_flag: true)
         end
         it 'returns a 302 status code' do
           subject
@@ -580,17 +580,6 @@ RSpec.describe NetasController, type: :request do
           expect(response).to redirect_to neta_path(@neta.id)
         end
       end
-      # context 'when exception during deleting record' do
-      #   before do
-      #     @neta = create(:neta, :with_valuecontent, user: @user, topic: topic_create, title: 'テストネタのタイトル', private_flag: true, price: 0)
-      #     allow_any_instance_of(Neta).to receive(:delete_hashtags).and_raise(ActiveRecord::RecordNotFound)
-      #   end
-      #   it 'rolls back transaction' do
-      #     expect do
-      #       subject
-      #     end.to change(Neta, :count).by(0)
-      #   end
-      # end
     end
     context 'as a guest' do
       before do

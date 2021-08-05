@@ -38,9 +38,13 @@ ja:
         message: 文章
       netas:
         title: タイトル
+        content: 本文（無料部分）
+        valuecontent: 本文（有料部分）
         price: 価格
         average_rate: 評価平均
         private_flag: 非公開設定
+        topic: トピック
+        user: ユーザー
       reviews:
         text: レビュー文
         rate: 点数

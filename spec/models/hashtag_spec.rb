@@ -154,19 +154,6 @@ RSpec.describe Hashtag, type: :model do
     end
   end
 
-  describe 'method::update_netacount' do
-    it 'updates neta count field' do
-      some_user = create(:user)
-      some_topic = create(:topic, user: some_user)
-      some_hashtag = create(:hashtag)
-      some_neta = create(:neta, user: some_user, topic: some_topic)
-      create(:hashtag_neta, neta_id: some_neta.id, hashtag_id: some_hashtag.id)
-      hashtag = Hashtag.first
-      hashtag.update_netacount
-      expect(hashtag.neta_count).to eq 1
-    end
-  end
-
   # describe 'method::update_yomigana' do
   #   context 'with valid data', type: :doing do
   #     it 'updates hashtag with hiragana' do
