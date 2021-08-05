@@ -21,7 +21,7 @@ RSpec.describe StripeExtAccountForm, type: :model do
     it 'is invalid if bank does not exist' do
       form = build(:StripeExtAccountForm, bank_name: 'some bank')
       form.valid?
-      expect(form.errors[:bank_name]).to include('は見つかりませんでした。')
+      expect(form.errors[:bank_name]).to include('が見つかりません。')
     end
     it 'is invalid without a branch name' do
       form = build(:StripeExtAccountForm, branch_name: nil)
@@ -31,7 +31,7 @@ RSpec.describe StripeExtAccountForm, type: :model do
     it 'is invalid if branch for a given bank does not exist' do
       form = build(:StripeExtAccountForm, branch_name: 'some branch')
       form.valid?
-      expect(form.errors[:branch_name]).to include('は見つかりませんでした。')
+      expect(form.errors[:branch_name]).to include('が見つかりません。')
     end
     it 'is invalid without a account number' do
       form = build(:StripeExtAccountForm, account_number: nil)
