@@ -60,7 +60,7 @@
             <% unless @my_page %>
               <% unless @user.blocked_by(current_user.id) %>
                 <span id="follows_buttons_<%= @user.id %>">
-                  <%= render partial: 'followers/follow', locals: { user: @user, followed_users_count: @followed_users_count } %>
+                  <%= render partial: 'followers/follow', locals: { user: @user } %>
                 </span>
                 <%= link_to new_user_violation_path(@user.id) do %>
                   <i class="user-show-profile__more material-icons">more_horiz</i>

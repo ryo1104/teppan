@@ -41,8 +41,8 @@ RSpec.describe ViolationsController, type: :request do
         end.to change(Violation, :count).by(1)
       end
       it 'deletes follows by reporter when exists' do
-        @follow = create(:follow, user_id: @violater.id, follower_id: @user.id)
-        expect  do
+        create(:follow, followed: @violater, follower: @user)
+        expect do
           post user_violations_url(@violater.id), params: { violation: { text: '', block: 1 } }
         end.to change(Follow, :count).by(-1)
       end

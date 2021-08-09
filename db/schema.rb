@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_12_062611) do
+ActiveRecord::Schema.define(version: 2021_08_07_141249) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -122,11 +122,13 @@ ActiveRecord::Schema.define(version: 2021_07_12_062611) do
   end
 
   create_table "follows", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
-    t.integer "user_id"
     t.integer "follower_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id", "follower_id"], name: "unique_follow", unique: true
+    t.integer "followed_id"
+    t.index ["followed_id"], name: "index_follows_on_followed_id"
+    t.index ["follower_id", "followed_id"], name: "index_follows_on_follower_id_and_followed_id", unique: true
+    t.index ["follower_id"], name: "index_follows_on_follower_id"
   end
 
   create_table "hashtag_hits", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
@@ -291,7 +293,7 @@ ActiveRecord::Schema.define(version: 2021_07_12_062611) do
     t.date "birthdate"
     t.integer "gender"
     t.string "stripe_cus_id"
-    t.integer "follows_count", default: 0, null: false
+    t.integer "followers_count", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "confirmation_token"
@@ -307,6 +309,7 @@ ActiveRecord::Schema.define(version: 2021_07_12_062611) do
     t.string "provider"
     t.string "uid"
     t.string "avatar_img_url"
+    t.integer "followings_count", default: 0, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -327,7 +330,7 @@ ActiveRecord::Schema.define(version: 2021_07_12_062611) do
   add_foreign_key "branches", "banks"
   add_foreign_key "comments", "users"
   add_foreign_key "copychecks", "netas"
-  add_foreign_key "follows", "users"
+  add_foreign_key "follows", "users", column: "followed_id"
   add_foreign_key "hashtag_hits", "hashtags"
   add_foreign_key "hashtag_hits", "users"
   add_foreign_key "hashtag_netas", "hashtags"

@@ -284,7 +284,11 @@ RSpec.describe User, type: :model do
       expect(user.errors[:birthdate]).to include('：13歳未満はご利用できません。')
     end
 
-    it 'is invalid if introduction is longer than 800 characters'
+    it 'is invalid if introduction is longer than 800 characters' do
+      user = build(:user, introduction: Faker::Lorem.characters(number: 801))
+      user.valid?
+      expect(user.errors[:introduction]).to include('は800字以内で入力してください。')
+    end
 
     it 'is invalid if stripe_cus_id does not start with cus_' do
       user = build(:user, stripe_cus_id: "aaa_#{Faker::Lorem.characters(number: 14)}")
@@ -292,18 +296,17 @@ RSpec.describe User, type: :model do
       expect(user.errors[:stripe_cus_id]).to include('が正しくありません。')
     end
 
-    it 'is invalid if follows_count is negative' do
-      user = build(:user, follows_count: -1)
+    it 'is invalid if followers_count is negative' do
+      user = build(:user, followers_count: -1)
       user.valid?
-      expect(user.errors[:follows_count]).to include('は0以上の値にしてください。')
+      expect(user.errors[:followers_count]).to include('は0以上の値にしてください。')
     end
 
-    # it 'is invalid if unsupported file type for image was attached' do
-    #   user = create(:user, nickname: nil, gender: nil, birthdate: nil)
-    #   file = fixture_file_upload('/files/トラ.gif', 'image/gif')
-    #   user.image.attach(file)
-    #   expect(user.errors[:image]).to include('のファイル形式が正しくありません。')
-    # end
+    it 'is invalid if followings_count is negative' do
+      user = build(:user, followings_count: -1)
+      user.valid?
+      expect(user.errors[:followings_count]).to include('は0以上の値にしてください。')
+    end
 
     it 'is invalid if unregistered flag is neither true or false' do
       user = build(:user, unregistered: nil)
@@ -449,85 +452,14 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe 'method::following_users' do
-    before do
-      @follower = create(:user)
-    end
-
-    it 'returns following user list' do
-      @user1 = create(:user)
-      @user2 = create(:user)
-      @user3 = create(:user)
-      @user4 = create(:user)
-      @follow1 = create(:follow, user: @user1, follower_id: @follower.id)
-      @follow2 = create(:follow, user: @user2, follower_id: @follower.id)
-      @follow3 = create(:follow, user: @user3, follower_id: @user1.id)
-      @follow4 = create(:follow, user: @user1, follower_id: @user4.id)
-      @follow5 = create(:follow, user: @user4, follower_id: @follower.id)
-      users = User.where(id: [@user1.id, @user2.id, @user4.id])
-      expect(@follower.following_users).to match users
-    end
-
-    it 'returns blank (=> Active Record::Relation []) when user is not following anyone' do
-      expect(@follower.following_users).to be_empty
-    end
-  end
-
-  describe 'method::following_users_count' do
-    before do
-      @follower = create(:user)
-    end
-
-    it 'returns following user count' do
-      @user1 = create(:user)
-      @user2 = create(:user)
-      @user3 = create(:user)
-      @user4 = create(:user)
-      @follow1 = create(:follow, user: @user1, follower_id: @follower.id)
-      @follow2 = create(:follow, user: @user2, follower_id: @follower.id)
-      @follow3 = create(:follow, user: @user3, follower_id: @user1.id)
-      @follow4 = create(:follow, user: @user1, follower_id: @user4.id)
-      @follow5 = create(:follow, user: @user4, follower_id: @follower.id)
-      expect(@follower.following_users_count).to eq 3
-    end
-
-    it 'returns 0 when user is not following anyone' do
-      expect(@follower.following_users_count).to eq 0
-    end
-  end
-
-  describe 'method::followed_users' do
-    before do
-      @user = create(:user)
-    end
-
-    it 'returns followed user list' do
-      @follower1 = create(:user)
-      @follower2 = create(:user)
-      @follower3 = create(:user)
-      @follower4 = create(:user)
-      @follow1 = create(:follow, user: @user, follower_id: @follower1.id)
-      @follow2 = create(:follow, user: @user, follower_id: @follower2.id)
-      @follow3 = create(:follow, user: @follower1, follower_id: @follower3.id)
-      @follow4 = create(:follow, user: @follower3, follower_id: @follower4.id)
-      @follow5 = create(:follow, user: @user, follower_id: @follower4.id)
-      users = User.where(id: [@follower1.id, @follower2.id, @follower4.id])
-      expect(@user.followed_users).to match users
-    end
-
-    it 'returns blank (=> Active Record::Relation []) when user is not followed by anyone' do
-      expect(@user.followed_users).to be_empty
-    end
-  end
-
-  describe 'method::followed_by(user_id)' do
+  describe 'method::followed_by(user_id)', type: :doing do
     before do
       @user = create(:user)
       @follower = create(:user)
     end
 
     it 'returns true if user is already followed by follower' do
-      @follow = create(:follow, user: @user, follower_id: @follower.id)
+      @follow = create(:follow, followed: @user, follower: @follower)
       expect(@user.followed_by(@follower.id)).to eq true
     end
 

@@ -84,8 +84,8 @@ class UsersController < ApplicationController
     @bought_netas_count = @bought_netas.present? ? @bought_netas.count : 0
     @bookmarked_netas_count = @bookmarked_netas.present? ? @bookmarked_netas.count : 0
     @bookmarked_topics_count = @bookmarked_topics.present? ? @bookmarked_topics.count : 0
-    @followed_users_count = @user.follows_count
-    @following_users_count = @user.following_users_count
+    @followed_users_count = @user.followers_count
+    @following_users_count = @user.followings_count
   end
 
   def set_s3_direct_post

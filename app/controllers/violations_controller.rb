@@ -26,7 +26,7 @@ class ViolationsController < ApplicationController
 
   def unfollow
     target_usr = User.find(params[:user_id])
-    follow = target_usr.follows.find_by(follower_id: current_user.id)
+    follow = Follow.find_by(followed: target_usr, follower: current_user)
     follow.destroy if follow.present?
   end
 end

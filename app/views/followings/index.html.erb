@@ -7,10 +7,10 @@
         <%= render partial: "layouts/breadcrumbs" %>
       </div>
       <div class="row follow-index">
-        <h1 class="following-index__title">フォロー中(<%= @followings.count %>)</h1>
-        <% if @followings %>
+        <h1 class="following-index__title">フォロー中(<%= @user.followings_count %>)</h1>
+        <% if @user.followings.present? %>
           <ul class="follow-list collection">
-            <%= render partial: "followings/following", collection: @followings %>
+            <%= render partial: "followings/following", collection: @user.followings %>
           </ul>
         <% else %>
           <p>（ユーザーはいません）</p><br><br>

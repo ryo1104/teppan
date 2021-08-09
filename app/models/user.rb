@@ -14,7 +14,17 @@ class User < ApplicationRecord
   has_many  :bookmarks,  -> { order('created_at DESC') }, dependent: :destroy, inverse_of: :user
   has_many  :hashtag_hits, -> { order('created_at DESC') }, dependent: :destroy, inverse_of: :user
   has_many  :comments, dependent: :destroy
-  has_many  :follows, dependent: :destroy
+  has_many :active_relationships, class_name: 'Follow',
+                                  foreign_key: 'follower_id',
+                                  dependent: :destroy,
+                                  inverse_of: :user
+  has_many :followings, through: :active_relationships, source: :followed
+  has_many :passive_relationships, class_name: 'Follow',
+                                   foreign_key: 'followed_id',
+                                   dependent: :destroy,
+                                   inverse_of: :user
+  has_many :followers, through: :passive_relationships, source: :follower
+
   has_many  :reviews, dependent: :destroy
   has_many  :violations, dependent: :destroy
   has_one   :stripe_account, dependent: :destroy
@@ -22,8 +32,10 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: { case_sensitive: false }
   validate  :gender_code_check
   validate  :age_check
+  validate  :introduction_check
   validate  :stripe_cus_id_check
-  validates :follows_count, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :followers_count, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :followings_count, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :unregistered, inclusion: { in: [true, false] }
 
   def self.find_or_create_for_oauth(auth)
@@ -88,30 +100,8 @@ class User < ApplicationRecord
     email.split('@')[0] if email.present?
   end
 
-  def following_users
-    following_user_ids = []
-    follows = Follow.where(follower_id: id)
-    follows.each do |follow|
-      following_user_ids << follow.user_id
-    end
-    User.includes(:netas).where(id: following_user_ids.uniq)
-  end
-
-  def following_users_count
-    Follow.where(follower_id: id).count
-  end
-
-  def followed_users
-    followed_user_ids = []
-    follows = self.follows
-    follows.each do |follow|
-      followed_user_ids << follow.follower_id
-    end
-    User.includes(:netas).where(id: followed_user_ids.uniq)
-  end
-
   def followed_by(user_id)
-    follow = Follow.find_by(user_id: id, follower_id: user_id)
+    follow = Follow.find_by(followed_id: id, follower_id: user_id)
     follow.present?
   end
 
@@ -249,6 +239,10 @@ class User < ApplicationRecord
       errors.add(:birthdate,
                  I18n.t('errors.messages.underage', age_limit: '13'))
     end
+  end
+
+  def introduction_check
+    errors.add(:introduction, 'は800字以内で入力してください。') if introduction.to_plain_text.squish.length > 800
   end
 
   def stripe_cus_id_check

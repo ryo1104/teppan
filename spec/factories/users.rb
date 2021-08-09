@@ -7,9 +7,9 @@ FactoryBot.define do
     confirmed_at { Time.zone.yesterday }
     gender { '3' }
     birthdate { Time.zone.today.prev_year(19) }
-    # introduction { Faker::Lorem.characters(number: 800) }
     stripe_cus_id { "cus_#{Faker::Lorem.characters(number: 14)}" }
-    follows_count { '0' }
+    followers_count { '0' }
+    followings_count { '0' }
     unregistered { false }
   end
 end

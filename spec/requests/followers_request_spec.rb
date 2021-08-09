@@ -9,7 +9,9 @@ RSpec.describe FollowersController, type: :request do
         @my_user = create(:user)
         sign_in @my_user
         @target_user = create(:user)
-        @follows = create_list(:follow, 3, user: @target_user)
+        @another_user = create(:user)
+        create(:follow, followed: @target_user, follower: @my_user)
+        create(:follow, followed: @target_user, follower: @another_user)
       end
       it 'returns a 200 status code' do
         subject
@@ -52,7 +54,7 @@ RSpec.describe FollowersController, type: :request do
       end
       context 'when follower is already following target user' do
         before do
-          create(:follow, user_id: @target_user.id, follower_id: @follower.id)
+          create(:follow, followed: @target_user, follower: @follower)
         end
         it 'redirects to user#show ' do
           subject
@@ -71,7 +73,7 @@ RSpec.describe FollowersController, type: :request do
     end
   end
 
-  describe 'DELETE #destroy', type: :doing do
+  describe 'DELETE #destroy' do
     subject { delete user_follower_url(@target_user.id, @follower.id), xhr: true }
 
     context 'as a signed in user' do
@@ -82,7 +84,7 @@ RSpec.describe FollowersController, type: :request do
       end
       context 'when follow exists' do
         before do
-          create(:follow, user_id: @target_user.id, follower_id: @follower.id)
+          create(:follow, followed: @target_user, follower: @follower)
         end
         it 'deletes follow' do
           expect do
