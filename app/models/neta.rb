@@ -177,7 +177,7 @@ class Neta < ApplicationRecord
   private
 
   def content_check
-    errors.add(:content, 'を入力してください。') if content.body.blank?
+    errors.add(:content, I18n.t('errors.messages.blank')) if content.body.blank?
     errors.add(:content, 'は300字以内で入力してください。') if content.to_plain_text.squish.length > 300
     # Need attachment checks. Below does not work because at this point blob is not attached..
     # self.content.embeds.blobs.each do |blob|

@@ -38,7 +38,7 @@ class UsersController < ApplicationController
   private
 
   def get_user(id)
-    @user = User.includes({ netas: %i[reviews hashtags] }, :bookmarks).find(id)
+    @user = User.includes(:netas).find(id)
     @premium_user = @user.premium_user
     @userrate = @user.average_rate
   end
@@ -52,13 +52,13 @@ class UsersController < ApplicationController
   end
 
   def get_posted_info
-    @posted_netas = @user.netas.includes(:reviews, :hashtags, :user).where(private_flag: false)
-    @posted_topics = @user.topics.includes(:netas, :user).where(private_flag: false)
+    @posted_netas = @user.netas.where(private_flag: false)
+    @posted_topics = @user.topics.includes(:netas).where(private_flag: false)
   end
 
   def get_draft_info
-    @draft_netas = @user.netas.includes(:hashtags, :user).where(private_flag: true)
-    @draft_topics = @user.topics.includes(:netas, :user).where(private_flag: true)
+    @draft_netas = @user.netas.where(private_flag: true)
+    @draft_topics = @user.topics.includes(:netas).where(private_flag: true)
   end
 
   def get_traded_info

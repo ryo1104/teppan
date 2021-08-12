@@ -77,16 +77,16 @@ Rails.application.configure do
     IPAddr.new('::/0'),      # All IPv6 addresses.
     'localhost',             # The localhost reserved domain.
     '3c355ca7c62a41d683a0526b64642f45.vfs.cloud9.ap-southeast-1.amazonaws.com',
-    '18.142.10.65' # AWS EC2 Elastic IP address
+    '18.142.10.65' # AWS EC2 Elastic IP
   ]
 
-  # config.after_initialize do
-  #   Bullet.enable = true
-  #   Bullet.alert = true
-  #   Bullet.bullet_logger = true
-  #   Bullet.console = true
-  #   Bullet.rails_logger = true
-  # end
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.alert = true
+    Bullet.bullet_logger = true
+    Bullet.console = true
+    Bullet.rails_logger = true
+  end
 
   # Disables log coloration
   config.colorize_logging = false

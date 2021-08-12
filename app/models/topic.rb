@@ -9,7 +9,7 @@ class Topic < ApplicationRecord
   has_many      :comments,  as: :commentable, dependent: :destroy
   has_many      :likes,     as: :likeable, dependent: :destroy
   validates     :title,     presence: true, uniqueness: { case_sensitive: true }, length: { maximum: 35 }
-  validate      :content_exists
+  validate      :content_check
   validate      :header_url_check
 
   def max_rate
@@ -68,8 +68,9 @@ class Topic < ApplicationRecord
 
   private
 
-  def content_exists
+  def content_check
     errors.add(:content, I18n.t('errors.messages.blank')) if content.body.blank?
+    errors.add(:content, 'は300字以内で入力してください。') if content.to_plain_text.squish.length > 300
     # Need attachment checks. Below does not work because at this point blob is not attached.
     # self.content.embeds.blobs.each do |blob|
     #   if blob.byte_size.to_i > 5.megabytes

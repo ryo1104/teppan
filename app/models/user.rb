@@ -14,17 +14,10 @@ class User < ApplicationRecord
   has_many  :bookmarks,  -> { order('created_at DESC') }, dependent: :destroy, inverse_of: :user
   has_many  :hashtag_hits, -> { order('created_at DESC') }, dependent: :destroy, inverse_of: :user
   has_many  :comments, dependent: :destroy
-  has_many :active_relationships, class_name: 'Follow',
-                                  foreign_key: 'follower_id',
-                                  dependent: :destroy,
-                                  inverse_of: :user
-  has_many :followings, through: :active_relationships, source: :followed
-  has_many :passive_relationships, class_name: 'Follow',
-                                   foreign_key: 'followed_id',
-                                   dependent: :destroy,
-                                   inverse_of: :user
-  has_many :followers, through: :passive_relationships, source: :follower
-
+  has_many  :active_relationships, class_name: 'Follow', foreign_key: 'follower_id', dependent: :destroy, inverse_of: :user
+  has_many  :followings, through: :active_relationships, source: :followed
+  has_many  :passive_relationships, class_name: 'Follow', foreign_key: 'followed_id', dependent: :destroy, inverse_of: :user
+  has_many  :followers, through: :passive_relationships, source: :follower
   has_many  :reviews, dependent: :destroy
   has_many  :violations, dependent: :destroy
   has_one   :stripe_account, dependent: :destroy
@@ -115,11 +108,11 @@ class User < ApplicationRecord
   end
 
   def free_netas
-    netas.includes(:reviews).where(price: 0)
+    netas.where(price: 0)
   end
 
   def free_reviewed_netas
-    netas.includes(:reviews).where(price: 0).where.not(average_rate: 0)
+    netas.where(price: 0).where.not(average_rate: 0)
   end
 
   def premium_user
@@ -146,7 +139,7 @@ class User < ApplicationRecord
     bought_trades.each do |trade|
       b_netaids << trade.tradeable_id if trade.tradeable_type == 'Neta'
     end
-    Neta.includes(:user, :hashtags).where(id: b_netaids)
+    Neta.includes(:user).where(id: b_netaids)
   end
 
   def bookmarked_netas
@@ -154,7 +147,7 @@ class User < ApplicationRecord
     bookmarks.each do |bookmark|
       i_netaids << bookmark.bookmarkable_id if bookmark.bookmarkable_type == 'Neta'
     end
-    Neta.includes(:user, :hashtags).where(id: i_netaids).order('created_at DESC')
+    Neta.includes(:user).where(id: i_netaids).order('created_at DESC')
   end
 
   def bookmarked_topics

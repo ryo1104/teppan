@@ -53,27 +53,6 @@ RSpec.describe Hashtag, type: :model do
       end
     end
 
-    # context 'yomigana' do
-    #   it 'is valid if hiragana katakana' do
-    #     hashtag = build(:hashtag, yomigana: 'ひらがなカタカナー')
-    #     expect(hashtag).to be_valid
-    #   end
-    # it 'is valid if hiragana katakana alphanumeric' do
-    #     hashtag = build(:hashtag, yomigana: 'ひらがなカタカナーAbc123')
-    #     expect(hashtag).to be_valid
-    #   end
-    #   it 'is invalid if kanji' do
-    #     hashtag = build(:hashtag, hashname: '試験用ハッシュタグ1A', yomigana: '試験用ハッシュタグ1A')
-    #     hashtag.valid?
-    #     expect(hashtag.errors[:yomigana]).to include('はひらがな・英数字が入力可能です。（句読点や記号は不可）')
-    #   end
-    #   it 'is invalid if special characters' do
-    #     hashtag = build(:hashtag, hashname: '試験用ハッシュタグ', yomigana: 'しけんよう・ハッシュタグ')
-    #     hashtag.valid?
-    #     expect(hashtag.errors[:yomigana]).to include('はひらがな・英数字が入力可能です。（句読点や記号は不可）')
-    #   end
-    # end
-
     context 'hit_count' do
       it 'is invalid if blank' do
         follow = build(:hashtag, hit_count: nil)

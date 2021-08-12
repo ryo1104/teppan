@@ -91,10 +91,6 @@ class NetasController < ApplicationController
     end
   end
 
-  def session_params
-    params.require(:neta).permit(:timestamp)
-  end
-
   def delete_check
     if @neta.owner(current_user)
       if @neta.dependents
