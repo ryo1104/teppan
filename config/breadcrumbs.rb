@@ -34,19 +34,19 @@ crumb :edit_topic do |topic|
   parent :show_topic, topic
 end
 
-# ネタshow
+# neta#show
 crumb :show_neta do |neta|
   link neta.title, neta_path(neta.id)
   parent :show_topic, neta.topic
 end
 
-# ネタnew
+# neta#new
 crumb :new_neta do |topic|
   link '新規ネタ', new_topic_neta_path
   parent :show_topic, topic
 end
 
-# ネタedit
+# neta#edit
 crumb :edit_neta do |neta|
   link '編集', edit_neta_path(neta.id)
   parent :show_neta, neta
@@ -58,7 +58,7 @@ crumb :show_review do |review|
   parent :show_neta, review.neta
 end
 
-# レビュー#show
+# review#show
 crumb :show_user do |user|
   link user.nickname.to_s, user_path(user.id)
   parent :root

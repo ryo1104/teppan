@@ -167,6 +167,3 @@ end
 end
 
 # Bank and Branch (for Stripe test env)
-
-# Admin User
-User.create(email: 'admin@teppan.com', confirmed_at: Time.zone.now, nickname: 'Admin', password: 'teppan_password')

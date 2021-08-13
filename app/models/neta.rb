@@ -89,7 +89,7 @@ class Neta < ApplicationRecord
   def add_pageview(user)
     from = Time.zone.now - 1.day
     to = Time.zone.now
-    pageviews.find_or_create_by(user_id: user.id, created_at: from..to)
+    pageviews.find_or_create_by(user: user, created_at: from..to)
   end
 
   def dependents

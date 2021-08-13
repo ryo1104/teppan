@@ -109,16 +109,6 @@ RSpec.describe NetasController, type: :request do
           expect(response).to have_http_status('200')
         end
       end
-      # context 'when exception during saving record' do
-      #   before do
-      #     allow_any_instance_of(Neta).to receive(:add_hashtags).and_raise(ActiveRecord::RecordNotSaved)
-      #   end
-      #   it 'rolls back transaction' do
-      #     expect do
-      #       subject
-      #     end.to change(Neta, :count).by(0)
-      #   end
-      # end
     end
     context 'as a guest' do
       before do
@@ -137,7 +127,7 @@ RSpec.describe NetasController, type: :request do
     end
   end
 
-  describe 'GET #show' do
+  describe 'GET #show', type: :doing do
     subject { get neta_url(@neta.id) }
 
     context 'as a signed in user' do
@@ -226,7 +216,7 @@ RSpec.describe NetasController, type: :request do
             end
             context 'and no trade exists' do
               context 'but is for sale' do
-                it 'shows sale price' do
+                it 'shows for sale message' do
                   subject
                   expect(response.body).to include 'これより先は有料コンテンツです'
                 end
@@ -337,16 +327,39 @@ RSpec.describe NetasController, type: :request do
       before do
         @neta = neta_create
       end
-
       subject { get neta_url(@neta.id) }
 
-      it 'returns a 302 status code' do
+      it 'returns a 200 status code' do
         subject
-        expect(response).to have_http_status('302')
+        expect(response).to have_http_status('200')
       end
-      it 'redirects to the sign-in page' do
+      it 'shows free content' do
         subject
-        expect(response).to redirect_to new_user_session_url
+        expect(response.body).to include 'ネタテスト　無料部分'
+      end
+      context 'and price is non-zero' do
+        before do
+          @neta_owner = create(:user)
+          @neta = create(:neta, :with_valuecontent, user: @neta_owner, topic: topic_create, private_flag: false, price: 100)
+        end
+        context 'and is for sale' do
+          before do
+            allow_any_instance_of(Neta).to receive(:for_sale).and_return(true)
+          end
+          it 'shows for sale message' do
+            subject
+            expect(response.body).to include 'これより先は有料コンテンツです'
+          end
+        end
+        context 'but is not for sale' do
+          before do
+            allow_any_instance_of(Neta).to receive(:for_sale).and_return(false)
+          end
+          it 'shows message saying not for sale' do
+            subject
+            expect(response.body).to include '現在は販売されておりません'
+          end
+        end
       end
     end
   end

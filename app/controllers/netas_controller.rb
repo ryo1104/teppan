@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class NetasController < ApplicationController
+  skip_before_action :authenticate_user!, only: %i[show]
+
   def new
     @topic = Topic.find(params[:topic_id])
     @neta = @topic.netas.new
@@ -19,16 +21,14 @@ class NetasController < ApplicationController
 
   def show
     @neta = Neta.find(params[:id])
-    @owner = @neta.owner(current_user)
+    get_owner
     if @neta.private_flag && !@owner
       @message = I18n.t('controller.neta.private')
     else
+      get_reviews
+      add_pageview
+      get_trades
       @for_sale = @neta.for_sale
-      @reviews = @neta.reviews.includes(:user).order('created_at DESC')
-      @my_review = @reviews.find_by(user_id: current_user.id)
-      @new_review = Review.new if @my_review.blank?
-      @my_trade = @neta.trades.find_by(buyer_id: current_user.id)
-      @neta.add_pageview(current_user)
     end
   end
 
@@ -101,5 +101,29 @@ class NetasController < ApplicationController
     else
       [false, I18n.t('controller.general.no_access')]
     end
+  end
+
+  def get_owner
+    @owner = if user_signed_in?
+               @neta.owner(current_user)
+             else
+               false
+             end
+  end
+
+  def get_reviews
+    @reviews = @neta.reviews.includes(:user).order('created_at DESC')
+    if user_signed_in?
+      @my_review = @reviews.find_by(user_id: current_user.id)
+      @new_review = Review.new if @my_review.blank?
+    end
+  end
+
+  def add_pageview
+    @neta.add_pageview(current_user) if user_signed_in?
+  end
+
+  def get_trades
+    @my_trade = @neta.trades.find_by(buyer_id: current_user.id) if user_signed_in?
   end
 end

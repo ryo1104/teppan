@@ -1,5 +1,6 @@
 require 'zengin_code'
 
+# Zengin codes
 ZenginCode::Bank.all.each do |original_code, original_bank|
   puts "== #{original_code}:#{original_bank.name}"
   bank = Bank.find_or_initialize_by(code: original_code)
@@ -21,5 +22,4 @@ ZenginCode::Bank.all.each do |original_code, original_bank|
     branch.save!
   end
 end
-
 puts "Bank: #{Bank.count}, Branch: #{Branch.count}"

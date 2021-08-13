@@ -74,7 +74,7 @@
           </div>
         </div>  
         <div class="row neta-show__review">
-          <% if !@owner && @my_review.blank? %>
+          <% if !@owner && @new_review.present? %>
             <% unless ( @for_sale && @my_trade.blank? ) %>
               <ul class="neta-show__review-index collection">
                 <%= render partial: "reviews/reviewform", locals: { neta: @neta, new_review: @new_review } %>
