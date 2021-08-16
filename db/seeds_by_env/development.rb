@@ -166,4 +166,32 @@ end
   end
 end
 
-# Bank and Branch (for Stripe test env)
+# Bank and Branch
+ZenginCode::Bank.all.each do |original_code, original_bank|
+  puts "== #{original_code}:#{original_bank.name}"
+  bank = Bank.find_or_initialize_by(code: original_code)
+  bank.name = original_bank.name
+  bank.namekana = original_bank.kana
+  bank.namehira = original_bank.hira
+  bank.roma = original_bank.roma
+  bank.touch unless bank.new_record?
+  bank.save!
+
+  original_bank.branches.each do |original_branch_code, original_branch|
+    puts "-- #{bank.code}:#{bank.name} #{original_branch_code}:#{original_branch.name}"
+    branch = bank.branches.find_or_initialize_by(code: original_branch_code)
+    branch.name = original_branch.name
+    branch.namekana = original_branch.kana
+    branch.namehira = original_branch.hira
+    branch.roma = original_branch.roma
+    branch.touch unless branch.new_record?
+    branch.save!
+  end
+end
+# for Stripe test env
+test_bank = Bank.create(code: '1100', name: 'STRIPE TEST BANK', namekana: 'STRIPE TEST BANK', namehira: 'STRIPE TEST BANK', roma: 'STRIPE TEST BANK')
+test_branch = Branch.create(bank: test_bank, code: '000', name: 'STRIPE TEST BRANCH')
+puts "test_bank = #{test_bank.inspect}"
+puts "test_branch = #{test_branch.inspect}"
+
+puts "Bank: #{Bank.count}, Branch: #{Branch.count}"

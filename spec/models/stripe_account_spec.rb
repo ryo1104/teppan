@@ -5,7 +5,7 @@ RSpec.describe StripeAccount, type: :model do
   let(:test_acct_id)          { 'acct_1FHvBMCx2rPekxgm' } # 山田 賢介
   let(:test_ext_acct_id)      { 'acct_1ETuuMKRzI9hdj1X' } # 山田 祐太郎
   let(:stripe_test_key)       { ENV['STRIPE_SECRET_KEY'] }
-  let(:test_env_ip)           { ENV['STRIPE_TEST_IP'] }
+  let(:test_env_ip)           { ENV['STRIPE_TEST_REMOTE_IP'] }
   let(:stripe_account_obj)    do
     {
       'id' => 'acct_1FHvBMCx2rPekxgm',

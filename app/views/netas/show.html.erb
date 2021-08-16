@@ -25,7 +25,7 @@
                   <div class="neta-show__text--value"><%= @neta.valuecontent %></div>
                 <% end %>
                 <% if @my_trade.present? %>
-                  <span class="neta-show__price--inactive"><%= number_to_currency(@my_trade.price, locale: 'ja') %>で購入済み</span>
+                  <span class="neta-show__price--active"><%= number_to_currency(@my_trade.price, locale: 'ja') %>で購入済み</span>
                 <% else %>
                   <span class="neta-show__price--active">価格：<%= number_to_currency(@neta.price, locale: 'ja') %></span>
                 <% end %>

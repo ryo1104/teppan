@@ -77,7 +77,7 @@ Rails.application.configure do
     IPAddr.new('::/0'),      # All IPv6 addresses.
     'localhost',             # The localhost reserved domain.
     '3c355ca7c62a41d683a0526b64642f45.vfs.cloud9.ap-southeast-1.amazonaws.com',
-    '18.142.10.65' # AWS EC2 Elastic IP
+    'ec2-18-142-10-65.ap-southeast-1.compute.amazonaws.com' # EC2 Elastic IP
   ]
 
   config.after_initialize do

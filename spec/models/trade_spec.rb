@@ -6,7 +6,7 @@ RSpec.describe Trade, type: :model do
   let(:neta_create)   { FactoryBot.create(:neta, :with_user, topic: topic_create) }
   let(:review_create) { FactoryBot.create(:review, :with_user, neta: neta_create) }
 
-  describe 'Validations', type: :doing do
+  describe 'Validations' do
     it 'is valid with a tradeable, buyer_id, seller_id, stripe_ch_id and price' do
       trade = build(:trade, tradeable: neta_create)
       expect(trade).to be_valid
@@ -98,6 +98,8 @@ RSpec.describe Trade, type: :model do
     end
   end
   describe 'method::get_checkout_session'
+  describe 'method::process_event'
+  describe 'method::update_customer_id'
   describe 'method::fulfill_order'
   describe 'method::get_trade_params'
   describe 'method::get_seller_info'

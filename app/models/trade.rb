@@ -61,7 +61,9 @@ class Trade < ApplicationRecord
                                  quantity: 1
                                }
                              ],
-                             metadata: { neta_id: tradeable.id },
+                             metadata: {
+                               neta_id: tradeable.id, buyer_id: buyer.id, seller_id: seller.id
+                             },
                              payment_intent_data: {
                                transfer_data: {
                                  amount: seller_revenue,
@@ -73,6 +75,31 @@ class Trade < ApplicationRecord
                            })
 
     JSON.parse(Stripe::Checkout::Session.create(checkout_params).to_s)
+  end
+
+  def self.process_event(event)
+    return [false, 'event type does not exist'] unless event.key?('type')
+    return [false, "event type not checkout.session.completed but #{event['type']}"] unless event['type'] == 'checkout.session.completed'
+    return [false, 'event data does not exist'] unless event.key?('data')
+    return [false, 'event object does not exist'] unless event['data'].key?('object')
+
+    Trade.update_customer_id(event)
+  end
+
+  def self.update_customer_id(event)
+    return [false, 'customer does not exist'] unless event['data']['object'].key?('customer')
+    return [false, 'buyer_id does not exist'] unless event['data']['object']['metadata'].key?('buyer_id')
+
+    buyer = User.find(event['data']['object']['metadata']['buyer_id'])
+    return [false, 'cannot find buyer user.'] if buyer.blank?
+    return [true, nil] if buyer.stripe_cus_id.present?
+
+    buyer.stripe_cus_id = event['data']['object']['customer']
+    if buyer.save
+      [true, nil]
+    else
+      [false, 'cannot save buyer user.']
+    end
   end
 
   def self.fulfill_order(checkout_session)

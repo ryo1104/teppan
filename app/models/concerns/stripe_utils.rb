@@ -7,6 +7,7 @@ module StripeUtils
 
   included do
     Stripe.api_key = ENV['STRIPE_SECRET_KEY']
+    Stripe.log_level = ENV['STRIPE_LOG_LEVEL']
   end
 
   # this will be rescued by Rambulance
