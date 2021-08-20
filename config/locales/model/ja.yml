@@ -74,7 +74,7 @@ ja:
         account_number: 口座番号
         account_holder_name: 口座名義人
       stripe_idcards:
-        frontback: 表・裏
+        frontback: 表面・裏面
       topics:
         title: タイトル
         pageviews_count: PV数

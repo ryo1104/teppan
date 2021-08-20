@@ -32,10 +32,6 @@ RSpec.describe Users::AvatarsController, type: :request do
               expect(response).to have_http_status('302')
             end
           end
-          context 'when S3 object delete fails' do
-            it 'does not reset avatar_img_url field'
-            it 'logs error message'
-          end
         end
         context 'if avatar_img_url field is blank' do
           it 'redirects to topic edit' do

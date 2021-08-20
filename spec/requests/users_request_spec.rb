@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Users::AvatarsController, type: :request do
+RSpec.describe UsersController, type: :request do
   describe 'GET #show', type: :request do
     subject { get user_url(@user.id) }
 
@@ -27,16 +27,30 @@ RSpec.describe Users::AvatarsController, type: :request do
           before do
             @user.update!(nickname: 'ひろき')
           end
-          it 'displays info permissioned only for owner'
+          it 'displays info permissioned only for owner' do
+            subject
+            expect(response.body).to include '購入したネタ'
+          end
           it 'returns a 200 status code' do
             subject
             expect(response).to have_http_status('200')
           end
         end
       end
-      context 'as a non-owner'
+      context 'as a non-owner' do
+        before do
+          @user = create(:user)
+        end
+        it 'does not display info permissioned only for owner' do
+          subject
+          expect(response.body).to_not include '購入したネタ'
+        end
+        it 'returns a 200 status code' do
+          subject
+          expect(response).to have_http_status('200')
+        end
+      end
     end
-
     context 'as a guest' do
       before do
         @user = create(:user)

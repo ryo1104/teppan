@@ -22,7 +22,7 @@
               </tr>
               <tr>
                 <td><b>合計</b></td>
-                <td><b><%= number_to_currency(@charge_amount, locale: 'ja') %></b></td>
+                <td><b><%= number_to_currency(@price + @ctax, locale: 'ja') %></b></td>
               </tr>
             </tbody>
           </table>

@@ -1,6 +1,8 @@
 require 'faker'
+require 'csv'
+require 'zengin_code'
 
-# 日本語のダミーデータ
+# 日本語ダミーデータ
 Faker::Config.locale = :ja
 
 # Users
@@ -10,6 +12,15 @@ Faker::Config.locale = :ja
 end
 last_user_n = User.last.id
 
+# User avatar images
+user_avatar_csv_path = Rails.root.join("db", "seeds_by_env", "dev_user_avatar_img_url.csv")
+CSV.foreach(user_avatar_csv_path, headers: true) do |row|
+  user_id = row['ID'].to_i
+  user = User.find(user_id)
+  user.update!(avatar_img_url: row['Avatar_img_url'])
+  puts "user = #{user.inspect}"
+end
+
 # Topics
 30.times do |n|
   user_id = Faker::Number.within(range: 1..last_user_n)
@@ -18,6 +29,15 @@ last_user_n = User.last.id
   puts "topic = #{topic.inspect}"
 end
 last_topic_n = Topic.last.id
+
+# Topic header images
+topic_header_csv_path = Rails.root.join("db", "seeds_by_env", "dev_topic_header_img_url.csv")
+CSV.foreach(topic_header_csv_path, headers: true) do |row|
+  topic_id = row['ID'].to_i
+  topic = Topic.find(topic_id)
+  topic.update!(header_img_url: row['Header_img_url'])
+  puts "topic = #{topic.inspect}"
+end
 
 # Netas (free)
 last_user_n.times do |n|

@@ -7,24 +7,25 @@
         <%= render partial: "layouts/breadcrumbs" %>
       </div>
       <div class="row account-show">
-      <% if @account_info['personal_info']['verification']['status'] == 'verified' %>
         <h1>ビジネスアカウント</h1>
-        <div class="account-show__balance">
-          <h2>残高</h2>
-          <%= render :partial => "balance", locals: { balance_info: @balance_info } %>
-          <% if @balance_info["available"][0]["amount"].to_i > @payout_threshold %>
-            <%= link_to '出金', new_account_payout_path(@account.id), :class => "account-show__btn btn waves-effect" %>
-          <% else %>
-            <div class="account-show__btn btn inactive">出金</div>
-          <% end %>
-        </div>
+        <% if @account_info['personal_info']['verification']['status'] == 'verified' %>
+          <div class="account-show__balance">
+            <h2>残高</h2>
+            <%= render :partial => "balance", locals: { balance_info: @balance_info } %>
+            <% if @balance_info["available"][0]["amount"].to_i > @payout_threshold %>
+              <%= link_to '出金', new_account_payout_path(@account.id), :class => "account-show__btn btn waves-effect" %>
+            <% else %>
+              <div class="account-show__btn btn inactive">出金</div>
+            <% end %>
+          </div>
+        <% end %>
         <div class="account-show__bank-account">
-          <h2>銀行口座</h2>
+          <h2>出金先 銀行口座</h2>
           <% if @account_info["bank_info"]["account_number"].present? %>
-            <%= render :partial => "bankaccount", locals: { bank_info: @account_info["bank_info"] } %>
-            <%= link_to '口座変更', edit_account_bank_path(@account.id), :class => "account-show__btn btn waves-effect" %><br>
+            <%= render :partial => "extacct", locals: { bank_info: @account_info["bank_info"] } %>
+            <%= link_to '口座変更', edit_account_extacct_path(@account.id), :class => "account-show__btn btn waves-effect" %><br>
           <% else %>
-            <%= link_to '登録', new_account_bank_path(@account.id), :class => "account-show__btn btn waves-effect" %><br>
+            <%= link_to '登録', new_account_extacct_path(@account.id), :class => "account-show__btn btn waves-effect" %><br>
           <% end %>
         </div>
         <div class="account-show__individual">
@@ -32,45 +33,30 @@
           <%= render :partial => "individual" %>
           <%= link_to '変更', edit_account_path(@account.id), :class => "account-show__btn btn waves-effect" %>&nbsp;&nbsp;
         </div>
-        <div class="account-show__terminate">
-          <%= link_to 'アカウントを削除', account_path(@account.id), {:method => :delete, :class => "account-show__terminate btn waves-effect", data: { confirm: "本当に削除しますか？" }} %>
-        </div>
-      <% else %>
-        <h1>ビジネスアカウント登録</h1>
-        <br>
-        <div class="account-show__individual">
-          <h2>お客様情報</h2>
-          <%= render :partial => "individual" %>
-          <%= link_to '変更', edit_account_path(@account.id), :class => "account-show__btn btn waves-effect" %>
-        </div><br>
-        <div class="account-show__bank-account">
-          <h2>銀行口座情報</h2>
-          <% if @account_info["bank_info"]["bank_name"].present? %>
-            <%= render :partial => "bankaccount", locals: { bank_info: @account_info["bank_info"] } %>
-            <%= link_to '口座変更', edit_account_bank_path(@account.id), :class => "account-show__btn btn waves-effect" %><br>
-          <% else %>
-            <%= link_to '登録', new_account_bank_path(@account.id), :class => "account-show__btn btn waves-effect" %><br>
-          <% end %>
-        </div><br>
         <div class="account-show__identification">
-          <h2>ご本人様確認 （運転免許証など）</h2>
+          <h2>身分証コピー </h2>
           <% if @account_info["personal_info"]["verification"]["status"] == "verified" %>
             確認済<br>
           <% else %>
             <%= render :partial => "idcard" %>
           <% end %>
-        </div><br>
-        <div class="account-show__missing-info">
-          <h2>不足情報</h2>
-          <% @account_info["requirements"]["eventually_due"].map do |pending_item| %>
-            <%= t("accounts.show."+pending_item) %><br>
-          <% end %>
-          <br>
         </div>
-        <% unless @account_info["personal_info"]["verification"]["status"] == "verified" %>
-          <%= link_to '申請を取消', account_path(@account.id), {:method => :delete, :class => "account-show__terminate btn waves-effect", data: { confirm: "本当に申請を取消しますか？" }} %><br>
+        <div class="account-show__terminate">
+          <% if @account_info["personal_info"]["verification"]["status"] == "verified" %>
+            <%= link_to 'アカウントを削除', account_path(@account.id), {:method => :delete, :class => "account-show__terminate btn waves-effect", data: { confirm: "本当に削除しますか？" }} %>
+          <% else %>
+            <%= link_to '申請を取消', account_path(@account.id), {:method => :delete, :class => "account-show__terminate btn waves-effect", data: { confirm: "本当に申請を取消しますか？" }} %><br>
+          <% end %>
+        </div>
+        <% if @account_info["requirements"]["eventually_due"].present? %>
+          <div class="account-show__missing-info">
+            <h2>不足情報</h2>
+            <% @account_info["requirements"]["eventually_due"].map do |pending_item| %>
+              <%= t("accounts.show."+pending_item) %><br>
+            <% end %>
+            <br>
+          </div>
         <% end %>
-      <% end %>
       </div>
     </div>
   </div>

@@ -1,5 +1,5 @@
 <% @page_title = "銀行口座登録" %>
-<% breadcrumb :new_bankacct, @account %>
+<% breadcrumb :new_extacct, @account %>
 <div class="page-body">
   <div class="row">
     <div class="col s12 m12 content">
@@ -8,9 +8,9 @@
       </div> 
       <div class="row bankacct-new">
         <h1>銀行口座登録</h1>
-        <%= form_with model: @ext_acct_form, method: :post, url: account_bank_path(@account.id), local: true, :class => "bankacct-form" do |form| %>
+        <%= form_with model: @ext_acct_form, method: :post, url: account_extacct_path(@account.id), local: true, :class => "bankacct-form" do |form| %>
           <% if @ext_acct_form.errors.any? %>
-            <%= render :partial => "bankaccts/errorform" %>
+            <%= render :partial => "extaccts/errorform" %>
           <% end %>
           <%= render :partial => "ext_acct_form", locals: { f: form } %>
           <div class="bankacct-form__submit">

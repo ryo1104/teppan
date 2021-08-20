@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Business::BanksController < ApplicationController
+class Business::ExtacctsController < ApplicationController
   include StripeUtils
 
   def new
@@ -8,7 +8,7 @@ class Business::BanksController < ApplicationController
     if qualified(@account.user)
       @ext_acct_form = StripeExtAccountForm.new
     else
-      redirect_to user_path(current_user.id), alert: I18n.t('controller.banks.ineligible') and return
+      redirect_to user_path(current_user.id), alert: I18n.t('controller.extaccts.ineligible') and return
     end
   end
 
@@ -20,10 +20,10 @@ class Business::BanksController < ApplicationController
     create_stripe_ext_acct
 
     if @account.update(ext_acct_id: @stripe_result[1]['id'])
-      redirect_to account_path(@account.id), notice: I18n.t('controller.banks.created') and return
+      redirect_to account_path(@account.id), notice: I18n.t('controller.extaccts.created') and return
     else
       logger.error "Active Record update returned false. stripe_result = #{@stripe_result}"
-      redirect_to account_path(@account.id), alert: I18n.t('controller.banks.not_created') and return
+      redirect_to account_path(@account.id), alert: I18n.t('controller.extaccts.not_created') and return
     end
   end
 
@@ -34,7 +34,7 @@ class Business::BanksController < ApplicationController
       @ext_acct_form = StripeExtAccountForm.new(@bank_info[1])
     else
       logger.error "get_ext_account returned false : #{@bank_info[1]}"
-      redirect_to account_path(@account.id), alert: I18n.t('controller.banks.no_info') and return
+      redirect_to account_path(@account.id), alert: I18n.t('controller.extaccts.no_info') and return
     end
   end
 
@@ -48,10 +48,10 @@ class Business::BanksController < ApplicationController
     update_stripe_ext_acct
 
     if @account.update(ext_acct_id: @new_stripe_result[1]['id'])
-      redirect_to account_path(@account.id), notice: I18n.t('controller.banks.updated') and return
+      redirect_to account_path(@account.id), notice: I18n.t('controller.extaccts.updated') and return
     else
       logger.error "Active Record update returned false. account id #{@account.id}, #{@new_stripe_result[1]}"
-      redirect_to edit_account_bank_path(@account.id), alert: I18n.t('controller.banks.not_updated') and return
+      redirect_to edit_account_bank_path(@account.id), alert: I18n.t('controller.extaccts.not_updated') and return
     end
   end
 
@@ -63,7 +63,7 @@ class Business::BanksController < ApplicationController
 
   def get_account(id)
     @account = StripeAccount.find(id)
-    redirect_to user_path(current_user.id), alert: I18n.t('controller.banks.account_non_exist') and return if @account.blank?
+    redirect_to user_path(current_user.id), alert: I18n.t('controller.extaccts.account_non_exist') and return if @account.blank?
   end
 
   def my_info(user_id)
@@ -86,7 +86,7 @@ class Business::BanksController < ApplicationController
     @stripe_bank_inputs = @ext_acct_form.create_bank_inputs
     unless @stripe_bank_inputs[0]
       logger.error "create_bank_inputs returned false. account id #{@account.id} : #{@stripe_bank_inputs[1]}"
-      redirect_to edit_account_bank_path(@account.id), alert: I18n.t('controller.banks.not_updated') and return
+      redirect_to edit_account_bank_path(@account.id), alert: I18n.t('controller.extaccts.not_updated') and return
     end
   end
 
@@ -95,7 +95,7 @@ class Business::BanksController < ApplicationController
     @stripe_result = @account.create_ext_account(@stripe_bank_inputs[1])
     unless @stripe_result[0]
       logger.error "create_ext_account returned false : #{@stripe_result[1]}"
-      redirect_to user_path(@account.user_id), alert: I18n.t('controller.banks.not_created') and return
+      redirect_to user_path(@account.user_id), alert: I18n.t('controller.extaccts.not_created') and return
     end
   end
 
@@ -108,11 +108,11 @@ class Business::BanksController < ApplicationController
       @delete_old_stripe_result = @account.delete_ext_account(@old_stripe_bank_id)
       unless @delete_old_stripe_result[0]
         logger.error "delete_ext_acct returned false. account id #{@account.id} : #{@delete_old_stripe_result[1]}"
-        redirect_to edit_account_bank_path(@account.id), alert: I18n.t('controller.banks.not_updated') and return
+        redirect_to edit_account_bank_path(@account.id), alert: I18n.t('controller.extaccts.not_updated') and return
       end
     else
       logger.error "create_ext_account returned false. account id #{@account.id} : #{@new_stripe_result[1]}"
-      redirect_to edit_account_bank_path(@account.id), alert: I18n.t('controller.banks.not_updated') and return
+      redirect_to edit_account_bank_path(@account.id), alert: I18n.t('controller.extaccts.not_updated') and return
     end
   end
 end

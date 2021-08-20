@@ -14,21 +14,13 @@ class Business::IdcardsController < ApplicationController
     render :new and return unless @idcard.valid?
 
     upload_file_to_stripe
-    @idcard.stripe_file_id = @file_upload_res['id']
-    @idcard.save!
-
-    stripe_acct_res = JSON.parse(Stripe::Account.update(@account.acct_id, @idcard.verification_docs).to_s)
-    if stripe_acct_res['id'].present?
-      redirect_to account_path(@account.id), notice: I18n.t('controller.idcards.received') and return
-    else
-      redirect_to account_path(@account.id), alert: I18n.t('controller.idcards.not_received') and return
-    end
+    record_file_id
+    update_connected_account
   end
 
   def destroy
     idcard = StripeIdcard.find(params[:id])
     account_id = idcard.stripe_account_id
-    idcard.image.purge
     idcard.destroy!
     redirect_to account_path(account_id), notice: I18n.t('controller.idcards.deleted') and return
   end
@@ -36,17 +28,28 @@ class Business::IdcardsController < ApplicationController
   private
 
   def save_params
-    params.require(:stripe_idcard).permit(:frontback, :image)
-  end
-
-  def file_to_upload
-    params[:stripe_idcard][:image]
+    params.require(:stripe_idcard).permit(:frontback)
   end
 
   def upload_file_to_stripe
-    file = file_to_upload
-    name = file.original_filename
-    @file_upload_res = @idcard.create_stripe_file(file, name)
-    redirect_to account_path(@account.id), alert: 'ご本人様確認書類の保存に失敗しました。' and return if @file_upload_res['id'].blank?
+    file = params[:stripe_idcard][:image]
+    redirect_to account_path(@account.id), alert: I18n.t('controller.idcards.no_file') and return if file.blank?
+
+    @file_upload_res = @idcard.create_stripe_file(file, file.original_filename)
+    redirect_to account_path(@account.id), alert: I18n.t('controller.idcards.not_received') and return if @file_upload_res['id'].blank?
+  end
+
+  def record_file_id
+    @idcard.stripe_file_id = @file_upload_res['id']
+    @idcard.save!
+  end
+
+  def update_connected_account
+    stripe_acct_res = JSON.parse(Stripe::Account.update(@account.acct_id, @idcard.verification_docs).to_s)
+    if stripe_acct_res['id'].present?
+      redirect_to account_path(@account.id), notice: I18n.t('controller.idcards.received') and return
+    else
+      redirect_to account_path(@account.id), alert: I18n.t('controller.idcards.not_received') and return
+    end
   end
 end

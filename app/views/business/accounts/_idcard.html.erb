@@ -4,7 +4,6 @@
       <td>
         表面： 
         <% if @frontcard.present? %>
-          <%= @frontcard.image.filename %>&nbsp;&nbsp;
           <%= link_to '削除', idcard_path(@frontcard.id), :method => :delete, :class => "account-show__btn btn waves-effect" %>
         <% else %>
           <%= link_to '登録', new_account_idcard_path(@account.id), :class => "account-show__btn btn waves-effect" %>
@@ -15,7 +14,6 @@
       <td>
         裏面： 
         <% if @backcard.present? %>
-          <%= @backcard.image.filename %>&nbsp;&nbsp;
           <%= link_to '削除', idcard_path(@backcard.id), :method => :delete, :class => "account-show__btn btn waves-effect" %>
         <% else %>
           <%= link_to '登録', new_account_idcard_path(@account.id), :class => "account-show__btn btn waves-effect" %>

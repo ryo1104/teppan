@@ -55,7 +55,7 @@ Rails.application.routes.draw do
       patch :confirm, on: :member
       resources :payouts, only: %i[new create]
       resources :idcards, only: %i[new create]
-      resource  :bank, only: %i[new create edit update]
+      resource  :extacct, only: %i[new create edit update]
     end
     resources :idcards, only: [:destroy]
     resources :bank_autocomplete, only: [:index]

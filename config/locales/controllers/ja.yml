@@ -16,7 +16,7 @@ ja:
       deleted: 'ビジネスアカウントを削除しました。'
       not_deleted: 'ビジネスアカウントを削除できませんでした。'
       not_retrieved: 'アカウント情報が取得できませんでした。'
-    banks:
+    extaccts:
       ineligible: 'ビジネスアカウントを作成するユーザー条件を満たしていません。'
       no_info: '銀行口座情報を取得できませんでした。'
       account_non_exist: 'ビジネスアカウントを先に申請して下さい。'
@@ -34,6 +34,8 @@ ja:
       received: 'ご本人様確認書類を受領しました。'
       not_received: 'ご本人様確認書類の登録に失敗しました。'
       deleted: 'ファイルを削除しました。'
+      duplicate: 'に身分証の表面・裏面を1つずつ登録してください。'
+      no_file: 'ファイルが添付されていません。'
     neta:
       created: 'ネタが投稿されました。'
       updated: 'ネタが更新されました。'
@@ -63,4 +65,6 @@ ja:
         yahoojp: 'Yahoo Japan'
         twitter: 'Twitter'
         google_oauth2: 'Google'
+      avatar:
+        blank: 'プロフィール画像は登録されていません。'
       

@@ -128,15 +128,15 @@ crumb :new_idcard do |account|
   parent :show_account, account
 end
 
-# bankacct#new
-crumb :new_bankacct do |account|
-  link '銀行口座', new_account_bank_path(account.id)
+# extacct#new
+crumb :new_extacct do |account|
+  link '銀行口座', new_account_extacct_path(account.id)
   parent :show_account, account
 end
 
 # bankacct#edit
-crumb :edit_bankacct do |account|
-  link '銀行口座', edit_account_bank_path(account.id)
+crumb :edit_extacct do |account|
+  link '銀行口座', edit_account_extacct_path(account.id)
   parent :show_account, account
 end
 

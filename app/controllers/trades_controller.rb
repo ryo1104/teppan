@@ -14,7 +14,7 @@ class TradesController < ApplicationController
   def webhook
     construct_stripe_event
     process_event
-    execute_purchase
+    execute_order
   end
 
   private
@@ -32,11 +32,10 @@ class TradesController < ApplicationController
     @buyer = current_user
     @price = @tradeable.price
     @ctax = Trade.get_ctax(@price)
-    @charge_amount = @price + @ctax
     @seller = @tradeable.user
     @seller_revenue = Trade.get_seller_revenue(@price)
-    @success_path = ENV['HOST_URL'] + tradeable_path(@tradeable)
-    @cancel_path = ENV['TRADE_CANCEL_PATH']
+    @success_path = "#{ENV['HOST_URL']}#{tradeable_path(@tradeable)}"
+    @cancel_path = "#{ENV['HOST_URL']}#{tradeable_path(@tradeable)}/trades/new"
   end
 
   def get_checkout_session
@@ -64,11 +63,11 @@ class TradesController < ApplicationController
     end
   end
 
-  def execute_purchase
-    ex_result = Trade.fulfill_order(@event['data']['object'])
+  def execute_order
+    ex_result = Trade.execute_order(@event['data']['object'])
     unless ex_result[0]
-      logger.error "Fulfill order failed. #{ex_result[1]}"
-      raise StripeUtils::StripeWebhookError, "Fulfill order failed. #{ex_result[1]}"
+      logger.error "Execute order failed. #{ex_result[1]}"
+      raise StripeUtils::StripeWebhookError, "Execute order failed. #{ex_result[1]}"
     end
   end
 end

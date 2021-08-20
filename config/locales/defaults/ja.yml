@@ -103,6 +103,7 @@ ja:
       attach_too_many: は%{attach_limit}個までです。 
       blank: を入力してください。
       confirmation: と%{attribute}の入力が一致しません。
+      duplicate: に重複した情報がすでにあります。
       empty: を入力してください。
       equal_to: は%{count}にしてください。
       even: は偶数にしてください。

@@ -5,13 +5,8 @@ class Topics::HeaderimagesController < ApplicationController
     @topic = Topic.find(params[:topic_id])
     if @topic.present?
       if @topic.header_img_url.present?
-        object = S3_BUCKET.object(@topic.header_img_url.split('amazonaws.com/')[1])
-        if object.delete
-          @topic.header_img_url = nil
-          @topic.save
-        else
-          logger.error "S3 object delete failed. Topic ID : #{@topic.id}"
-        end
+        @topic.header_img_url = nil
+        @topic.save!
       else
         logger.error "topic.header_img_url is blank. Topic ID : #{@topic.id}"
       end

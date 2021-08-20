@@ -43,7 +43,7 @@
 </div>
 <div class="user-show-contents__tab-panel">
 
-  <h2>購入ネタ(<%= @bought_netas_count %>件)</h2>
+  <h2>購入したネタ(<%= @bought_netas_count %>件)</h2>
   <% if @bought_netas_count != 0 %>
     <ul class="user-show-contents__netas collection">
       <%= render partial: "netas/neta", collection: @bought_netas %>

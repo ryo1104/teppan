@@ -5,7 +5,7 @@ class User < ApplicationRecord
 
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :confirmable,
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, #:confirmable,
          :trackable, :omniauthable, omniauth_providers: %i[google_oauth2 twitter yahoojp]
 
   has_many  :topics, -> { order('netas_count DESC') }, dependent: :destroy, inverse_of: :user

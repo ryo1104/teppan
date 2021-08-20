@@ -102,7 +102,7 @@ class Trade < ApplicationRecord
     end
   end
 
-  def self.fulfill_order(checkout_session)
+  def self.execute_order(checkout_session)
     payment_intent_obj = JSON.parse(Stripe::PaymentIntent.retrieve(checkout_session['payment_intent']).to_s)
     return [false, 'Unable to retrieve payment intent object.'] if payment_intent_obj['id'].blank?
 
