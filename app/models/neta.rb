@@ -3,16 +3,16 @@
 class Neta < ApplicationRecord
   belongs_to  :user
   belongs_to  :topic
-  counter_culture :topic
+  counter_culture :topic, column_name: proc { |model| model.private_flag? ? nil : 'netas_count' }
   has_rich_text :content
   has_rich_text :valuecontent
   has_many :reviews, dependent: :destroy
-  has_many :trades, as: :tradeable, dependent: :destroy
+  has_many :trades, as: :tradeable, dependent: :restrict_with_error
   has_many :pageviews, as: :pageviewable, dependent: :destroy
   has_many :bookmarks, as: :bookmarkable, dependent: :destroy
   has_many :rankings, as: :rankable, dependent: :destroy
   has_many :hashtag_netas, dependent: :destroy
-  has_many :hashtags, through: :hashtag_netas, dependent: :destroy
+  has_many :hashtags, through: :hashtag_netas
   validates :title, presence: true, length: { maximum: 35 }
   validates :price, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 10_000 }
   validates :private_flag, inclusion: { in: [true, false] }

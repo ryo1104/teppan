@@ -81,6 +81,65 @@ RSpec.describe Neta, type: :model do
     end
   end
 
+  describe 'Counters', type: :doing do
+    context 'Topic.netas_count column' do
+      before do
+        @topic = create(:topic, :with_user)
+        @neta = build(:neta, topic: @topic, user: user_create)
+      end
+      context 'when private_flag is true' do
+        before do
+          @neta.private_flag = true
+        end
+        it 'Topic.netas_count column is unchanged' do
+          expect { @neta.save! }.to change { @topic.netas_count }.by(0)
+        end
+        context 'but private_flag is updated to false' do
+          it 'Topic.netas_count column increments by 1' do
+            @neta.save!
+            @topic.reload
+            before_count = @topic.netas_count
+            @neta.update!(private_flag: false)
+            @topic.reload
+            after_count = @topic.netas_count
+            expect(after_count - before_count).to eq 1
+          end
+        end
+      end
+      context 'when private_flag is false' do
+        before do
+          @neta.private_flag = false
+        end
+        it 'and Neta is created, Topic.netas_count column increments by 1' do
+          @neta.save!
+          @topic.reload
+          expect(@topic.netas_count).to eq 1
+        end
+        it 'and Neta is destroyed, Topic.netas_count column decrements by 1' do
+          @neta.save!
+          @another_neta = create(:neta, topic: @topic, user: user_create, private_flag: false)
+          @topic.reload
+          before_count = @topic.netas_count
+          @neta.destroy!
+          @topic.reload
+          after_count = @topic.netas_count
+          expect(after_count - before_count).to eq(-1)
+        end
+        context 'but private_flag is updated to true' do
+          it 'Topic.netas_count column decrements by 1' do
+            @neta.save!
+            @topic.reload
+            before_count = @topic.netas_count
+            @neta.update!(private_flag: true)
+            @topic.reload
+            after_count = @topic.netas_count
+            expect(after_count - before_count).to eq(-1)
+          end
+        end
+      end
+    end
+  end
+
   describe 'method::average_rate(netas)' do
     it 'returns average review rate from multiple netas' do
       user = user_create
@@ -264,7 +323,7 @@ RSpec.describe Neta, type: :model do
     end
   end
 
-  describe 'method::save_with_hashtags', type: :doing do
+  describe 'method::save_with_hashtags' do
     subject { @neta.save_with_hashtags(@tags) }
     before do
       @neta = build(:neta, user: user_create, topic: topic_create)
@@ -321,7 +380,7 @@ RSpec.describe Neta, type: :model do
     end
   end
 
-  describe 'method::delete_with_hashtags' do
+  describe 'method::delete_with_hashtags', type: :doing do
     subject { @neta.delete_with_hashtags }
     before do
       @neta = create(:neta, user: user_create, topic: topic_create)
@@ -343,8 +402,11 @@ RSpec.describe Neta, type: :model do
       it 'returns true' do
         expect(subject).to eq true
       end
-      it 'reduces HashtagNeta count' do
+      it 'deletes associated rows in HashtagNeta' do
         expect { subject }.to change(HashtagNeta, :count).by(-2)
+      end
+      it 'does not delete the Hashtag itself' do
+        expect { subject }.to change(Hashtag, :count).by(0)
       end
     end
     context 'when associated hashtags do not exist' do
@@ -356,6 +418,9 @@ RSpec.describe Neta, type: :model do
       end
       it 'does not change HashtagNeta total count' do
         expect { subject }.to change(HashtagNeta, :count).by(0)
+      end
+      it 'does not delete the Hashtag itself' do
+        expect { subject }.to change(Hashtag, :count).by(0)
       end
     end
     context 'when ActiveRecord exception occurs' do

@@ -9,6 +9,11 @@ class Topic < ApplicationRecord
   has_many      :comments,  as: :commentable, dependent: :destroy
   has_many      :likes,     as: :likeable, dependent: :destroy
   validates     :title,     presence: true, uniqueness: { case_sensitive: true }, length: { maximum: 35 }
+  validates     :netas_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates     :pageviews_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates     :likes_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates     :bookmarks_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates     :comments_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validate      :content_check
   validate      :header_url_check
 

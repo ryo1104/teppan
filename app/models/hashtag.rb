@@ -2,7 +2,7 @@
 
 class Hashtag < ApplicationRecord
   has_many  :hashtag_netas, dependent: :destroy
-  has_many  :netas, through: :hashtag_netas, dependent: :destroy
+  has_many  :netas, through: :hashtag_netas
   has_many  :hashtag_hits, dependent: :delete_all
   validates :hashname, presence: true, uniqueness: { case_sensitive: true }, length: { maximum: 30 },
                        format: { with: /\A(?:\p{Hiragana}|\p{Katakana}|[ー－]|[a-zA-Z0-9０-９]|[一-龠々])+\z/,
@@ -17,10 +17,7 @@ class Hashtag < ApplicationRecord
   def add_hit(user)
     from = Time.zone.now - 1.day
     to = Time.zone.now
-    if hashtag_hits.where(user_id: user.id, created_at: from..to).count.zero?
-      hashtag_hits.create!(user_id: user.id)
-      increment(:hit_count, 1)
-    end
+    hashtag_hits.create!(user: user) if hashtag_hits.where(user: user, created_at: from..to).count.zero?
   end
 
   def self.fix_netacount

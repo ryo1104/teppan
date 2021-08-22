@@ -106,30 +106,42 @@ RSpec.describe Hashtag, type: :model do
     end
   end
 
-  describe 'method::add_hit' do
-    it 'adds a new record for the user if no hit exists in the last 1 day' do
-      some_user = create(:user)
-      hashtag = create(:hashtag)
-      create(:hashtag_hit, hashtag: hashtag, user: some_user, created_at: Time.zone.now - 1.day - 1.second)
-      expect { hashtag.add_hit(some_user) }.to change(HashtagHit, :count).by(1)
+  describe 'method::add_hit', type: :doing do
+    before do
+      @some_user = create(:user)
+      @hashtag = create(:hashtag)
     end
-    it 'increments hit count if no hit exists in the last 1 day' do
-      some_user = create(:user)
-      hashtag = create(:hashtag)
-      create(:hashtag_hit, hashtag: hashtag, user: some_user, created_at: Time.zone.now - 1.day - 1.second)
-      expect { hashtag.add_hit(some_user) }.to change(hashtag, :hit_count).by(1)
+    context 'if no hit exists in the last 24hrs for the hashtag-user pair' do
+      before do
+        create(:hashtag_hit, hashtag: @hashtag, user: @some_user, created_at: Time.zone.now - 1.day - 1.second)
+        @hashtag.reload
+      end
+      it 'adds a new record' do
+        expect { @hashtag.add_hit(@some_user) }.to change(HashtagHit, :count).by(1)
+      end
+      it 'increments hit counter' do
+        before_count = @hashtag.hit_count
+        @hashtag.add_hit(@some_user)
+        @hashtag.reload
+        after_count = @hashtag.hit_count
+        expect(after_count - before_count).to eq 1
+      end
     end
-    it 'does not add a new record for the user if already exists in the last 1 day' do
-      some_user = create(:user)
-      hashtag = create(:hashtag)
-      create(:hashtag_hit, hashtag: hashtag, user: some_user, created_at: Time.zone.now - 1.day + 1.second)
-      expect { hashtag.add_hit(some_user) }.to change(HashtagHit, :count).by(0)
-    end
-    it 'does not add a new record for the user if already exists in the last 1 day' do
-      some_user = create(:user)
-      hashtag = create(:hashtag)
-      create(:hashtag_hit, hashtag: hashtag, user: some_user, created_at: Time.zone.now - 1.day + 1.second)
-      expect { hashtag.add_hit(some_user) }.to change(hashtag, :hit_count).by(0)
+    context 'if a hit already exists in the last 24hrs for the hashtag-user pair' do
+      before do
+        create(:hashtag_hit, hashtag: @hashtag, user: @some_user, created_at: Time.zone.now - 1.day + 1.second)
+        @hashtag.reload
+      end
+      it 'does not add a new record' do
+        expect { @hashtag.add_hit(@some_user) }.to change(HashtagHit, :count).by(0)
+      end
+      it 'does not increment hit counter' do
+        before_count = @hashtag.hit_count
+        @hashtag.add_hit(@some_user)
+        @hashtag.reload
+        after_count = @hashtag.hit_count
+        expect(after_count - before_count).to eq 0
+      end
     end
   end
 
