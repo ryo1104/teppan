@@ -96,7 +96,7 @@ class StripeAccountForm
       return [false, 'params for :available does not exist'] if stripe_obj.key?('available') == false
       return [false, 'params for :pending does not exist'] if stripe_obj.key?('pending') == false
 
-      return [false, 'livemode is set to false'] if ENV['RAILS_ENV'] == 'production' && !(stripe_obj['livemode'])
+      # return [false, 'livemode is set to false'] if ENV['RAILS_ENV'] == 'production' && !(stripe_obj['livemode'])
 
       [true, nil]
     else

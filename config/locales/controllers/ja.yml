@@ -67,4 +67,6 @@ ja:
         google_oauth2: 'Google'
       avatar:
         blank: 'プロフィール画像は登録されていません。'
+      profile:
+        updated: 'プロフィールを更新しました。'
       

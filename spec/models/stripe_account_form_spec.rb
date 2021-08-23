@@ -505,12 +505,12 @@ RSpec.describe StripeAccountForm, type: :model do
         result = StripeAccountForm.check_results(@stripe_bal_obj)
         expect(result).to match [false, 'params for :pending does not exist']
       end
-      it 'returns false when livemode is off' do
-        allow(ENV).to receive(:[]).and_call_original # necessary
-        allow(ENV).to receive(:[]).with('RAILS_ENV').and_return('production')
-        result = StripeAccountForm.check_results(@stripe_bal_obj)
-        expect(result).to match [false, 'livemode is set to false']
-      end
+      # it 'returns false when livemode is off' do
+      #   allow(ENV).to receive(:[]).and_call_original # necessary
+      #   allow(ENV).to receive(:[]).with('RAILS_ENV').and_return('production')
+      #   result = StripeAccountForm.check_results(@stripe_bal_obj)
+      #   expect(result).to match [false, 'livemode is set to false']
+      # end
       it 'returns true otherwise' do
         result = StripeAccountForm.check_results(@stripe_bal_obj)
         expect(result).to match [true, nil]
