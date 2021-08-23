@@ -7,7 +7,8 @@ class UsersController < ApplicationController
     get_user(params[:id])
     get_posted_info
     if my_page
-      redirect_to edit_user_path(@user.id) if @user.nickname.blank?
+      redirect_to edit_user_path(@user.id) and return if @user.nickname.blank?
+
       get_draft_info
       get_bookmarked_info
       get_traded_info
@@ -18,20 +19,18 @@ class UsersController < ApplicationController
 
   def edit
     get_user(params[:id])
-    redirect_to user_path(@user.id), alert: '権限がありません。' and return unless my_page
+    redirect_to user_path(@user.id), alert: I18n.t('controller.general.no_access') and return unless my_page
   end
 
   def update
     get_user(params[:id])
-    if my_page
-      @user.purge_s3_object if update_params[:avatar_img_url].present?
-      if @user.update(update_params)
-        redirect_to user_path(@user.id), notice: 'プロフィールを更新しました。' and return
-      else
-        render :edit
-      end
+    redirect_to user_path(@user.id), alert: I18n.t('controller.general.no_access') and return unless my_page
+
+    @user.purge_s3_object if update_params[:avatar_img_url].present?
+    if @user.update(update_params)
+      redirect_to user_path(@user.id), notice: I18n.t('controller.user.profile.updated') and return
     else
-      redirect_to user_path(@user.id), alert: '権限がありません。' and return
+      render :edit
     end
   end
 
