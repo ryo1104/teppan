@@ -1,6 +1,20 @@
 .trade-new {
   &__items {
-    margin-bottom: 2rem;
+    margin: 2rem;
+  }
+  
+  &__table {
+    &-row {
+      &-total {
+        font-weight: bold;
+      }
+    }
+    &-column1 {
+      
+    }
+    &-column2 {
+      text-align: right;
+    }
   }
   
   &__button {

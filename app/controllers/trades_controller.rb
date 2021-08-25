@@ -33,7 +33,7 @@ class TradesController < ApplicationController
     @price = @tradeable.price
     @ctax = Trade.get_ctax(@price)
     @seller = @tradeable.user
-    @seller_revenue = Trade.get_seller_revenue(@price)
+    @seller_revenue = Trade.get_seller_revenue(@price + @ctax)
     @success_path = "#{ENV['HOST_URL']}#{tradeable_path(@tradeable)}"
     @cancel_path = "#{ENV['HOST_URL']}#{tradeable_path(@tradeable)}/trades/new"
   end
@@ -47,12 +47,6 @@ class TradesController < ApplicationController
     endpoint_secret = ENV['STRIPE_WEBHOOK_SECRET']
     sig_header = request.env['HTTP_STRIPE_SIGNATURE']
     @event = JSON.parse(Stripe::Webhook.construct_event(payload, sig_header, endpoint_secret).to_s)
-  rescue JSON::ParserError
-    render status: :bad_request  # Invalid payload
-    nil
-  rescue Stripe::SignatureVerificationError
-    render status: :bad_request  # Invalid signature
-    nil
   end
 
   def process_event

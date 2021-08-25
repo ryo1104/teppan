@@ -10,19 +10,19 @@
       <div class="row trade-new">      
         <h1>ネタを購入</h1>
         <div class="trade-new__items">
-          <table class="striped">
+          <table class="trade-new__table">
             <tbody>
-              <tr>
-                <td><%= @tradeable.title %></td>
-                <td><%= number_to_currency(@price, locale: 'ja') %></td>
+              <tr class="trade-new__table-row">
+                <td class="trade-new__table-column1">ネタ名「<%= @tradeable.title %>」</td>
+                <td class="trade-new__table-column2"><%= number_to_currency(@price, locale: 'ja') %></td>
               </tr>
-              <tr>
-                <td>消費税</td>
-                <td><%= number_to_currency(@ctax, locale: 'ja') %></td>
+              <tr class="trade-new__table-row">
+                <td class="trade-new__table-column1">消費税</td>
+                <td class="trade-new__table-column2"><%= number_to_currency(@ctax, locale: 'ja') %></td>
               </tr>
-              <tr>
-                <td><b>合計</b></td>
-                <td><b><%= number_to_currency(@price + @ctax, locale: 'ja') %></b></td>
+              <tr class="trade-new__table-row-total">
+                <td class="trade-new__table-column1">合計</td>
+                <td class="trade-new__table-column2"><%= number_to_currency(@price + @ctax, locale: 'ja') %></td>
               </tr>
             </tbody>
           </table>

@@ -35,7 +35,10 @@ Rambulance.setup do |config|
     # "Pundit::NotAuthorizedError"    => :forbidden,
     # "YourCustomException"           => :not_found
     'ErrorUtils::AccessDeniedError' => :forbidden,
-    'StripeUtils::StripeWebhookError' => :bad_request
+    'StripeUtils::StripeWebhookError' => :bad_request,
+    'ActionView::MissingTemplate' => :not_found,
+    'JSON::ParserError' => :bad_request,
+    'Stripe::SignatureVerificationError' => :bad_request
   }
 
   # The template name for the layout of the error pages. The default value is

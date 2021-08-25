@@ -76,13 +76,13 @@ RSpec.describe Trade, type: :model do
 
   describe 'method::get_seller_revenue(amount)' do
     it 'returns sellers amount with platform fee deducted' do
-      expect(Trade.get_seller_revenue(100)).to eq 85
+      expect(Trade.get_seller_revenue(100)).to eq 75
     end
     it 'returns error when amount is nil' do
-      expect { Trade.get_seller_revenue(nil) }.to raise_error(ArgumentError, 'amount is nil.')
+      expect { Trade.get_seller_revenue(nil) }.to raise_error(ArgumentError, 'total_amount is nil.')
     end
     it 'returns error when amount is non integer' do
-      expect { Trade.get_seller_revenue('60') }.to raise_error(ArgumentError, 'amount is not a integer.')
+      expect { Trade.get_seller_revenue('60') }.to raise_error(ArgumentError, 'total_amount is not a integer.')
     end
   end
 

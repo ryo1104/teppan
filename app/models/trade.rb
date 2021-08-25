@@ -18,15 +18,25 @@ class Trade < ApplicationRecord
     end
   end
 
-  def self.get_seller_revenue(amount)
-    if amount.present?
-      if amount.is_a?(Integer)
-        (amount * (1 - 0.15)).floor
+  # Buyer pays neta price + 10% tax.
+  # Seller gets 75% of above tax inclusive amount.
+  # Fee is split into Stripe fee 3-4%, and remaining to Teppan.
+  # <Example>
+  #  Price excluding tax : 100
+  #  Tax : 10 = 100 * 10%
+  #  Seller revenue : 82 = 110 * 75%
+  #  Fee : 18 = 100 - 82
+  #    Stripe fee : 4 = 110 * 4%
+  #    Income to Teppan : 14 = 18 - 4
+  def self.get_seller_revenue(total_amount)
+    if total_amount.present?
+      if total_amount.is_a?(Integer)
+        (total_amount * 0.75).floor
       else
-        raise ArgumentError, 'amount is not a integer.'
+        raise ArgumentError, 'total_amount is not a integer.'
       end
     else
-      raise ArgumentError, 'amount is nil.'
+      raise ArgumentError, 'total_amount is nil.'
     end
   end
 
@@ -58,7 +68,8 @@ class Trade < ApplicationRecord
                                  name: tradeable.title,
                                  amount: tradeable.price,
                                  currency: 'jpy',
-                                 quantity: 1
+                                 quantity: 1,
+                                 tax_rates: ['txr_1JSHEcEThOtNwrS9iC7arZxH']
                                }
                              ],
                              metadata: {
@@ -121,17 +132,18 @@ class Trade < ApplicationRecord
     return [false, 'Unable to retrieve charges object.'] if payment_intent_obj['charges']['data'][0].blank?
 
     charge_obj = payment_intent_obj['charges']['data'][0]
+
     seller_info = Trade.get_seller_info(charge_obj)
     return [false, "Failed to get seller info. #{seller_info[1]}"] unless seller_info[0]
 
     buyer_info = Trade.get_buyer_info(checkout_session)
     return [false, "Failed to get buyer info. #{buyer_info[1]}"] unless buyer_info[0]
 
-    neta_info = Trade.get_neta_id(checkout_session)
-    return [false, "Failed to get neta_id. #{neta_info[1]}"] unless neta_info[0]
+    neta_info = Trade.get_neta_info(checkout_session)
+    return [false, "Failed to get neta info. #{neta_info[1]}"] unless neta_info[0]
 
-    trade_amount = Trade.create_trade_amounts(charge_obj)
-    return [false, trade_amount[1]] unless trade_amount[0]
+    trade_amount = Trade.parse_trade_amounts(charge_obj, checkout_session)
+    return [false, "Failed to get trade amounts. #{trade_amount[1]}"] unless trade_amount[0]
 
     trade_params = { tradeable_type: 'Neta', tradeable_id: neta_info[1], buyer_id: buyer_info[1].id, seller_id: seller_info[1].id,
                      stripe_ch_id: charge_obj['id'], stripe_pi_id: payment_intent_obj['id'] }
@@ -167,7 +179,7 @@ class Trade < ApplicationRecord
     [true, buyer]
   end
 
-  def self.get_neta_id(checkout_session)
+  def self.get_neta_info(checkout_session)
     if checkout_session['metadata'].key?('neta_id')
       if checkout_session['metadata']['neta_id'].present?
         [true, checkout_session['metadata']['neta_id']]
@@ -179,16 +191,25 @@ class Trade < ApplicationRecord
     end
   end
 
-  def self.create_trade_amounts(charge_obj)
-    return [false, 'Amount does not exist in charge object.'] unless charge_obj.key?('amount')
+  def self.parse_trade_amounts(charge_obj, checkout_session)
+    inputs_exist = trade_inputs_exist(charge_obj, checkout_session)
+    return [false, inputs_exist[1]] unless inputs_exist[0]
 
-    price = charge_obj['amount'].to_i
-    return [false, 'Unable to get price.'] if price.blank?
-    return [false, 'Price is not positive.'] unless price.positive?
+    price = checkout_session['amount_subtotal'].to_i
+    return [false, 'Price is zero or negative.'] unless price.positive?
 
-    seller_revenue = Trade.get_seller_revenue(price)
+    seller_revenue = charge_obj['transfer_data']['amount'].to_i
+    return [false, 'Seller revenue is zero or negative.'] unless seller_revenue.positive?
+
     fee = price - seller_revenue
-    c_tax = Trade.get_ctax(price)
+    return [false, 'Fee is zero or negative.'] unless fee.positive?
+
+    c_tax = checkout_session['total_details']['amount_tax'].to_i
+    return [false, 'Tax is zero or negative.'] unless c_tax.positive?
+
+    balance_check = checkout_session['amount_total'].to_i - seller_revenue - fee - c_tax
+    return [false, 'amounts do not balance.'] unless balance_check.zero?
+
     [true, { price: price, seller_revenue: seller_revenue, fee: fee, c_tax: c_tax }]
   end
 
@@ -245,5 +266,18 @@ class Trade < ApplicationRecord
     end
   end
 
-  private_class_method :sold_netas_details, :collect_ids
+  def self.trade_inputs_exist(charge_obj, checkout_session)
+    return [false, 'Amount subtotal does not exist in checkout_session.'] unless checkout_session.key?('amount_subtotal')
+    return [false, 'Amount subtotal is blank.'] if checkout_session['amount_subtotal'].blank?
+    return [false, 'Transfer data does not exist in charge_obj.'] unless charge_obj.key?('transfer_data')
+    return [false, 'Transfer amount does not exist in charge_obj.'] unless charge_obj['transfer_data'].key?('amount')
+    return [false, 'Transfer amount is blank.'] if charge_obj['transfer_data']['amount'].blank?
+    return [false, 'Total details does not exist in checkout_session.'] unless checkout_session.key?('total_details')
+    return [false, 'Amount tax does not exist in checkout_session.'] unless checkout_session['total_details'].key?('amount_tax')
+    return [false, 'Amount tax is blank.'] if checkout_session['total_details']['amount_tax'].blank?
+
+    [true, nil]
+  end
+
+  private_class_method :sold_netas_details, :collect_ids, :trade_inputs_exist
 end
