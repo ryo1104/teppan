@@ -44,10 +44,10 @@ ja:
       uneditable: 'このネタに関連するデータがすでに存在するため、編集できません。'
       undeleteable: 'このネタに関連するデータがすでに存在するため、削除できません。'
     payouts:
-      account_non_exist: 'ビジネスアカウントを先に申請して下さい。'
+      created: '出金を承りました。'
       no_bank_info: '振込先口座情報が取得できませんでした。'
       no_payout: '出金処理は中断されました。管理者にお問い合わせ下さい。'
-      record_not_saved: '出金処理に一部エラーが発生しています。管理者にお問い合わせ下さい。'
+      record_not_saved: '出金処理が中断されました。管理者にお問い合わせ下さい。'
       balance_not_retrieved: '出金可能残高を取得できませんでした。'
     topic:
       created: 'トピックが作成されました。'

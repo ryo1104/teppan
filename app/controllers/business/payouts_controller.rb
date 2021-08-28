@@ -4,70 +4,63 @@ class Business::PayoutsController < ApplicationController
   include StripeUtils
 
   def new
-    get_account(params[:account_id])
-    redirect_to user_path(current_user.id), alert: I18n.t('controller.general.no_access') and return unless my_info(@account.user.id)
+    res_accts = get_accounts
+    redirect_to user_path(current_user.id), alert: res_accts[1] and return unless res_accts[0]
 
-    get_bank_info
-    get_balance
+    res_amounts = get_amounts
+    redirect_to account_path(@account.id), alert: res_amounts[1] and return unless res_amounts[0]
   end
 
   def create
-    get_account(params[:account_id])
-    redirect_to user_path(current_user.id), alert: I18n.t('controller.general.no_access') and return unless my_info(@account.user.id)
+    res_accts = get_accounts
+    redirect_to user_path(current_user.id), alert: res_accts[1] and return unless res_accts[0]
 
-    get_bank_info
-    create_stripe_payout
-    create_payout_record
+    res_create = create_payout
+    redirect_to new_account_payout_path(@account.id), alert: res_create[1] and return unless res_create[0]
   end
 
   private
 
-  def get_account(id)
-    @account = StripeAccount.find(id)
-    redirect_to user_path(current_user.id), alert: I18n.t('controller.payouts.account_non_exist') and return if @account.blank?
+  def my_account
+    current_user.id == @account.user_id
   end
 
-  def get_bank_info
-    @bank_info = @account.get_ext_account
-    redirect_to new_account_payout_path(@account.id), alert: I18n.t('controller.payouts.no_bank_info') and return unless @bank_info[0]
-  end
-
-  def get_balance
-    @balance = @account.get_balance
-    redirect_to user_path(current_user.id), alert: I18n.t('controller.payouts.balance_not_retrieved') and return unless @balance[0]
-  end
-
-  def payout_amount
+  def payout_params
     params.permit(:account_id, :amount)
   end
 
-  def my_info(user_id)
-    if current_user.id == user_id
-      true
-    else
-      raise ErrorUtils::AccessDeniedError, "current_user.id : #{current_user.id} is accessing account info for user_id : #{user_id}"
-    end
+  def get_accounts
+    @account = StripeAccount.find(params[:account_id])
+    return [false, I18n.t('controller.general.no_access')] unless my_account
+
+    @bank_info = @account.get_ext_account
+    return [false, I18n.t('controller.payouts.no_bank_info')] unless @bank_info[0]
+
+    [true, nil]
   end
 
-  def create_stripe_payout
-    if payout_amount[:amount]
-      @stripe_payout = StripePayout.create_stripe_payout(payout_amount[:amount], @account.acct_id)
-      unless @stripe_payout[0]
-        logger.error "Stripe Payout returned error. account_id : #{@account.id}, stripe_response : #{@stripe_payout[1]}"
-        redirect_to new_account_payout_path(@account.id), alert: I18n.t('controller.payouts.no_payout') and return
-      end
-    else
-      redirect_to new_account_payout_path(@account.id), alert: I18n.t('controller.general.unknown') and return
-    end
+  def get_amounts
+    @balance = @account.get_balance
+    return [false, I18n.t('controller.payouts.balance_not_retrieved')] unless @balance[0]
+
+    [true, nil]
   end
 
-  def create_payout_record
-    @payout = StripePayout.new(stripe_account_id: @account.id, payout_id: @stripe_payout[1]['id'], amount: @stripe_payout[1]['amount'].to_i)
-    if @payout.save
-      @message = '銀行振込を受付けました。'
+  def create_payout
+    @stripe_payout = StripePayout.create_stripe_payout(payout_params[:amount].to_i, @account.acct_id)
+    unless @stripe_payout[0]
+      logger.error "Stripe Payout returned error. account_id : #{@account.id}, stripe_response : #{@stripe_payout[1]}"
+      return [false, I18n.t('controller.payouts.no_payout')]
+    end
+
+    @payout_ar = StripePayout.new(stripe_account_id: @account.id, payout_id: @stripe_payout[1]['id'],
+                                  amount: @stripe_payout[1]['amount'].to_i)
+    if @payout_ar.save
+      flash[:notice] = I18n.t('controller.payouts.created')
+      [true, nil]
     else
       logger.error "Failed to save StripePayout record : acct_id : #{@account.id}, payout_id : #{@stripe_payout[1]['id']}"
-      redirect_to user_path(@user.id), alert: I18n.t('controller.payouts.record_not_saved') and return
+      [false, I18n.t('controller.payouts.record_not_saved')]
     end
   end
 end

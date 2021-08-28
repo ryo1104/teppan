@@ -11,8 +11,8 @@
         <%= form_with url: account_payouts_path(@account.id), local: true, method: :post, :class => "payout-new__form" do |f| %>
           <%= render :partial => "business/accounts/balance", locals: { balance_info: @balance[1] } %>
           <% if @bank_info[1]["account_number"].present? %>
-            <%= render :partial => "business/accounts/bankaccount", locals: { bank_info: @bank_info[1] } %>
-            <%= link_to '口座変更', edit_account_bank_path(@account.id), :class => "payout-new__submit btn waves-effect" %><br>
+            <%= render :partial => "business/accounts/extacct", locals: { bank_info: @bank_info[1] } %>
+            <%= link_to '口座変更', edit_account_extacct_path(@account.id), :class => "payout-new__submit btn waves-effect" %><br>
           <% end %><br><br>
           <table class="highlight">
             <tbody>
@@ -22,7 +22,7 @@
               </tr>
             </tbody>
           </table>
-          <% if @balance[1]["available"][0]["amount"].to_i > 1000 %>
+          <% if @balance[1]["available"][0]["amount"].to_i > 10 %>
             <%= f.submit "出金実行", data: {disable_with: '処理中...'}, :class => "payout-new__submit btn waves-effect" %>
           <% else %>
             <div class="payout-new__btn btn inactive">出金実行</div>
