@@ -452,7 +452,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe 'method::followed_by(user_id)', type: :doing do
+  describe 'method::followed_by(user_id)' do
     before do
       @user = create(:user)
       @follower = create(:user)

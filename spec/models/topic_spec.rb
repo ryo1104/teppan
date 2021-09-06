@@ -174,7 +174,7 @@ RSpec.describe Topic, type: :model do
     end
   end
 
-  describe 'method::purge_s3_object', type: :doing do
+  describe 'method::purge_s3_object' do
     it 'returns true even if header image does not exist' do
       topic = create(:topic, :with_user, header_img_url: nil)
       expect(topic.purge_s3_object).to eq true

@@ -35,20 +35,20 @@ RSpec.describe Neta, type: :model do
       neta.valid?
       expect(neta.errors[:title]).to include('は35文字以内で入力してください。')
     end
-    it 'is invalid if content is longer than 300 characters' do
-      neta = build(:neta, content: Faker::Lorem.characters(number: 301), user: user_create, topic: topic_create)
+    it 'is invalid if content is longer than 1200 characters' do
+      neta = build(:neta, content: Faker::Lorem.characters(number: 1201), user: user_create, topic: topic_create)
       neta.valid?
-      expect(neta.errors[:content]).to include('は300字以内で入力してください。')
+      expect(neta.errors[:content]).to include('は1200字以内で入力してください。')
     end
     it 'is invalid if valuecontent exists but price is zero' do
-      neta = build(:neta, content: Faker::Lorem.characters(number: 300), price: 0, valuecontent: Faker::Lorem.characters(number: 301), user: user_create, topic: topic_create)
+      neta = build(:neta, content: Faker::Lorem.characters(number: 300), price: 0, valuecontent: Faker::Lorem.characters(number: 300), user: user_create, topic: topic_create)
       neta.valid?
       expect(neta.errors[:valuecontent]).to include('は価格０では入力できません。')
     end
-    it 'is invalid if valuecontent is longer than 300 characters' do
-      neta = build(:neta, content: Faker::Lorem.characters(number: 300), price: 100, valuecontent: Faker::Lorem.characters(number: 301), user: user_create, topic: topic_create)
+    it 'is invalid if valuecontent is longer than 1200 characters' do
+      neta = build(:neta, content: Faker::Lorem.characters(number: 1200), price: 100, valuecontent: Faker::Lorem.characters(number: 1201), user: user_create, topic: topic_create)
       neta.valid?
-      expect(neta.errors[:valuecontent]).to include('は300字以内で入力してください。')
+      expect(neta.errors[:valuecontent]).to include('は1200字以内で入力してください。')
     end
     it 'is invalid without a price' do
       neta = build(:neta, user: user_create, topic: topic_create, price: nil)
@@ -81,7 +81,7 @@ RSpec.describe Neta, type: :model do
     end
   end
 
-  describe 'Counters', type: :doing do
+  describe 'Counters' do
     context 'Topic.netas_count column' do
       before do
         @topic = create(:topic, :with_user)
@@ -380,7 +380,7 @@ RSpec.describe Neta, type: :model do
     end
   end
 
-  describe 'method::delete_with_hashtags', type: :doing do
+  describe 'method::delete_with_hashtags' do
     subject { @neta.delete_with_hashtags }
     before do
       @neta = create(:neta, user: user_create, topic: topic_create)

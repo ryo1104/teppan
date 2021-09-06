@@ -75,7 +75,7 @@ $('.js-review-new__star').raty({
   half     : false,
   precision:   false,
   // size     : 32,
-  hints: ['1 : どゆこと？', '2 : つまらん', '3 : 面白い', '4 : ワロタ！', '5 : 殿堂入り！'],
+  hints: ['1 : どゆこと？', '2 : なるほど', '3 : 面白い', '4 : ワロタ！', '5 : 殿堂入り！'],
   starHalf : halfStar,
   starOff  : offStar,
   starOn   : onStar,

@@ -178,7 +178,7 @@ class Neta < ApplicationRecord
 
   def content_check
     errors.add(:content, I18n.t('errors.messages.blank')) if content.body.blank?
-    errors.add(:content, 'は300字以内で入力してください。') if content.to_plain_text.squish.length > 300
+    errors.add(:content, 'は1200字以内で入力してください。') if content.to_plain_text.squish.length > 1200
     # Need attachment checks. Below does not work because at this point blob is not attached..
     # self.content.embeds.blobs.each do |blob|
     #   if blob.byte_size.to_i > 10.megabytes
@@ -190,7 +190,7 @@ class Neta < ApplicationRecord
   def valuecontent_check
     if price != 0
       errors.add(:valuecontent, 'を入力してください。') if valuecontent.body.blank?
-      errors.add(:valuecontent, 'は300字以内で入力してください。') if valuecontent.to_plain_text.squish.length > 300
+      errors.add(:valuecontent, 'は1200字以内で入力してください。') if valuecontent.to_plain_text.squish.length > 1200
       # Need attachment checks. Below does not work because at this point blob is not attached..
       # self.valuecontent.embeds.blobs.each do |blob|
       #   if blob.byte_size.to_i > 10.megabytes

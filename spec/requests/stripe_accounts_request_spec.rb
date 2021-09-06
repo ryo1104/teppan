@@ -1,706 +1,658 @@
 require 'rails_helper'
 
 RSpec.describe Business::AccountsController, type: :request do
-  # let(:user_create)             { FactoryBot.create(:user) }
-  # let(:test_stripe_acct_id)     { 'acct_1EUtQQBImRhqCMSQ' }
-  # let(:good_input)              do
-  #   {
-  #     'last_name_kanji' => '山田',
-  #     'last_name_kana' => 'ヤマダ',
-  #     'first_name_kanji' => '賢介',
-  #     'first_name_kana' => 'ケンスケ',
-  #     'gender' => '男性',
-  #     'email' => 'kenske@hoge.com',
-  #     'birthdate(1i)' => 1977,
-  #     'birthdate(2i)' => 5,
-  #     'birthdate(3i)' => 24,
-  #     'postal_code' => '1010021',
-  #     'state' => '東京都',
-  #     'city' => '千代田区',
-  #     'town' => '外神田２丁目',
-  #     'kanji_line1' => '１５−２−２０１',
-  #     'kanji_line2' => '大山ビル',
-  #     'kana_line1' => '15-2-201',
-  #     'kana_line2' => 'ｵｵﾔﾏﾋﾞﾙ',
-  #     'phone' => '+81376332219',
-  #     'user_agreement' => 'false'
-  #   }
-  # end
-  # let(:filtered_good_params) do
-  #   {
-  #     business_type: 'individual',
-  #     individual: {
-  #       last_name: '山田',
-  #       last_name_kanji: '山田',
-  #       last_name_kana: 'ヤマダ',
-  #       first_name: '賢介',
-  #       first_name_kanji: '賢介',
-  #       first_name_kana: 'ケンスケ',
-  #       gender: '男性',
-  #       dob: { year: '1977', month: '5', day: '24' },
-  #       address_kanji: {
-  #         postal_code: '1010021',
-  #         state: '東京都',
-  #         city: '千代田区',
-  #         town: '外神田２丁目',
-  #         line1: '１５−２−２０１',
-  #         line2: '大山ビル'
-  #       },
-  #       address_kana: {
-  #         line1: '15-2-201',
-  #         line2: 'オオヤマビル'
-  #       },
-  #       phone: '+81376332219',
-  #       email: 'kenske@hoge.com'
-  #     },
-  #     type: 'custom',
-  #     country: 'JP'
-  #   }
-  # end
-  # let(:account_info_hash) do
-  #   { 'id' => 'acct_1EUtQQBImRhqCMSQ',
-  #     'personal_info' =>
-  #     { 'last_name_kanji' => '山田',
-  #       'last_name_kana' => 'ヤマダ',
-  #       'first_name_kanji' => '賢介',
-  #       'first_name_kana' => 'ケンスケ',
-  #       'gender' => '男性',
-  #       'email' => 'kenske@hoge.com',
-  #       'dob' => { 'year' => 1977, 'month' => 5, 'day' => 24 },
-  #       'postal_code' => '1010021',
-  #       'kanji_state' => '東京都',
-  #       'kanji_city' => '千代田区',
-  #       'kanji_town' => '外神田２丁目',
-  #       'kanji_line1' => '１５−２−２０１',
-  #       'kanji_line2' => '大山ビル',
-  #       'kana_state' => 'ﾄｳｷﾖｳﾄ',
-  #       'kana_city' => 'ﾁﾖﾀﾞｸ',
-  #       'kana_town' => 'ｿﾄｶﾝﾀﾞ 2-',
-  #       'kana_line1' => '15-2-201',
-  #       'kana_line2' => 'ｵｵﾔﾏﾋﾞﾙ',
-  #       'phone' => '+81376332219',
-  #       'verification' =>
-  #       { 'additional_document' => { 'back' => nil, 'details' => nil, 'details_code' => nil, 'front' => nil },
-  #         'details' => 'Provided identity information could not be verified',
-  #         'details_code' => 'failed_keyed_identity',
-  #         'document' => { 'back' => nil, 'details' => 'Scan failed', 'details_code' => nil, 'front' => nil },
-  #         'status' => 'unverified' } },
-  #     'tos_acceptance' => { 'date' => 1_566_575_169, 'ip' => '202.32.34.208', 'user_agent' => nil },
-  #     'bank_info' => { 'bank_name' => nil, 'branch_name' => nil, 'account_number' => nil, 'account_holder_name' => nil },
-  #     'payouts_enabled' => false,
-  #     'requirements' =>
-  #     { 'current_deadline' => nil, 'currently_due' => [], 'disabled_reason' => 'rejected.other', 'eventually_due' => [], 'past_due' => [], 'pending_verification' => [] } }
-  # end
-  # let(:created_acct_info_hash) do
-  #   {
-  #     'id' => 'acct_' + Faker::Lorem.characters(number: 16),
-  #     'personal_info' => {
-  #       'verification' => {
-  #         'details' => nil,
-  #         'details_code' => nil,
-  #         'document' => { 'back' => nil, 'details' => nil, 'details_code' => nil, 'front' => nil },
-  #         'status' => 'pending'
-  #       }
-  #     }
-  #   }
-  # end
-  # let(:stripe_balance_obj) do
-  #   {
-  #     'object' => 'balance',
-  #     'available' => [{ 'amount' => 0, 'currency' => 'jpy', 'source_types' => { 'card' => 0 } }],
-  #     'livemode' => false,
-  #     'pending' => [{ 'amount' => 0, 'currency' => 'jpy', 'source_types' => { 'card' => 0 } }]
-  #   }
-  # end
-  # let(:stripe_delete_success) { { 'account' => { 'id' => test_stripe_acct_id, 'object' => 'account', 'deleted' => true } } }
-  # # render_views
+  let(:user_create) { create(:user) }
+  let(:confirm_params_new) do
+    {
+      'mode' => 'new',
+      'stripe_account_form' => {
+        'last_name_kanji' => '渡部',
+        'last_name_kana' => 'ワタベ',
+        'first_name_kanji' => '愛子',
+        'first_name_kana' => 'アイコ',
+        'gender' => 'female',
+        'dob' => '1991-04-20',
+        'postal_code' => '1060032',
+        'kanji_state' => '東京都',
+        'kanji_city' => '港区',
+        'kanji_town' => '六本木',
+        'kanji_line1' => '7-7-7',
+        'kanji_line2' => 'TRI-SEVEN ROPPONGI 13F',
+        'kana_line1' => '7-7-7',
+        'kana_line2' => 'TRI-SEVEN ROPPONGI 13F',
+        'email' => 'kali.howe@johnston.biz',
+        'phone' => '03-3122-8876',
+        'verification' => '1'
+      },
+      'commit' => '確認画面へ'
+    }
+  end
+  let(:confirm_params_edit) do
+    {
+      'mode' => 'edit',
+      'stripe_account_form' => {
+        'last_name_kanji' => '渡部',
+        'last_name_kana' => 'ワタベ',
+        'first_name_kanji' => '愛子',
+        'first_name_kana' => 'アイコ',
+        'gender' => 'female',
+        'dob' => '1991-04-20',
+        'postal_code' => '1060032',
+        'kanji_state' => '東京都',
+        'kanji_city' => '港区',
+        'kanji_town' => '六本木',
+        'kanji_line1' => '7-7-7',
+        'kanji_line2' => 'TRI-SEVEN ROPPONGI 13F',
+        'kana_line1' => '7-7-7',
+        'kana_line2' => 'TRI-SEVEN ROPPONGI 13F',
+        'email' => 'kali.howe@johnston.biz',
+        'phone' => '03-3122-8876',
+        'verification' => '1'
+      },
+      'commit' => '確認画面へ'
+    }
+  end
+  let(:create_params) do
+    {
+      'stripe_account_form' => {
+        'last_name_kanji' => '渡部',
+        'last_name_kana' => 'ワタベ',
+        'first_name_kanji' => '愛子',
+        'first_name_kana' => 'アイコ',
+        'gender' => 'female',
+        'dob' => '1991-04-20',
+        'postal_code' => '1060032',
+        'kanji_state' => '東京都',
+        'kanji_city' => '港区',
+        'kanji_town' => '六本木',
+        'kanji_line1' => '7-7-7',
+        'kanji_line2' => 'TRI-SEVEN ROPPONGI 13F',
+        'kana_line1' => '7-7-7',
+        'kana_line2' => 'TRI-SEVEN ROPPONGI 13F',
+        'email' => 'kali.howe@johnston.biz',
+        'phone' => '03-3122-8876',
+        'verification' => '1'
+      }
+    }
+  end
+  let(:update_params) do
+    {
+      'stripe_account_form' => {
+        'last_name_kanji' => '渡部',
+        'last_name_kana' => 'ワタベ',
+        'first_name_kanji' => '愛子',
+        'first_name_kana' => 'アイコ',
+        'gender' => 'female',
+        'dob' => '1991-04-20',
+        'postal_code' => '1060032',
+        'kanji_state' => '東京都',
+        'kanji_city' => '渋谷区',
+        'kanji_town' => '桜丘町',
+        'kanji_line1' => '20-1',
+        'kanji_line2' => '渋谷インフォスタワー6F',
+        'kana_line1' => '20-1',
+        'kana_line2' => 'シブヤインフォスタワー6F',
+        'email' => 'kali.howe@johnston.biz',
+        'phone' => '03-3122-8876',
+        'verification' => '1'
+      }
+    }
+  end
+  let(:invalid_params) do  # last_name_kana is blank
+    {
+      'stripe_account_form' => {
+        'last_name_kanji' => '渡部',
+        'last_name_kana' => '',
+        'first_name_kanji' => '愛子',
+        'first_name_kana' => 'アイコ',
+        'gender' => 'female',
+        'dob' => '1991-04-20',
+        'postal_code' => '1060032',
+        'kanji_state' => '東京都',
+        'kanji_city' => '港区',
+        'kanji_town' => '六本木',
+        'kanji_line1' => '7-7-7',
+        'kanji_line2' => 'TRI-SEVEN ROPPONGI 13F',
+        'kana_line1' => '7-7-7',
+        'kana_line2' => 'TRI-SEVEN ROPPONGI 13F',
+        'email' => 'kali.howe@johnston.biz',
+        'phone' => '03-3122-8876',
+        'verification' => '1'
+      }
+    }
+  end
+  let(:created_acct_info_hash) do
+    {
+      'id' => nil,
+      'personal_info' => {
+        'last_name_kanji' => '渡部',
+        'last_name_kana' => 'ワタベ',
+        'first_name_kanji' => '愛子',
+        'first_name_kana' => 'アイコ',
+        'gender' => '女性',
+        'email' => 'kali.howe@johnston.biz',
+        'dob' => { 'year' => 1991, 'month' => 4, 'day' => 20 },
+        'postal_code' => '1060032',
+        'kanji_state' => '東京都',
+        'kanji_city' => '港区',
+        'kanji_town' => '六本木',
+        'kanji_line1' => '7-7-7',
+        'kanji_line2' => 'TRI-SEVEN ROPPONGI 13F',
+        'kana_state' => 'ﾄｳｷﾖｳﾄ',
+        'kana_city' => 'ﾐﾅﾄｸ',
+        'kana_town' => 'ﾛｯﾎﾟﾝｷﾞ',
+        'kana_line1' => '7-7-7',
+        'kana_line2' => 'TRI-SEVEN ROPPONGI 13F',
+        'phone' => '03-3122-8876',
+        'verification' => {
+          'details' => nil,
+          'details_code' => nil,
+          'document' => { 'back' => nil, 'details' => nil, 'details_code' => nil, 'front' => nil },
+          'status' => 'pending'
+        }
+      },
+      'tos_acceptance' => { 'date' => 1_566_575_782, 'ip' => '202.32.34.208', 'user_agent' => nil },
+      'bank_info' => { 'bank_name' => nil, 'branch_name' => nil, 'account_number' => nil, 'account_holder_name' => nil },
+      'payouts_enabled' => false,
+      'requirements' => {
+        'current_deadline' => nil,
+        'currently_due' => ['external_account'],
+        'disabled_reason' => nil,
+        'eventually_due' => ['external_account'],
+        'past_due' => ['external_account']
+      }
+    }
+  end
+  let(:updated_acct_info_hash) do
+    {
+      'id' => nil,
+      'personal_info' => {
+        'last_name_kanji' => '渡部',
+        'last_name_kana' => 'ワタベ',
+        'first_name_kanji' => '愛子',
+        'first_name_kana' => 'アイコ',
+        'gender' => '女性',
+        'email' => 'kali.howe@johnston.biz',
+        'dob' => { 'year' => 1991, 'month' => 4, 'day' => 20 },
+        'postal_code' => '1060032',
+        'kanji_state' => '東京都',
+        'kanji_city' => '渋谷区',
+        'kanji_town' => '桜丘町',
+        'kanji_line1' => '20-1',
+        'kanji_line2' => '渋谷インフォスタワー6F',
+        'kana_state' => 'ﾄｳｷﾖｳﾄ',
+        'kana_city' => 'ﾐﾅﾄｸ',
+        'kana_town' => 'ﾛｯﾎﾟﾝｷﾞ',
+        'kana_line1' => '20-1',
+        'kana_line2' => 'シブヤインフォスタワー6F',
+        'phone' => '03-3122-8876',
+        'verification' => {
+          'details' => nil,
+          'details_code' => nil,
+          'document' => { 'back' => nil, 'details' => nil, 'details_code' => nil, 'front' => nil },
+          'status' => 'pending'
+        }
+      },
+      'tos_acceptance' => { 'date' => 1_566_575_782, 'ip' => '202.32.34.208', 'user_agent' => nil },
+      'bank_info' => { 'bank_name' => nil, 'branch_name' => nil, 'account_number' => nil, 'account_holder_name' => nil },
+      'payouts_enabled' => false,
+      'requirements' => {
+        'current_deadline' => nil,
+        'currently_due' => ['external_account'],
+        'disabled_reason' => nil,
+        'eventually_due' => ['external_account'],
+        'past_due' => ['external_account']
+      }
+    }
+  end
+  let(:verified_acct_info_hash) do
+    { 'id' => 'acct_1JRf7SRCqRPv2EJa',
+      'personal_info' =>
+       { 'last_name_kanji' => '斉藤',
+         'last_name_kana' => 'サイトウ',
+         'first_name_kanji' => '弘太郎',
+         'first_name_kana' => 'コウタロウ',
+         'gender' => '男性',
+         'email' => 'koutaro@hogehoge.com',
+         'dob' => { 'year' => 1980, 'month' => 10, 'day' => 21 },
+         'postal_code' => '1410021',
+         'kanji_state' => '東京都',
+         'kanji_city' => '品川区',
+         'kanji_town' => '上大崎',
+         'kanji_line1' => '3-1-1',
+         'kanji_line2' => 'アトレ目黒２',
+         'kana_state' => 'ﾄｳｷﾖｳﾄ',
+         'kana_city' => 'ｼﾅｶﾞﾜｸ',
+         'kana_town' => 'ｶﾐｵｵｻｷ 3-',
+         'kana_line1' => '3-1-1',
+         'kana_line2' => 'アトレメグロ2',
+         'phone' => '03-5435-0001',
+         'verification' =>
+         { 'additional_document' => { 'back' => nil, 'details' => nil, 'details_code' => nil, 'front' => nil },
+           'details' => nil,
+           'details_code' => nil,
+           'document' => { 'back' => nil, 'details' => nil, 'details_code' => nil, 'front' => 'file_1JRfbJEThOtNwrS9DxNcIgYy' },
+           'status' => 'verified' } },
+      'tos_acceptance' => { 'date' => 1_629_732_660, 'ip' => '175.177.44.117', 'user_agent' => nil },
+      'bank_info' => { 'bank_name' => 'STRIPE TEST BANK', 'branch_name' => 'STRIPE TEST BRANCH', 'account_number' => '***1234', 'account_holder_name' => 'サイトウコウタロウ' },
+      'payouts_enabled' => true,
+      'requirements' =>
+       { 'alternatives' => [],
+         'current_deadline' => nil,
+         'currently_due' => [],
+         'disabled_reason' => nil,
+         'errors' => [],
+         'eventually_due' => [],
+         'past_due' => [],
+         'pending_verification' => [] } }
+  end
 
-  # describe 'GET #new', type: :doing do
-  #   context 'as a signed in user' do
-  #     before do
-  #       @user = user_create
-  #       sign_in @user
-  #     end
-  #     context "when not qualified to create seller's account" do
-  #       subject { get new_user_account_url(@user.id) }
-  #       before do
-  #         allow(@user).to receive(:premium_user).and_return(false)
-  #       end
-  #       it 'redirects to user#show' do
-  #         subject
-  #         expect(response).to redirect_to "/users/#{@user.id}"
-  #       end
-  #       it 'returns a 302 status code' do
-  #         subject
-  #         expect(response).to have_http_status('302')
-  #       end
-  #     end
-  #     context 'when accessing for different user' do
-  #       subject { get new_user_account_url(@another_user.id) }
-  #       before do
-  #         @another_user = create(:user)
-  #       end
-  #       it 'redirects to user#show ' do
-  #         subject
-  #         expect(response).to redirect_to "/users/#{@user.id}"
-  #       end
-  #       it 'returns a 302 status code' do
-  #         subject
-  #         expect(response).to have_http_status('302')
-  #       end
-  #     end
-  #     it 'renders the :new template' do
-  #       allow(controller).to receive(:qualified).and_return(true)
-  #       subject
-  #       expect(response).to render_template :new
-  #     end
-  #     it 'returns a 200 status code' do
-  #       allow(controller).to receive(:qualified).and_return(true)
-  #       subject
-  #       expect(response).to have_http_status('200')
-  #     end
-  #     it 'redirects to user#show when account already exists' do
-  #       create(:stripe_account, user: @user)
-  #       subject
-  #       expect(response).to redirect_to "/users/#{@user.id}"
-  #     end
-  #     it 'returns a 302 status code when account already exists' do
-  #       create(:stripe_account, user: @user)
-  #       subject
-  #       expect(response).to have_http_status('302')
-  #     end
-  #   end
-  #   context 'as a guest' do
-  #     before do
-  #       @user = user_create
-  #     end
-  #     it 'returns a 302 status code' do
-  #       subject
-  #       expect(response).to have_http_status('302')
-  #     end
-  #     it 'redirects to user sign-in page' do
-  #       subject
-  #       expect(response).to redirect_to '/users/sign_in'
-  #     end
-  #   end
-  # end
+  describe 'GET #new' do
+    subject { get new_user_account_url(@user.id) }
 
-  # describe 'POST #create' do
-  #   context 'as a signed in user' do
-  #     before do
-  #       @user = user_create
-  #       sign_in @user
-  #     end
-  #     context "when not qualified to create seller's account" do
-  #       before do
-  #         allow(controller).to receive(:qualified).and_return(false)
-  #       end
-  #       it 'redirects to user#show' do
-  #         post :create, params: { user_id: @user.id }
-  #         expect(response).to redirect_to "/users/#{@user.id}"
-  #       end
-  #       it 'returns a 302 status code' do
-  #         post :create, params: { user_id: @user.id }
-  #         expect(response).to have_http_status('302')
-  #       end
-  #     end
-  #     context 'when accessing for different user' do
-  #       before do
-  #         @another_user = create(:user)
-  #       end
-  #       it 'redirects to user#show' do
-  #         post :create, params: { user_id: @another_user.id }
-  #         expect(response).to redirect_to "/users/#{@user.id}"
-  #       end
-  #       it 'returns a 302 status code' do
-  #         post :create, params: { user_id: @another_user.id }
-  #         expect(response).to have_http_status('302')
-  #       end
-  #     end
-  #     context 'when Stripe account creation is successful' do
-  #       before do
-  #         allow(controller).to receive(:qualified).and_return(true)
-  #         allow(Account).to receive(:create_stripe_account).and_return([true, created_acct_info_hash])
-  #       end
-  #       it 'filters permitted params' do
-  #         @params_to_test = good_input.merge!(user_id: @user.id)
-  #         @params_to_test.merge!(evil_input: 'some input')
-  #         post :create, params: @params_to_test
-  #         expect(controller.instance_eval { new_account_params }).to eq filtered_good_params
-  #       end
-  #       it 'creates an account' do
-  #         expect do
-  #           post :create, params: { user_id: @user.id }
-  #         end.to change(Account, :count).by(1)
-  #       end
-  #       it 'returns a 302 status code' do
-  #         post :create, params: { user_id: @user.id }
-  #         expect(response).to have_http_status('302')
-  #       end
-  #       it 'redirects to account#show' do
-  #         post :create, params: { user_id: @user.id }
-  #         new_account = Account.last
-  #         expect(response).to redirect_to "/accounts/#{new_account.id}"
-  #       end
-  #     end
-  #     context 'when Stripe account creation failed' do
-  #       before do
-  #         allow(controller).to receive(:qualified).and_return(true)
-  #         allow(Account).to receive(:create_stripe_account).and_return([false, 'some reason of Stripe account failure'])
-  #       end
-  #       it 'writes to Rails logger an error message' do
-  #         expect(Rails.logger).to receive(:error).with('create_stripe_account returned false : some reason of Stripe account failure')
-  #         post :create, params: { user_id: @user.id }
-  #       end
-  #       it 'redirects to user#show' do
-  #         post :create, params: { user_id: @user.id }
-  #         expect(response).to redirect_to "/users/#{@user.id}"
-  #       end
-  #       it 'returns a 302 status code' do
-  #         post :create, params: { user_id: @user.id }
-  #         expect(response).to have_http_status('302')
-  #       end
-  #     end
-  #   end
-  #   context 'as a guest' do
-  #     before do
-  #       @user = user_create
-  #     end
-  #     it 'returns a 302 status code' do
-  #       post :create, params: { user_id: @user.id }
-  #       expect(response).to have_http_status('302')
-  #     end
-  #     it 'redirects to user sign-in page' do
-  #       post :create, params: { user_id: @user.id }
-  #       expect(response).to redirect_to '/users/sign_in'
-  #     end
-  #   end
-  #   context 'exceptions' do
-  #     before do
-  #       @user = user_create
-  #       sign_in @user
-  #     end
-  #     it 'redirects to user#show for Stripe::PermissionError' do
-  #       allow(Account).to receive(:create_stripe_account).and_raise(Stripe::PermissionError)
-  #       post :create, params: { user_id: @user.id }
-  #       expect(response).to redirect_to "/users/#{@user.id}"
-  #     end
-  #     it 'redirects to account#new for general exceptions' do
-  #       allow(controller).to receive(:qualified).and_raise(StandardError)
-  #       post :create, params: { user_id: @user.id }
-  #       expect(response).to redirect_to "/users/#{@user.id}/accounts/new"
-  #     end
-  #   end
-  # end
+    before do
+      @user = user_create
+    end
+    context 'as a signed in user' do
+      before do
+        sign_in @user
+      end
+      context "when not qualified to create seller's account" do
+        before do
+          allow_any_instance_of(User).to receive(:premium_user).and_return([false, nil, nil])
+        end
+        it 'redirects to user#show' do
+          subject
+          expect(response).to redirect_to user_url(@user.id)
+          expect(response).to have_http_status('302')
+        end
+      end
+      context 'when accessing for different user' do
+        before do
+          @another_user = create(:user)
+        end
+        it 'redirects to user#show ' do
+          get new_user_account_url(@another_user.id)
+          expect(response).to redirect_to user_url(@user.id)
+          expect(response).to have_http_status('302')
+        end
+      end
+      context 'with a fresh session' do
+        it 'displays blank form' do
+          allow_any_instance_of(User).to receive(:premium_user).and_return([true, nil, nil])
+          subject
+          expect(response.body).to include 'お客様情報'
+          expect(response).to have_http_status('200')
+        end
+      end
+      context 'when rendering back from confirm screen' do
+        it 'displays filled form' do
+          allow_any_instance_of(User).to receive(:premium_user).and_return([true, nil, nil])
+          get new_user_account_url(@user.id), params: { mode: 'new', stripe_account_form: { last_name_kanji: '田中' } }
+          expect(response.body).to include '田中'
+        end
+      end
+    end
+    context 'as a guest' do
+      it 'redirects to user sign-in page' do
+        subject
+        expect(response).to redirect_to new_user_session_url
+        expect(response).to have_http_status('302')
+      end
+    end
+  end
 
-  # describe 'GET #show' do
-  #   context 'as a signed in user' do
-  #     before do
-  #       @user = user_create
-  #       sign_in @user
-  #       @test_account = create(:stripe_account, user: @user, stripe_acct_id: test_stripe_acct_id)
-  #     end
-  #     context 'when Stripe account retrieval is successful' do
-  #       before do
-  #         allow_any_instance_of(Account).to receive(:get_stripe_account).and_return([true, account_info_hash])
-  #         allow_any_instance_of(Account).to receive(:get_stripe_balance).and_return([true, stripe_balance_obj])
-  #       end
-  #       it 'populates @account' do
-  #         get :show, params: { id: @test_account.id }
-  #         expect(assigns(:account)).to match(@test_account)
-  #       end
-  #       it 'populates @account_info from Stripe' do
-  #         get :show, params: { id: @test_account.id }
-  #         expect(assigns(:account_info)).to match(account_info_hash)
-  #       end
-  #       it "updates record's stripe_status" do
-  #         @verified_account_info = account_info_hash
-  #         @verified_account_info['personal_info']['verification']['status'] = 'verified'
-  #         allow_any_instance_of(Account).to receive(:get_stripe_account).and_return([true, @verified_account_info])
+  describe 'POST #confirm' do  # this is for new -> confirm -> create
+    subject { post confirm_user_accounts_url(@user.id), params: confirm_params_new }
 
-  #         get :show, params: { id: @test_account.id }
-  #         expect(@test_account.reload.stripe_status).to eq 'verified'
-  #       end
-  #       it 'populates @balance_info' do
-  #         get :show, params: { id: @test_account.id }
-  #         expect(assigns(:balance_info)).to match(stripe_balance_obj)
-  #       end
-  #       it 'renders the show template' do
-  #         get :show, params: { id: @test_account.id }
-  #         expect(response).to render_template :show
-  #       end
-  #       it 'returns a 200 status code' do
-  #         get :show, params: { id: @test_account.id }
-  #         expect(response).to have_http_status('200')
-  #       end
-  #     end
-  #     context 'when Stripe account retrieval failed' do
-  #       before do
-  #         allow_any_instance_of(Account).to receive(:get_stripe_account).and_return([false, 'some error in retrieving stripe account'])
-  #       end
-  #       it 'redirects to user#show' do
-  #         get :show, params: { id: @test_account.id }
-  #         expect(response).to redirect_to "/users/#{@user.id}"
-  #       end
-  #       it 'writes to Rails logger an error message' do
-  #         expect(Rails.logger).to receive(:error).with('get_stripe_account returned false : some error in retrieving stripe account')
-  #         get :show, params: { id: @test_account.id }
-  #       end
-  #     end
-  #     context 'when Stripe balance retrieval failed' do
-  #       before do
-  #         allow_any_instance_of(Account).to receive(:get_stripe_account).and_return([true, account_info_hash])
-  #         allow_any_instance_of(Account).to receive(:get_stripe_balance).and_return([false, 'some error in retrieving stripe balance'])
-  #       end
-  #       it 'redirects to user#show' do
-  #         get :show, params: { id: @test_account.id }
-  #         expect(response).to redirect_to "/users/#{@user.id}"
-  #       end
-  #       it 'writes to Rails logger an error message' do
-  #         expect(Rails.logger).to receive(:error).with('get_stripe_balance returned false : some error in retrieving stripe balance')
-  #         get :show, params: { id: @test_account.id }
-  #       end
-  #     end
-  #     context 'when different user than the account owner' do
-  #       before do
-  #         sign_out @user
-  #         @another_user = create(:user)
-  #         sign_in @another_user
-  #       end
-  #       it 'redirects to user#show' do
-  #         get :show, params: { id: @test_account.id }
-  #         expect(response).to redirect_to "/users/#{@another_user.id}"
-  #       end
-  #     end
-  #   end
+    before do
+      @user = user_create
+    end
+    context 'as a signed in user' do
+      before do
+        sign_in @user
+      end
+      it 'displays form info to be confirmed' do
+        subject
+        expect(response.body).to include 'お名前（漢字）'
+        expect(response).to have_http_status('200')
+      end
+    end
+    context 'as a guest' do
+      it 'redirects to user sign-in page' do
+        subject
+        expect(response).to redirect_to new_user_session_url
+        expect(response).to have_http_status('302')
+      end
+    end
+  end
 
-  #   context 'as a guest' do
-  #     before do
-  #       @test_account = create(:stripe_account, user: user_create, stripe_acct_id: test_stripe_acct_id)
-  #     end
-  #     it 'returns a 302 status code' do
-  #       get :show, params: { id: @test_account.id }
-  #       expect(response).to have_http_status('302')
-  #     end
-  #     it 'redirects to user sign-in page' do
-  #       get :show, params: { id: @test_account.id }
-  #       expect(response).to redirect_to '/users/sign_in'
-  #     end
-  #   end
+  describe 'PATCH #confirm' do # this is for edit -> confirm -> update
+    subject { patch confirm_account_url(@account.id), params: confirm_params_edit }
 
-  #   context 'exceptions' do
-  #     before do
-  #       @user = user_create
-  #       sign_in @user
-  #       @test_account = create(:stripe_account, user: @user, stripe_acct_id: test_stripe_acct_id)
-  #     end
-  #     it 'rescues from Stripe::PermissionError' do
-  #       allow(controller).to receive(:show).and_raise(Stripe::PermissionError)
-  #       expect do
-  #         get :show, params: { id: @test_account.id }
-  #       end.to raise_error(Stripe::PermissionError)
-  #     end
-  #     it 'redirects to user#show for Stripe::PermissionError' # do
-  #     #   allow(controller).to receive(:show).and_raise(Stripe::PermissionError)
-  #     #   subject { get :show, params: { id: @test_account.id } }
-  #     #   expect(subject).to redirect_to "/users/#{@user.id}"
-  #     # end
+    before do
+      @user = user_create
+      @account = create(:stripe_account, user: @user)
+    end
+    context 'as a signed in user' do
+      before do
+        sign_in @user
+      end
+      it 'displays info to be confirmed' do
+        subject
+        expect(response.body).to include 'お名前（漢字）'
+        expect(response).to have_http_status('200')
+      end
+    end
+    context 'as a guest' do
+      it 'redirects to user sign-in page' do
+        subject
+        expect(response).to redirect_to new_user_session_url
+        expect(response).to have_http_status('302')
+      end
+    end
+  end
 
-  #     it 'rescues from general exceptions' do
-  #       allow(controller).to receive(:show).and_raise(StandardError)
-  #       expect do
-  #         get :show, params: { id: @test_account.id }
-  #       end.to raise_error(StandardError)
-  #     end
-  #   end
-  # end
+  describe 'POST #create' do
+    subject { post user_accounts_url(@user.id), params: @test_params }
 
-  # describe 'GET #edit' do
-  #   context 'as a signed in user' do
-  #     before do
-  #       @user = user_create
-  #       sign_in @user
-  #       @test_account = create(:stripe_account, user: @user, stripe_acct_id: test_stripe_acct_id)
-  #     end
+    before do
+      @user = user_create
+      @test_params = create_params
+    end
+    context 'as a signed in user' do
+      before do
+        sign_in @user
+      end
+      it 'redirects to current_user#show when not my page' do
+        @another_user = create(:user)
+        post user_accounts_url(@another_user.id), params: @create_params
+        expect(response).to redirect_to user_url(@user.id)
+        expect(response).to have_http_status('302')
+      end
+      it 'redirects to user#show when not qualified for premium plan' do
+        allow_any_instance_of(User).to receive(:premium_user).and_return([false, nil, nil])
+        subject
+        expect(response).to redirect_to user_url(@user.id)
+        expect(response).to have_http_status('302')
+      end
+      context 'qualified for premium plan' do
+        before do
+          allow_any_instance_of(User).to receive(:premium_user).and_return([true, nil, nil])
+        end
+        it 'renders filled form when back button pressed in confirm screen (params[:back] exists)' do
+          @test_params.merge!({ 'back' => '入力画面に戻る' }) # 戻るボタンが押された
+          subject
+          expect(response.body).to include '渡部'
+          expect(response).to have_http_status('200')
+        end
+        it 'renders filled form with error message when form is invalid' do
+          @test_params = invalid_params
+          subject
+          expect(response).to have_http_status('200')
+          expect(response.body).to include('姓（カナ）を入力してください')
+        end
+        it 'redirects to user#show if stripe returns error' do
+          allow(StripeAccount).to receive(:create_connect_account).and_return([false, 'some kind of Stripe error'])
+          subject
+          expect(response).to redirect_to user_url(@user.id)
+        end
+        it 'redirects to user#show if Active Record save returns error' do
+          allow(StripeAccount).to receive(:create_connect_account).and_return([true, created_acct_info_hash])
+          allow_any_instance_of(StripeAccount).to receive(:save).and_return(false)
+          subject
+          expect(response).to redirect_to user_url(@user.id)
+        end
+        it 'redirects to account#show when Stripe Connect and Active Record both succeeds creating account' do
+          allow(StripeAccount).to receive(:create_connect_account).and_return([true, created_acct_info_hash])
+          subject
+          new_account = StripeAccount.last
+          expect(response).to redirect_to account_url(new_account.id)
+          expect(response).to have_http_status('302')
+        end
+      end
+    end
+    context 'as a guest' do
+      it 'redirects to user sign-in page' do
+        subject
+        expect(response).to redirect_to new_user_session_url
+        expect(response).to have_http_status('302')
+      end
+    end
+  end
 
-  #     context 'when Stripe account retrieval is successful' do
-  #       before do
-  #         allow_any_instance_of(Account).to receive(:get_stripe_account).and_return([true, account_info_hash])
-  #       end
-  #       it 'populates @account' do
-  #         get :edit, params: { id: @test_account.id }
-  #         expect(assigns(:account)).to match(@test_account)
-  #       end
-  #       it 'populates @account_info' do
-  #         get :edit, params: { id: @test_account.id }
-  #         expect(assigns(:account_info)).to match(account_info_hash)
-  #       end
-  #       it 'renders the edit template' do
-  #         get :edit, params: { id: @test_account.id }
-  #         expect(response).to render_template :edit
-  #       end
-  #       it 'returns a 200 status code' do
-  #         get :edit, params: { id: @test_account.id }
-  #         expect(response).to have_http_status('200')
-  #       end
-  #     end
-  #     context 'when Stripe account retrieval failed' do
-  #       before do
-  #         allow_any_instance_of(Account).to receive(:get_stripe_account).and_return([false, 'some error in retrieving stripe account'])
-  #       end
-  #       it 'writes to Rails logger an error message' do
-  #         expect(Rails.logger).to receive(:error).with('get_stripe_account returned false : some error in retrieving stripe account')
-  #         get :edit, params: { id: @test_account.id }
-  #       end
-  #       it 'redirects to user#show' do
-  #         get :edit, params: { id: @test_account.id }
-  #         expect(response).to redirect_to "/users/#{@user.id}"
-  #       end
-  #     end
-  #     context 'as a different user' do
-  #       before do
-  #         sign_out @user
-  #         @another_user = create(:user)
-  #         sign_in @another_user
-  #       end
-  #       it 'redirects to user#show' do
-  #         get :edit, params: { id: @test_account.id }
-  #         expect(response).to redirect_to "/users/#{@another_user.id}"
-  #       end
-  #     end
-  #   end
+  describe 'GET #edit' do
+    subject { get edit_account_url(@account.id) }
 
-  #   context 'as a guest' do
-  #     before do
-  #       @test_account = create(:stripe_account, user: user_create, stripe_acct_id: test_stripe_acct_id)
-  #     end
-  #     it 'returns a 302 status code' do
-  #       get :edit, params: { id: @test_account.id }
-  #       expect(response).to have_http_status('302')
-  #     end
-  #     it 'redirects to user sign-in page' do
-  #       get :edit, params: { id: @test_account.id }
-  #       expect(response).to redirect_to '/users/sign_in'
-  #     end
-  #   end
+    before do
+      @user = user_create
+      @account = create(:stripe_account, user: @user, acct_id: 'acct_1JQDTsRErzrZuQBE') # 渡部 愛子のStripe Connect
+    end
+    context 'as a signed in user' do
+      before do
+        sign_in @user
+      end
+      it 'displays form with current info' do
+        subject
+        expect(response.body).to include '渡部'
+        expect(response).to have_http_status('200')
+      end
+      it 'redirects to current_user#show when not my account' do
+        @another_user = create(:user)
+        @another_account = create(:stripe_account, user: @another_user, acct_id: 'acct_1JVzHnRDIeZClgoy') # 菅原 蓮のStripe Connect
+        get edit_account_url(@another_account.id)
+        expect(response).to redirect_to user_url(@user.id)
+        expect(response).to have_http_status('302')
+      end
+      it 'redirects to account#show when Stripe connect returns error' do
+        allow_any_instance_of(StripeAccount).to receive(:get_connect_account).and_return([false, 'some error message'])
+        subject
+        expect(response).to redirect_to account_url(@account.id)
+        expect(response).to have_http_status('302')
+      end
+      it 'redirects to account#show when convert attributes returns error' do
+        allow(StripeAccountForm).to receive(:convert_attributes).and_return([false, 'some error message'])
+        subject
+        expect(response).to redirect_to account_url(@account.id)
+        expect(response).to have_http_status('302')
+      end
+    end
+    context 'as a guest' do
+      it 'redirects to user sign-in page' do
+        subject
+        expect(response).to redirect_to new_user_session_url
+        expect(response).to have_http_status('302')
+      end
+    end
+  end
 
-  #   context 'exceptions' do
-  #     before do
-  #       @user = user_create
-  #       sign_in @user
-  #       @test_account = create(:stripe_account, user: @user, stripe_acct_id: test_stripe_acct_id)
-  #     end
-  #     it 'rescues from Stripe::PermissionError' do
-  #       allow(controller).to receive(:edit).and_raise(Stripe::PermissionError)
-  #       expect  do
-  #         get :edit, params: { id: @test_account.id }
-  #       end.to raise_error(Stripe::PermissionError)
-  #     end
-  #     it 'redirects to user#show for Stripe::PermissionError'
-  #     it 'rescues from general exceptions' do
-  #       allow(controller).to receive(:edit).and_raise(StandardError)
-  #       expect  do
-  #         get :edit, params: { id: @test_account.id }
-  #       end.to raise_error(StandardError)
-  #     end
-  #   end
-  # end
+  describe 'PATCH #update' do
+    subject { patch account_url(@account.id), params: @test_params }
 
-  # describe 'POST #update' do
-  #   context 'as a signed in user' do
-  #     before do
-  #       @user = user_create
-  #       sign_in @user
-  #       @test_account = create(:stripe_account, user: @user, stripe_acct_id: test_stripe_acct_id)
-  #     end
-  #     it 'populates @account' do
-  #       patch :update, params: { id: @test_account.id }
-  #       expect(assigns(:account)).to match(@test_account)
-  #     end
-  #     context 'when Stripe account update is successful' do
-  #       it 'populates @account_info' do
-  #         allow_any_instance_of(Account).to receive(:update_stripe_account).and_return([true, account_info_hash])
-  #         patch :update, params: { id: @test_account.id }
-  #         expect(assigns(:account_info)).to match(account_info_hash)
-  #       end
-  #       it "updates record's stripe_status" do
-  #         @verified_account_info = account_info_hash
-  #         @verified_account_info['personal_info']['verification']['status'] = 'verified'
-  #         allow_any_instance_of(Account).to receive(:update_stripe_account).and_return([true, @verified_account_info])
+    before do
+      @user = user_create
+      @account = create(:stripe_account, user: @user, acct_id: 'acct_1JQDTsRErzrZuQBE') # 渡部 愛子のStripe Connect
+      @test_params = update_params # create_params から住所を変更
+    end
+    context 'as a signed in user' do
+      before do
+        sign_in @user
+      end
+      it 'redirects to current_user#show when not my page' do
+        @another_user = create(:user)
+        @another_account = create(:stripe_account, user: @another_user, acct_id: 'acct_1JVzHnRDIeZClgoy') # 菅原 蓮のStripe Connect
+        patch account_url(@another_account.id), params: @test_params
+        expect(response).to redirect_to user_url(@user.id)
+        expect(response).to have_http_status('302')
+      end
+      it 'renders edit when back button pressed in confirm screen (params[:back] exists)' do
+        @test_params.merge!({ 'back' => '入力画面に戻る' }) # 戻るボタンが押された
+        subject
+        expect(response.body).to include '桜丘町' # 更新しようとした内容
+        expect(response).to have_http_status('200')
+      end
+      it 'redirects to account#edit when Stripe connect returns error' do
+        allow_any_instance_of(StripeAccount).to receive(:update_connect_account).and_return([false, 'some kind of Stripe error message'])
+        subject
+        expect(response).to redirect_to edit_account_url(@account.id)
+        expect(response).to have_http_status('302')
+      end
+      it 'redirects to account#edit when Active Record update returns false' do
+        allow_any_instance_of(StripeAccount).to receive(:update_connect_account).and_return([true, updated_acct_info_hash])
+        allow_any_instance_of(StripeAccount).to receive(:update).and_return(false)
+        subject
+        expect(response).to redirect_to edit_account_url(@account.id)
+        expect(response).to have_http_status('302')
+      end
+      it 'redirects to account#show when update is successful' do
+        allow_any_instance_of(StripeAccount).to receive(:update_connect_account).and_return([true, updated_acct_info_hash])
+        allow_any_instance_of(StripeAccount).to receive(:update).and_return(true)
+        subject
+        expect(response).to redirect_to account_url(@account.id)
+        expect(response).to have_http_status('302')
+      end
+    end
+    context 'as a guest' do
+      it 'redirects to user sign-in page' do
+        subject
+        expect(response).to redirect_to new_user_session_url
+        expect(response).to have_http_status('302')
+      end
+    end
+  end
 
-  #         patch :update, params: { id: @test_account.id }
-  #         expect(@test_account.reload.stripe_status).to eq 'verified'
-  #       end
-  #       it 'does not change record count' do
-  #         expect { patch :update, params: { id: @test_account.id } }.to change(Account, :count).by(0)
-  #       end
-  #       it 'redirects to account#show' do
-  #         allow_any_instance_of(Account).to receive(:update_stripe_account).and_return([true, account_info_hash])
-  #         patch :update, params: { id: @test_account.id }
-  #         expect(response).to redirect_to "/accounts/#{@test_account.id}"
-  #       end
-  #       it 'returns a 302 status code' do
-  #         allow_any_instance_of(Account).to receive(:update_stripe_account).and_return([true, account_info_hash])
-  #         patch :update, params: { id: @test_account.id }
-  #         expect(response).to have_http_status('302')
-  #       end
-  #     end
-  #     context 'when Stripe account update failed' do
-  #       before do
-  #         allow_any_instance_of(Account).to receive(:update_stripe_account).and_return([false, 'some error in updating stripe account'])
-  #       end
-  #       it 'redirects to account#edit' do
-  #         patch :update, params: { id: @test_account.id }
-  #         expect(response).to redirect_to "/accounts/#{@test_account.id}/edit"
-  #       end
-  #       it 'returns a 302 status code' do
-  #         patch :update, params: { id: @test_account.id }
-  #         expect(response).to have_http_status('302')
-  #       end
-  #       it 'writes to Rails logger an error message' do
-  #         expect(Rails.logger).to receive(:error).with('update_stripe_account returned false : some error in updating stripe account')
-  #         patch :update, params: { id: @test_account.id }
-  #       end
-  #     end
-  #     context 'as a different user' do
-  #       before do
-  #         sign_out @user
-  #         @another_user = create(:user)
-  #         sign_in @another_user
-  #       end
-  #       it 'redirects to user#show' do
-  #         patch :update, params: { id: @test_account.id }
-  #         expect(response).to redirect_to "/users/#{@another_user.id}"
-  #       end
-  #     end
-  #   end
-  #   context 'as a guest' do
-  #     before do
-  #       @test_account = create(:stripe_account, user: user_create, stripe_acct_id: test_stripe_acct_id)
-  #     end
-  #     it 'returns a 302 status code' do
-  #       patch :update, params: { id: @test_account.id }
-  #       expect(response).to have_http_status('302')
-  #     end
-  #     it 'redirects to user sign-in page' do
-  #       patch :update, params: { id: @test_account.id }
-  #       expect(response).to redirect_to '/users/sign_in'
-  #     end
-  #   end
-  #   context 'exceptions' do
-  #     before do
-  #       @user = user_create
-  #       sign_in @user
-  #       @test_account = create(:stripe_account, user: @user, stripe_acct_id: test_stripe_acct_id)
-  #     end
-  #     it 'rescues from Stripe::PermissionError' do
-  #       allow(controller).to receive(:update).and_raise(Stripe::PermissionError)
-  #       expect do
-  #         get :update, params: { id: @test_account.id }
-  #       end.to raise_error(Stripe::PermissionError)
-  #     end
-  #     it 'redirects to user#show for Stripe::PermissionError'
+  describe 'GET #show' do
+    subject { get account_url(@account.id) }
 
-  #     it 'rescues from general exceptions' do
-  #       allow(controller).to receive(:update).and_raise(StandardError)
-  #       expect do
-  #         get :update, params: { id: @test_account.id }
-  #       end.to raise_error(StandardError)
-  #     end
-  #   end
-  # end
-  # describe 'DELETE #destroy' do
-  #   context 'as a signed in user' do
-  #     before do
-  #       @user = user_create
-  #       sign_in @user
-  #       @test_account = create(:stripe_account, user: @user, stripe_acct_id: test_stripe_acct_id)
-  #     end
-  #     it 'populates @account' do
-  #       delete :destroy, params: { id: @test_account.id }
-  #       expect(assigns(:account)).to match(@test_account)
-  #     end
-  #     it 'redirects to account#show if account balance is not zero' do
-  #       allow_any_instance_of(Account).to receive(:zero_balance).and_return(false)
-  #       delete :destroy, params: { id: @test_account.id }
-  #       expect(response).to redirect_to "/accounts/#{@test_account.id}"
-  #     end
-  #     context 'when Stripe account delete is successful' do
-  #       before do
-  #         allow_any_instance_of(Account).to receive(:zero_balance).and_return(true)
-  #         allow_any_instance_of(Account).to receive(:delete_stripe_account).and_return([true, stripe_delete_success])
-  #       end
-  #       it 'populates @delete_result' do
-  #         delete :destroy, params: { id: @test_account.id }
-  #         expect(assigns(:delete_result)).to match(stripe_delete_success)
-  #       end
-  #       it 'changes record count by -1' do
-  #         expect { delete :destroy, params: { id: @test_account.id } }.to change(Account, :count).by(-1)
-  #       end
-  #     end
-  #     context 'when Stripe account delete failed' do
-  #       before do
-  #         allow_any_instance_of(Account).to receive(:zero_balance).and_return(true)
-  #         allow_any_instance_of(Account).to receive(:delete_stripe_account).and_return([false, 'some error in deleting stripe account'])
-  #       end
-  #       it 'redirects to account#show' do
-  #         delete :destroy, params: { id: @test_account.id }
-  #         expect(response).to redirect_to "/accounts/#{@test_account.id}"
-  #       end
-  #       it 'returns a 302 status code' do
-  #         delete :destroy, params: { id: @test_account.id }
-  #         expect(response).to have_http_status('302')
-  #       end
-  #       it 'writes to Rails logger an error message' do
-  #         expect(Rails.logger).to receive(:error).with('delete_stripe_account returned false : some error in deleting stripe account')
-  #         delete :destroy, params: { id: @test_account.id }
-  #       end
-  #     end
-  #     context 'as a different user' do
-  #       before do
-  #         sign_out @user
-  #         @another_user = create(:user)
-  #         sign_in @another_user
-  #       end
-  #       it 'redirects to user#show' do
-  #         delete :destroy, params: { id: @test_account.id }
-  #         expect(response).to redirect_to "/users/#{@another_user.id}"
-  #       end
-  #     end
-  #   end
-  #   context 'as a guest' do
-  #     before do
-  #       @test_account = create(:stripe_account, user: user_create, stripe_acct_id: test_stripe_acct_id)
-  #     end
-  #     it 'returns a 302 status code' do
-  #       delete :destroy, params: { id: @test_account.id }
-  #       expect(response).to have_http_status('302')
-  #     end
-  #     it 'redirects to user sign-in page' do
-  #       delete :destroy, params: { id: @test_account.id }
-  #       expect(response).to redirect_to '/users/sign_in'
-  #     end
-  #   end
-  #   context 'exceptions' do
-  #     before do
-  #       @user = user_create
-  #       sign_in @user
-  #       @test_account = create(:stripe_account, user: @user, stripe_acct_id: test_stripe_acct_id)
-  #     end
-  #     it 'rescues from Stripe::PermissionError' do
-  #       allow(controller).to receive(:destroy).and_raise(Stripe::PermissionError)
-  #       expect do
-  #         delete :destroy, params: { id: @test_account.id }
-  #       end.to raise_error(Stripe::PermissionError)
-  #     end
-  #     it 'redirects to user#show for Stripe::PermissionError'
+    before do
+      @user = user_create
+    end
+    context 'as a signed in user' do
+      before do
+        sign_in @user
+      end
+      context 'when status is not Verified' do
+        before do
+          @account = create(:stripe_account, user: @user, acct_id: 'acct_1JQDTsRErzrZuQBE') # 渡部 愛子のStripe Connect
+        end
+        it 'redirects to current_user#show when not my page' do
+          @another_user = create(:user)
+          @another_account = create(:stripe_account, user: @another_user, acct_id: 'acct_1JVzHnRDIeZClgoy') # 菅原 蓮のStripe Connect
+          get account_url(@another_account.id)
+          expect(response).to redirect_to user_url(@user.id)
+          expect(response).to have_http_status('302')
+        end
+        it 'redirects to current_user#show when Stripe connect returns error' do
+          allow_any_instance_of(StripeAccount).to receive(:get_connect_account).and_return([false, 'some kind of Stripe error message'])
+          subject
+          expect(response).to redirect_to user_url(@user.id)
+          expect(response).to have_http_status('302')
+        end
+        it 'redirects to current_user#show when refresh_status returns false' do
+          allow_any_instance_of(StripeAccount).to receive(:update).and_return(false)
+          subject
+          expect(response).to redirect_to user_url(@user.id)
+          expect(response).to have_http_status('302')
+        end
+        it 'displays idcards upload buttons' do
+          allow_any_instance_of(StripeAccount).to receive(:get_connect_account).and_return([true, created_acct_info_hash])
+          subject
+          expect(response.body).to include '表面：'
+          expect(response.body).to include '裏面：'
+        end
+      end
+      context 'when status is Verified' do
+        before do
+          @account = create(:stripe_account, user: @user, acct_id: 'acct_1JRf7SRCqRPv2EJa') # 斉藤 弘太郎のStripe Connect
+        end
+        it 'displays connect account information' do
+          subject
+          expect(response.body).to include '上大崎'
+          expect(response).to have_http_status('200')
+        end
+        it 'displays bank account' do
+          subject
+          expect(response.body).to include '出金先 銀行口'
+          expect(response).to have_http_status('200')
+        end
+        it 'displays balances' do
+          subject
+          expect(response.body).to include '出金可能'
+          expect(response).to have_http_status('200')
+        end
+        it 'displays id card as verified' do
+          subject
+          expect(response.body).to include '確認済'
+          expect(response).to have_http_status('200')
+        end
+      end
+    end
+    context 'as a guest' do
+      before do
+        @account = create(:stripe_account, user: @user, acct_id: 'acct_1JRf7SRCqRPv2EJa') # 斉藤 弘太郎のStripe Connect
+      end
+      it 'redirects to user sign-in page' do
+        subject
+        expect(response).to redirect_to new_user_session_url
+        expect(response).to have_http_status('302')
+      end
+    end
+  end
 
-  #     it 'rescues from general exceptions' do
-  #       allow(controller).to receive(:destroy).and_raise(StandardError)
-  #       expect do
-  #         delete :destroy, params: { id: @test_account.id }
-  #       end.to raise_error(StandardError)
-  #     end
-  #   end
-  # end
+  describe 'DELETE #destroy' do
+    subject { delete account_url(@account.id) }
+
+    before do
+      @user = user_create
+      @account = create(:stripe_account, user: @user, acct_id: 'acct_1JRf7SRCqRPv2EJa') # 斉藤 弘太郎のStripe Connect
+    end
+    context 'as a signed in user' do
+      before do
+        sign_in @user
+      end
+      it 'redirects to current_user#show when not my page' do
+        @another_user = create(:user)
+        @another_account = create(:stripe_account, user: @another_user, acct_id: 'acct_1JVzHnRDIeZClgoy') # 菅原 蓮のStripe Connect
+        delete account_url(@another_account.id)
+        expect(response).to redirect_to user_url(@user.id)
+        expect(response).to have_http_status('302')
+      end
+      it 'redirects to account#show when balance still remaining' do
+        allow_any_instance_of(StripeAccount).to receive(:zero_balance).and_return(false)
+        subject
+        expect(response).to redirect_to account_url(@account.id)
+        expect(response).to have_http_status('302')
+      end
+      it 'redirects to account#show when Stripe connect returns error' do
+        allow_any_instance_of(StripeAccount).to receive(:zero_balance).and_return(true)
+        allow_any_instance_of(StripeAccount).to receive(:delete_connect_account).and_return([false, 'some Stripe error'])
+        subject
+        expect(response).to redirect_to account_url(@account.id)
+        expect(response).to have_http_status('302')
+      end
+      it 'redirects to account#show when Active Record destroy returns false' do
+        allow_any_instance_of(StripeAccount).to receive(:zero_balance).and_return(true)
+        allow_any_instance_of(StripeAccount).to receive(:delete_connect_account).and_return([true, { 'account' => { 'id' => @account.acct_id, 'object' => 'account', 'deleted' => true } }])
+        allow_any_instance_of(StripeAccount).to receive(:destroy).and_return(false)
+        subject
+        expect(response).to redirect_to account_url(@account.id)
+        expect(response).to have_http_status('302')
+      end
+      it 'redirects to user#show when destroy is successful' do
+        allow_any_instance_of(StripeAccount).to receive(:zero_balance).and_return(true)
+        allow_any_instance_of(StripeAccount).to receive(:delete_connect_account).and_return([true, { 'account' => { 'id' => @account.acct_id, 'object' => 'account', 'deleted' => true } }])
+        allow_any_instance_of(StripeAccount).to receive(:destroy).and_return(true)
+        subject
+        expect(response).to redirect_to user_url(@user.id)
+        expect(response).to have_http_status('302')
+      end
+    end
+    context 'as a guest' do
+      it 'redirects to user sign-in page' do
+        subject
+        expect(response).to redirect_to new_user_session_url
+        expect(response).to have_http_status('302')
+      end
+    end
+  end
 end

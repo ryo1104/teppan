@@ -6,13 +6,12 @@ class Business::AccountsController < ApplicationController
   def new
     @user = User.find(params[:user_id])
     redirect_to user_path(current_user.id), alert: I18n.t('controller.account.ineligible') and return unless qualified(@user)
-    if @user.stripe_account.present?
-      redirect_to edit_account_path(@user.stripe_account.id), alert: I18n.t('controller.account.exists') and return
-    elsif params[:stripe_account_form].present?
-      @account_form = StripeAccountForm.new(form_params)
-    else
-      @account_form = StripeAccountForm.new
-    end
+
+    @account_form = if params[:stripe_account_form].present?
+                      StripeAccountForm.new(form_params) # rendering back from confirm screen (back button)
+                    else
+                      StripeAccountForm.new
+                    end
   end
 
   def confirm
@@ -36,51 +35,63 @@ class Business::AccountsController < ApplicationController
     render :new and return if params[:back]
     render :new and return unless @account_form.valid?
 
-    create_account
+    res_create_acct = create_account
+    redirect_to user_path(@user.id), alert: res_create_acct[1] and return unless res_create_acct[0]
+
+    redirect_to account_path(@account.id), notice: I18n.t('controller.account.created') and return
   end
 
   def edit
     @account = StripeAccount.find(params[:id])
-    my_info(@account.user_id)
-    @stripe_account_info = @account.get_connect_account
-    if @stripe_account_info[0]
-      converted_res = StripeAccountForm.convert_attributes(@stripe_account_info[1]['personal_info'])
-      if converted_res[0]
-        @account_form = StripeAccountForm.new(converted_res[1])
-      else
-        logger.error "convert_attributes returned error. #{converted_res[1]}, data : #{@stripe_account_info[1]['personal_info']}"
-        redirect_to account_path(@account.id), alert: I18n.t('controller.account.not_retrieved') and return
-      end
-    else
-      logger.error @stripe_account_info[1]
-      redirect_to account_path(@account.id), alert: I18n.t('controller.account.not_retrieved') and return
-    end
+    redirect_to user_path(current_user.id), alert: I18n.t('controller.general.no_access') unless my_info(@account.user)
+
+    edit_form_res = get_edit_form
+    redirect_to account_path(@account.id), alert: I18n.t('controller.account.not_retrieved') and return unless edit_form_res[0]
+
+    @account_form = StripeAccountForm.new(edit_form_res[1])
   end
 
   def update
     @account = StripeAccount.find(params[:id])
+    redirect_to user_path(current_user.id), alert: I18n.t('controller.general.no_access') and return unless my_info(@account.user)
+
     @account_form = StripeAccountForm.new(form_params)
     render :edit and return if params[:back]
 
-    my_info(@account.user_id)
-    update_account_info
+    update_res = update_account_info
+    if update_res[0]
+      redirect_to account_path(@account.id), notice: I18n.t('controller.account.updated') and return
+    else
+      redirect_to edit_account_path(@account.id), alert: I18n.t('controller.account.not_updated') and return
+    end
   end
 
   def show
     @account = StripeAccount.find(params[:id])
-    my_info(@account.user_id)
-    get_account_info
-    update_account_status
-    get_idcards
-    get_balance
+    redirect_to user_path(current_user.id), alert: I18n.t('controller.general.no_access') and return unless my_info(@account.user)
+
+    account_info_res = get_account_info
+    redirect_to user_path(current_user.id), alert: I18n.t('controller.account.no_info') and return unless account_info_res[0]
+
+    if @account_info['personal_info']['verification']['status'] == 'verified'
+      balance_res = get_balance
+      redirect_to user_path(current_user.id), alert: I18n.t('controller.account.nil_balance') and return unless balance_res
+    else
+      get_idcards
+    end
   end
 
   def destroy
     @account = StripeAccount.find(params[:id])
-    my_info(@account.user_id)
+    redirect_to user_path(current_user.id), alert: I18n.t('controller.general.no_access') and return unless my_info(@account.user)
     redirect_to account_path(@account.id), alert: I18n.t('controller.account.residual') and return unless @account.zero_balance
 
-    delete_account
+    delete_res = delete_account
+    if delete_res[0]
+      redirect_to user_path(current_user.id), alert: I18n.t('controller.account.deleted') and return
+    else
+      redirect_to account_path(@account.id), alert: I18n.t('controller.account.not_deleted') and return
+    end
   end
 
   private
@@ -91,53 +102,65 @@ class Business::AccountsController < ApplicationController
                                                 :kana_line1, :kana_line2, :gender, :dob, :phone, :email, :verification)
   end
 
-  def my_info(user_id)
-    if current_user.id == user_id
-      true
-    else
-      raise ErrorUtils::AccessDeniedError, "current_user.id : #{current_user.id} is accessing account info for user_id : #{user_id}"
-    end
+  def qualified(user)
+    user.premium_user[0] && my_info(user)
   end
 
-  def qualified(user)
-    if my_info(user.id) && current_user.premium_user[0]
-      true
-    else
-      false
-    end
+  def my_info(user)
+    current_user.id == user.id
   end
 
   def get_account_info
     stripe_result_acct = @account.get_connect_account
     if stripe_result_acct[0]
       @account_info = stripe_result_acct[1]
+      status_res = refresh_status
+      if status_res[0]
+        [true, stripe_result_acct[1]]
+      else
+        [false, status_res[1]]
+      end
     else
       logger.error "get_connect_account returned false : #{stripe_result_acct[1]}"
-      redirect_to user_path(current_user.id), alert: I18n.t('controller.account.no_info') and return
+      [false, stripe_result_acct[1]]
     end
   end
 
-  def update_account_status
-    if @account_info['personal_info']['verification']['status'].present? &&
-        @account.status != @account_info['personal_info']['verification']['status']
-      if @account.update(status: @account_info['personal_info']['verification']['status'])
-        @account.reload
-      else
-        raise ActiveRecord::RecordNotSaved, "update_account_status failed. ['personal_info'] = #{@account_info['personal_info']}"
-      end
-    end
+  def get_edit_form
+    account_res = get_account_info
+    return [false, account_res[1]] unless account_res[0]
+
+    StripeAccountForm.convert_attributes(account_res[1]['personal_info'])
   end
 
   def update_account_info
     stripe_result = @account.update_connect_account(@account_form, request.remote_ip)
     if stripe_result[0]
       @account_info = stripe_result[1]
-      logger.info "Stripe updated.  acct_id : #{@account_info['id']}"
-      @account.update!(status: @account_info['personal_info']['verification']['status'])
-      redirect_to account_path(@account.id), notice: I18n.t('controller.account.updated') and return
+      logger.info "Stripe updated.  acct_id : #{@account_info['id']}, @account.id : #{@account.id}"
+      refresh_status
     else
-      logger.error "update_connect_account returned false : #{stripe_result[1]}"
-      redirect_to edit_account_path(@account.id), alert: I18n.t('controller.account.not_updated') and return
+      logger.error "update_connect_account for account_id #{@account.id} returned false : #{stripe_result[1]}.
+                    @account_form = #{@account_form.attributes.inspect}"
+      [false, "update_connect_account for account_id #{@account.id} returned false : #{stripe_result[1]}."]
+    end
+  end
+
+  def refresh_status
+    if @account_info['personal_info']['verification']['status'].present?
+      if @account.status == @account_info['personal_info']['verification']['status']
+        [true, 'nothing to update']
+      elsif @account.update(status: @account_info['personal_info']['verification']['status'])
+        @account.reload
+        logger.info "refresh_status succeeded. @account = #{@account.attributes.inspect}"
+        [true, nil]
+      else
+        logger.error "refresh_status failed. ['personal_info'] = #{@account_info['personal_info']}"
+        [false, "refresh_status failed. ['personal_info'] = #{@account_info['personal_info']}"]
+      end
+    else
+      logger.error 'verification status does not exist in account_info'
+      [false, 'verification status does not exist in account_info']
     end
   end
 
@@ -153,10 +176,11 @@ class Business::AccountsController < ApplicationController
     stripe_result_balance = @account.get_balance
     if stripe_result_balance[0]
       @balance_info = stripe_result_balance[1]
-      @payout_threshold = 10
+      @payout_threshold = ENV['PAYOUT_THRESHOLD'].to_i
+      true
     else
       logger.error "get_balance returned false : #{stripe_result_balance[1]}"
-      redirect_to user_path(current_user.id), alert: I18n.t('controller.account.nil_balance') and return
+      false
     end
   end
 
@@ -166,19 +190,20 @@ class Business::AccountsController < ApplicationController
       logger.info "Stripe connect account created. acct_id : #{@stripe_result[1]['id']}"
       add_record
     else
-      logger.error "create_connect_account returned false : #{@stripe_result[1]}.  User ID : #{@user.id}, email : #{@user.email}"
-      redirect_to user_path(@user.id), alert: I18n.t('controller.account.not_created') + @stripe_result[1].to_s and return
+      logger.error "create_connect_account returned false : #{@stripe_result[1]}.
+                    User ID : #{@user.id}, email : #{@user.email}, @account_form = #{@account_form.attributes.inspect}"
+      [false, I18n.t('controller.account.not_created')]
     end
   end
 
   def add_record
-    @account = StripeAccount.create(user_id: @user.id, acct_id: @stripe_result[1]['id'],
-                                    status: @stripe_result[1]['personal_info']['verification']['status'])
-    if @account.persisted?
-      redirect_to account_path(@account.id), notice: I18n.t('controller.account.created') and return
+    @account = StripeAccount.new(user_id: @user.id, acct_id: @stripe_result[1]['id'],
+                                 status: @stripe_result[1]['personal_info']['verification']['status'])
+    if @account.save
+      [true, nil]
     else
-      raise ActiveRecord::RecordNotSaved, "create account failed. user_id: #{@user.id}, acct_id: #{@stripe_result[1]['id']},
-                                           status: #{@stripe_result[1]['personal_info']['verification']['status']}"
+      logger.error "Active Record create failed. user_id: #{@user.id}, stripe_result: #{@stripe_result[1]}"
+      [false, I18n.t('controller.account.not_created')]
     end
   end
 
@@ -187,14 +212,15 @@ class Business::AccountsController < ApplicationController
     if stripe_del_acct_res[0]
       logger.info "Stripe delete succeeded. acct_id : #{stripe_del_acct_res[1]['id']}"
       if @account.destroy
-        redirect_to user_path(current_user.id), alert: I18n.t('controller.account.deleted') and return
+        logger.info 'ActiveRecord destroy succeeded.'
+        [true, nil]
       else
         logger.error "ActiveRecord destroy failed. Account id : #{@account.id}"
-        redirect_to account_path(@account.id), alert: I18n.t('controller.account.not_deleted') and return
+        [false, "ActiveRecord destroy failed. Account id : #{@account.id}"]
       end
     else
       logger.error "Stripe delete failed : #{stripe_del_acct_res[1]}"
-      redirect_to account_path(@account.id), alert: I18n.t('controller.account.not_deleted') and return
+      [false, "Stripe delete failed : #{stripe_del_acct_res[1]}"]
     end
   end
 end

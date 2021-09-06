@@ -50,29 +50,6 @@ ja:
         rate: 点数
       stripe_accounts:
         status: 承認ステータス
-      stripe_account_forms:
-        last_name_kanji: 姓（漢字）
-        last_name_kana: 姓（カナ）
-        first_name_kanji: 名（漢字）
-        first_name_kana: 名（カナ）
-        gender: 性別
-        email: メールアドレス
-        dob: 生年月日
-        postal_code: 郵便番号
-        kanji_state: 都道府県
-        kanji_city: 市・区
-        kanji_town: 町
-        kanji_line1: 番地
-        kanji_line2: 建物名
-        kana_line1: 番地（カナ）
-        kana_line2: 建物名（カナ）
-        phone: 電話番号
-        verification: 利用規約
-      stripe_ext_account_forms:
-        bank_name: 銀行名
-        branch_name: 支店名
-        account_number: 口座番号
-        account_holder_name: 口座名義人
       stripe_idcards:
         frontback: 表面・裏面
       topics:
@@ -100,3 +77,31 @@ ja:
       violations:
         text: 報告内容
         block: ブロック
+  activemodel:
+    models:
+      stripe_account_form: ビジネスアカウント申込フォーム
+      stripe_ext_account_form: 出金口座入力フォーム
+    attributes:
+      stripe_account_form:
+        last_name_kanji: 姓（漢字）
+        last_name_kana: 姓（カナ）
+        first_name_kanji: 名（漢字）
+        first_name_kana: 名（カナ）
+        gender: 性別
+        email: メールアドレス
+        dob: 生年月日
+        postal_code: 郵便番号
+        kanji_state: 都道府県
+        kanji_city: 市・区
+        kanji_town: 町
+        kanji_line1: 番地
+        kanji_line2: 建物名
+        kana_line1: 番地（カナ）
+        kana_line2: 建物名（カナ）
+        phone: 電話番号
+        verification: 利用規約
+      stripe_ext_account_form:
+        bank_name: 銀行名
+        branch_name: 支店名
+        account_number: 口座番号
+        account_holder_name: 口座名義人 

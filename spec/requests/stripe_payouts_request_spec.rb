@@ -22,13 +22,10 @@ RSpec.describe Business::PayoutsController, type: :request do
         before do
           @account = create(:stripe_account, user: @user, acct_id: valid_stripe_acct_id, ext_acct_id: valid_ext_acct_id)
         end
-        it 'returns a 200 status code' do
-          subject
-          expect(response).to have_http_status('200')
-        end
         it 'displays payout form' do
           subject
           expect(response.body).to include '銀行口座へ出金'
+          expect(response).to have_http_status('200')
         end
       end
       context 'if current user is not account owner' do
@@ -63,7 +60,7 @@ RSpec.describe Business::PayoutsController, type: :request do
         it 'redirects to account#show' do
           subject
           expect(response).to redirect_to account_url(@account.id)
-          expect(flash[:alert]).to include '出金可能残高を取得できませんでした。'
+          expect(flash[:alert]).to include '出金可能額を取得できませんでした。'
           expect(response).to have_http_status('302')
         end
       end
@@ -72,13 +69,10 @@ RSpec.describe Business::PayoutsController, type: :request do
       before do
         @account = create(:stripe_account, user: @user, acct_id: valid_stripe_acct_id, ext_acct_id: valid_ext_acct_id)
       end
-      it 'returns a 302 status code' do
-        subject
-        expect(response).to have_http_status('302')
-      end
       it 'redirects to the sign-in page' do
         subject
         expect(response).to redirect_to new_user_session_url
+        expect(response).to have_http_status('302')
       end
     end
   end
@@ -154,6 +148,16 @@ RSpec.describe Business::PayoutsController, type: :request do
           expect(flash[:alert]).to include '出金処理が中断されました。管理者にお問い合わせ下さい。'
           expect(response).to have_http_status('302')
         end
+      end
+    end
+    context 'as a guest' do
+      before do
+        @account = create(:stripe_account, user: @user, acct_id: valid_stripe_acct_id, ext_acct_id: valid_ext_acct_id)
+      end
+      it 'redirects to the sign-in page' do
+        subject
+        expect(response).to redirect_to new_user_session_url
+        expect(response).to have_http_status('302')
       end
     end
   end

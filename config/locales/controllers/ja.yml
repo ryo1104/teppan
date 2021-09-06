@@ -48,7 +48,7 @@ ja:
       no_bank_info: '振込先口座情報が取得できませんでした。'
       no_payout: '出金処理は中断されました。管理者にお問い合わせ下さい。'
       record_not_saved: '出金処理が中断されました。管理者にお問い合わせ下さい。'
-      balance_not_retrieved: '出金可能残高を取得できませんでした。'
+      balance_not_retrieved: '出金可能額を取得できませんでした。'
     topic:
       created: 'トピックが作成されました。'
       updated: 'トピックが更新されました。'

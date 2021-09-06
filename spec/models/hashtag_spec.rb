@@ -106,7 +106,7 @@ RSpec.describe Hashtag, type: :model do
     end
   end
 
-  describe 'method::add_hit', type: :doing do
+  describe 'method::add_hit' do
     before do
       @some_user = create(:user)
       @hashtag = create(:hashtag)
@@ -145,34 +145,4 @@ RSpec.describe Hashtag, type: :model do
     end
   end
 
-  # describe 'method::update_yomigana' do
-  #   context 'with valid data', type: :doing do
-  #     it 'updates hashtag with hiragana' do
-  #       hashtag = create(:hashtag, hashname: '試験用ハッシュタグ1A２')
-  #       hashtag.update_yomigana
-  #       expect(hashtag.yomigana).to eq 'しけんようはっしゅたぐ1A２'
-  #     end
-  #     it 'returns true' do
-  #       hashtag = create(:hashtag, hashname: '試験用ハッシュタグ1A２')
-  #       expect(hashtag.update_yomigana).to eq true
-  #     end
-  #   end
-  #   context 'with invalid data' do
-  #     before do
-  #       rubifuri_mock = double('Rubifuri client')
-  #       allow(Rubyfuri::Client).to receive(:new).and_return(rubifuri_mock)
-  #       allow(rubifuri_mock).to receive(:furu).and_return('しけんようハッシュ・タグ')
-  #     end
-  #     it 'logs warning if rubifuri returned a invalid yomigana' do
-  #       hashtag = build(:hashtag, hashname: '試験用ハッシュタグ')
-  #       expect(Rails.logger).to receive(:warn).with('Error updating yomigana for Hashtag 試験用ハッシュタグ, result was : しけんようハッシュ・タグ')
-  #       hashtag.update_yomigana
-  #     end
-  #     it 'returns false' do
-  #       allow_any_instance_of(Hashtag).to receive(:save).and_return(false)
-  #       hashtag = build(:hashtag, hashname: '試験用ハッシュタグ')
-  #       expect(hashtag.update_yomigana).to eq false
-  #     end
-  #   end
-  # end
 end
