@@ -1,0 +1,21 @@
+<% @page_title = "メール本文" %>
+<% breadcrumb :email, @email %>
+<div class="page-body">
+  <div class="row">
+    <div class="col s12 m12 email-show">
+      <div class="row email-show__pageheader">
+        <div class="col s12 m12 email-show__breadcrumbs">
+          <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs-tp" %>
+        </div>
+      </div>
+      <div class="row email-show__pagebody">
+        <div>From : <%= @email.from %></div>
+        <div>To : <%= @email.to %></div>
+        <div>Received : <%= @email.created_at %></div>
+        <div>Subject : <%= @email.subject %></div>
+        <div>Attachments : <%= @email.attachments.blobs.map { |a| a.filename.to_s } %></div>
+        <div><%= @email.body %></div>
+      </div>
+    </div>
+  </div>
+</div>

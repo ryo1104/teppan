@@ -61,4 +61,6 @@ Rails.application.routes.draw do
     resources :bank_autocomplete, only: [:index]
     resources :branch_autocomplete, only: [:index]
   end
+
+  resources :emailrecs, only: %i[index show]
 end

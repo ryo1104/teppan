@@ -1,0 +1,19 @@
+<% @page_title = "受信メール一覧" %>
+<% breadcrumb :emails %>
+<div class="page-body">
+  <div class="row">
+    <div class="col s12 m12 email-index">
+      <div class="row email-index__pageheader">
+        <div class="col s12 m12 email-index__breadcrumbs">
+          <%= breadcrumbs separator: "  &rsaquo;  ", :class => "breadcrumbs-tp" %>
+        </div>
+      </div>
+      <div class="row email-index__pagebody">
+        <table class="email-index__table">
+          <th>From</th><th>To</th><th>Subject</th><th>Received</th>
+          <%= render partial: "emailrecs/email", collection: @emails %>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

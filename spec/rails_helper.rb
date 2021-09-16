@@ -10,6 +10,7 @@ require 'devise'
 require './spec/support/omni_auth_mocks'
 require './spec/support/fakes3'
 # require './spec/support/controller_macros'
+require 'action_mailbox/test_helper'
 require 'dotenv'
 Dotenv.load('.env.development')
 
@@ -90,5 +91,7 @@ RSpec.configure do |config|
       bucket: 'dummy_bucket_name'
     )
     stub_const('S3_BUCKET', Aws::S3::Resource.new(client: s3_client).bucket('dummy_bucket_name'))
+
+    config.include ActionMailbox::TestHelper, type: :mailbox
   end
 end

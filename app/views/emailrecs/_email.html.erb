@@ -1,0 +1,10 @@
+<tr>
+  <td><%= email.from %></td>
+  <td><%= email.to %></td>
+  <td>
+    <%= link_to emailrec_path(email.id) do %>
+      <%= email.subject %>
+    <% end %>
+  </td>
+  <td><%= email.created_at %></td>
+</tr>

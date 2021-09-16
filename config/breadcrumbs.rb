@@ -157,3 +157,15 @@ crumb :create_payout do |account|
   link '出金完了', account_payouts_path(account.id)
   parent :show_account, account
 end
+
+# emailrecs#index
+crumb :emails do
+  link 'メール一覧', emailrecs_path
+  parent :root
+end
+
+# emailrecs#show
+crumb :email do |email|
+  link email.subject.to_s, emailrec_path(email.id)
+  parent :emails
+end
