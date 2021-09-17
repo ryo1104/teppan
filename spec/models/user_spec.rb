@@ -495,7 +495,7 @@ RSpec.describe User, type: :model do
       create(:neta, user: @user, topic: @topic1, reviews_count: 3, average_rate: 3.11)
       create(:neta, user: @user, topic: @topic2, reviews_count: 5, average_rate: 3.72)
       create(:neta, user: @user, topic: @topic3, reviews_count: 1, average_rate: 0)
-      expect(@user.average_rate).to eq ((3.11 * 3 + 3.72 * 5 + 0) / (3 + 5 + 1)).round(2)
+      expect(@user.average_rate).to eq (((3.11 * 3) + (3.72 * 5) + 0) / (3 + 5 + 1)).round(2)
     end
     it 'returns 0 when no netas by user' do
       expect(@user.average_rate).to eq 0
