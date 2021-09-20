@@ -127,7 +127,7 @@ RSpec.describe NetasController, type: :request do
     end
   end
 
-  describe 'GET #show', type: :doing do
+  describe 'GET #show' do
     subject { get neta_url(@neta.id) }
 
     context 'as a signed in user' do

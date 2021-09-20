@@ -23,9 +23,18 @@
           <%= f.label :password_confirmation, :class => 'user-register-new__password-label' %>
           <%= f.password_field :password_confirmation, autocomplete: "off", :class => 'user-register-new__password' %>
         </div>
-        <%= f.submit "登録", :class => "user-register-new__login btn waves-effect" %>
+        
+        <div class="user-register-new__agreement">
+          <%= f.label :agreement_terms do %>
+            <%= f.check_box :agreement_terms, :class => 'reset-checkbox', :as => :boolean %>
+            <span class="user-register-new__agreement-tag">
+              <%= link_to '利用規約', userterm_path, method: :get %>・
+              <%= link_to 'プライバシーポリシー', policy_path, method: :get %>に同意する
+            </span>
+          <% end %>
+        </div>
+        <%= f.submit "メールアドレスで登録する", :class => "user-register-new__login btn waves-effect" %>
       <% end %>
-      <hr>
       <h2>他のアカウントで登録</h2>
       <%= render :partial => "/users/shared/oauth" %>
     </div>

@@ -30,6 +30,7 @@ class User < ApplicationRecord
   validates :followers_count, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :followings_count, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :unregistered, inclusion: { in: [true, false] }
+  validates :agreement_terms, allow_nil: false, acceptance: true, on: :create
 
   def self.find_or_create_for_oauth(auth)
     auth_check = auth_check(auth)
@@ -55,9 +56,10 @@ class User < ApplicationRecord
                       uid: auth.uid,
                       nickname: auth.info.name,
                       password: Devise.friendly_token[0, 20],
-                      gender: gender)
+                      gender: gender,
+                      agreement_terms: true)
       user.skip_confirmation!
-      user.save
+      user.save!
     end
     user
   end

@@ -1,12 +1,22 @@
 .user-register-new {
   
   &__form {
-    margin: 0 0 2rem 0;
+    margin: 0;
   }
   
   &__field {
     max-width: 28rem;
     height: 7rem;
+    padding: 1rem 0;
+  }
+  
+  &__agreement {
+    max-width: 30rem;
+    padding: 3rem 0 1rem;
+     &-tag {
+       font-size: 1.3rem !important;
+       padding-left: 0 !important
+     }
   }
   
   &__email {
@@ -16,14 +26,14 @@
   &__password {
     height: 2rem;
     &-message {
-      color: $tp-gray
+      color: $tp-gray;
+      font-size: 1.3rem;
     }
   }
   
   &__login {
     &.btn.waves-effect.waves-input-wrapper {
       @include button-normal;
-      margin-bottom: 2rem;
     }
   }
 }

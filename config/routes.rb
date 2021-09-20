@@ -63,4 +63,6 @@ Rails.application.routes.draw do
   end
 
   resources :emailrecs, only: %i[index show]
+  resource :policy, only: [:show]
+  resource :userterm, only: [:show]
 end

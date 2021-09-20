@@ -11,5 +11,6 @@ FactoryBot.define do
     followers_count { '0' }
     followings_count { '0' }
     unregistered { false }
+    agreement_terms { true }
   end
 end

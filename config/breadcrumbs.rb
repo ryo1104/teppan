@@ -169,3 +169,15 @@ crumb :email do |email|
   link email.subject.to_s, emailrec_path(email.id)
   parent :emails
 end
+
+# userterms#show
+crumb :userterms do
+  link '利用規約', userterm_path
+  parent :root
+end
+
+# userterms#show
+crumb :policy do
+  link 'プライバシーポリシー', policy_path
+  parent :root
+end
