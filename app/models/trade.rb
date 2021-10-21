@@ -69,7 +69,7 @@ class Trade < ApplicationRecord
                                  amount: tradeable.price,
                                  currency: 'jpy',
                                  quantity: 1,
-                                 tax_rates: ['txr_1JSHEcEThOtNwrS9iC7arZxH']
+                                 tax_rates: [ENV['TAX_RATE_ID']]
                                }
                              ],
                              metadata: {
@@ -80,8 +80,7 @@ class Trade < ApplicationRecord
                                  amount: seller_revenue,
                                  destination: seller.stripe_account.acct_id
                                },
-                               # receipt_email: buyer.email
-                               receipt_email: ENV['ADMIN_EMAIL_ADDRESS']
+                               receipt_email: buyer.email
                              }
                            })
 

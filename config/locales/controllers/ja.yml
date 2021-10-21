@@ -61,6 +61,7 @@ ja:
       registration:
         data_exists: '関連するデータが存在するため、削除できません。'
         unregister_failed: '退会処理に失敗しました。'
+        unregistered: 'メールアドレスまたはパスワードが無効です。'
       omniauth_callbacks:
         yahoojp: 'Yahoo Japan'
         twitter: 'Twitter'

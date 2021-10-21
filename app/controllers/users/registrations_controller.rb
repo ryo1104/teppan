@@ -9,7 +9,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # POST /resource
   def create
     if unregistered_user
-      redirect_to new_user_registration_path, alert: 'メールアドレスまたはパスワードが無効です。' and return
+      redirect_to new_user_registration_path, alert: I18n.t('controller.user.registration.unregistered') and return
     else
       super
     end
@@ -20,27 +20,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # PUT /resource
 
   # DELETE /resource
-  # def destroy
-  #   if user_signed_in? && resource.class.name == 'User'
-  #     if resource.id == current_user.id
-  #       user = User.find(resource.id)
-  #       if user.can_unregister[0]
-  #         if user.update(unregistered: true)
-  #           sign_out(resource)
-  #         else
-  #           redirect_to user_path(current_user.id), alert: '退会処理に失敗しました。' and return
-  #         end
-  #       else
-  #         redirect_to user_path(current_user.id), alert: '必要なデータを削除して下さい。' and return
-  #       end
-  #     else
-  #       redirect_to user_path(current_user.id), alert: '権限がありません。' and return
-  #     end
-  #   else
-  #     redirect_to root_path and return
-  #   end
-  # end
-
   def destroy
     get_user(resource)
     deleteable = @user.can_unregister

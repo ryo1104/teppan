@@ -65,4 +65,5 @@ Rails.application.routes.draw do
   resources :emailrecs, only: %i[index show]
   resource :policy, only: [:show]
   resource :userterm, only: [:show]
+  resource :tokutei, only: [:show]
 end

@@ -181,3 +181,9 @@ crumb :policy do
   link 'プライバシーポリシー', policy_path
   parent :root
 end
+
+# tokuteis#show
+crumb :tokutei do
+  link '特定商取引法に基づく表示', policy_path
+  parent :root
+end
