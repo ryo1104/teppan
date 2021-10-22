@@ -46,7 +46,8 @@ RSpec.describe FollowersController, type: :request do
       it 'creates a follow' do
         expect do
           subject
-        end.to change(Follow, :count).by(1)
+        end.
+          to change(Follow, :count).by(1)
       end
       it 'returns a 200 status code' do
         subject
@@ -89,7 +90,8 @@ RSpec.describe FollowersController, type: :request do
         it 'deletes follow' do
           expect do
             subject
-          end.to change(Follow, :count).by(-1)
+          end.
+            to change(Follow, :count).by(-1)
         end
         it 'returns a 200 status code' do
           subject

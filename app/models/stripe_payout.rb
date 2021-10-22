@@ -20,7 +20,8 @@ class StripePayout < ApplicationRecord
 
     begin
       stripe_payout = JSON.parse(Stripe::Payout.create({ amount: amt, currency: 'jpy' },
-                                                       { stripe_account: acct_id }).to_s)
+                                                       { stripe_account: acct_id }).
+                                                       to_s)
     rescue StandardError => e
       ErrorUtility.log_and_notify(exc: e, data: { 'stripe_account' => acct_id, 'amount' => amt, 'check_inputs' => check_inputs })
       return [false, "Stripe error - #{e.message}"]

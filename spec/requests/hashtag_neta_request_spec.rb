@@ -17,7 +17,8 @@ RSpec.describe 'HashtagAutocompletes', type: :request do
         it 'hit count increases by 1' do
           expect do
             subject
-          end.to change(HashtagHit, :count).by(1)
+          end.
+            to change(HashtagHit, :count).by(1)
         end
         it 'returns a 200 status code' do
           subject
@@ -28,7 +29,8 @@ RSpec.describe 'HashtagAutocompletes', type: :request do
         it 'hit count is unchanged' do
           expect do
             subject
-          end.to change(HashtagHit, :count).by(0)
+          end.
+            to change(HashtagHit, :count).by(0)
         end
       end
       it 'returns a 200 status code' do
@@ -44,7 +46,8 @@ RSpec.describe 'HashtagAutocompletes', type: :request do
       it 'hit count is unchanged' do
         expect do
           subject
-        end.to change(HashtagHit, :count).by(0)
+        end.
+          to change(HashtagHit, :count).by(0)
       end
       it 'returns a 200 status code' do
         subject

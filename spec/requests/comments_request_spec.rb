@@ -19,7 +19,8 @@ RSpec.describe CommentsController, type: :request do
           it 'adds record to Comments' do
             expect do
               post topic_comments_path(@topic.id), params: { comment: { text: 'test comment' } }
-            end.to change(Comment, :count).by(1)
+            end.
+              to change(Comment, :count).by(1)
           end
           it 'user_id of new record is current user' do
             post topic_comments_path(@topic.id), params: { comment: { text: 'test comment' } }

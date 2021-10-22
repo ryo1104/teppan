@@ -21,12 +21,14 @@ RSpec.describe InquiriesController, type: :request do
     it 'creates a inquiry record' do
       expect do
         post inquiries_url, params: { inquiry: { email: @attributes[:email], message: @attributes[:message] } }
-      end.to change(Inquiry, :count).by(1)
+      end.
+        to change(Inquiry, :count).by(1)
     end
     it 'sends email' do
       expect do
         post inquiries_url, params: { inquiry: { email: @attributes[:email], message: @attributes[:message] } }
-      end.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end.
+        to change { ActionMailer::Base.deliveries.count }.by(1)
     end
     it 'displays page' do
       post inquiries_url, params: { inquiry: { email: @attributes[:email], message: @attributes[:message] } }

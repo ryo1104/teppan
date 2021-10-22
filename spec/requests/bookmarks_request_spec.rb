@@ -18,7 +18,8 @@ RSpec.describe BookmarksController, type: :request do
           it 'creates a Bookmarks record' do
             expect do
               post topic_bookmarks_path(@topic.id), xhr: true
-            end.to change(Bookmark, :count).by(1)
+            end.
+              to change(Bookmark, :count).by(1)
           end
           it 'user_id of new record is current user' do
             post topic_bookmarks_path(@topic.id), xhr: true
@@ -44,7 +45,8 @@ RSpec.describe BookmarksController, type: :request do
           it 'adds record to Bookmark table' do
             expect do
               post neta_bookmarks_path(@neta.id), xhr: true
-            end.to change(Bookmark, :count).by(1)
+            end.
+              to change(Bookmark, :count).by(1)
           end
           it 'user_id of new record is current user' do
             post neta_bookmarks_path(@neta.id), xhr: true
@@ -109,7 +111,8 @@ RSpec.describe BookmarksController, type: :request do
           it 'deletes record from Bookmark table' do
             expect do
               delete topic_bookmark_path(@topic.id, @bookmark.id), xhr: true
-            end.to change(Bookmark, :count).by(-1)
+            end.
+              to change(Bookmark, :count).by(-1)
           end
           it 'returns a 200 status code' do
             delete topic_bookmark_path(@topic.id, @bookmark.id), xhr: true
@@ -138,7 +141,8 @@ RSpec.describe BookmarksController, type: :request do
           it 'deletes record from Bookmark table' do
             expect do
               delete neta_bookmark_path(@neta.id, @bookmark.id), xhr: true
-            end.to change(Bookmark, :count).by(-1)
+            end.
+              to change(Bookmark, :count).by(-1)
           end
           it 'returns a 200 status code' do
             delete neta_bookmark_path(@neta.id, @bookmark.id), xhr: true

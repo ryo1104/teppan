@@ -18,7 +18,8 @@ RSpec.describe LikesController, type: :request do
           it 'creates a Like record' do
             expect do
               post topic_likes_path(@topic.id), xhr: true
-            end.to change(Like, :count).by(1)
+            end.
+              to change(Like, :count).by(1)
           end
           it 'user_id of new record is current user' do
             post topic_likes_path(@topic.id), xhr: true
@@ -44,7 +45,8 @@ RSpec.describe LikesController, type: :request do
           it 'creates a Like record' do
             expect do
               post comment_likes_path(@comment.id), xhr: true
-            end.to change(Like, :count).by(1)
+            end.
+              to change(Like, :count).by(1)
           end
           it 'user_id of new record is current user' do
             post comment_likes_path(@comment.id), xhr: true
@@ -109,7 +111,8 @@ RSpec.describe LikesController, type: :request do
           it 'deletes record from Like table' do
             expect do
               delete topic_like_path(@topic.id, @like.id), xhr: true
-            end.to change(Like, :count).by(-1)
+            end.
+              to change(Like, :count).by(-1)
           end
           it 'returns a 200 status code' do
             delete topic_like_path(@topic.id, @like.id), xhr: true
@@ -138,7 +141,8 @@ RSpec.describe LikesController, type: :request do
           it 'deletes record from Like table' do
             expect do
               delete comment_like_path(@comment.id, @like.id), xhr: true
-            end.to change(Like, :count).by(-1)
+            end.
+              to change(Like, :count).by(-1)
           end
           it 'returns a 200 status code' do
             delete comment_like_path(@comment.id, @like.id), xhr: true

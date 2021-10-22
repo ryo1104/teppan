@@ -52,7 +52,8 @@ RSpec.describe Hashtags::NetasController, type: :request do
       it 'adds hashtag hit' do
         expect do
           get hashtags_netas_url, params: { keyword: 'hashtag3' }
-        end.to change(HashtagHit, :count).by(1)
+        end.
+          to change(HashtagHit, :count).by(1)
       end
     end
   end

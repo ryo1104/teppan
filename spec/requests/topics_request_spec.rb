@@ -153,7 +153,8 @@ RSpec.describe TopicsController, type: :request do
       it 'creates a topic' do
         expect do
           post topics_url, params: { topic: { title: @attributes[:title], content: @attributes[:content] } }
-        end.to change(Topic, :count).by(1)
+        end.
+          to change(Topic, :count).by(1)
       end
     end
     context 'as a guest' do
@@ -195,7 +196,8 @@ RSpec.describe TopicsController, type: :request do
       it 'adds pageview' do
         expect do
           subject
-        end.to change(Pageview, :count).by(1)
+        end.
+          to change(Pageview, :count).by(1)
       end
       it 'returns a 200 status code' do
         subject
@@ -301,7 +303,8 @@ RSpec.describe TopicsController, type: :request do
         it 'updates topic' do
           expect do
             patch topic_url @test_topic, params: { topic: { title: '変更後テストトピックタイトル' } }
-          end.to change { Topic.find(@test_topic.id).title }.from('テストトピックタイトル').to('変更後テストトピックタイトル')
+          end.
+            to change { Topic.find(@test_topic.id).title }.from('テストトピックタイトル').to('変更後テストトピックタイトル')
         end
         it 'redirects to topic#show when update succeeds' do
           patch topic_url @test_topic, params: { topic: { title: '変更後テストトピックタイトル' } }
@@ -342,7 +345,8 @@ RSpec.describe TopicsController, type: :request do
         it 'does not delete the topic' do
           expect do
             delete topic_url @test_topic
-          end.to change(Topic, :count).by(0)
+          end.
+            to change(Topic, :count).by(0)
         end
         it 'redirects to topic#show' do
           delete topic_url @test_topic
@@ -360,7 +364,8 @@ RSpec.describe TopicsController, type: :request do
           it 'deletes the topic' do
             expect do
               delete topic_url @test_topic
-            end.to change(Topic, :count).by(-1)
+            end.
+              to change(Topic, :count).by(-1)
           end
           it 'displays topic#edit when destroy fails', type: :doing do
             allow_any_instance_of(Topic).to receive(:destroy).and_return(false)
@@ -375,7 +380,8 @@ RSpec.describe TopicsController, type: :request do
           it 'does not delete the topic' do
             expect do
               delete topic_url @test_topic
-            end.to change(Topic, :count).by(0)
+            end.
+              to change(Topic, :count).by(0)
           end
           it 'redirects to topic#show' do
             delete topic_url @test_topic

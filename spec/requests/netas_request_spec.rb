@@ -75,12 +75,14 @@ RSpec.describe NetasController, type: :request do
         it 'creates a neta' do
           expect do
             subject
-          end.to change(Neta, :count).by(1)
+          end.
+            to change(Neta, :count).by(1)
         end
         it 'adds hashtags associated to neta' do
           expect do
             subject
-          end.to change(HashtagNeta, :count).by(3)
+          end.
+            to change(HashtagNeta, :count).by(3)
         end
         it 'redirects to neta#show' do
           subject
@@ -167,7 +169,8 @@ RSpec.describe NetasController, type: :request do
           it 'adds pageview' do
             expect do
               subject
-            end.to change(Pageview, :count).by(1)
+            end.
+              to change(Pageview, :count).by(1)
           end
           context 'and price is zero' do
             before do
@@ -469,7 +472,8 @@ RSpec.describe NetasController, type: :request do
         it 'updates the neta' do
           expect do
             subject
-          end.to change(Neta, :count).by(0)
+          end.
+            to change(Neta, :count).by(0)
         end
         it 'redirects to show action' do
           subject
@@ -540,7 +544,8 @@ RSpec.describe NetasController, type: :request do
         it 'deletes the neta' do
           expect do
             subject
-          end.to change(Neta, :count).by(-1)
+          end.
+            to change(Neta, :count).by(-1)
         end
         it 'deletes the hashtag associations with neta (but not the hashtag itself)' do
           hashtag1 = create(:hashtag, hashname: 'tag1')
@@ -550,7 +555,8 @@ RSpec.describe NetasController, type: :request do
           create(:hashtag_neta, neta: @neta, hashtag: hashtag3)
           expect do
             subject
-          end.to change(HashtagNeta, :count).by(-2)
+          end.
+            to change(HashtagNeta, :count).by(-2)
         end
         it 'redirects to topic' do
           subject
@@ -567,7 +573,8 @@ RSpec.describe NetasController, type: :request do
           it 'does not delete the neta' do
             expect do
               subject
-            end.to change(Neta, :count).by(0)
+            end.
+              to change(Neta, :count).by(0)
           end
           it 'redirects back to neta' do
             subject

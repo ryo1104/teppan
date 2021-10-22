@@ -18,7 +18,8 @@ RSpec.describe ReviewsController, type: :request do
         it 'creates a review' do
           expect do
             post neta_reviews_url(@neta.id), params: { review: @review_attributes }
-          end.to change(Review, :count).by(1)
+          end.
+            to change(Review, :count).by(1)
         end
         it "updates neta's average rate column" do
           another_user = create(:user)

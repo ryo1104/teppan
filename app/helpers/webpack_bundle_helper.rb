@@ -12,10 +12,12 @@ module WebpackBundleHelper
   def javascript_bundle_tag(entry, **options)
     path = asset_bundle_path("#{entry}.js")
 
-    options = {
-      src: path,
-      defer: true
-    }.merge(options)
+    options =
+      {
+        src: path,
+        defer: true
+      }.
+      merge(options)
 
     # async と defer を両方指定した場合、ふつうは async が優先されるが、
     # defer しか対応してない古いブラウザの挙動を考えるのが面倒なので、両方指定は防いでおく
@@ -27,9 +29,11 @@ module WebpackBundleHelper
   def stylesheet_bundle_tag(entry, **options)
     path = asset_bundle_path("#{entry}.css")
 
-    options = {
-      href: path
-    }.merge(options)
+    options =
+      {
+        href: path
+      }.
+      merge(options)
 
     stylesheet_link_tag '', **options
   end
