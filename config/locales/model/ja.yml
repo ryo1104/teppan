@@ -18,49 +18,50 @@ ja:
       violation: 違反報告
       comment: コメント
     attributes:
-      banks:    
+      bank:    
         name: 銀行名
         namekana: 銀行名（カタカナ）
         namehira: 銀行名（ひらがな）
         roma: 銀行名（ローマ字）
-      branches:
+      branch:
         name: 支店名
         namekana: 支店名（カタカナ）
         namehira: 支店名（ひらがな）
         roma: 支店名（ローマ字）
-      comments:
+      comment:
         text: コメント文
-      hashtags:
+      hashtag:
         hashname: ハッシュタグ
         hiragana: 読みがな
-      inquiries:
+      inquiry:
         email: メールアドレス
         message: 文章
-      netas:
+      neta:
         title: タイトル
-        content: 本文（無料部分）
+        content: 本文
         valuecontent: 本文（有料部分）
         price: 価格
         average_rate: 評価平均
         private_flag: 非公開設定
         topic: トピック
         user: ユーザー
-      reviews:
+      review:
         text: レビュー文
         rate: 点数
-      stripe_accounts:
+      stripe_account:
         status: 承認ステータス
-      stripe_idcards:
+      stripe_idcard:
         frontback: 表面・裏面
-      topics:
+      topic:
         title: タイトル
+        content: 本文
         pageviews_count: PV数
         likes_count: いいね数
         bookmarks_count: お気に入り数
         netas_count: ネタ数
         comments_count: コメント数
         private_flag: 非公開設定
-      trades:
+      trade:
         price: 価格
         stripe_ch_id: StripeChargeID
         stripe_pi_id: StripePaymentIntentID
@@ -75,7 +76,7 @@ ja:
         new_password: 新しいパスワード
         remember_me: ログイン状態を保持する
         agreement_terms: 利用規約・プライバシーポリシー
-      violations:
+      violation:
         text: 報告内容
         block: ブロック
   activemodel:
