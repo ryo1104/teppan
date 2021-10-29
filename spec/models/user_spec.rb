@@ -369,7 +369,7 @@ RSpec.describe User, type: :model do
       end
       it 'sets email' do
         user = User.find_or_create_for_oauth(@auth)
-        expect(user.email).to eq 'mocktwitteruser@twitter-hoge.com'
+        expect(user.email).to eq 'example_user@twitter-hoge.com'
       end
       it 'sets nickname' do
         user = User.find_or_create_for_oauth(@auth)
@@ -381,7 +381,7 @@ RSpec.describe User, type: :model do
         expect(user).to eq the_new_user
       end
       it 'finds user if already exists' do
-        user = create(:user, email: 'mocktwitteruser@twitter-hoge.com')
+        user = create(:user, email: 'example_user@twitter-hoge.com')
         got_user = User.find_or_create_for_oauth(@auth)
         expect(got_user).to eq user
       end

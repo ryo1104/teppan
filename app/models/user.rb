@@ -36,11 +36,7 @@ class User < ApplicationRecord
     auth_check = auth_check(auth)
     return [false, auth_check[1]] unless auth_check[0]
 
-    email = if auth.provider == 'twitter'
-              "#{auth.info.name}@twitter-hoge.com" # twitter APIでPrivacyPolicy等の設定をすればauth.info.emailから取得可能になる
-            else
-              auth.info.email
-            end
+    email = auth.info.email
 
     gender = case auth.info.gender
              when 'male'
