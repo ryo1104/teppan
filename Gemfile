@@ -111,3 +111,5 @@ gem 'fast_jsonapi'
 
 # Phone number
 gem 'telephone_number'
+
+gem 'newrelic_rpm'

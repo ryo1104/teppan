@@ -212,6 +212,7 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.1.1)
     mysql2 (0.5.3)
+    newrelic_rpm (8.1.0)
     nio4r (2.5.7)
     nokogiri (1.12.5)
       mini_portile2 (~> 2.6.1)
@@ -444,6 +445,7 @@ DEPENDENCIES
   material_icons
   mini_magick (~> 4.10)
   mysql2
+  newrelic_rpm
   omniauth
   omniauth-google-oauth2
   omniauth-rails_csrf_protection
