@@ -38,7 +38,7 @@ RSpec.describe Topic, type: :model do
     it 'is invalid if title is longer than 35 characters' do
       topic = build(:topic, :with_user, title: 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもや')
       topic.valid?
-      expect(topic.errors[:title]).to include('は35文字以内で入力してください。')
+      expect(topic.errors[:title]).to include('は35字以内で入力してください。')
     end
 
     it 'is invalid without a content' do

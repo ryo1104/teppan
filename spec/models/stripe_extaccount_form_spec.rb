@@ -41,7 +41,7 @@ RSpec.describe StripeExtAccountForm, type: :model do
     it 'is invalid if account number is not 7 digits' do
       form = build(:StripeExtAccountForm, account_number: '00000000')
       form.valid?
-      expect(form.errors[:account_number]).to include('は7文字で入力してください。')
+      expect(form.errors[:account_number]).to include('は7字で入力してください。')
     end
     it 'is invalid without a account holder name' do
       form = build(:StripeExtAccountForm, account_holder_name: nil)

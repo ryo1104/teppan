@@ -70,6 +70,7 @@ ja:
         nickname: アカウント名
         birthdate: 生年月日
         gender: 性別
+        introduction: プロフィール文
         password: パスワード
         password_confirmation: パスワード（確認）
         current_password: 現在のパスワード

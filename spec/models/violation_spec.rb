@@ -53,7 +53,7 @@ RSpec.describe Violation, type: :model do
     it 'is invalid if text is longer than 400 characters' do
       violation = build(:violation, :with_user, text: Faker::Lorem.characters(number: 401))
       violation.valid?
-      expect(violation.errors[:text]).to include('は400文字以内で入力してください。')
+      expect(violation.errors[:text]).to include('は400字以内で入力してください。')
     end
   end
 end

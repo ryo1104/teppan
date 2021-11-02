@@ -50,7 +50,7 @@ RSpec.describe Review, type: :model do
     it 'is invalid if text is longer than 200 characters' do
       review = build(:review, neta: neta, user: user, text: Faker::Lorem.characters(number: 201))
       review.valid?
-      expect(review.errors[:text]).to include('は200文字以内で入力してください。')
+      expect(review.errors[:text]).to include('は200字以内で入力してください。')
     end
 
     it 'is invalid if duplicate reviews by same user' do

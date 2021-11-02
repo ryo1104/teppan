@@ -233,7 +233,7 @@ class User < ApplicationRecord
   end
 
   def introduction_check
-    errors.add(:introduction, 'は800字以内で入力してください。') if introduction.to_plain_text.squish.length > 800
+    errors.add(:introduction, I18n.t('errors.messages.too_long', count: '2000')) if introduction.to_plain_text.squish.length > 2000
   end
 
   def stripe_cus_id_check

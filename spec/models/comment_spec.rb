@@ -31,7 +31,7 @@ RSpec.describe Comment, type: :model do
     it 'is invalid if text is longer than 200 characters' do
       comment = Comment.new(commentable: topic, user: user, text: Faker::Lorem.characters(number: 201))
       comment.valid?
-      expect(comment.errors[:text]).to include('は200文字以内で入力してください。')
+      expect(comment.errors[:text]).to include('は200字以内で入力してください。')
     end
 
     it 'is invalid if likes count is not a number' do

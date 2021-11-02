@@ -75,7 +75,7 @@ class Topic < ApplicationRecord
 
   def content_check
     errors.add(:content, I18n.t('errors.messages.blank')) if content.body.blank?
-    errors.add(:content, 'は300字以内で入力してください。') if content.to_plain_text.squish.length > 300
+    errors.add(:content, I18n.t('errors.messages.too_long', count: '300')) if content.to_plain_text.squish.length > 300
     # Need attachment checks. Below does not work because at this point blob is not attached.
     # self.content.embeds.blobs.each do |blob|
     #   if blob.byte_size.to_i > 5.megabytes

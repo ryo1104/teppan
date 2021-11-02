@@ -284,10 +284,10 @@ RSpec.describe User, type: :model do
       expect(user.errors[:birthdate]).to include('：13歳未満はご利用できません。')
     end
 
-    it 'is invalid if introduction is longer than 800 characters' do
-      user = build(:user, introduction: Faker::Lorem.characters(number: 801))
+    it 'is invalid if introduction is longer than 2000 characters' do
+      user = build(:user, introduction: Faker::Lorem.characters(number: 2001))
       user.valid?
-      expect(user.errors[:introduction]).to include('は800字以内で入力してください。')
+      expect(user.errors[:introduction]).to include('は2000字以内で入力してください。')
     end
 
     it 'is invalid if stripe_cus_id does not start with cus_' do

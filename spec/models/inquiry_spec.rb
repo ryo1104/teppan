@@ -41,7 +41,7 @@ RSpec.describe Inquiry, type: :model do
     it 'is invalid if message is longer than 400 characters' do
       inquiry = build(:inquiry, email: 'aaa@bbbccc.com', message: Faker::Lorem.characters(number: 401))
       inquiry.valid?
-      expect(inquiry.errors[:message]).to include('は400文字以内で入力してください。')
+      expect(inquiry.errors[:message]).to include('は400字以内で入力してください。')
     end
   end
 end
