@@ -29,6 +29,7 @@ RSpec.describe StripeAccountForm, type: :model do
         }
       },
       type: 'custom',
+      capabilities: { transfers: { requested: true } },
       country: 'JP',
       tos_acceptance: { date: Time.parse(Time.zone.now.to_s).to_i, ip: '0.0.0.0' },
       settings: {

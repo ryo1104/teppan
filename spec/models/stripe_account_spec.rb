@@ -133,7 +133,8 @@ RSpec.describe StripeAccount, type: :model do
                     email: 'kenske@hoge.com' },
       tos_acceptance: { date: 1_566_575_169, ip: '202.32.34.208' },
       type: 'custom',
-      country: 'JP' }
+      country: 'JP',
+      capabilities: { transfers: { requested: true } } }
   end
   let(:update_acct_params) do # address_kanji->town が 外神田２丁目に変更されているだけ
     { business_type: 'individual',
@@ -302,7 +303,7 @@ RSpec.describe StripeAccount, type: :model do
     end
   end
 
-  describe 'method::create_connect_account' do
+  describe 'method::create_connect_account', type: :doing do
     before do
       Stripe.api_key = stripe_test_key
       @acct_form = build(:stripe_account_form)

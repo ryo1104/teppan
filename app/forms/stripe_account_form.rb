@@ -56,7 +56,7 @@ class StripeAccountForm
       business_type: 'individual',
       individual: create_stripe_individual
     }
-    ac_params.merge!(type: 'custom', country: 'JP') if mode == 'create'
+    ac_params.merge!(type: 'custom', country: 'JP', capabilities: { transfers: { requested: true } }) if mode == 'create'
     ac_params.merge!(tos_acceptance: { date: Time.parse(Time.zone.now.to_s).to_i, ip: remote_ip.to_s }) if verification
     ac_params.merge!(settings: { payouts: { schedule: { interval: 'manual' } } })
     ac_params

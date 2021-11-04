@@ -49,6 +49,7 @@ class StripeAccount < ApplicationRecord
     if account_info[0]
       [true, account_info[1]]
     else
+      Stripe::Account.delete(stripe_account_obj['id']) if stripe_account_obj.key?('id')
       [false, "error in parse_account_info : #{account_info[1]}"]
     end
   end
@@ -177,13 +178,6 @@ class StripeAccount < ApplicationRecord
       [false, 'Failed to delete external account']
     end
   end
-
-  # def find_idcards
-  #   cards = stripe_idcards
-  #   frontcard = cards.find_by(frontback: 'front')
-  #   backcard = cards.find_by(frontback: 'back')
-  #   [frontcard, backcard]
-  # end
 
   private
 

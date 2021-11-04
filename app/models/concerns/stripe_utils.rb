@@ -6,6 +6,7 @@ module StripeUtils
   require 'json'
 
   included do
+    Stripe.api_version = '2020-08-27'
     Stripe.api_key = ENV['STRIPE_SECRET_KEY']
     Stripe.log_level = ENV['STRIPE_LOG_LEVEL']
   end
