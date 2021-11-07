@@ -277,11 +277,11 @@ RSpec.describe User, type: :model do
       expect(user.errors[:gender]).to include('が正しくありません。')
     end
 
-    it 'is invalid if age is less than 13 years old' do
-      testdate = Time.zone.today.prev_year(13) + 1.day
+    it 'is invalid if age is less than 20 years old' do
+      testdate = Time.zone.today.prev_year(20) + 1.day
       user = build(:user, birthdate: testdate)
       user.valid?
-      expect(user.errors[:birthdate]).to include('：13歳未満はご利用できません。')
+      expect(user.errors[:birthdate]).to include('：20歳未満はご利用できません。')
     end
 
     it 'is invalid if introduction is longer than 2000 characters' do
@@ -412,11 +412,11 @@ RSpec.describe User, type: :model do
       expect(@user.age).to eq ' - '
     end
     it 'returns current age (without rounding up)' do
-      real_age = 15.6
+      real_age = 20.6
       seconds_from_birth = (real_age * 365.25 * 24 * 60 * 60).floor
       birthdate = Time.zone.now - seconds_from_birth
       @user = create(:user, birthdate: Time.zone.at(birthdate))
-      expect(@user.age).to eq 15
+      expect(@user.age).to eq 20
     end
     it 'returns nil when age calc result is not positive' do
       @user = create(:user)

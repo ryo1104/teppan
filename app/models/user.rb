@@ -226,9 +226,9 @@ class User < ApplicationRecord
   end
 
   def age_check
-    if birthdate.present? && (birthdate > Time.zone.today.prev_year(13))
+    if birthdate.present? && (birthdate > Time.zone.today.prev_year(20))
       errors.add(:birthdate,
-                 I18n.t('errors.messages.underage', age_limit: '13'))
+                 I18n.t('errors.messages.underage', age_limit: '20'))
     end
   end
 

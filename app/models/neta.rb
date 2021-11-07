@@ -14,8 +14,8 @@ class Neta < ApplicationRecord
   has_many :hashtag_netas, dependent: :destroy
   has_many :hashtags, through: :hashtag_netas
   validates :title, presence: true, length: { maximum: 35 }
-  validates :price, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 10_000 }
   validates :private_flag, inclusion: { in: [true, false] }
+  validate  :price_check
   validate  :content_check
   validate  :valuecontent_check
 
@@ -175,6 +175,20 @@ class Neta < ApplicationRecord
   end
 
   private
+
+  def price_check
+    if price.blank?
+      errors.add(:price, I18n.t('errors.messages.blank'))
+    elsif price.zero?
+      true
+    elsif price.negative?
+      errors.add(:price, I18n.t('errors.messages.greater_than_or_equal_to', count: '0'))
+    elsif price < 10
+      errors.add(:price, I18n.t('errors.messages.greater_than_or_equal_to', count: '10'))
+    elsif price > 10_000
+      errors.add(:price, I18n.t('errors.messages.less_than_or_equal_to', count: '10000'))
+    end
+  end
 
   def content_check
     errors.add(:content, I18n.t('errors.messages.blank')) if content.body.blank?

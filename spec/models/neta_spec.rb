@@ -5,7 +5,7 @@ RSpec.describe Neta, type: :model do
   let(:topic_create)  { FactoryBot.create(:topic, :with_user) }
   let(:hashtag)       { FactoryBot.create(:hashtag) }
 
-  describe 'Validations' do
+  describe 'Validations', type: :doing do
     it 'is valid with a user_id, topic_id, text, and price' do
       neta = build(:neta, user: user_create, topic: topic_create)
       expect(neta).to be_valid
@@ -60,15 +60,15 @@ RSpec.describe Neta, type: :model do
       neta.valid?
       expect(neta.errors[:price]).to include('は0以上の値にしてください。')
     end
-    it 'is invalid if price is not integer' do
-      neta = build(:neta, user: user_create, topic: topic_create, price: 100.1)
-      neta.valid?
-      expect(neta.errors[:price]).to include('は整数で入力してください。')
-    end
     it 'is invalid if price is greater than 10000' do
       neta = build(:neta, user: user_create, topic: topic_create, price: 10_001)
       neta.valid?
       expect(neta.errors[:price]).to include('は10000以下の値にしてください。')
+    end
+    it 'is invalid if price is between 0 and 10' do
+      neta = build(:neta, user: user_create, topic: topic_create, price: 1)
+      neta.valid?
+      expect(neta.errors[:price]).to include('は10以上の値にしてください。')
     end
     it 'is invalid if private_flag is blank' do
       neta = build(:neta, user: user_create, topic: topic_create, private_flag: nil)
