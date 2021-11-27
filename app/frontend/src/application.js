@@ -1,11 +1,9 @@
 require("@rails/ujs").start()
-require("@rails/activestorage").start()
-require('@rails/actiontext')
 require('jquery')
-require('trix')
-require('materialize')
+// require('materialize')
+// require('trix')
 
-import './generic'
+import './sidenav'
 import './stars'
 
 // CSS

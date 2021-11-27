@@ -2,35 +2,26 @@ const glob = require('glob')
 const path = require('path')
 const webpack = require('webpack')
 
-const MODE = "development";
+const MODE = "production";
 const enabledSourceMap = MODE === "development";
-const ManifestPlugin = require('webpack-manifest-plugin')
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const frontend_path = path.join(__dirname, 'app', 'frontend')
 const js_entry  = { 
   "account"               : path.join(frontend_path, 'src', 'account.js'),
+  "actiontext"            : path.join(frontend_path, 'src', 'actiontext.js'),
   "application"           : path.join(frontend_path, 'src', 'application.js'),
   "bankaccount"           : path.join(frontend_path, 'src', 'bankaccount.js'),
   "hashtag-entry"         : path.join(frontend_path, 'src', 'hashtag-entry.js'),
   "hashtag-autocomplete"  : path.join(frontend_path, 'src', 'hashtag-autocomplete.js'),
+  "headerimg-direct"      : path.join(frontend_path, 'src', 'headerimg-direct.js'),
+  "neta"                  : path.join(frontend_path, 'src', 'neta.js'),
   "topic"                 : path.join(frontend_path, 'src', 'topic.js'),
   "trade"                 : path.join(frontend_path, 'src', 'trade.js'),
   "user"                  : path.join(frontend_path, 'src', 'user.js')
 }
-
-// const img_path = path.join(frontend_path, 'images')
-// const images = glob.sync(path.join(img_path, '**/*.{png,jpg,jpeg,gif,ico}'))
-// const img_entry = images.reduce((img_entry, target) => {
-//   const asset = path.relative(img_path, target)
-//   const ext = path.extname(asset)
-//   const asset_name = asset.replace(ext, '')
-//   return Object.assign(img_entry, {
-//     [asset_name]: target
-//   })
-// }, {})
-// const entry = Object.assign(js_entry, img_entry)
 
 module.exports = {
 
@@ -38,19 +29,19 @@ module.exports = {
     context: frontend_path,
     entry: js_entry,
     output: {
-      filename: 'js/[name]-[hash].js',
-      chunkFilename: 'js/[name]-[hash].chunk.js',
+      filename: 'js/[name]-[contenthash].js',
+      chunkFilename: 'js/[name]-[contenthash].chunk.js',
       path: path.resolve(__dirname, 'public/packs'),
       publicPath: '/packs/',
     },
     plugins: [
-      new ManifestPlugin({
+      new WebpackManifestPlugin({
         fileName: 'manifest.json',
         publicPath: '/packs/',
         writeToFileEmit: true,
       }),
       new MiniCssExtractPlugin({
-        filename: 'css/[name]-[hash].css',
+        filename: 'css/[name]-[contenthash].css',
       }),
       new CleanWebpackPlugin(),
       new webpack.ProvidePlugin({

@@ -1,19 +1,6 @@
 import $ from 'jquery';
-require('load-image')
-require('load-image-scale')
-require('load-image-meta')
-require('load-image-fetch')
-require('load-image-orientation')
-require('load-image-exif')
-require('load-image-exif-map')
-require('load-image-iptc')
-require('load-image-iptc-map')
-require('canvas-to-blob')
-require('iframe-transport')
-require('jquery.ui.widget')
-require('jquery.fileupload')
-require('jquery.fileupload-process')
-require('jquery.fileupload-image')
+import './headerimg-direct';
+import './actiontext';
 
 $(document).ready( function() {
   /*初期表示*/

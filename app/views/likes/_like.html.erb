@@ -10,12 +10,12 @@
   <% end %>
 <% end %>
 <% if likeable.class.name == "Comment" %>
-  <% if likeable.likes.find_by(user_id: current_user.id) %>
-    <%= link_to comment_like_path(likeable.id, likeable.likes.find_by(user_id: current_user.id).id), :method => :delete, remote: true do %>
+  <% if likeable.likes.find_by(user: current_user) %>
+    <%= link_to comment_like_path(likeable.id, likeable.likes.find_by(user: current_user).id), method: :delete, remote: true do %>
       <i class="like-large material-icons">favorite</i>
     <% end %>
   <% else %>
-    <%= link_to comment_likes_path(likeable.id), :method => :post, remote: true do %>
+    <%= link_to comment_likes_path(likeable.id), method: :post, remote: true do %>
       <i class="like-large material-icons">favorite_border</i>
     <% end %>
   <% end %>

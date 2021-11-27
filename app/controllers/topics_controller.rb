@@ -30,7 +30,7 @@ class TopicsController < ApplicationController
       @message = I18n.t('controller.topic.private')
     else
       @netas = @topic.netas.includes(:user).where(private_flag: false).order('average_rate DESC')
-      @comments = @topic.comments.includes(:user).order('created_at DESC')
+      @comments = @topic.comments.includes(:user).order('created_at ASC')
       if user_signed_in?
         @newcomment = Comment.new
         @topic.add_pageview(current_user)
