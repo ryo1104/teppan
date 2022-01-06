@@ -113,7 +113,7 @@ RSpec.describe Hashtag, type: :model do
     end
     context 'if no hit exists in the last 24hrs for the hashtag-user pair' do
       before do
-        create(:hashtag_hit, hashtag: @hashtag, user: @some_user, created_at: Time.zone.now - 1.day - 1.second)
+        create(:hashtag_hit, hashtag: @hashtag, user: @some_user, created_at: 1.day.ago - 1.second)
         @hashtag.reload
       end
       it 'adds a new record' do
@@ -129,7 +129,7 @@ RSpec.describe Hashtag, type: :model do
     end
     context 'if a hit already exists in the last 24hrs for the hashtag-user pair' do
       before do
-        create(:hashtag_hit, hashtag: @hashtag, user: @some_user, created_at: Time.zone.now - 1.day + 1.second)
+        create(:hashtag_hit, hashtag: @hashtag, user: @some_user, created_at: 1.day.ago + 1.second)
         @hashtag.reload
       end
       it 'does not add a new record' do

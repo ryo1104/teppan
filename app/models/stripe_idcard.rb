@@ -3,7 +3,7 @@
 class StripeIdcard < ApplicationRecord
   include StripeUtils
   belongs_to :stripe_account
-  validates :stripe_account, presence: true, uniqueness: { scope: :frontback, message: I18n.t('errors.messages.duplicate') }
+  validates :stripe_account, uniqueness: { scope: :frontback, message: I18n.t('errors.messages.duplicate') }
   validates :frontback, inclusion: { in: %w[front back], message: I18n.t('errors.messages.duplicate') }
   validate  :stripe_file_id_check
 
@@ -29,7 +29,7 @@ class StripeIdcard < ApplicationRecord
   end
 
   def create_stripe_file(file, name)
-    File.open("tmp/#{name}", 'wb') { |f| f.write(file.read) }
+    File.binwrite("tmp/#{name}", file.read)
     file_upload_hash = JSON.parse(Stripe::File.create({ purpose: 'identity_document', file: File.open("tmp/#{name}", 'r') }).to_s)
     File.delete("tmp/#{name}")
     file_upload_hash

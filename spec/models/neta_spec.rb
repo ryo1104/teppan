@@ -268,14 +268,14 @@ RSpec.describe Neta, type: :model do
       some_user = create(:user)
       neta = create(:neta, user: some_user, topic: topic_create)
       another_user = create(:user)
-      create(:pageview, pageviewable: neta, user: another_user, created_at: Time.zone.now - 1.day - 1.second)
+      create(:pageview, pageviewable: neta, user: another_user, created_at: 1.day.ago - 1.second)
       expect { neta.add_pageview(another_user) }.to change(Pageview, :count).by(1)
     end
     it 'finds pageview if neta is already viewed by the same user within one day' do
       some_user = create(:user)
       neta = create(:neta, user: some_user, topic: topic_create)
       another_user = create(:user)
-      pageview = create(:pageview, pageviewable: neta, user: another_user, created_at: Time.zone.now - 1.day)
+      pageview = create(:pageview, pageviewable: neta, user: another_user, created_at: 1.day.ago)
       expect(neta.add_pageview(another_user)).to eq pageview
     end
   end

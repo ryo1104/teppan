@@ -14,13 +14,13 @@ RSpec.describe HashtagNeta, type: :model do
     it 'is invalid without a neta_id' do
       hashtag_neta = build(:hashtag_neta, neta: nil, hashtag: hashtag)
       hashtag_neta.valid?
-      expect(hashtag_neta.errors[:neta_id]).to include('を入力してください。')
+      expect(hashtag_neta.errors[:neta_id]).to include('は数値で入力してください。')
     end
 
     it 'is invalid without a hashtag_id' do
       hashtag_neta = build(:hashtag_neta, neta: neta, hashtag: nil)
       hashtag_neta.valid?
-      expect(hashtag_neta.errors[:hashtag_id]).to include('を入力してください。')
+      expect(hashtag_neta.errors[:hashtag_id]).to include('は数値で入力してください。')
     end
 
     it 'is invalid with a duplicate neta_id and hashtag_id combination' do

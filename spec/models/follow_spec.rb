@@ -17,13 +17,13 @@ RSpec.describe Follow, type: :model do
     it 'is invalid without a followed_id' do
       follow = build(:follow, followed_id: nil, follower: @user2)
       follow.valid?
-      expect(follow.errors[:followed_id]).to include('を入力してください。')
+      expect(follow.errors[:followed_id]).to include('は数値で入力してください。')
     end
 
     it 'is invalid without a follower_id' do
       follow = build(:follow, followed_id: 1, follower_id: nil)
       follow.valid?
-      expect(follow.errors[:follower_id]).to include('を入力してください。')
+      expect(follow.errors[:follower_id]).to include('は数値で入力してください。')
     end
 
     it 'is invalid if follower_id is not integer' do

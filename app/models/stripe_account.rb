@@ -6,7 +6,7 @@ class StripeAccount < ApplicationRecord
   belongs_to  :user
   has_many    :stripe_idcards, dependent: :destroy
   has_many    :stripe_payouts, dependent: :destroy
-  validates   :user_id, presence: true, uniqueness: true
+  validates   :user_id, uniqueness: true
   validates   :acct_id, uniqueness: { case_sensitive: true }, allow_nil: true
   validate    :acct_id_check
   validate    :ext_acct_id_check

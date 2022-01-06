@@ -139,14 +139,14 @@ RSpec.describe Topic, type: :model do
       some_user = create(:user)
       topic = create(:topic, user: some_user)
       another_user = create(:user)
-      create(:pageview, pageviewable: topic, user: another_user, created_at: Time.zone.now - 1.day - 1.second)
+      create(:pageview, pageviewable: topic, user: another_user, created_at: 1.day.ago - 1.second)
       expect { topic.add_pageview(another_user) }.to change(Pageview, :count).by(1)
     end
     it 'finds pageview if topic is already viewed by the same user within one day' do
       some_user = create(:user)
       topic = create(:topic, user: some_user)
       another_user = create(:user)
-      pageview = create(:pageview, pageviewable: topic, user: another_user, created_at: Time.zone.now - 1.day)
+      pageview = create(:pageview, pageviewable: topic, user: another_user, created_at: 1.day.ago)
       expect(topic.add_pageview(another_user)).to eq pageview
     end
   end

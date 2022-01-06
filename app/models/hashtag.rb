@@ -15,7 +15,7 @@ class Hashtag < ApplicationRecord
 
   # record only 1 hit per day per user
   def add_hit(user)
-    from = Time.zone.now - 1.day
+    from = 1.day.ago
     to = Time.zone.now
     hashtag_hits.create!(user: user) if hashtag_hits.where(user: user, created_at: from..to).count.zero?
   end
