@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_15_071753) do
+ActiveRecord::Schema.define(version: 2022_01_17_154634) do
 
   create_table "action_mailbox_inbound_emails", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "status", default: 0, null: false
@@ -285,19 +285,17 @@ ActiveRecord::Schema.define(version: 2021_09_15_071753) do
   create_table "trades", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.integer "buyer_id", default: 0, null: false
     t.integer "price", default: 0, null: false
-    t.string "tradetype"
-    t.string "tradestatus"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "tradeable_id", default: 0, null: false
-    t.string "tradeable_type", default: "0", null: false
     t.integer "seller_id", default: 0, null: false
     t.string "stripe_ch_id"
     t.string "stripe_pi_id"
     t.integer "seller_revenue"
     t.integer "fee"
     t.integer "c_tax"
-    t.index ["buyer_id", "seller_id", "tradeable_type", "tradeable_id"], name: "unique_trade", unique: true
+    t.integer "neta_id"
+    t.index ["buyer_id", "seller_id", "neta_id"], name: "unique_trade", unique: true
+    t.index ["neta_id"], name: "neta_id"
   end
 
   create_table "users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
@@ -362,5 +360,6 @@ ActiveRecord::Schema.define(version: 2021_09_15_071753) do
   add_foreign_key "stripe_idcards", "stripe_accounts"
   add_foreign_key "stripe_payouts", "stripe_accounts"
   add_foreign_key "topics", "users"
+  add_foreign_key "trades", "netas"
   add_foreign_key "violations", "users"
 end

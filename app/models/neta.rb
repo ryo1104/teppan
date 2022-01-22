@@ -7,7 +7,7 @@ class Neta < ApplicationRecord
   has_rich_text :content
   has_rich_text :valuecontent
   has_many :reviews, dependent: :destroy
-  has_many :trades, as: :tradeable, dependent: :restrict_with_error
+  has_many :trades, dependent: :restrict_with_error
   has_many :pageviews, as: :pageviewable, dependent: :destroy
   has_many :bookmarks, as: :bookmarkable, dependent: :destroy
   has_many :rankings, as: :rankable, dependent: :destroy

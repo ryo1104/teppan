@@ -135,7 +135,7 @@ class User < ApplicationRecord
   def self.bought_netas(bought_trades)
     b_netaids = []
     bought_trades.each do |trade|
-      b_netaids << trade.tradeable_id if trade.tradeable_type == 'Neta'
+      b_netaids << trade.neta_id
     end
     Neta.includes(:user).where(id: b_netaids)
   end

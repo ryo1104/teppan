@@ -214,7 +214,7 @@ RSpec.describe Neta, type: :model do
 
     it 'returns false if trade exists on the neta' do
       neta = create(:neta, user: user_create, topic: topic_create)
-      create(:trade, tradeable: neta)
+      create(:trade, neta: neta)
       expect(neta.editable).to eq false
     end
   end
@@ -288,7 +288,7 @@ RSpec.describe Neta, type: :model do
     end
     it 'returns true if trade exists' do
       neta = create(:neta, user: user_create, topic: topic_create)
-      create(:trade, tradeable: neta)
+      create(:trade, neta: neta)
       expect(neta.dependents).to eq true
     end
     it 'returns true if bookmark exists' do

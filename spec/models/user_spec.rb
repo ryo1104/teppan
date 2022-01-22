@@ -651,17 +651,17 @@ RSpec.describe User, type: :model do
       @neta4 = create(:neta, :with_user, :with_valuecontent, topic: @topic2)
     end
     it 'returns bought netas' do
-      create(:trade, tradeable: @neta1, buyer_id: @user1.id, seller_id: @neta1.user.id)
-      create(:trade, tradeable: @neta2, buyer_id: @user1.id, seller_id: @neta2.user.id)
-      create(:trade, tradeable: @neta2, buyer_id: @user2.id, seller_id: @neta2.user.id)
-      create(:trade, tradeable: @neta3, buyer_id: @user2.id, seller_id: @neta3.user.id)
+      create(:trade, neta: @neta1, buyer_id: @user1.id, seller_id: @neta1.user.id)
+      create(:trade, neta: @neta2, buyer_id: @user1.id, seller_id: @neta2.user.id)
+      create(:trade, neta: @neta2, buyer_id: @user2.id, seller_id: @neta2.user.id)
+      create(:trade, neta: @neta3, buyer_id: @user2.id, seller_id: @neta3.user.id)
       trades = Trade.where(buyer_id: @user1.id)
       netas = Neta.where(topic: @topic1)
       expect(User.bought_netas(trades)).to match_array netas
     end
     it 'returns blank (=> Active Record::Relation []) when no bought netas exist' do
-      create(:trade, tradeable: @neta2, buyer_id: @user2.id, seller_id: @neta2.user.id)
-      create(:trade, tradeable: @neta3, buyer_id: @user2.id, seller_id: @neta3.user.id)
+      create(:trade, neta: @neta2, buyer_id: @user2.id, seller_id: @neta2.user.id)
+      create(:trade, neta: @neta3, buyer_id: @user2.id, seller_id: @neta3.user.id)
       trades = Trade.where(buyer_id: @user1.id)
       expect(User.bought_netas(trades)).to be_empty
     end

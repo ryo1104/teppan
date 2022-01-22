@@ -19,14 +19,14 @@ class TradesController < ApplicationController
 
   private
 
-  def load_tradeable
-    @resource, @id = request.path.split('/')[1, 2]
-    @tradeable = @resource.singularize.classify.constantize.find(@id)
-  end
+  # def load_tradeable
+  #   @resource, @id = request.path.split('/')[1, 2]
+  #   @tradeable = @resource.singularize.classify.constantize.find(@id)
+  # end
 
-  def tradeable_path(tradeable)
-    "/#{tradeable.class.name.pluralize.downcase}/#{tradeable.id}"
-  end
+  # def tradeable_path(tradeable)
+  #   "/#{tradeable.class.name.pluralize.downcase}/#{tradeable.id}"
+  # end
 
   def get_checkout_inputs
     @buyer = current_user

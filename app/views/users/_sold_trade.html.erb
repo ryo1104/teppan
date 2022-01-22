@@ -1,6 +1,6 @@
 <tr>
   <td class="table_body_item"><%= sold_trade["traded_at"].strftime("%Y/%m/%d %H:%M") %></td>
-  <td class="table_body_item"><%= sold_trade["title"] %></td>
+  <td class="table_body_item"><%= link_to sold_trade["title"], neta_path(sold_trade["neta_id"]) %></td>
   <td class="table_body_item"><%= sold_trade["price"] %></td>
   <td class="table_body_item"><%= sold_trade["buyer_nickname"] %></td>
   <td class="table_body_item"><%= sold_trade["review_rate"] %></td>

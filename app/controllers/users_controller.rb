@@ -61,9 +61,9 @@ class UsersController < ApplicationController
   end
 
   def get_traded_info
-    @bought_trades = Trade.where(buyer_id: @user.id, tradeable_type: 'Neta')
+    @bought_trades = Trade.where(buyer_id: @user.id)
     @bought_netas = User.bought_netas(@bought_trades)
-    @sold_netas_info = Trade.get_trades_info('seller', @user.id, 'Neta')
+    @sold_netas_info = Trade.get_trades_info('seller', @user.id)
   end
 
   def get_bookmarked_info

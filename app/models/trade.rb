@@ -2,8 +2,8 @@
 
 class Trade < ApplicationRecord
   include StripeUtils
-  belongs_to :tradeable, polymorphic: true
-  validates :buyer_id, presence: true, uniqueness: { scope: %i[seller_id tradeable_id tradeable_type],
+  belongs_to :neta
+  validates :buyer_id, presence: true, uniqueness: { scope: %i[seller_id neta_id],
                                                      message: I18n.t('activerecord.models.trade') + I18n.t('errors.messages.taken') }
   validates :seller_id, presence: true
   validate  :stripe_ch_id_check
@@ -212,47 +212,48 @@ class Trade < ApplicationRecord
     [true, { price: price, seller_revenue: seller_revenue, fee: fee, c_tax: c_tax }]
   end
 
-  def self.get_trades_info(who, id, tradeable_type)
+  def self.get_trades_info(who, id)
     trades = case who
              when 'seller'
-               Trade.where(seller_id: id, tradeable_type: tradeable_type).order('created_at DESC')
+               Trade.where(seller_id: id).order('created_at DESC')
              when 'buyer'
-               Trade.where(buyer_id: id, tradeable_type: tradeable_type).order('created_at DESC')
+               Trade.where(buyer_id: id).order('created_at DESC')
              end
     if trades.present?
       ids = collect_ids(trades)
       buyers_hash = User.details_from_ids(ids['buyer_ids'])
-      neta_hash = Neta.details_from_ids(ids['tradeable_ids'])
-      review_hash = Review.details_from_ids(tradeable_type, ids['tradeable_ids'])
+      neta_hash = Neta.details_from_ids(ids['neta_ids'])
+      review_hash = Review.details(ids['neta_ids'])
       sold_netas_info = sold_netas_details(trades, buyers_hash, neta_hash, review_hash)
       [true, sold_netas_info]
     else
-      [false, "No sold netas found for user_id #{id}"]
+      [false, "No trades found for #{who} and user_id #{id}"]
     end
   end
 
   def self.collect_ids(trades)
-    tradeable_ids = []
+    neta_ids = []
     buyer_ids = []
     trades.each do |trade|
       buyer_ids << trade.buyer_id
-      tradeable_ids << trade.tradeable_id
+      neta_ids << trade.neta_id
     end
     buyer_ids.uniq!
-    tradeable_ids.uniq!
-    { 'buyer_ids' => buyer_ids, 'tradeable_ids' => tradeable_ids }
+    neta_ids.uniq!
+    { 'buyer_ids' => buyer_ids, 'neta_ids' => neta_ids }
   end
 
   def self.sold_netas_details(trades, buyers_hash, neta_hash, review_hash)
     if trades.present?
       sold_netas_info = []
       trades.each do |trade|
-        rate = if review_hash.key?("neta_#{trade.tradeable_id}_user_#{trade.buyer_id}")
-                 review_hash["neta_#{trade.tradeable_id}_user_#{trade.buyer_id}"]['rate']
-               end
+        if review_hash.key?("neta_#{trade.neta_id}") && review_hash["neta_#{trade.neta_id}"].key?("user_#{trade.buyer_id}")
+          rate = review_hash["neta_#{trade.neta_id}"]["user_#{trade.buyer_id}"]
+        end
         sold_netas_info << {
           'traded_at' => trade.created_at,
-          'title' => neta_hash[trade.tradeable_id]['title'],
+          'neta_id' => trade.neta_id,
+          'title' => neta_hash[trade.neta_id]['title'],
           'price' => trade.price,
           'buyer_id' => trade.buyer_id,
           'buyer_nickname' => buyers_hash[trade.buyer_id]['nickname'],

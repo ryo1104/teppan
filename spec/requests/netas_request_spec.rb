@@ -193,7 +193,7 @@ RSpec.describe NetasController, type: :request do
             end
             context 'and trade exists' do
               before do
-                @trade = create(:trade, buyer_id: @user.id, seller_id: @neta_owner.id, tradeable_type: 'Neta', tradeable_id: @neta.id)
+                @trade = create(:trade, buyer_id: @user.id, seller_id: @neta_owner.id, neta_id: @neta.id)
               end
               it 'shows traded price' do
                 subject
