@@ -26,7 +26,7 @@ gem 'mysql2'
 gem 'actiontext'
 gem 'trix'
 # Use Active Storage variant
-gem 'image_processing', '~> 1.2'
+gem 'image_processing', '~> 1.12'
 gem 'mini_magick', '~> 4.10'
 
 # Reduces boot times through caching; required in config/boot.rb
