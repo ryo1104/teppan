@@ -16,7 +16,7 @@
     "blueimp-load-image": "^5.14.0",
     "jquery": "^3.5.0",
     "jquery-datetimepicker": "^2.5.21",
-    "jquery-ui": "^1.13.0",
+    "jquery-ui": "^1.13.2",
     "jquery-ui-dist": "^1.12.1",
     "materialize-css": "^1.0.0",
     "node-sass": "^4.13.1",
